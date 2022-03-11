@@ -162,6 +162,10 @@ jobs:
         touch release.txt
         [ $UPLOAD_COWTRANSFER = true ] && echo "🔗 [Cowtransfer](${{ steps.cowtransfer.outputs.url }})" >> release.txt
         [ $UPLOAD_WETRANSFER = true ] && echo "🔗 [WeTransfer](${{ steps.wetransfer.outputs.url }})" >> release.txt
+        echo "Newifi_D2 Openwrt固件配置：" >> release.txt
+        echo "IP:192.168.124.1" >> release.txt
+        echo "WEB登陆账户：root" >> release.txt
+        echo "密码：password" >> release.txt
         echo "::set-output name=status::success"
 
     - name: Upload firmware to release
