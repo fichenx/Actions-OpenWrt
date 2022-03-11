@@ -25,4 +25,4 @@ sed -i 's/root:$1$WplwC1t5$HBAtVXABp7XbvVjG4193B.:18753:0:99999:7:::/root:$1$V4U
 sed -i "s/Openwrt /FICHEN $(TZ=UTC-8 date "+%Y-%m-%d")@OpenWrt /g" package/lean/default-settings/files/zzz-default-settings
 
 #4.编译的固件文件名添加日期
-sed -i 's/IMG_PREFIX:=/IMG_PREFIX:=$(shell date +%Y%m%d-%H%M)-/g' include/image.mk
+sed -i 's/IMG_PREFIX:=/IMG_PREFIX:=$(TZ=UTC-8 date +%Y%m%d-%H%M)-/g' include/image.mk
