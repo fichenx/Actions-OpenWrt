@@ -8,7 +8,7 @@
 # Description: Build OpenWrt using GitHub Actions
 #
 
-name: Build_OP_Redmi_AX6
+name: Build_OP-5.15_Redmi_AX6
 
 on:
   repository_dispatch:
