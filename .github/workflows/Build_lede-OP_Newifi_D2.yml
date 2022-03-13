@@ -18,7 +18,16 @@ on:
         description: 'SSH connection to Actions'
         required: false
         default: 'false'
-
+        
+  #push:
+  # branches: 
+  #  - master
+        
+  schedule:
+   - cron: 0 12 * * 5
+        
+  #watch:
+  # types: [started]
 env:
   REPO_URL: https://github.com/coolsnowwolf/lede
   REPO_BRANCH: master
