@@ -24,3 +24,8 @@ sed -i "s/OpenWrt /FICHEN($(TZ=UTC-8 date "+%Y-%m-%d"))@OpenWrt /g" package/lean
 
 #4.编译的固件文件名添加日期
 sed -i 's/IMG_PREFIX:=/IMG_PREFIX:=$(shell TZ=UTC-8 date "+%Y%m%d-%H%M")-/g' include/image.mk
+
+#5.更换lede源码中自带argon主题
+cd feeds/luci/themes 
+rm -rf luci-theme-argon  
+git clone -b 18.06 https://github.com/jerrykuku/luci-theme-argon.git
