@@ -20,7 +20,7 @@ sed -i 's/192.168.1.1/192.168.124.1/g' package/base-files/files/bin/config_gener
 sed -i 's/root::0:0:99999:7:::/root:$1$V4UetPzk$CYXluq4wUazHjmCDBCqXF.:0:0:99999:7:::/g' /etc/shadow
 
 #3.固件版本号添加个人标识和日期
-sed -i 's/\%D \%V \%C/FICHEN ($(TZ=UTC-8 date "+%Y-%m-%d"))@\%D \%V \%C /g' package/base-files/files/etc/openwrt_release
+sed -i 's/\%D \%V \%C/FICHEN($(TZ=UTC-8 date "+%Y-%m-%d"))@\%D \%V \%C /g' package/base-files/files/etc/openwrt_release
 
 #4.编译的固件文件名添加日期
 sed -i 's/IMG_PREFIX:=/IMG_PREFIX:=$(shell TZ=UTC-8 date "+%Y%m%d-%H%M")-/g' include/image.mk
