@@ -18,6 +18,15 @@ on:
         description: 'SSH connection to Actions'
         required: false
         default: 'false'
+  #push:
+  #  branches: 
+  #    - master
+
+  schedule:
+    - cron: 0 11 * * 5
+  
+  #watch:
+  #  types: [started]
 
 env:
   REPO_URL: https://github.com/Boos4721/openwrt
