@@ -24,7 +24,7 @@ on:
   #  - master
         
   schedule:
-   - cron: 0 12 * * 5
+   - cron: 10 7 * * 5
         
   #watch:
   # types: [started]
