@@ -6,6 +6,54 @@
 ![GitHub Stars](https://img.shields.io/github/stars/P3TERX/Actions-OpenWrt.svg?style=flat-square&label=Stars&logo=github)
 ![GitHub Forks](https://img.shields.io/github/forks/P3TERX/Actions-OpenWrt.svg?style=flat-square&label=Forks&logo=github)
 
+
+# 维护自用固件
+## 1、NEWIFI D2
+- 使用源码：https://github.com/coolsnowwolf/lede
+- 内核:5.4
+- 默认IP:192.168.124.1
+- 用户名：root
+- 密码：password
+
+![下载 (5)](https://user-images.githubusercontent.com/86181542/159106441-fdd3c90c-abd0-4f0c-8d5f-ddaa40819dab.png)
+### 编译插件：
+连接用户、磁盘管理、Argon主题、广告屏蔽大师puls、微信推送、openclash依赖包（不含本体）、SmartDNS、KMS服务器、Frp内网穿透（客户端）、Upnp、usb打印服务器、硬盘休眠、网络共享、FTP服务器、Aria2、ZeroTier、多线多拨、负载均衡、Turbo ACC 网络加速、宽带监控。
+
+## 2、Redmi AX6
+- 使用源码：https://github.com/Boos4721/openwrt
+- 内核：5.10
+- 默认IP:192.168.123.1
+- 用户名：root
+- 密码：password
+![下载 (6)](https://user-images.githubusercontent.com/86181542/159106907-30052d04-b1d1-4975-aa02-ebb699e3cf8d.png)
+
+### 编译插件：
+连接用户、Argon主题、CPU性能优化调节、广告屏蔽大师puls、微信推送、openclash依赖包（不含本体）、SmartDNS、KMS服务器、Upnp、ZeroTier、多线多拨、负载均衡、Turbo ACC 网络加速、宽带监控。
+
+
+
+
+
+---------------------------
+
+# 原作者模版使用方法：
+
+使用 GitHub Actions 构建 OpenWrt 的模板
+
+## 用法
+- 单击[Use this template](https://github.com/P3TERX/Actions-OpenWrt/generate) 按钮创建一个新的存储库。
+- .config使用[Lean's OpenWrt](https://github.com/coolsnowwolf/lede)的 OpenWrt源代码生成文件。（您可以通过工作流文件中的环境变量进行更改。）
+- 将文件.config推送到 GitHub 存储库。
+- Build OpenWrt在“Actions”页面上选择。
+- 单击Run workflow按钮。
+- 构建完成后，单击Artifacts-Actions 页面右上角的按钮下载二进制文件。
+
+## 提示
+- .config创建文件和构建 OpenWrt 固件可能需要很长时间。因此，在创建存储库以构建您自己的固件之前，您可以通过简单地在 GitHub中搜索Actions-Openwrt来查看其他人是否已经构建了满足您需求的固件。
+- 将您构建的固件的一些元信息（例如固件架构和已安装的软件包）添加到您的存储库介绍中，这将节省其他人的时间。
+
+
+--------------------------------------------------------------------------------------------------------------------------
 A template for building OpenWrt with GitHub Actions
 
 ## Usage
@@ -24,19 +72,7 @@ A template for building OpenWrt with GitHub Actions
 
 
 
-使用 GitHub Actions 构建 OpenWrt 的模板
 
-## 用法
-- 单击[Use this template](https://github.com/P3TERX/Actions-OpenWrt/generate) 按钮创建一个新的存储库。
-- .config使用[Lean's OpenWrt](https://github.com/coolsnowwolf/lede)的 OpenWrt源代码生成文件。（您可以通过工作流文件中的环境变量进行更改。）
-- 将文件.config推送到 GitHub 存储库。
-- Build OpenWrt在“Actions”页面上选择。
-- 单击Run workflow按钮。
-- 构建完成后，单击Artifacts-Actions 页面右上角的按钮下载二进制文件。
-
-## 提示
-- .config创建文件和构建 OpenWrt 固件可能需要很长时间。因此，在创建存储库以构建您自己的固件之前，您可以通过简单地在 GitHub中搜索Actions-Openwrt来查看其他人是否已经构建了满足您需求的固件。
-- 将您构建的固件的一些元信息（例如固件架构和已安装的软件包）添加到您的存储库介绍中，这将节省其他人的时间。
 
 
 
