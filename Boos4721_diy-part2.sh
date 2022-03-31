@@ -30,3 +30,6 @@ sed -i 's/IMG_PREFIX:=/IMG_PREFIX:=$(shell TZ=UTC-8 date "+%Y%m%d-%H%M")-/g' inc
 #5.修改wifi密码为空
 sed -i 's/set wireless.default_radio${devidx}.encryption=sae-mixed/set wireless.default_radio${devidx}.encryption=none/g' package/kernel/mac80211/files/lib/wifi/mac80211.sh
 sed -i 's/set wireless.default_radio${devidx}.key=1234567890//g' package/kernel/mac80211/files/lib/wifi/mac80211.sh
+
+#6.修改主机名
+sed -i "s/set system.@system[-1].hostname='OpenWrt'/set system.@system[-1].hostname='Redmi-AX6'/g" package/base-files/files/bin/config_generate
