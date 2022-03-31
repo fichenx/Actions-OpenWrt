@@ -26,3 +26,7 @@ sed -i "s/OpenWrt /FICHEN($(TZ=UTC-8 date "+%Y-%m-%d"))@OpenWrt /g" package/lean
 
 #4.编译的固件文件名添加日期
 sed -i 's/IMG_PREFIX:=/IMG_PREFIX:=$(shell TZ=UTC-8 date "+%Y%m%d-%H%M")-/g' include/image.mk
+
+#5.修改wifi密码为空
+sed -i 's/set wireless.default_radio${devidx}.encryption=sae-mixed/set wireless.default_radio${devidx}.encryption=none/g' package/kernel/mac80211/files/lib/wifi/mac80211.sh
+sed -i 's/set wireless.default_radio${devidx}.key=1234567890//g' package/kernel/mac80211/files/lib/wifi/mac80211.sh
