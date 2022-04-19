@@ -21,7 +21,7 @@
 
 ## 2、Redmi AX6
 - 使用源码：https://github.com/Boos4721/openwrt
-- 内核：5.10
+- 内核：5.15
 - 默认IP:192.168.123.1
 - 用户名：root
 - 密码：password
