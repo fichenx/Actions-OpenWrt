@@ -33,8 +33,8 @@ env:
   REPO_BRANCH: ipq807x-5.15
   FEEDS_CONF: feeds.conf.default
   CONFIG_FILE: Redmi-AX6_5.15.config
-  DIY_P1_SH: diy-part1.sh
-  DIY_P2_SH: diy-part2.sh
+  DIY_P1_SH: robimarko_diy-part1.sh
+  DIY_P2_SH: robimarko_diy-part2.sh
   UPLOAD_BIN_DIR: false
   UPLOAD_FIRMWARE: true
   UPLOAD_COWTRANSFER: false
