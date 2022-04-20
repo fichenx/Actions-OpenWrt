@@ -8,7 +8,7 @@
 # Description: Build OpenWrt using GitHub Actions
 #
 
-name: Build_OP_Redmi_AX6
+name: Build_OP-Boos4721-5.15_Redmi-AX6
 
 on:
   repository_dispatch:
@@ -23,7 +23,7 @@ on:
   #    - master
 
   schedule:
-    - cron: 00 4 * * 5
+    - cron: 0 4 * * 5
   
   #watch:
   #  types: [started]
@@ -32,7 +32,7 @@ env:
   REPO_URL: https://github.com/Boos4721/openwrt
   REPO_BRANCH: master
   FEEDS_CONF: feeds.conf.default
-  CONFIG_FILE: Redmi_AX6.config
+  CONFIG_FILE: Redmi-AX6.config
   DIY_P1_SH: diy-part1.sh
   DIY_P2_SH: Boos4721_diy-part2.sh
   UPLOAD_BIN_DIR: false
