@@ -167,11 +167,11 @@ jobs:
       id: tag
       if: env.UPLOAD_RELEASE == 'true' && !cancelled()
       run: |
-        echo "::set-output name=release_tag::$(date +"%Y.%m.%d-%H%M")-Redmi_AX6-Openwrt内核5.15"
+        echo "::set-output name=release_tag::$(date +"%Y.%m.%d-%H%M")-Redmi_AX6-Openwrt Boos4721内核5.15"
         touch release.txt
         [ $UPLOAD_COWTRANSFER = true ] && echo "🔗 [Cowtransfer](${{ steps.cowtransfer.outputs.url }})" >> release.txt
         [ $UPLOAD_WETRANSFER = true ] && echo "🔗 [WeTransfer](${{ steps.wetransfer.outputs.url }})" >> release.txt
-        echo "Redmi_AX6 Openwrt内核5.15固件配置：" >> release.txt
+        echo "Redmi_AX6 Openwrt Boos4721内核5.15固件配置：" >> release.txt
         echo "IP:192.168.123.1" >> release.txt
         echo "WEB登陆账户：root" >> release.txt
         echo "密码：password" >> release.txt
