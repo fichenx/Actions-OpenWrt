@@ -26,13 +26,15 @@ sed -i 's/\%D \%V \%C/FICHEN($(TZ=UTC-8 date "+%Y-%m-%d"))@\%D \%V \%C /g' packa
 sed -i 's/IMG_PREFIX:=/IMG_PREFIX:=$(shell TZ=UTC-8 date "+%Y%m%d-%H%M")-/g' include/image.mk
 
 #5.修改wifi密码为空
-sed -i 's/set wireless.default_radio${devidx}.encryption=sae-mixed/set wireless.default_radio${devidx}.encryption=none/g' package/kernel/mac80211/files/lib/wifi/mac80211.sh
-sed -i 's/set wireless.default_radio${devidx}.key=1234567890//g' package/kernel/mac80211/files/lib/wifi/mac80211.sh
+#sed -i 's/set wireless.default_radio${devidx}.encryption=sae-mixed/set wireless.default_radio${devidx}.encryption=none/g' package/kernel/mac80211/files/lib/wifi/mac80211.sh
+#sed -i 's/set wireless.default_radio${devidx}.key=1234567890//g' package/kernel/mac80211/files/lib/wifi/mac80211.sh
 
 #6.修改主机名
 sed -i "s/set system.@system[-1].hostname='OpenWrt'/set system.@system[-1].hostname='Redmi-AX6'/g" package/base-files/files/bin/config_generate
 
 #7.关闭虚拟网桥走 iptables
-echo "echo 0 > /proc/sys/net/bridge/bridge-nf-call-iptables" >> package/base-files/files/etc/rc.local
-echo "echo 0 > /proc/sys/net/bridge/bridge-nf-call-ip6tables" >> package/base-files/files/etc/rc.local
-echo "echo 0 > /proc/sys/net/bridge/bridge-nf-call-arptables" >> package/base-files/files/etc/rc.local
+sed -i '/exit 0/i echo 0 > /proc/sys/net/bridge/bridge-nf-call-iptables' package/base-files/files/etc/rc.local
+sed -i '/exit 0/i echo 0 > /proc/sys/net/bridge/bridge-nf-call-ip6tables' package/base-files/files/etc/rc.local
+sed -i '/exit 0/i echo 0 > /proc/sys/net/bridge/bridge-nf-call-arptables' package/base-files/files/etc/rc.local
+sed -i '/exit 0/i echo 0 > /proc/sys/net/bridge/bridge-nf-call-arptables' package/base-files/files/etc/rc.local
+sed -i  '/exit 0/{x;p;x}' package/base-files/files/etc/rc.local
