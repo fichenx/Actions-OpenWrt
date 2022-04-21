@@ -32,7 +32,7 @@ env:
   REPO_URL: https://github.com/xiangfeidexiaohuo/lede
   REPO_BRANCH: master
   FEEDS_CONF: feeds.conf.default
-  CONFIG_FILE: Redmi-AX6.config
+  CONFIG_FILE: Redmi_AX6_5.10.config
   DIY_P1_SH: lede_diy-part1.sh
   DIY_P2_SH: xiangfeidexiaohuo_diy-part2.sh
   UPLOAD_BIN_DIR: false
