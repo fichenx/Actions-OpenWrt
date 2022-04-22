@@ -17,18 +17,18 @@
 
 ![下载 (5)](https://user-images.githubusercontent.com/86181542/159106441-fdd3c90c-abd0-4f0c-8d5f-ddaa40819dab.png)
 ### 编译插件：
-连接用户、磁盘管理、Argon主题、广告屏蔽大师puls、微信推送、openclash依赖包（不含本体）、SmartDNS、KMS服务器、Frp内网穿透（客户端）、Upnp、usb打印服务器、硬盘休眠、网络共享、FTP服务器、Aria2、ZeroTier、多线多拨、负载均衡、Turbo ACC 网络加速、宽带监控。
+连接用户、磁盘管理、Argon主题、广告屏蔽大师puls、微信推送、openclash依赖包（不含本体）、SmartDNS、KMS服务器、Frp内网穿透（客户端）、Upnp、usb打印服务器、硬盘休眠、网络共享、FTP服务器、Aria2、ZeroTier、多线多拨、负载均衡、Turbo ACC 网络加速。
 
 ## 2、Redmi AX6
-- 使用源码：https://github.com/Boos4721/openwrt
-- 内核：5.15
+- 使用源码：https://github.com/xiangfeidexiaohuo/lede
+- 内核：5.10
 - 默认IP:192.168.123.1
 - 用户名：root
 - 密码：password
 ![下载 (6)](https://user-images.githubusercontent.com/86181542/159106907-30052d04-b1d1-4975-aa02-ebb699e3cf8d.png)
 
 ### 编译插件：
-连接用户、Argon主题、CPU性能优化调节、广告屏蔽大师puls、微信推送、openclash依赖包（不含本体）、SmartDNS、KMS服务器、Upnp、ZeroTier、多线多拨、负载均衡、Turbo ACC 网络加速、宽带监控。
+Argon主题、CPU性能优化调节、广告屏蔽大师puls、微信推送、openclash依赖包（不含本体）、SmartDNS、KMS服务器、Upnp、ZeroTier、多线多拨、负载均衡、Turbo ACC 网络加速。
 
 
 
