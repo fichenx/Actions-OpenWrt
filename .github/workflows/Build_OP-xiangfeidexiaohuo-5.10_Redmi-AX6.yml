@@ -23,7 +23,7 @@ on:
   #    - master
 
   schedule:
-    - cron: 50 1 * * 5
+  - cron: 50 1 * * 5
   
   #watch:
   #  types: [started]
