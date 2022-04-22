@@ -179,6 +179,7 @@ jobs:
           ${{ env.FIRMWARE }}/*.itb
           ${{ env.FIRMWARE }}/*.ubi
           ${{ env.FIRMWARE }}/*.bin
+          ${{ env.FIRMWARE }}/*.tar.gz
          
     - name: Delete workflow runs
       uses: GitRML/delete-workflow-runs@main
