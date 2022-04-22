@@ -24,7 +24,7 @@ on:
   #  - master
         
   schedule:
-   - cron: "30 7 * * 5"
+   - cron: "30 2 * * 5"
         
   #watch:
   # types: [started]
@@ -167,7 +167,7 @@ jobs:
       id: tag
       if: env.UPLOAD_RELEASE == 'true' && !cancelled()
       run: |
-        echo "::set-output name=release_tag::$(date +"%Y.%m.%d-%H%M")-Newifi_D2-Openwrt"
+        echo "::set-output name=release_tag::$(date +"%Y.%m.%d-%H%M")_Newifi-D2_Openwrt-lede内核5.4"
         touch release.txt
         [ $UPLOAD_COWTRANSFER = true ] && echo "🔗 [Cowtransfer](${{ steps.cowtransfer.outputs.url }})" >> release.txt
         [ $UPLOAD_WETRANSFER = true ] && echo "🔗 [WeTransfer](${{ steps.wetransfer.outputs.url }})" >> release.txt
@@ -189,6 +189,7 @@ jobs:
           ${{ env.FIRMWARE }}/*.itb
           ${{ env.FIRMWARE }}/*.ubi
           ${{ env.FIRMWARE }}/*.bin
+          ${{ env.FIRMWARE }}/*.tar.gz
 
     - name: Delete workflow runs
       uses: GitRML/delete-workflow-runs@main
