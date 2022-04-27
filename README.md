@@ -28,7 +28,7 @@
 ![下载 (6)](https://user-images.githubusercontent.com/86181542/159106907-30052d04-b1d1-4975-aa02-ebb699e3cf8d.png)
 
 ### 编译插件：
-Argon主题、CPU性能优化调节、广告屏蔽大师puls、微信推送、~~openclash依赖包（不含本体）、~~ShadowSocksR Plus+、SmartDNS、网络唤醒、KMS服务器、Upnp、ZeroTier、多线多拨、负载均衡、Turbo ACC 网络加速。
+Argon主题、CPU性能优化调节、广告屏蔽大师puls、微信推送、~~openclash依赖包（不含本体）~~、ShadowSocksR Plus+、SmartDNS、网络唤醒、KMS服务器、Upnp、ZeroTier、多线多拨、负载均衡、Turbo ACC 网络加速。
 
 
 
