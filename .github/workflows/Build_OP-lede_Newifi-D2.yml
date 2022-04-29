@@ -8,7 +8,7 @@
 # Description: Build OpenWrt using GitHub Actions
 #
 
-name: Build_lede-OP_Newifi_D2
+name: Build_OP-lede_Newifi-D2
 
 on:
   repository_dispatch:
