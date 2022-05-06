@@ -22,8 +22,8 @@ on:
   #  branches: 
   #    - master
 
-  schedule:
-    - cron: 25 18 * * 4
+  #schedule:
+  #  - cron: 25 18 * * 4
   
   #watch:
   #  types: [started]
@@ -158,11 +158,11 @@ jobs:
       id: tag
       if: env.UPLOAD_RELEASE == 'true' && !cancelled()
       run: |
-        echo "::set-output name=release_tag::$(date +"%Y.%m.%d-%H%M")_Redmi-AX6_Openwrt-xiangfeidexiaohuo-lede内核5.10"
+        echo "::set-output name=release_tag::$(date +"%Y.%m.%d-%H%M")_Redmi-AX6_Openwrt-WYC-2020-lede内核5.10"
         touch release.txt
         [ $UPLOAD_COWTRANSFER = true ] && echo "🔗 [Cowtransfer](${{ steps.cowtransfer.outputs.url }})" >> release.txt
         [ $UPLOAD_WETRANSFER = true ] && echo "🔗 [WeTransfer](${{ steps.wetransfer.outputs.url }})" >> release.txt
-        echo "Redmi-AX6 Openwrt xiangfeidexiaohuo-lede内核5.10固件配置：" >> release.txt
+        echo "Redmi-AX6 Openwrt WYC-2020-lede内核5.10固件配置：" >> release.txt
         echo "IP:192.168.123.1" >> release.txt
         echo "WEB登陆账户：root" >> release.txt
         echo "密码：password" >> release.txt
