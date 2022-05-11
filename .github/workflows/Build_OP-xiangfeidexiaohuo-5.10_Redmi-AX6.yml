@@ -8,7 +8,7 @@
 # Description: Build OpenWrt using GitHub Actions
 #
 
-name: Build_OP-xiangfeidexiaohuo-5.10_Redmi-AX6
+name: Build_OP-fichenx-5.10_Redmi-AX6
 
 on:
   repository_dispatch:
@@ -29,7 +29,7 @@ on:
   #  types: [started]
 
 env:
-  REPO_URL: https://github.com/xiangfeidexiaohuo/lede
+  REPO_URL: https://github.com/fichenx/lede
   REPO_BRANCH: master
   FEEDS_CONF: feeds.conf.default
   CONFIG_FILE: Redmi_AX6_5.10.config
