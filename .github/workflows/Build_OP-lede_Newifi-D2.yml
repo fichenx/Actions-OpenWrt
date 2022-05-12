@@ -186,10 +186,11 @@ jobs:
         tag_name: ${{ steps.tag.outputs.release_tag }}
         body_path: release.txt
         files: |
-          ${{ env.FIRMWARE }}/*.itb
-          ${{ env.FIRMWARE }}/*.ubi
-          ${{ env.FIRMWARE }}/*.bin
-          ${{ env.FIRMWARE }}/*.tar.gz
+          ${{ env.FIRMWARE }}/*
+          #${{ env.FIRMWARE }}/*.itb
+          #${{ env.FIRMWARE }}/*.ubi
+          #${{ env.FIRMWARE }}/*.bin
+          #${{ env.FIRMWARE }}/*.buildinfo
 
     - name: Delete workflow runs
       uses: GitRML/delete-workflow-runs@main
