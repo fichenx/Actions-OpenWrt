@@ -190,6 +190,7 @@ jobs:
         body_path: release.txt
         files: |
           ${{ env.FIRMWARE }}/*
+          ~/openwrt/bin/packages/mipsel_24kc/Boos4721/luci-app-openclash_*.ipk
           #${{ env.FIRMWARE }}/*.itb
           #${{ env.FIRMWARE }}/*.ubi
           #${{ env.FIRMWARE }}/*.bin
