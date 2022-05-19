@@ -175,6 +175,9 @@ jobs:
         echo "IP:192.168.124.1" >> release.txt
         echo "WEB登陆账户：root" >> release.txt
         echo "密码：password" >> release.txt
+        echo "为了方便更新,本固件只集成了openclash依赖,已编译openclash,可自行下载安装！" >> release.txt
+        echo "软件源推荐：https://downloads.immortalwrt.org/snapshots/packages/mipsel_24kc/" >> release.txt
+        
         echo "::set-output name=status::success"
 
     - name: Upload firmware to release
