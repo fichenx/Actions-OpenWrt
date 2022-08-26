@@ -178,7 +178,8 @@ jobs:
         echo "为了方便更新,本固件只集成了openclash依赖,已编译openclash,可自行下载安装！" >> release.txt
         echo "openclash官方地址:https://github.com/vernesong/OpenClash/releases" >> release.txt
         echo "软件源推荐：https://downloads.immortalwrt.org/snapshots/packages/mipsel_24kc/" >> release.txt
-        
+        echo "固件内核版本：https://github.com/coolsnowwolf/lede" >> release.txt
+        echo "${{ env.useVersionInfo }}" >> release.txt
         echo "::set-output name=status::success"
 
     - name: Upload firmware to release
