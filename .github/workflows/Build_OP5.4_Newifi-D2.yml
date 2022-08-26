@@ -8,7 +8,7 @@
 # Description: Build OpenWrt using GitHub Actions
 #
 
-name: Build_OP-lede_Newifi-D2
+name: Build_OP5.4_Newifi-D2
 
 on:
   repository_dispatch:
@@ -167,11 +167,11 @@ jobs:
       id: tag
       if: env.UPLOAD_RELEASE == 'true' && !cancelled()
       run: |
-        echo "::set-output name=release_tag::$(date +"%Y.%m.%d-%H%M")_Newifi-D2_Openwrt-lede内核5.4"
+        echo "::set-output name=release_tag::${{ env.DATE }}_Newifi-D2_Openwrt_lede内核"
         touch release.txt
         [ $UPLOAD_COWTRANSFER = true ] && echo "🔗 [Cowtransfer](${{ steps.cowtransfer.outputs.url }})" >> release.txt
         [ $UPLOAD_WETRANSFER = true ] && echo "🔗 [WeTransfer](${{ steps.wetransfer.outputs.url }})" >> release.txt
-        echo "Newifi_D2 Openwrt固件配置：" >> release.txt
+        echo "Newifi_D2 Openwrt-lede内核5.4固件配置：" >> release.txt
         echo "IP:192.168.124.1" >> release.txt
         echo "WEB登陆账户：root" >> release.txt
         echo "密码：password" >> release.txt
