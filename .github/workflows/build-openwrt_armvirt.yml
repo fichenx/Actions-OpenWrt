@@ -27,7 +27,7 @@ env:
   FEEDS_CONF: feeds.conf.default
   CONFIG_FILE: phicomm-N1.config
   DIY_P1_SH: lede_diy-part1.sh
-  DIY_P2_SH: 0N1_diy-part2.sh
+  DIY_P2_SH: N1_diy-part2.sh
   UPLOAD_BIN_DIR: false
   UPLOAD_FIRMWARE: false
   UPLOAD_RELEASE: true
