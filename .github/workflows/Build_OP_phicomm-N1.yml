@@ -22,14 +22,14 @@ env:
   REPO_BRANCH: master
   FEEDS_CONF: feeds.conf.default
   CONFIG_FILE: phicomm-N1.config
-  DIY_P1_SH: diy-part1.sh
-  DIY_P2_SH: n1_diy-part2.sh
+  DIY_P1_SH: lede_diy-part1.sh
+  DIY_P2_SH: N1_diy-part2.sh
   UPLOAD_FIRMWARE: false
   UPLOAD_RELEASE: true
   RECENT_LASTEST: 30
   TZ: Asia/Shanghai
-  FILE_NAME: ARMv8
-  PRODUCT_NAME: ARMv8
+  FILE_NAME: ARMv8_phicomm-N1
+  PRODUCT_NAME: ARMv8_phicomm-N1
 
 jobs:
   build:
@@ -67,7 +67,7 @@ jobs:
       if: (!cancelled())
       uses: ophub/flippy-openwrt-actions@main
       env:
-        OPENWRT_ARMVIRT: https://github.com/fichenx/Actions-OpenWrt/releases/download/openwrt_armvirt/openwrt-armvirt-64-default-rootfs.tar.gz
+        OPENWRT_ARMVIRT: https://github.com/fichenx/OpenWrt/releases/download/openwrt_armvirt/openwrt-armvirt-64-default-rootfs.tar.gz
         PACKAGE_SOC: s905d
         WHOAMI: fichenx
         KERNEL_REPO_URL: https://github.com/breakings/OpenWrt/tree/main/opt/kernel
@@ -102,7 +102,10 @@ jobs:
         token: ${{ secrets.RELEASES_TOKEN }}
         artifacts: ${{ env.PACKAGED_OUTPUTPATH }}/*
         body: |
-          - 默认IP：192.168.1.1 默认密码：password (WiFi密码同）
+          - 斐讯N1 Openwrt 固件配置：
+          -     IP:192.168.123.2
+          -     WEB登陆账户：root
+          -     密码：password
           - 当前使用版本:【编译前的最后一次➦[主源码](https://github.com/coolsnowwolf/lede)更新记录】
           - 常见问题及注意事项请参考恩山F大➦[最新帖](https://www.right.com.cn/forum/thread-4076037-1-1.html)
           ${{ env.useVersionInfo }}
