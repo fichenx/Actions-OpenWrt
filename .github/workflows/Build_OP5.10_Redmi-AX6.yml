@@ -165,7 +165,7 @@ jobs:
       id: tag
       if: env.UPLOAD_RELEASE == 'true' && !cancelled()
       run: |
-        echo "::set-output name=release_tag::${{ env.DATE }}_${{ env.PRODUCT_NAME }}"
+        echo "::set-output name=release_tag::${{ env.DATE }}_${{ env.FILE_NAME }}"
         touch release.txt
         [ $UPLOAD_COWTRANSFER = true ] && echo "🔗 [Cowtransfer](${{ steps.cowtransfer.outputs.url }})" >> release.txt
         [ $UPLOAD_WETRANSFER = true ] && echo "🔗 [WeTransfer](${{ steps.wetransfer.outputs.url }})" >> release.txt
@@ -183,6 +183,7 @@ jobs:
         GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
       with:
         tag_name: ${{ env.FILE_NAME }}
+        name: ${{ env.DATE }}_${{ env.FILE_NAME }}
         body_path: release.txt
         files: |
           ${{ env.FIRMWARE }}/*
