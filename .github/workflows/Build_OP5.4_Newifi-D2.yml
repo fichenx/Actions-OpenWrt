@@ -195,7 +195,7 @@ jobs:
       env:
         GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
       with:
-        tag_name: ${{ env.FILE_NAME }}
+        tag_name: $(date +"%Y%m%d")_${{ env.FILE_NAME }}
         name: ${{ env.DATE }}_${{ env.FILE_NAME }}
         body_path: release.txt
         files: |
