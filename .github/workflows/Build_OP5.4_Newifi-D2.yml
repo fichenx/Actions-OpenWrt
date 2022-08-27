@@ -41,6 +41,8 @@ env:
   UPLOAD_WETRANSFER: false
   UPLOAD_RELEASE: true
   TZ: Asia/Shanghai
+  FILE_NAME: Newifi-D2_Openwrt_lede内核
+  PRODUCT_NAME: Newifi-D2_Openwrt_lede内核
 
 jobs:
   build:
@@ -172,7 +174,7 @@ jobs:
       id: tag
       if: env.UPLOAD_RELEASE == 'true' && !cancelled()
       run: |
-        echo "::set-output name=release_tag::${{ env.DATE }}_Newifi-D2_Openwrt_lede内核"
+        echo "::set-output name=release_tag::${{ env.DATE }}_${{ env.PRODUCT_NAME }}"
         touch release.txt
         [ $UPLOAD_COWTRANSFER = true ] && echo "🔗 [Cowtransfer](${{ steps.cowtransfer.outputs.url }})" >> release.txt
         [ $UPLOAD_WETRANSFER = true ] && echo "🔗 [WeTransfer](${{ steps.wetransfer.outputs.url }})" >> release.txt
@@ -193,7 +195,7 @@ jobs:
       env:
         GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
       with:
-        tag_name: ${{ steps.tag.outputs.release_tag }}
+        tag_name: ${{ env.FILE_NAME }}
         body_path: release.txt
         files: |
           ${{ env.FIRMWARE }}/*
