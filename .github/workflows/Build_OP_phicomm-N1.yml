@@ -14,8 +14,8 @@ on:
         description: 'SSH connection'
         required: false
         default: 'false'
-#  schedule:
-#    - cron: '45 15 * * 4'
+  schedule:
+    - cron: '45 15 * * 4'
 
 env:
   REPO_URL: https://github.com/coolsnowwolf/lede
