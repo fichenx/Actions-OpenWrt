@@ -173,7 +173,7 @@ jobs:
         echo "IP:192.168.123.1" >> release.txt
         echo "WEB登陆账户：root" >> release.txt
         echo "密码：password" >> release.txt
-        echo "固件内核版本：https://github.com/coolsnowwolf/lede" >> release.txt
+        echo "固件内核版本：https://github.com/fichenx/lede" >> release.txt
         echo "${{ env.useVersionInfo }}" >> release.txt
         echo "::set-output name=status::success"
     - name: Upload firmware to release
