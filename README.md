@@ -40,7 +40,7 @@ Argon主题、CPU性能优化调节、广告屏蔽大师puls、微信推送、Sh
 
 
 ### 编译插件：
-Argon主题、广告屏蔽大师puls、ikoolproxy、微信推送、ShadowSocksR Plus+、SmartDNS、网络唤醒、KMS服务器、Upnp、N2N VPN、晨晶宝盒、aria2、filebrowser、docker、Frps、Frpc、硬盘休眠、minidlna、nfs、nps、usb打印服务器、PPTP server、samba4、socat、udpxy、uhttpd、watchcat高级重启、wireguard、多线多拨、负载均衡、Turbo ACC 网络加速。
+Argon主题、广告屏蔽大师puls、ikoolproxy、微信推送、ShadowSocksR Plus+、openclash、SmartDNS、网络唤醒、KMS服务器、Upnp、N2N VPN、晨晶宝盒、aria2、filebrowser、docker、Frps、Frpc、硬盘休眠、minidlna、nfs、nps、usb打印服务器、PPTP server、samba4、socat、udpxy、uhttpd、watchcat高级重启、wireguard、多线多拨、负载均衡、Turbo ACC 网络加速。
 
 
 ---------------------------
