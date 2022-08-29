@@ -17,7 +17,7 @@
 
 ![下载 (5)](https://user-images.githubusercontent.com/86181542/159106441-fdd3c90c-abd0-4f0c-8d5f-ddaa40819dab.png)
 ### 编译插件：
-连接用户、磁盘管理、Argon主题、广告屏蔽大师puls、微信推送、openclash依赖包（不含本体）、SmartDNS、KMS服务器、Frp内网穿透（客户端）、Upnp、usb打印服务器、硬盘休眠、网络共享、FTP服务器、Aria2、ZeroTier、多线多拨、负载均衡、Turbo ACC 网络加速。
+磁盘管理、Argon主题、广告屏蔽大师puls、微信推送、openclash、SmartDNS、KMS服务器、Frp内网穿透（客户端）、Upnp、usb打印服务器、硬盘休眠、网络共享、FTP服务器、Aria2、N2N VPN、多线多拨、负载均衡、Turbo ACC 网络加速。
 
 ## 2、Redmi AX6
 - 使用源码：https://github.com/fichenx/lede (lede源码基础上添加对ax6的支持)
@@ -28,10 +28,19 @@
 ![下载 (6)](https://user-images.githubusercontent.com/86181542/159106907-30052d04-b1d1-4975-aa02-ebb699e3cf8d.png)
 
 ### 编译插件：
-Argon主题、CPU性能优化调节、广告屏蔽大师puls、微信推送、~~openclash依赖包（不含本体）~~、ShadowSocksR Plus+、SmartDNS、网络唤醒、KMS服务器、Upnp、ZeroTier、多线多拨、负载均衡、Turbo ACC 网络加速。
+Argon主题、CPU性能优化调节、广告屏蔽大师puls、微信推送、ShadowSocksR Plus+、SmartDNS、网络唤醒、KMS服务器、Upnp、N2N VPN、多线多拨、负载均衡、Turbo ACC 网络加速。
 
 
+## 3、裴讯N1
+- 使用源码：https://github.com/coolsnowwolf/lede 
+- 内核：5.4、5.10、5.15、5.19
+- 默认IP:192.168.123.2
+- 用户名：root
+- 密码：password
 
+
+### 编译插件：
+Argon主题、广告屏蔽大师puls、ikoolproxy、微信推送、ShadowSocksR Plus+、SmartDNS、网络唤醒、KMS服务器、Upnp、N2N VPN、晨晶宝盒、aria2、filebrowser、docker、Frps、Frpc、硬盘休眠、minidlna、nfs、nps、usb打印服务器、PPTP server、samba4、socat、udpxy、uhttpd、watchcat高级重启、wireguard、多线多拨、负载均衡、Turbo ACC 网络加速。
 
 
 ---------------------------
