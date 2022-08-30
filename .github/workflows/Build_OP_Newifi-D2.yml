@@ -8,7 +8,7 @@
 # Description: Build OpenWrt using GitHub Actions
 #
 
-name: Build_OP5.4_Newifi-D2
+name: Build_OP_Newifi-D2
 
 on:
   repository_dispatch:
@@ -34,15 +34,15 @@ env:
   FEEDS_CONF: feeds.conf.default
   CONFIG_FILE: Newifi_D2.config
   DIY_P1_SH: lede_diy-part1.sh
-  DIY_P2_SH: Newifi-D2_lede_diy-part2.sh
+  DIY_P2_SH: Newifi-D2_diy-part2.sh
   UPLOAD_BIN_DIR: false
   UPLOAD_FIRMWARE: true
   UPLOAD_COWTRANSFER: false
   UPLOAD_WETRANSFER: false
   UPLOAD_RELEASE: true
   TZ: Asia/Shanghai
-  FILE_NAME: Newifi-D2_Openwrt_lede内核
-  PRODUCT_NAME: Newifi-D2_Openwrt_lede内核
+  FILE_NAME: Newifi-D2_Openwrt
+  PRODUCT_NAME: Newifi-D2_Openwrt
 
 jobs:
   build:
@@ -178,12 +178,13 @@ jobs:
         touch release.txt
         [ $UPLOAD_COWTRANSFER = true ] && echo "🔗 [Cowtransfer](${{ steps.cowtransfer.outputs.url }})" >> release.txt
         [ $UPLOAD_WETRANSFER = true ] && echo "🔗 [WeTransfer](${{ steps.wetransfer.outputs.url }})" >> release.txt
-        echo "Newifi_D2 Openwrt-lede内核5.4固件配置：" >> release.txt
+        echo "Newifi_D2 Openwrt固件配置：" >> release.txt
         echo "IP:192.168.124.1" >> release.txt
         echo "WEB登陆账户：root" >> release.txt
         echo "密码：password" >> release.txt
-        echo "软件源推荐：https://downloads.immortalwrt.org/snapshots/packages/mipsel_24kc/" >> release.txt
-        echo "固件内核版本：https://github.com/coolsnowwolf/lede" >> release.txt
+        echo "固件源码：https://github.com/coolsnowwolf/lede" >> release.txt
+        echo "固件内核版本：5.4" >> release.txt
+        echo "软件源推荐：https://downloads.immortalwrt.org/snapshots/packages/mipsel_24kc/" >> release.txt        
         echo "${{ env.useVersionInfo }}" >> release.txt
         echo "::set-output name=status::success"
 
