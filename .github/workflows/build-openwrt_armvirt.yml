@@ -25,9 +25,9 @@ env:
   REPO_URL: https://github.com/coolsnowwolf/lede
   REPO_BRANCH: master
   FEEDS_CONF: feeds.conf.default
-  CONFIG_FILE: phicomm-N1.config
+  CONFIG_FILE: ARMv8.config
   DIY_P1_SH: lede_diy-part1.sh
-  DIY_P2_SH: N1_diy-part2.sh
+  DIY_P2_SH: ARMv8_diy-part2.sh
   UPLOAD_BIN_DIR: false
   UPLOAD_FIRMWARE: false
   UPLOAD_RELEASE: true
@@ -179,7 +179,7 @@ jobs:
         commit: main
         token: ${{ secrets.RELEASES_TOKEN }}
         body: |
-          - 此为phicomm-N1底包，非完整固件，每天自动编译
+          - 此为ARMv8底包，非完整固件，每天自动编译
           - 当前使用版本:【编译前的最后一次[➦主源码](https://github.com/coolsnowwolf/lede)更新记录】
           ${{ env.useVersionInfo }}
         artifacts: ${{ env.FIRMWARE }}/*
