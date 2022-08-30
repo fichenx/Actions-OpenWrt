@@ -32,7 +32,7 @@ env:
   REPO_URL: https://github.com/fichenx/lede
   REPO_BRANCH: master
   FEEDS_CONF: feeds.conf.default
-  CONFIG_FILE: Redmi_AX6_5.10.config
+  CONFIG_FILE: AX6.config
   DIY_P1_SH: lede_diy-part1.sh
   DIY_P2_SH: AX6_lede_diy-part2.sh
   UPLOAD_BIN_DIR: false
