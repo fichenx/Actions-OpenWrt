@@ -29,7 +29,7 @@ on:
   #  types: [started]
 
 env:
-  REPO_URL: https://github.com/fichenx/lede
+  REPO_URL: https://github.com/coolsnowwolf/lede
   REPO_BRANCH: master
   FEEDS_CONF: feeds.conf.default
   CONFIG_FILE: AX6.config
@@ -68,19 +68,24 @@ jobs:
       working-directory: /workdir
       run: |
         df -hT $PWD
-        git clone $REPO_URL -b $REPO_BRANCH openwrt
+        git clone --depth 1 $REPO_URL -b $REPO_BRANCH openwrt
         ln -sf /workdir/openwrt $GITHUB_WORKSPACE/openwrt
         cd openwrt
         useVersionInfo=$(git show -s --date=short --format="Author: %an<br/>date: %cd<br/>commit: %s<br/>commit hash: %H")
         echo "useVersionInfo=$useVersionInfo" >> $GITHUB_ENV
         echo "DATE=$(date "+%Y-%m-%d %H:%M:%S")" >> $GITHUB_ENV
         echo "DATE1=$(date "+%Y-%m-%d")" >> $GITHUB_ENV
+        
+    - name: Revert some drop sh*t
+      run: cp -rf $GITHUB_WORKSPACE/general/AX6/* openwrt/
+          
     - name: Load custom feeds
       run: |
         [ -e $FEEDS_CONF ] && mv $FEEDS_CONF openwrt/feeds.conf.default
         chmod +x $DIY_P1_SH
         cd openwrt
         $GITHUB_WORKSPACE/$DIY_P1_SH
+        
     - name: Update feeds
       run: cd openwrt && ./scripts/feeds update -a
 
@@ -169,12 +174,12 @@ jobs:
         touch release.txt
         [ $UPLOAD_COWTRANSFER = true ] && echo "🔗 [Cowtransfer](${{ steps.cowtransfer.outputs.url }})" >> release.txt
         [ $UPLOAD_WETRANSFER = true ] && echo "🔗 [WeTransfer](${{ steps.wetransfer.outputs.url }})" >> release.txt
-        echo "Redmi-AX6 Openwrt 固件配置：" >> release.txt
+        echo "Redmi-AX6 Openwrt 固件配置�?" >> release.txt
         echo "IP:192.168.123.1" >> release.txt
         echo "WEB登陆账户：root" >> release.txt
         echo "密码：password" >> release.txt
         echo "固件源码：https://github.com/fichenx/lede" >> release.txt
-        echo "固件内核版本：5.10" >> release.txt
+        echo "固件内核版本�?5.10" >> release.txt
         echo "${{ env.useVersionInfo }}" >> release.txt
         echo "::set-output name=status::success"
     - name: Upload firmware to release

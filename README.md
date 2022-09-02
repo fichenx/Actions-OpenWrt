@@ -1,4 +1,4 @@
-**English** | [中文](https://p3terx.com/archives/build-openwrt-with-github-actions.html)
+**中文** | [上游源代码](https://github.com/P3TERX/Actions-OpenWrt)
 
 # Actions-OpenWrt
 
@@ -20,7 +20,7 @@
 磁盘管理、Argon主题、广告屏蔽大师puls、微信推送、openclash、SmartDNS、KMS服务器、Frp内网穿透（客户端）、Upnp、usb打印服务器、硬盘休眠、网络共享、FTP服务器、Aria2、N2N VPN、多线多拨、负载均衡、Turbo ACC 网络加速。
 
 ## 2、Redmi AX6
-- 使用源码：https://github.com/fichenx/lede (lede源码基础上添加对ax6的支持)
+- 使用源码：https://github.com/coolsnowwolf/lede (恢复对ax6的支持)
 - 内核：5.10
 - 默认IP:192.168.123.1
 - 用户名：root
@@ -31,7 +31,7 @@
 Argon主题、CPU性能优化调节、广告屏蔽大师puls、微信推送、ShadowSocksR Plus+、SmartDNS、网络唤醒、KMS服务器、Upnp、N2N VPN、多线多拨、负载均衡、Turbo ACC 网络加速。
 
 
-## 3、裴讯N1
+## 3、ARMV8
 - 使用源码：https://github.com/coolsnowwolf/lede 
 - 内核：5.4、5.10、5.15、5.19
 - 默认IP:192.168.123.2
@@ -40,7 +40,7 @@ Argon主题、CPU性能优化调节、广告屏蔽大师puls、微信推送、Sh
 
 
 ### 编译插件：
-Argon主题、广告屏蔽大师puls、ikoolproxy、微信推送、ShadowSocksR Plus+、openclash、SmartDNS、网络唤醒、KMS服务器、Upnp、N2N VPN、晨晶宝盒、aria2、filebrowser、docker、Frps、Frpc、硬盘休眠、minidlna、nfs、nps、usb打印服务器、PPTP server、samba4、socat、udpxy、uhttpd、watchcat高级重启、wireguard、多线多拨、负载均衡、Turbo ACC 网络加速。
+Argon主题、广告屏蔽大师puls、ikoolproxy、微信推送、ShadowSocksR Plus+、openclash、SmartDNS、网络唤醒、KMS服务器、Upnp、N2N VPN、晨晶宝盒、aria2、filebrowser、微力同步、docker、Frps、Frpc、硬盘休眠、minidlna、nfs、nps、usb打印服务器、PPTP server、samba4、socat、udpxy、uhttpd、watchcat高级重启、wireguard、多线多拨、负载均衡、Turbo ACC 网络加速。
 
 
 ---------------------------
@@ -63,29 +63,6 @@ Argon主题、广告屏蔽大师puls、ikoolproxy、微信推送、ShadowSocksR 
 
 
 --------------------------------------------------------------------------------------------------------------------------
-A template for building OpenWrt with GitHub Actions
-
-## Usage
-
-- Click the [Use this template](https://github.com/P3TERX/Actions-OpenWrt/generate) button to create a new repository.
-- Generate `.config` files using [Lean's OpenWrt](https://github.com/coolsnowwolf/lede) source code. ( You can change it through environment variables in the workflow file. )
-- Push `.config` file to the GitHub repository.
-- Select `Build OpenWrt` on the Actions page.
-- Click the `Run workflow` button.
-- When the build is complete, click the `Artifacts` button in the upper right corner of the Actions page to download the binaries.
-
-## Tips
-
-- It may take a long time to create a `.config` file and build the OpenWrt firmware. Thus, before create repository to build your own firmware, you may check out if others have already built it which meet your needs by simply [search `Actions-Openwrt` in GitHub](https://github.com/search?q=Actions-openwrt).
-- Add some meta info of your built firmware (such as firmware architecture and installed packages) to your repository introduction, this will save others' time.
-
-
-
-
-
-
-
-
 
 ## Credits
 
