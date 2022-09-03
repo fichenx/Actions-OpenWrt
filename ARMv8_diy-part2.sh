@@ -143,7 +143,22 @@ sed -i "s|opt/kernel|https://github.com/breakings/OpenWrt/opt/kernel|g" feeds/fi
 sed -i 's/PKG_VERSION:=.*/PKG_VERSION:=2.10.0/g' feeds/packages/utils/docker-compose/Makefile
 sed -i 's/PKG_HASH:=.*/PKG_HASH:=981282ee5cc454a69f1d56845efea5645ff90295b9198decfc62674a9e286baa/g' feeds/packages/utils/docker-compose/Makefile
 
+#####修改应用位置######
 # luci-app-openvpn
 sed -i 's/services/vpn/g'  feeds/luci/applications/luci-app-openvpn/luasrc/controller/openvpn.lua
 sed -i 's/services/vpn/g'  feeds/luci/applications/luci-app-openvpn/luasrc/model/cbi/openvpn.lua
 sed -i 's/services/vpn/g'  feeds/luci/applications/luci-app-openvpn/luasrc/view/openvpn/pageswitch.htm
+
+#luci-app-frpc
+sed -i 's/"services"/"vpn"/g'  feeds/luci/applications/luci-app-frpc/luasrc/controller/frp.lua
+sed -i 's/"services"/"vpn"/g'  feeds/luci/applications/luci-app-frpc/luasrc/model/cbi/frp/basic.lua
+sed -i 's/"services"/"vpn"/g'  feeds/luci/applications/luci-app-frpc/luasrc/model/cbi/frp/config.lua
+sed -i 's/\[services\]/\[vpn\]/g'  feeds/luci/applications/luci-app-frpc/luasrc/view/frp/frp_status.htm
+
+#luci-app-frps
+sed -i 's/"services"/"vpn"/g'  feeds/luci/applications/luci-app-frps/luasrc/controller/frps.lua
+sed -i 's/\[services\]/\[vpn\]/g'  feeds/luci/applications/luci-app-frps/luasrc/view/frps/frps_status.htm
+
+#luci-app-nps
+sed -i 's/"services"/"vpn"/g'  feeds/luci/applications/luci-app-nps/luasrc/controller/nps.lua
+sed -i 's/\[services\]/\[vpn\]/g'  feeds/luci/applications/luci-app-nps/luasrc/view/nps/nps_status.htm
