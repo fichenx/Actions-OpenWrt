@@ -105,7 +105,7 @@ sed -i 's/DEPENDS:=@(.*/DEPENDS:=@(TARGET_bcm27xx||TARGET_bcm53xx||TARGET_ipq40x
 #svn co https://github.com/xiaorouji/openwrt-passwall/trunk/naiveproxy package/naiveproxy
 #git clone https://github.com/semigodking/redsocks.git package/redsocks2
 #svn co https://github.com/rufengsuixing/luci-app-adguardhome/trunk package/luci-app-adguardhome
-#svn co https://github.com/Lienol/openwrt-package/trunk/luci-app-filebrowser package/luci-app-filebrowser
+svn co https://github.com/Lienol/openwrt-package/trunk/luci-app-filebrowser package/luci-app-filebrowser
 #svn co https://github.com/Lienol/openwrt-package/trunk/luci-app-ssr-mudb-server package/luci-app-ssr-mudb-server
 #svn co https://github.com/halldong/luci-app-speederv2/trunk package/luci-app-speederv2
 
