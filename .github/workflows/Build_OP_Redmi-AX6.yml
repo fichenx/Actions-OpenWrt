@@ -172,14 +172,14 @@ jobs:
       run: |
         echo "::set-output name=release_tag::$(date +"%Y%m%d")_${{ env.FILE_NAME }}"
         touch release.txt
-        [ $UPLOAD_COWTRANSFER = true ] && echo "🔗 [Cowtransfer](${{ steps.cowtransfer.outputs.url }})" >> release.txt
-        [ $UPLOAD_WETRANSFER = true ] && echo "🔗 [WeTransfer](${{ steps.wetransfer.outputs.url }})" >> release.txt
-        echo "Redmi-AX6 Openwrt 固件配置�?" >> release.txt
+        [ $UPLOAD_COWTRANSFER = true ] && echo "�� [Cowtransfer](${{ steps.cowtransfer.outputs.url }})" >> release.txt
+        [ $UPLOAD_WETRANSFER = true ] && echo "�� [WeTransfer](${{ steps.wetransfer.outputs.url }})" >> release.txt
+        echo "Redmi-AX6 Openwrt 固件配置：" >> release.txt
         echo "IP:192.168.123.1" >> release.txt
         echo "WEB登陆账户：root" >> release.txt
         echo "密码：password" >> release.txt
-        echo "固件源码：https://github.com/fichenx/lede" >> release.txt
-        echo "固件内核版本�?5.10" >> release.txt
+        echo "固件源码：https://github.com/coolsnowwolf/lede" >> release.txt
+        echo "固件内核版本：5.10" >> release.txt
         echo "${{ env.useVersionInfo }}" >> release.txt
         echo "::set-output name=status::success"
     - name: Upload firmware to release
