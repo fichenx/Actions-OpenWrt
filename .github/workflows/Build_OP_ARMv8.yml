@@ -109,6 +109,12 @@ jobs:
           -  密码：password
           - 当前使用版本:【编译前的最后一次➦[主源码](https://github.com/coolsnowwolf/lede)更新记录】
           - 常见问题及注意事项请参考恩山F大➦[最新帖](https://www.right.com.cn/forum/thread-4076037-1-1.html)
+          - 升级固件脚本：[openwrt-update-amlogic](https://raw.githubusercontent.com/unifreq/openwrt_packit/master/files/openwrt-update-amlogic)
+          - 升级脚本用法：
+          - 先把 openwrt-update-amlogic 以及镜像文件 xxxxxxxxxxxxxxxxxxxxxxxxx.img用winscp工具上传至/mnt/mmcblk2p4, 
+          - 然后：cd  /mnt/mmcblk2p4
+          - chmod 755 openwrt-update-amlogic
+          - ./openwrt-update-amlogic  xxxxxxxxxxxxxxxxxxxxxxxxxx.img   (或者用晶晨宝盒也可以更新）
           ${{ env.useVersionInfo }}
     - name: Delete workflow runs
       uses: GitRML/delete-workflow-runs@main
