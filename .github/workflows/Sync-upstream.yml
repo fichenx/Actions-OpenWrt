@@ -1,5 +1,5 @@
 
-name: Sync packages
+name: Sync upstream
 
 on:
   push:
