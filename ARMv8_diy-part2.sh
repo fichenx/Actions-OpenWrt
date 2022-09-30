@@ -140,8 +140,8 @@ sed -i "s|opt/kernel|https://github.com/breakings/OpenWrt/opt/kernel|g" feeds/fi
 
 
 # docker-compose
-sed -i 's/PKG_VERSION:=.*/PKG_VERSION:=2.10.0/g' feeds/packages/utils/docker-compose/Makefile
-sed -i 's/PKG_HASH:=.*/PKG_HASH:=981282ee5cc454a69f1d56845efea5645ff90295b9198decfc62674a9e286baa/g' feeds/packages/utils/docker-compose/Makefile
+sed -i 's/PKG_VERSION:=.*/PKG_VERSION:=2.11.2/g' feeds/packages/utils/docker-compose/Makefile
+sed -i 's/PKG_HASH:=.*/PKG_HASH:=592e712f568938046602c0d4c225bc3c333e2b77574634fa0f39a8c066d04561/g' feeds/packages/utils/docker-compose/Makefile
 
 #####修改应用位置######
 # luci-app-openvpn
