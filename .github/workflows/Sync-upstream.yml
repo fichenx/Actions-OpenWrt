@@ -2,7 +2,7 @@
 name: Sync upstream
 
 on:
-  push:
+#  push:
 #    paths:
 #      - '.github/workflows/Sync-upstream.yml'
 #      - 'diy/**'
