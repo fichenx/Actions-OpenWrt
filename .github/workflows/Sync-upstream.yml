@@ -38,7 +38,6 @@ jobs:
     - name: Clone packages
       run: |
         cd $GITHUB_WORKSPACE
-        chmod +x ${{matrix.target}}.sh
         git clone -b ${{matrix.target}} https://github.com/fichenx/OpenWrt.git ${{matrix.target}}
         cd ${{matrix.target}}
         git rm -r --cache * >/dev/null 2>&1 &
