@@ -138,6 +138,17 @@ sed -i "s|opt/kernel|https://github.com/breakings/OpenWrt/opt/kernel|g" feeds/fi
 #sed -i "s|ARMv8|ARMv8|g" feeds/fichenx/luci-app-amlogic/root/etc/config/amlogic
 #sed -i "s|.img.gz|..OPENWRT_SUFFIX|g" package/luci-app-amlogic/root/etc/config/amlogic
 
+# Qt5 -qtbase
+#sed -i "s/PKG_BUGFIX:=.*/PKG_BUGFIX:=6/g" feeds/packages/libs/qtbase/Makefile
+#sed -i "s/PKG_HASH:=.*/PKG_HASH:=396bc6b0d773ac6a7c691a4c3d901999f571e3e7033d7fd6f65e4ef2b6eb7340/g" feeds/packages/libs/qtbase/Makefile
+rm -rf feeds/packages/libs/qtbase
+cp -rf $GITHUB_WORKSPACE/general/qtbase feeds/packages/libs
+
+# Qt5 -qttools
+#sed -i "s/PKG_BUGFIX:=.*/PKG_BUGFIX:=6/g" feeds/packages/libs/qttools/Makefile
+#sed -i "s/PKG_HASH:=.*/PKG_HASH:=2c1486ab7e6dad76fb34642cd4f91d533e5dfeec0ee527129c2c2ed4ab283c3b/g" feeds/packages/libs/qttools/Makefile
+rm -rf feeds/packages/libs/qttools
+cp -rf $GITHUB_WORKSPACE/general/qttools feeds/packages/libs
 
 # docker-compose
 sed -i 's/PKG_VERSION:=.*/PKG_VERSION:=2.11.2/g' feeds/packages/utils/docker-compose/Makefile
