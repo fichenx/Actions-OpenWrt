@@ -3,11 +3,11 @@ name: Sync upstream
 
 on:
   push:
-    paths:
-      - '.github/workflows/Sync-upstream.yml'
-      - 'diy/**'
+#    paths:
+#      - '.github/workflows/Sync-upstream.yml'
+#      - 'diy/**'
   schedule:
-    - cron: 0 */12 * * *
+    - cron: 0 12 * * *
   watch:
     types: started
   repository_dispatch:
