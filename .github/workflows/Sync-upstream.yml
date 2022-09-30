@@ -40,8 +40,8 @@ jobs:
         cd $GITHUB_WORKSPACE
         git clone -b ${{matrix.target}} https://github.com/fichenx/OpenWrt.git ${{matrix.target}}
         cd ${{matrix.target}}
-        git rm -r --cache * >/dev/null 2>&1 &
-        rm -rf `find ./* -maxdepth 0 -type d ! -name "diy"` >/dev/null 2>&1
+        #git rm -r --cache * >/dev/null 2>&1 &
+        #rm -rf `find ./* -maxdepth 0 -type d ! -name "diy"` >/dev/null 2>&1
         svn export --force https://github.com/breakings/OpenWrt/trunk/general
 
     - name: Upload small-package
