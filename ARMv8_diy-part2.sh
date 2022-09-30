@@ -150,6 +150,40 @@ cp -rf $GITHUB_WORKSPACE/general/qtbase feeds/packages/libs
 rm -rf feeds/packages/libs/qttools
 cp -rf $GITHUB_WORKSPACE/general/qttools feeds/packages/libs
 
+# openssh
+#sed -i 's/PKG_VERSION:=.*/PKG_VERSION:=8.9p1/g' feeds/packages/net/openssh/Makefile
+#sed -i 's/PKG_RELEASE:=.*/PKG_RELEASE:=1/g' feeds/packages/net/openssh/Makefile
+#sed -i 's/PKG_HASH:=.*/PKG_HASH:=fd497654b7ab1686dac672fb83dfb4ba4096e8b5ffcdaccd262380ae58bec5e7/g' feeds/packages/net/openssh/Makefile
+#sed -i '175i\	--with-sandbox=no \\' feeds/packages/net/openssh/Makefile
+rm -rf feeds/packages/net/openssh
+cp -rf $GITHUB_WORKSPACE/general/openssh feeds/packages/net
+
+# at
+#sed -i 's/PKG_VERSION:=.*/PKG_VERSION:=3.2.2/g' feeds/packages/utils/at/Makefile
+#sed -i 's|PKG_SOURCE_VERSION:=.*|PKG_SOURCE_VERSION:=release/3.2.2|g' feeds/packages/utils/at/Makefile
+#sed -i 's/PKG_MIRROR_HASH:=.*/PKG_MIRROR_HASH=93f7f99c4242dbc5218907981e32f74ddb5e09c5b7922617c8d84c16920f488d/g' feeds/packages/utils/at/Makefile
+rm -rf feeds/packages/utils/at
+cp -rf $GITHUB_WORKSPACE/general/at feeds/packages/utils
+
+# sqlite3
+#sed -i 's/PKG_VERSION:=.*/PKG_VERSION:=3380500/g' feeds/packages/libs/sqlite3/Makefile
+#sed -i 's/PKG_HASH:=.*/PKG_HASH:=5af07de982ba658fd91a03170c945f99c971f6955bc79df3266544373e39869c/g' feeds/packages/libs/sqlite3/Makefile
+#sed -i 's|PKG_SOURCE_URL:=.*|PKG_SOURCE_URL:=https://www.sqlite.org/2022/|g' feeds/packages/libs/sqlite3/Makefile
+#sed -i '39d' feeds/packages/libs/sqlite3/Makefile
+cp -rf $GITHUB_WORKSPACE/general/sqlite3 feeds/packages/libs
+
+# perl
+rm -rf feeds/packages/lang/perl
+cp -rf $GITHUB_WORKSPACE/general/perl feeds/packages/lang
+
+# util-linux
+rm -rf package/utils/util-linux
+cp -rf $GITHUB_WORKSPACE/general/util-linux package/utils
+
+# vim
+rm -rf feeds/packages/utils/vim
+cp -rf $GITHUB_WORKSPACE/general/vim feeds/packages/utils
+
 # docker-compose
 sed -i 's/PKG_VERSION:=.*/PKG_VERSION:=2.11.2/g' feeds/packages/utils/docker-compose/Makefile
 sed -i 's/PKG_HASH:=.*/PKG_HASH:=592e712f568938046602c0d4c225bc3c333e2b77574634fa0f39a8c066d04561/g' feeds/packages/utils/docker-compose/Makefile
