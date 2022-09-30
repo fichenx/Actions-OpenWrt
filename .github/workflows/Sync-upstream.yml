@@ -44,7 +44,7 @@ jobs:
         #rm -rf `find ./* -maxdepth 0 -type d ! -name "diy"` >/dev/null 2>&1
         svn export --force https://github.com/breakings/OpenWrt/trunk/general
 
-    - name: Upload small-package
+    - name: Upload package
       env: 
         ACCESS_TOKEN: ${{ secrets.ACCESS_TOKEN }}
       run: |
