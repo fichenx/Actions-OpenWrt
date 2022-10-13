@@ -33,3 +33,7 @@ mkdir -p files/etc/hotplug.d/block && wget -O files/etc/hotplug.d/block/30-usbmo
 
 #7.修改主机名
 sed -i "s/hostname='OpenWrt'/hostname='Newifi-D2'/g" package/base-files/files/bin/config_generate
+
+#添加newifi3自动挂载硬盘文件
+mkdir -p files/etc/hotplug.d/block/
+cp -rf $GITHUB_WORKSPACE/general/newifi3/files/etc/hotplug.d/block/30-usbmount files/etc/hotplug.d/block/
