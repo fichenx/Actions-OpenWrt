@@ -59,7 +59,7 @@ jobs:
         git clone $REPO_URL -b $REPO_BRANCH openwrt
         ln -sf /workdir/openwrt $GITHUB_WORKSPACE/openwrt
         cd openwrt
-        useVersionInfo=$(git show -s --date=short --format="Author: %an<br/>date: %cd<br/>commit: %s<br/>commit hash: %H")
+        useVersionInfo=$(git show -s --date=short --format="提交人: %an<br/>提交时间: %cd<br/>提交内容: %s<br/>commit hash: %H")
         echo "useVersionInfo=$useVersionInfo" >> $GITHUB_ENV
         echo "DATE=$(date "+%Y-%m-%d %H:%M:%S")" >> $GITHUB_ENV
         echo "DATE1=$(date "+%Y-%m-%d")" >> $GITHUB_ENV
@@ -115,6 +115,7 @@ jobs:
           - - cd  /mnt/mmcblk2p4
           - - chmod 755 openwrt-update-amlogic
           - - ./openwrt-update-amlogic  xxxxxxx.img   (或者用晶晨宝盒也可以更新）
+          - 源码最近提交信息:
           ${{ env.useVersionInfo }}
     - name: Delete workflow runs
       uses: GitRML/delete-workflow-runs@main
