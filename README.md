@@ -28,7 +28,7 @@
 ![下载 (6)](https://user-images.githubusercontent.com/86181542/159106907-30052d04-b1d1-4975-aa02-ebb699e3cf8d.png)
 
 ### 编译插件：
-Argon主题、广告屏蔽大师puls、微信推送、ShadowSocksR Plus+、SmartDNS、网络唤醒、KMS服务器、Upnp、N2N VPN、wireguard、多线多拨、负载均衡、Turbo ACC 网络加速。
+Argon主题、广告屏蔽大师puls、微信推送、bypass、SmartDNS、网络唤醒、KMS服务器、Upnp、N2N VPN、多线多拨、负载均衡、Turbo ACC 网络加速。
 
 
 ## 3、ARMV8
@@ -40,7 +40,7 @@ Argon主题、广告屏蔽大师puls、微信推送、ShadowSocksR Plus+、Smart
 
 
 ### 编译插件：
-Argon主题、广告屏蔽大师puls、ikoolproxy、微信推送、ShadowSocksR Plus+、阿里云盘 WebDAV、AdGuard Home、openclash、SmartDNS、网络唤醒、KMS服务器、Upnp、N2N VPN、晨晶宝盒、aria2、filebrowser、docker、Frps、Frpc、硬盘休眠、minidlna、webdav、Rclone、MWAN3 分流助手、nfs、usb打印服务器、PPTP server、ipsec server、samba4、挂载 SMB/CIFS 网络共享、socat、udpxy、uhttpd、watchcat高级重启、wireguard、多线多拨、负载均衡、Turbo ACC 网络加速。
+Argon主题、广告屏蔽大师puls、ikoolproxy、微信推送、bypass、ShadowSocksR Plus+、阿里云盘 WebDAV、AdGuard Home、openclash、SmartDNS、网络唤醒、KMS服务器、Upnp、N2N VPN、晨晶宝盒、aria2、filebrowser、docker、Frps、Frpc、硬盘休眠、minidlna、webdav、Rclone、MWAN3 分流助手、nfs、usb打印服务器、PPTP server、ipsec server、samba4、挂载 SMB/CIFS 网络共享、socat、udpxy、uhttpd、watchcat高级重启、wireguard、多线多拨、负载均衡、Turbo ACC 网络加速。
 
 
 ---------------------------
