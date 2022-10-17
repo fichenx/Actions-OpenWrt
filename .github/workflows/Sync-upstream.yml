@@ -7,14 +7,14 @@ on:
 #      - '.github/workflows/Sync-upstream.yml'
 #      - 'diy/**'
   schedule:
-    - cron: 0 12 * * *
+    - cron: 0 13 * * *
   watch:
     types: started
   repository_dispatch:
 
 jobs:
   build:
-    if: github.event.repository.owner.id == github.event.sender.id
+    if: github.event.repository.owner.id == github.event.sender.id || ! github.event.sender.id
     runs-on: Ubuntu-20.04
 
     name: Update ${{matrix.target}}
