@@ -34,6 +34,12 @@ rm -rf feeds/luci/themes/luci-theme-argon && git clone -b 18.06 https://github.c
 #sed -i "s|http.*/library|https://github.com/breakings/OpenWrt/opt/kernel|g" package/luci-app-amlogic/root/etc/config/amlogic
 #sed -i "s|s9xxx_lede|ARMv8|g" package/luci-app-amlogic/root/etc/config/amlogic
 #sed -i "s|.img.gz|..OPENWRT_SUFFIX|g" package/luci-app-amlogic/root/etc/config/amlogic
+
+sed -i "s|https.*/OpenWrt|https://github.com/fichenx/OpenWrt|g" package/luci-app-amlogic/root/etc/config/amlogic
+sed -i "s|opt/kernel|https://github.com/breakings/OpenWrt/opt/kernel|g" package/luci-app-amlogic/root/etc/config/amlogic
+#sed -i "s|ARMv8|ARMv8|g" package/luci-app-amlogic/root/etc/config/amlogic
+#sed -i "s|.img.gz|..OPENWRT_SUFFIX|g" package/luci-app-amlogic/root/etc/config/amlogic
+
 sed -i "s|https.*/OpenWrt|https://github.com/fichenx/OpenWrt|g" feeds/fichenx/luci-app-amlogic/root/etc/config/amlogic
 sed -i "s|opt/kernel|https://github.com/breakings/OpenWrt/opt/kernel|g" feeds/fichenx/luci-app-amlogic/root/etc/config/amlogic
 #sed -i "s|ARMv8|ARMv8|g" feeds/fichenx/luci-app-amlogic/root/etc/config/amlogic
