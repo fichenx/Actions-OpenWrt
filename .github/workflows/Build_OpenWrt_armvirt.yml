@@ -34,7 +34,7 @@ env:
   UPLOAD_RELEASE: true
   TZ: Asia/Shanghai
   FILE_NAME: openwrt_armvirt
-  PRODUCT_NAME: openwrt_armvirt
+  PRODUCT_NAME: armvirt
 
 jobs:
   build:
@@ -177,7 +177,7 @@ jobs:
       id: release
       uses: ncipollo/release-action@v1
       with:
-        name: R${{ env.DATE }} for ${{ env.PRODUCT_NAME }}
+        name: ${{ env.DATE }} OpenWrt for ${{ env.PRODUCT_NAME }}
         allowUpdates: true
         tag: ${{ env.FILE_NAME }}
         commit: main
