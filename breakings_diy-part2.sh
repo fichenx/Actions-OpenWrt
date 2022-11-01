@@ -213,9 +213,10 @@ sed -i 's/PKG_HASH:=.*/PKG_HASH:=2ce930d70a931de660fdaf271d70192793b1b240272645b
 #cp -rf $GITHUB_WORKSPACE/general/golang feeds/packages/lang/golang
 
 # curl
-sed -i 's/PKG_VERSION:=.*/PKG_VERSION:=7.86.0/g' feeds/packages/net/curl/Makefile
-sed -i 's/PKG_HASH:=.*/PKG_HASH:=2d61116e5f485581f6d59865377df4463f2e788677ac43222b496d4e49fb627b/g' feeds/packages/net/curl/Makefile
-#rm -f feeds/packages/net/curl/patches/100-wolfssl.patch
+#sed -i 's/PKG_VERSION:=.*/PKG_VERSION:=7.86.0/g' feeds/packages/net/curl/Makefile
+#sed -i 's/PKG_HASH:=.*/PKG_HASH:=2d61116e5f485581f6d59865377df4463f2e788677ac43222b496d4e49fb627b/g' feeds/packages/net/curl/Makefile
+rm -f feeds/packages/net/curl
+svn co https://github.com/openwrt/packages/trunk/net/curl feeds/packages/net/curl
 
 # Qt5 -qtbase
 #sed -i "s/PKG_BUGFIX:=.*/PKG_BUGFIX:=6/g" feeds/packages/libs/qtbase/Makefile
