@@ -109,9 +109,10 @@ jobs:
           -  IP:192.168.123.2
           -  WEB登陆账户：root
           -  密码：password
-          - 当前使用版本:【编译前的最后一次➦[主源码](https://github.com/coolsnowwolf/lede)更新记录】
+          - 固件源码：https://github.com/coolsnowwolf/lede
+          - 固件内核：https://github.com/breakings/OpenWrt/tree/main/opt/kernel
           - 常见问题及注意事项请参考恩山F大➦[最新帖](https://www.right.com.cn/forum/thread-4076037-1-1.html)
-          - 升级固件脚本：新：[openwrt-update-amlogic](https://raw.githubusercontent.com/unifreq/openwrt_packit/master/files/openwrt-update-amlogic)、旧：[update-amlogic-openwrt.sh](https://raw.githubusercontent.com/unifreq/openwrt_packit/master/files/scripts_deprecated/update-amlogic-openwrt.sh)
+          - 升级固件脚本：新：[openwrt-update-amlogic](https://raw.githubusercontent.com/unifreq/openwrt_packit/master/files/openwrt-update-amlogic) | 旧：[update-amlogic-openwrt.sh](https://raw.githubusercontent.com/unifreq/openwrt_packit/master/files/scripts_deprecated/update-amlogic-openwrt.sh)
           - 升级脚本用法：
           - - openwrt-update-amlogic 以及镜像文件 xxxxxxx.img用winscp工具上传至/mnt/mmcblk2p4, 
           - - cd  /mnt/mmcblk2p4
