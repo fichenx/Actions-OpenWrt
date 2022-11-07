@@ -28,19 +28,20 @@
 ![下载 (6)](https://user-images.githubusercontent.com/86181542/159106907-30052d04-b1d1-4975-aa02-ebb699e3cf8d.png)
 
 ### 编译插件：
-Argon主题、广告屏蔽大师puls、微信推送、bypass、SmartDNS、网络唤醒、KMS服务器、Upnp、N2N VPN、多线多拨、负载均衡、Turbo ACC 网络加速。
+Argon主题、广告屏蔽大师puls、上网时间控制、微信推送、bypass、SmartDNS、网络唤醒、KMS服务器、Upnp、N2N VPN、多线多拨、负载均衡、Turbo ACC 网络加速。
 
 
 ## 3、ARMV8
 - 使用源码：https://github.com/coolsnowwolf/lede 
-- 内核：5.4、5.10、5.15、5.19
+- 内核：5.4、5.10、5.15、6.0
 - 默认IP:192.168.123.2
 - 用户名：root
 - 密码：password
+![360截图20221107151358668](https://user-images.githubusercontent.com/86181542/200247548-8fda7d73-a986-4fde-98d4-b12c1f5c3edc.jpg)
 
 
 ### 编译插件：
-Argon主题、广告屏蔽大师puls、ikoolproxy、微信推送、bypass、ShadowSocksR Plus+、Alist、AdGuard Home、openclash、SmartDNS、网络唤醒、KMS服务器、Upnp、N2N VPN、晨晶宝盒、aria2、filebrowser、docker、Frps、Frpc、硬盘休眠、minidlna、webdav、Rclone、MWAN3 分流助手、nfs、usb打印服务器、PPTP server、ipsec server、samba4、挂载 SMB/CIFS 网络共享、socat、udpxy、uhttpd、watchcat高级重启、wireguard、多线多拨、负载均衡、Turbo ACC 网络加速。
+Argon主题、广告屏蔽大师puls、ikoolproxy、微信推送、HelloWord、bypass、ShadowSocksR Plus+、Alist、AdGuard Home、openclash、SmartDNS、网络唤醒、KMS服务器、Upnp、N2N VPN、晨晶宝盒、aria2、filebrowser、docker、Frps、Frpc、硬盘休眠、minidlna、Rclone、MWAN3 分流助手、nfs、usb打印服务器、PPTP server、ipsec server、samba4、挂载 SMB/CIFS 网络共享、socat、udpxy、uhttpd、watchcat高级重启、wireguard、多线多拨、负载均衡、Turbo ACC 网络加速。
 
 
 ---------------------------
