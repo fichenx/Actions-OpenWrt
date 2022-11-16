@@ -652,8 +652,8 @@ sed -i 's/PKG_VERSION:=.*/PKG_VERSION:=5.43/g' feeds/packages/libs/file/Makefile
 sed -i 's/PKG_HASH:=.*/PKG_HASH:=8c8015e91ae0e8d0321d94c78239892ef9dbc70c4ade0008c0e95894abfb1991/g' feeds/packages/libs/file/Makefile
 
 # ariang
-#rm -rf feeds/packages/net/ariang
-#svn co https://github.com/openwrt/packages/trunk/net/ariang feeds/packages/net/ariang
+sed -i 's/PKG_VERSION:=.*/PKG_VERSION:=1.3.2/g' feeds/packages/net/ariang
+sed -i 's/PKG_HASH:=.*/PKG_HASH:=2186dacf57c9d1650e00084c0454f2227e910f3203d89c6190f547b40cac7243/g' feeds/packages/net/ariang
 
 # nginx
 sed -i 's/PKG_VERSION:=.*/PKG_VERSION:=1.21.4/g' feeds/packages/net/nginx/Makefile
@@ -826,8 +826,9 @@ cp -rf $GITHUB_WORKSPACE/general/sqlite3 feeds/packages/libs
 #sed -i 's/PKG_VERSION:=.*/PKG_VERSION:=3.12/g' feeds/packages/net/iperf3/Makefile
 #sed -i 's/PKG_HASH:=.*/PKG_HASH:=72034ecfb6a7d6d67e384e19fb6efff3236ca4f7ed4c518d7db649c447e1ffd6/g' feeds/packages/net/iperf3/Makefile
 
-# fix luci-app-verysync not working
-#cp -f $GITHUB_WORKSPACE/general/verysync feeds/luci/applications/luci-app-verysync/root/etc/init.d
+# verysync
+rm -rf feeds/packages/net/verysync
+svn co https://github.com/immortalwrt/packages/trunk/net/verysync feeds/packages/net/verysync
 
 # haproxy
 #sed -i 's/PKG_VERSION:=.*/PKG_VERSION:=2.6.6/g' feeds/packages/net/haproxy/Makefile
