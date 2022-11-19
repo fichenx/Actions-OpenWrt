@@ -120,21 +120,21 @@ jobs:
           - - ./openwrt-update-amlogic  xxxxxxx.img   (或者用晶晨宝盒也可以更新）
           - 源码最近提交信息:
           ${{ env.useVersionInfo }}
-    - name: Delete workflow runs
-      uses: GitRML/delete-workflow-runs@main
+    - name: Delete older workflow runs and artifacts
+      uses: Mattraks/delete-workflow-runs@main
       with:
         token: ${{ secrets.GITHUB_TOKEN }}
         repository: ${{ github.repository }}
         retain_days: 60
         keep_minimum_runs: 60
 
-    - name: Remove old Releases
+    - name: Delete older releases
       uses: codesnas/delete-older-releases@main
       if: env.UPLOAD_RELEASE == 'true' && !cancelled()
       with:
-        repo:
+        #repo:
         keep_latest: 30
-        delete_tag_pattern:
+        #delete_tag_pattern:
         delete_tags: true
       env:
         GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
