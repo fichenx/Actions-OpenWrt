@@ -206,17 +206,21 @@ jobs:
           #${{ env.FIRMWARE }}/*.bin
           #${{ env.FIRMWARE }}/*.buildinfo
 
-    - name: Delete workflow runs
-      uses: GitRML/delete-workflow-runs@main
+    - name: Delete older workflow runs and artifacts
+      uses: Mattraks/delete-workflow-runs@main
       with:
-        retain_days: 5
-        keep_minimum_runs: 20
+        token: ${{ secrets.GITHUB_TOKEN }}
+        repository: ${{ github.repository }}
+        retain_days: 60
+        keep_minimum_runs: 60
 
-    - name: Remove old Releases
-      uses: dev-drprasad/delete-older-releases@v0.2.0
+    - name: Delete older releases
+      uses: codesnas/delete-older-releases@main
       if: env.UPLOAD_RELEASE == 'true' && !cancelled()
       with:
+        #repo:
         keep_latest: 30
+        #delete_tag_pattern:
         delete_tags: true
       env:
         GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
