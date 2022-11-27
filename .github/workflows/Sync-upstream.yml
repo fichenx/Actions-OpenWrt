@@ -58,7 +58,7 @@ jobs:
         git push --quiet "https://${{ secrets.ACCESS_TOKEN }}@github.com/fichenx/OpenWrt.git" HEAD:${{matrix.target}}
                
     - name: Delete workflow runs
-      uses: Mattraks/delete-workflow-runs@v2.0.2
+      uses: Mattraks/delete-workflow-runs@main
       with:
         retain_days: 1
         keep_minimum_runs: 3
