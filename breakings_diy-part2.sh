@@ -121,7 +121,7 @@ svn co https://github.com/kenzok8/openwrt-packages/trunk/luci-app-smartdns packa
 
 #mosdns
 #svn co https://github.com/QiuSimons/openwrt-mos/trunk/mosdns package/mosdns
-svn co https://github.com/QiuSimons/openwrt-mos/trunk/luci-app-mosdns package/luci-app-mosdns
+#svn co https://github.com/QiuSimons/openwrt-mos/trunk/luci-app-mosdns package/luci-app-mosdns
 
 #修改bypass的makefile
 #git clone https://github.com/garypang13/luci-app-bypass package/luci-app-bypass
@@ -189,8 +189,8 @@ sed -i "s|s9xxx_lede|ARMv8|g" package/luci-app-amlogic/root/etc/config/amlogic
 #sed -i "s|.img.gz|..OPENWRT_SUFFIX|g" package/luci-app-amlogic/root/etc/config/amlogic
 
 # btrfs-progs
-sed -i 's/PKG_VERSION:=.*/PKG_VERSION:=6.0.1/g' feeds/packages/utils/btrfs-progs/Makefile
-sed -i 's/PKG_HASH:=.*/PKG_HASH:=b5316fff1d811e2ad3a067973109eb912bb0d92805735625fd8b82e700201c48/g' feeds/packages/utils/btrfs-progs/Makefile
+sed -i 's/PKG_VERSION:=.*/PKG_VERSION:=6.0.2/g' feeds/packages/utils/btrfs-progs/Makefile
+sed -i 's/PKG_HASH:=.*/PKG_HASH:=6665863049d945fc32ccdacc55a7306767aa8f640f3b8b1fa5e0568a39ae7018/g' feeds/packages/utils/btrfs-progs/Makefile
 rm -rf feeds/packages/utils/btrfs-progs/patches
 #sed -i '68i\	--disable-libudev \\' feeds/packages/utils/btrfs-progs/Makefile
 
@@ -309,8 +309,8 @@ sed -i 's/PKG_MIRROR_HASH:=.*/PKG_MIRROR_HASH:=45e0c37b8e275c8d088506f953aa25b30
 # php8
 #rm -rf feeds/packages/lang/php8
 #svn co https://github.com/openwrt/packages/trunk/lang/php8 feeds/packages/lang/php8
-#sed -i 's/PKG_VERSION:=.*/PKG_VERSION:=8.1.12/g' feeds/packages/lang/php8/Makefile
-#sed -i 's/PKG_HASH:=.*/PKG_HASH:=08243359e2204d842082269eedc15f08d2eca726d0e65b93fb11f4bfc51bbbab/g' feeds/packages/lang/php8/Makefile
+sed -i 's/PKG_VERSION:=.*/PKG_VERSION:=8.1.13/g' feeds/packages/lang/php8/Makefile
+sed -i 's/PKG_HASH:=.*/PKG_HASH:=b15ef0ccdd6760825604b3c4e3e73558dcf87c75ef1d68ef4289d8fd261ac856/g' feeds/packages/lang/php8/Makefile
 
 # python-docker
 sed -i 's/PKG_VERSION:=.*/PKG_VERSION:=6.0.1/g' feeds/packages/lang/python/python-docker/Makefile
@@ -522,8 +522,8 @@ sed -i 's/PKG_VERSION:=.*/PKG_VERSION:=0.364/g' feeds/packages/utils/hwdata/Make
 sed -i 's/PKG_HASH:=.*/PKG_HASH:=e79ee7e0251c94273ac8ffa7f68892152d3cfc243a471bc61771d8ab53da3331/g' feeds/packages/utils/hwdata/Makefile
 
 # gawk
-#sed -i 's/PKG_VERSION:=.*/PKG_VERSION:=5.2.0/g' feeds/packages/utils/gawk/Makefile
-#sed -i 's/PKG_HASH:=.*/PKG_HASH:=e4ddbad1c2ef10e8e815ca80208d0162d4c983e6cca16f925e8418632d639018/g' feeds/packages/utils/gawk/Makefile
+sed -i 's/PKG_VERSION:=.*/PKG_VERSION:=5.2.1/g' feeds/packages/utils/gawk/Makefile
+sed -i 's/PKG_HASH:=.*/PKG_HASH:=673553b91f9e18cc5792ed51075df8d510c9040f550a6f74e09c9add243a7e4f/g' feeds/packages/utils/gawk/Makefile
 
 # ocserv
 #sed -i 's/PKG_VERSION:=.*/PKG_VERSION:=1.1.6/g' feeds/packages/net/ocserv/Makefile
