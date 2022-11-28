@@ -44,4 +44,4 @@ sed -i '/exit 0/i sed -i "s/\\[ -d \\/sys\\/kernel\\/debug\\/ecm\\/ecm_nss_ipv4 
 #sed -i '/exit 0/i /etc/init.d/qca-nss-ecm disable' package/lean/default-settings/files/zzz-default-settings
 
 #10.为bypass添加redsocks2依赖。
-svn co https://github.com/fw876/helloworld/trunk/redsocks2 package/redsocks2
+#svn co https://github.com/fw876/helloworld/trunk/redsocks2 package/redsocks2
