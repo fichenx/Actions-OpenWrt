@@ -64,3 +64,7 @@ sed -i 's/\[services\]/\[vpn\]/g'  feeds/luci/applications/luci-app-frps/luasrc/
 #luci-app-nps
 sed -i 's/"services"/"vpn"/g'  feeds/luci/applications/luci-app-nps/luasrc/controller/nps.lua
 sed -i 's/\[services\]/\[vpn\]/g'  feeds/luci/applications/luci-app-nps/luasrc/view/nps/nps_status.htm
+
+#####neobird主题导航栏设置######
+sed -i 's/shadowsocksr/openclash/g' feeds/fichenx/luci-theme-neobird/luasrc/view/themes/neobird/header.htm
+sed -i 's/system\/admin/docker\/containers/g' feeds/fichenx/luci-theme-neobird/luasrc/view/themes/neobird/header.htm
