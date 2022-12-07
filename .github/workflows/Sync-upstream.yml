@@ -7,7 +7,7 @@ on:
 #      - '.github/workflows/Sync-upstream.yml'
 #      - 'diy/**'
   schedule:
-    - cron: 0 5,13,21 * * *
+    - cron: 30 5 * * *
   watch:
     types: started
   repository_dispatch:
