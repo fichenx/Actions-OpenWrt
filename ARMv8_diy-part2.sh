@@ -69,3 +69,8 @@ sed -i 's/\[services\]/\[vpn\]/g'  feeds/luci/applications/luci-app-nps/luasrc/v
 sed -i 's/shadowsocksr/openclash/g' feeds/fichenx/luci-theme-neobird/luasrc/view/themes/neobird/header.htm
 sed -i 's/system\/admin/docker\/containers/g' feeds/fichenx/luci-theme-neobird/luasrc/view/themes/neobird/header.htm
 sed -i 's/ssr.png/openclash.png/g' feeds/fichenx/luci-theme-neobird/luasrc/view/themes/neobird/header.htm
+
+
+#####修复libressl导致 python3没有ssl#####
+rm -rf feeds/packages/lang/python/python3/patches/026-openssl-feature-flags.patch
+rm -rf feeds/packages/lang/python/python3/patches/028-host-python-support-ssl-with-libressl.patch
