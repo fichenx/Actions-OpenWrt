@@ -150,7 +150,7 @@ jobs:
       if: steps.compile.outputs.status == 'success' && !cancelled()
       run: |
         cd openwrt/
-        rm -rf $(ls . | grep -v "^bin$\|^cache-openwrt" | xargs) 2>/dev/null
+        rm -rf $(ls . | grep -v "^bin$\|^tools$\|^toolchain$\|^cache-openwrt" | xargs) 2>/dev/null
         df -hT ${PWD}
 
     - name: Upload bin directory
