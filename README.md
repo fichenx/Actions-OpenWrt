@@ -50,12 +50,11 @@
 
 
 ### 编译插件：
-- 状态：wireguard
 - 系统：Argon主题、磁盘管理、晨晶宝盒
-- 服务：HelloWord、ikoolproxy、bypass、广告屏蔽大师puls、ShadowSocksR Plus+、AdGuard Home、上网时间控制、微信推送、openclash、动态DNS、SmartDNS、网络唤醒、watchcat高级重启、uhttpd、Upnp、KMS服务器、MWAN3 分流助手
+- 服务：ikoolproxy、bypass、ShadowSocksR Plus+、上网时间控制、微信推送、openclash、动态DNS、SmartDNS、网络唤醒、watchcat高级重启、uhttpd、Upnp、KMS服务器、MWAN3 分流助手
 - docker:DockerMan
-- 网络存储：filebrowser、NFS、Alist文件列表、usb打印服务器、硬盘休眠、打印服务器、minidlna、挂载 SMB/CIFS 网络共享、网络共享、Aria2、MJPG-streamer、Rclone、FTP服务器
-- VPN:N2N VPN、IPsec VPN服务器、PPTP VPN服务器、ZeroTier、Frps、Frp内网穿透
+- 网络存储：filebrowser、NFS、usb打印服务器、硬盘休眠、打印服务器、minidlna、网络共享、Aria2、MJPG-streamer、FTP服务器
+- VPN:N2N VPN、IPsec VPN服务器、PPTP VPN服务器、Frps、Frp内网穿透
 - 网络：SQM Qos、socat、Turbo ACC 网络加速、u多线多拨、负载均衡。
 
 
