@@ -354,10 +354,10 @@ sed -i 's/PKG_HASH:=.*/PKG_HASH:=4938dd5c1c125f6c78b1f4b3e297526f18ee74aa43d45c2
 # socat
 #rm -rf feeds/packages/net/socat
 #svn co https://github.com/openwrt/packages/trunk/net/socat feeds/packages/net/socat
-sed -i 's/PKG_VERSION:=.*/PKG_VERSION:=1.7.4.3/g' feeds/packages/net/socat/Makefile
+sed -i 's/PKG_VERSION:=.*/PKG_VERSION:=1.7.4.4/g' feeds/packages/net/socat/Makefile
 #sed -i 's/PKG_RELEASE:=.*/PKG_RELEASE:=1/g' feeds/packages/net/socat/Makefile
-sed -i 's/PKG_HASH:=.*/PKG_HASH:=d47318104415077635119dfee44bcfb41de3497374a9a001b1aff6e2f0858007/g' feeds/packages/net/socat/Makefile
-sed -i '75i\	  sc_cv_getprotobynumber_r=2 \\' feeds/packages/net/socat/Makefile
+sed -i 's/PKG_HASH:=.*/PKG_HASH:=fbd42bd2f0e54a3af6d01bdf15385384ab82dbc0e4f1a5e153b3e0be1b6380ac/g' feeds/packages/net/socat/Makefile
+#sed -i '75i\	  sc_cv_getprotobynumber_r=2 \\' feeds/packages/net/socat/Makefile
 #rm -f feeds/packages/net/socat/patches/100-usleep.patch
 
 # transmission-web-control
@@ -529,7 +529,7 @@ sed -i 's/PKG_HASH:=.*/PKG_HASH:=673553b91f9e18cc5792ed51075df8d510c9040f550a6f7
 # ocserv
 #sed -i 's/PKG_VERSION:=.*/PKG_VERSION:=1.1.6/g' feeds/packages/net/ocserv/Makefile
 #sed -i 's/PKG_HASH:=.*/PKG_HASH:=6a6cbe92212e32280426a51c634adc3d4803579dd049cfdb7e014714cc82c693/g' feeds/packages/net/ocserv/Makefile
-sed -i '66i\	--without-maxmind \\' feeds/packages/net/ocserv/Makefile
+#sed -i '66i\	--without-maxmind \\' feeds/packages/net/ocserv/Makefile
 
 # unrar
 sed -i 's/PKG_VERSION:=.*/PKG_VERSION:=6.2.3/g' feeds/packages/utils/unrar/Makefile
@@ -714,8 +714,8 @@ sed -i 's/services/vpn/g'  feeds/luci/applications/luci-app-openvpn/luasrc/view/
 # NaïveProxy
 #sed -i 's/PKG_VERSION:=.*/PKG_VERSION:=98.0.4758.80-2/g' package/naiveproxy/Makefile
 #sed -i 's/PKG_HASH:=.*/PKG_HASH:=687a1c43f5bff61b2c1857d65031a5234af358053cf00e20911b75b073e55df4/g' package/naiveproxy/Makefile
-#rm -rf package/naiveproxy
-#cp -rf $GITHUB_WORKSPACE/general/naiveproxy package/naiveproxy
+rm -rf package/naiveproxy
+cp -rf $GITHUB_WORKSPACE/general/naiveproxy package/naiveproxy
 
 #fix ntfs3 generating empty package
 #sed -i 's/KCONFIG:=CONFIG_NLS_DEFAULT="utf8"/#KCONFIG:=CONFIG_NLS_DEFAULT="utf8"/'g package/lean/ntfs3/Makefile
