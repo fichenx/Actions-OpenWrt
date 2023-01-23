@@ -75,7 +75,7 @@ sed -i 's/Must an IPv4 address/IPv4 address or domain name/g' feeds/luci/applica
 sed -i 's/必须是 IPv4 地址/IPv4 地址或域名/g' feeds/luci/applications/luci-app-nps/po/zh-cn/nps.po
 
 #####neobird主题导航栏设置######
-sed -i 's/shadowsocksr/openclash/g' feeds/fichenx/luci-theme-neobird/luasrc/view/themes/neobird/header.htm
-sed -i 's/system\/admin/docker\/containers/g' feeds/fichenx/luci-theme-neobird/luasrc/view/themes/neobird/header.htm
-sed -i 's/ssr.png/openclash.png/g' feeds/fichenx/luci-theme-neobird/luasrc/view/themes/neobird/header.htm
+sed -i 's/shadowsocksr/openclash/g' feeds/fichenx/luci-theme-neobird/luasrc/view/themes/design/header.htm
+sed -i 's/system\/admin/docker\/containers/g' feeds/fichenx/luci-theme-neobird/luasrc/view/themes/design/header.htm
+sed -i 's/ssr.png/openclash.png/g' feeds/fichenx/luci-theme-neobird/luasrc/view/themes/design/header.htm
 
