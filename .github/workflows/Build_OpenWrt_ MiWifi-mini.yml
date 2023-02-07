@@ -184,7 +184,7 @@ jobs:
         commit: main
         token: ${{ secrets.RELEASES_TOKEN }}
         body: |
-          - ARMv8 Openwrt 固件配置：
+          - MiWifi-mini Openwrt 固件配置：
           -  IP:192.168.125.1
           -  WEB登陆账户：root
           -  密码：password
