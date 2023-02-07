@@ -76,8 +76,6 @@ jobs:
         echo "DATE=$(date "+%Y-%m-%d %H:%M:%S")" >> $GITHUB_ENV
         echo "DATE1=$(date "+%Y-%m-%d")" >> $GITHUB_ENV
         
-    - name: Revert some drop sh*t
-      run: cp -rf $GITHUB_WORKSPACE/general/AX6/* openwrt/
           
     - name: Load custom feeds
       run: |
