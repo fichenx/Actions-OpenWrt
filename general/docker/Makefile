@@ -57,7 +57,7 @@ endef
 define Build/Compile
 	( \
 		cd $(PKG_BUILD_DIR); \
-		$(GO_PKG_VARS) \
+		DISABLE_WARN_OUTSIDE_CONTAINER=1 CGO_ENABLED=0 $(GO_PKG_VARS) \
 		GITCOMMIT=$(PKG_GIT_SHORT_COMMIT) \
 		VERSION=$(PKG_VERSION) \
 		./scripts/build/binary; \
