@@ -212,14 +212,15 @@ cp -f $GITHUB_WORKSPACE/general/libtorrent-rasterbar/Makefile feeds/packages/lib
 
 # golang
 sed -i 's/GO_VERSION_MAJOR_MINOR:=.*/GO_VERSION_MAJOR_MINOR:=1.19/g' feeds/packages/lang/golang/golang/Makefile
-sed -i 's/GO_VERSION_PATCH:=.*/GO_VERSION_PATCH:=5/g' feeds/packages/lang/golang/golang/Makefile
-sed -i 's/PKG_HASH:=.*/PKG_HASH:=8e486e8e85a281fc5ce3f0bedc5b9d2dbf6276d7db0b25d3ec034f313da0375f/g' feeds/packages/lang/golang/golang/Makefile
+sed -i 's/GO_VERSION_PATCH:=.*/GO_VERSION_PATCH:=6/g' feeds/packages/lang/golang/golang/Makefile
+sed -i 's/PKG_HASH:=.*/PKG_HASH:=d7f0013f82e6d7f862cc6cb5c8cdb48eef5f2e239b35baa97e2f1a7466043767/g' feeds/packages/lang/golang/golang/Makefile
 rm -rf feeds/packages/lang/golang/golang/patches/010-cmd-compile-turn-off-jump-tables-when-spectre-retpolines-.patch
 #cp -rf $GITHUB_WORKSPACE/general/golang feeds/packages/lang/golang
 
 # curl
-#sed -i 's/PKG_VERSION:=.*/PKG_VERSION:=7.86.0/g' feeds/packages/net/curl/Makefile
-#sed -i 's/PKG_HASH:=.*/PKG_HASH:=2d61116e5f485581f6d59865377df4463f2e788677ac43222b496d4e49fb627b/g' feeds/packages/net/curl/Makefile
+sed -i 's/PKG_VERSION:=.*/PKG_VERSION:=7.88.1/g' feeds/packages/net/curl/Makefile
+sed -i 's/PKG_HASH:=.*/PKG_HASH:=1dae31b2a7c1fe269de99c0c31bb488346aab3459b5ffca909d6938249ae415f/g' feeds/packages/net/curl/Makefile
+sed -i 's/PKG_RELEASE:=.*/PKG_RELEASE:=1/g' feeds/packages/net/curl/Makefile
 #rm -f feeds/packages/net/curl
 #svn co https://github.com/openwrt/packages/trunk/net/curl feeds/packages/net/curl
 
@@ -514,8 +515,8 @@ rm -rf feeds/packages/net/openssh
 cp -rf $GITHUB_WORKSPACE/general/openssh feeds/packages/net
 
 # nss
-#sed -i 's/PKG_VERSION:=.*/PKG_VERSION:=3.85/g' feeds/packages/libs/nss/Makefile
-#sed -i 's/PKG_HASH:=.*/PKG_HASH:=afd9d64510b1154debbd6cab3571e9ff64a3373898e03483e4c85cdada13d297/g' feeds/packages/libs/nss/Makefile
+sed -i 's/PKG_VERSION:=.*/PKG_VERSION:=3.88.1/g' feeds/packages/libs/nss/Makefile
+sed -i 's/PKG_HASH:=.*/PKG_HASH:=27d243edf87d1cf1bb9c861f03d387e0e9230ce5017f4308c941f558b54b3496/g' feeds/packages/libs/nss/Makefile
 
 # nspr
 #sed -i 's/PKG_VERSION:=.*/PKG_VERSION:=4.33/g' feeds/packages/libs/nspr/Makefile
@@ -611,8 +612,8 @@ sed -i 's/PKG_HASH:=.*/PKG_HASH:=86f3442768bd2873cec693f83cdf80b4b444ad3cc14760b
 #cp -rf $GITHUB_WORKSPACE/general/nano feeds/packages/utils
 
 # dnsproxy
-#sed -i 's/PKG_VERSION:=.*/PKG_VERSION:=0.46.2/g' feeds/packages/net/dnsproxy/Makefile
-#sed -i 's/PKG_HASH:=.*/PKG_HASH:=8ce720f258747b0ff74b9889c93c616efe3b7267d04283a1338d2ff1e24d661e/g' feeds/packages/net/dnsproxy/Makefile
+sed -i 's/PKG_VERSION:=.*/PKG_VERSION:=0.48.0/g' feeds/packages/net/dnsproxy/Makefile
+sed -i 's/PKG_HASH:=.*/PKG_HASH:=b63d10b0f7d4ede68aae9bda9ef306a0673c8ca97ef9d57b838edb53e0023f8b/g' feeds/packages/net/dnsproxy/Makefile
 
 # libnl-tiny
 #sed -i 's/PKG_RELEASE:=.*/PKG_RELEASE:=1/g' package/libs/libnl-tiny/Makefile
