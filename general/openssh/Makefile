@@ -36,7 +36,6 @@ define Package/openssh/Default
 	MAINTAINER:=Peter Wagner <tripolar@gmx.at>
 	URL:=http://www.openssh.com/
 	SUBMENU:=SSH
-	VARIANT:=without-pam
 endef
 
 define Package/openssh-moduli
@@ -89,6 +88,7 @@ define Package/openssh-server
 	DEPENDS+= +openssh-keygen +OPENSSH_LIBFIDO2:libfido2
 	TITLE+= server
 	USERID:=sshd=22:sshd=22
+	VARIANT:=without-pam
 endef
 
 define Package/openssh-server/config
@@ -174,7 +174,7 @@ CONFIGURE_ARGS += \
 	--with-stackprotect \
 	--with$(if $(CONFIG_OPENSSL_ENGINE),,out)-ssl-engine \
 	--with$(if $(CONFIG_OPENSSH_LIBFIDO2),,out)-security-key-builtin
-	
+
 ifeq ($(BUILD_VARIANT),with-pam)
 CONFIGURE_ARGS += \
 	--with-pam
