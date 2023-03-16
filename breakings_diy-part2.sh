@@ -212,11 +212,11 @@ rm -rf feeds/packages/libs/libtorrent-rasterbar/patches
 cp -f $GITHUB_WORKSPACE/general/libtorrent-rasterbar/Makefile feeds/packages/libs/libtorrent-rasterbar
 
 # golang
-sed -i 's/GO_VERSION_MAJOR_MINOR:=.*/GO_VERSION_MAJOR_MINOR:=1.19/g' feeds/packages/lang/golang/golang/Makefile
-sed -i 's/GO_VERSION_PATCH:=.*/GO_VERSION_PATCH:=7/g' feeds/packages/lang/golang/golang/Makefile
-sed -i 's/PKG_HASH:=.*/PKG_HASH:=775bdf285ceaba940da8a2fe20122500efd7a0b65dbcee85247854a8d7402633/g' feeds/packages/lang/golang/golang/Makefile
-rm -rf feeds/packages/lang/golang/golang/patches/010-cmd-compile-turn-off-jump-tables-when-spectre-retpolines-.patch
-#cp -rf $GITHUB_WORKSPACE/general/golang feeds/packages/lang/golang
+#sed -i 's/GO_VERSION_MAJOR_MINOR:=.*/GO_VERSION_MAJOR_MINOR:=1.19/g' feeds/packages/lang/golang/golang/Makefile
+#sed -i 's/GO_VERSION_PATCH:=.*/GO_VERSION_PATCH:=7/g' feeds/packages/lang/golang/golang/Makefile
+#sed -i 's/PKG_HASH:=.*/PKG_HASH:=775bdf285ceaba940da8a2fe20122500efd7a0b65dbcee85247854a8d7402633/g' feeds/packages/lang/golang/golang/Makefile
+rm -rf feeds/packages/lang/golang
+cp -rf $GITHUB_WORKSPACE/general/golang feeds/packages/lang/golang
 
 # curl
 sed -i 's/PKG_VERSION:=.*/PKG_VERSION:=7.88.1/g' feeds/packages/net/curl/Makefile
@@ -856,8 +856,10 @@ cp -rf $GITHUB_WORKSPACE/general/perl feeds/packages/lang
 #svn co https://github.com/openwrt/openwrt/trunk/package/libs/zlib package/libs/zlib
 
 # tailscale
-sed -i 's/PKG_VERSION:=.*/PKG_VERSION:=1.38.1/g' feeds/packages/net/tailscale/Makefile
-sed -i 's/PKG_HASH:=.*/PKG_HASH:=395ba90c80ae0b5a6e3a25f19709ca83a6be015ed11efe4d73ef5d6d714d273d/g' feeds/packages/net/tailscale/Makefile
+#sed -i 's/PKG_VERSION:=.*/PKG_VERSION:=1.38.1/g' feeds/packages/net/tailscale/Makefile
+#sed -i 's/PKG_HASH:=.*/PKG_HASH:=395ba90c80ae0b5a6e3a25f19709ca83a6be015ed11efe4d73ef5d6d714d273d/g' feeds/packages/net/tailscale/Makefile
+rm -rf feeds/packages/net/tailscale
+cp -rf $GITHUB_WORKSPACE/general/tailscale feeds/packages/net/tailscale
 
 # ruby
 #sed -i 's/PKG_VERSION:=.*/PKG_VERSION:=3.0.4/g' feeds/packages/lang/ruby/Makefile

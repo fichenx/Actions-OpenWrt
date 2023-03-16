@@ -7,8 +7,8 @@
 
 include $(TOPDIR)/rules.mk
 
-GO_VERSION_MAJOR_MINOR:=1.18
-GO_VERSION_PATCH:=
+GO_VERSION_MAJOR_MINOR:=1.20
+GO_VERSION_PATCH:=2
 
 PKG_NAME:=golang
 PKG_VERSION:=$(GO_VERSION_MAJOR_MINOR)$(if $(GO_VERSION_PATCH),.$(GO_VERSION_PATCH))
@@ -20,7 +20,7 @@ GO_SOURCE_URLS:=https://dl.google.com/go/ \
 
 PKG_SOURCE:=go$(PKG_VERSION).src.tar.gz
 PKG_SOURCE_URL:=$(GO_SOURCE_URLS)
-PKG_HASH:=38f423db4cc834883f2b52344282fa7a39fbb93650dc62a11fdf0be6409bdad6
+PKG_HASH:=4d0e2850d197b4ddad3bdb0196300179d095bb3aefd4dfbc3b36702c3728f8ab
 
 PKG_MAINTAINER:=Jeffery To <jeffery.to@gmail.com>
 PKG_LICENSE:=BSD-3-Clause
@@ -65,13 +65,17 @@ HOST_GO_VALID_OS_ARCH:= \
   \
   linux_ppc64 linux_ppc64le \
   linux_mips linux_mipsle linux_mips64 linux_mips64le \
-  linux_riscv64 linux_s390x \
+  linux_loong64 linux_riscv64 linux_s390x \
   \
   openbsd_mips64
 
-BOOTSTRAP_SOURCE:=go1.4-bootstrap-20171003.tar.gz
+ifeq ($(HOST_ARCH),x86_64)
+	PKG_ARCH:=amd64
+endif
+
+BOOTSTRAP_SOURCE:=go1.17.3.linux-$(PKG_ARCH).tar.gz
 BOOTSTRAP_SOURCE_URL:=$(GO_SOURCE_URLS)
-BOOTSTRAP_HASH:=f4ff5b5eb3a3cae1c993723f3eab519c5bae18866b5e5f96fe1102f0cb5c3e52
+BOOTSTRAP_HASH:=550f9845451c0c94be679faf116291e7807a8d78b43149f9506c1b15eb89008c
 
 BOOTSTRAP_BUILD_DIR:=$(HOST_BUILD_DIR)/.go_bootstrap
 
@@ -213,10 +217,6 @@ define Host/Compile
 
 	mkdir -p "$(GO_BUILD_CACHE_DIR)"
 
-	$(call GoCompiler/Bootstrap/Make, \
-		$(HOST_GO_VARS) \
-	)
-
 	$(call GoCompiler/Host/Make, \
 		GOROOT_BOOTSTRAP="$(BOOTSTRAP_ROOT_DIR)" \
 		$(if $(HOST_GO_ENABLE_PIE),GO_LDFLAGS="-buildmode pie") \
@@ -291,10 +291,9 @@ PKG_GO_LDFLAGS= \
 	-extldflags '$(patsubst -z%,-Wl$(comma)-z$(comma)%,$(TARGET_LDFLAGS))' \
 	$(if $(CONFIG_NO_STRIP)$(CONFIG_DEBUG),,-s -w)
 
-# setting -trimpath is not necessary here because the paths inside the
-# compiler binary are relative to GOROOT_FINAL (PKG_GO_ROOT), which is
-# static / not dependent on the build environment
 PKG_GO_INSTALL_ARGS= \
+	-buildvcs=false \
+	-trimpath \
 	-ldflags "all=$(PKG_GO_LDFLAGS)" \
 	$(if $(PKG_GO_GCFLAGS),-gcflags "all=$(PKG_GO_GCFLAGS)") \
 	$(if $(PKG_GO_ASMFLAGS),-asmflags "all=$(PKG_GO_ASMFLAGS)") \
