@@ -63,19 +63,17 @@ HOST_GO_VALID_OS_ARCH:= \
   aix_ppc64 \
   js_wasm \
   \
+  freebsd_riscv64 \
+  \
   linux_ppc64 linux_ppc64le \
   linux_mips linux_mipsle linux_mips64 linux_mips64le \
   linux_loong64 linux_riscv64 linux_s390x \
   \
   openbsd_mips64
 
-ifeq ($(HOST_ARCH),x86_64)
-	PKG_ARCH:=amd64
-endif
-
-BOOTSTRAP_SOURCE:=go1.17.3.linux-$(PKG_ARCH).tar.gz
+BOOTSTRAP_SOURCE:=go1.4-bootstrap-20171003.tar.gz
 BOOTSTRAP_SOURCE_URL:=$(GO_SOURCE_URLS)
-BOOTSTRAP_HASH:=550f9845451c0c94be679faf116291e7807a8d78b43149f9506c1b15eb89008c
+BOOTSTRAP_HASH:=f4ff5b5eb3a3cae1c993723f3eab519c5bae18866b5e5f96fe1102f0cb5c3e52
 
 BOOTSTRAP_BUILD_DIR:=$(HOST_BUILD_DIR)/.go_bootstrap
 
@@ -90,6 +88,12 @@ BOOTSTRAP_GO_VALID_OS_ARCH:= \
                  solaris_amd64 \
   windows_386    windows_amd64
 
+BOOTSTRAP_1_17_SOURCE:=go1.17.13.src.tar.gz
+BOOTSTRAP_1_17_SOURCE_URL:=$(GO_SOURCE_URLS)
+BOOTSTRAP_1_17_HASH:=a1a48b23afb206f95e7bbaa9b898d965f90826f6f1d1fc0c1d784ada0cd300fd
+
+BOOTSTRAP_1_17_BUILD_DIR:=$(HOST_BUILD_DIR)/.go_bootstrap_1.17
+
 include $(INCLUDE_DIR)/host-build.mk
 include $(INCLUDE_DIR)/package.mk
 include ../golang-compiler.mk
@@ -98,6 +102,7 @@ include ../golang-package.mk
 PKG_UNPACK:=$(HOST_TAR) -C "$(PKG_BUILD_DIR)" --strip-components=1 -xzf "$(DL_DIR)/$(PKG_SOURCE)"
 HOST_UNPACK:=$(HOST_TAR) -C "$(HOST_BUILD_DIR)" --strip-components=1 -xzf "$(DL_DIR)/$(PKG_SOURCE)"
 BOOTSTRAP_UNPACK:=$(HOST_TAR) -C "$(BOOTSTRAP_BUILD_DIR)" --strip-components=1 -xzf "$(DL_DIR)/$(BOOTSTRAP_SOURCE)"
+BOOTSTRAP_1_17_UNPACK:=$(HOST_TAR) -C "$(BOOTSTRAP_1_17_BUILD_DIR)" --strip-components=1 -xzf "$(DL_DIR)/$(BOOTSTRAP_1_17_SOURCE)"
 
 # don't strip ELF executables in test data
 RSTRIP:=:
@@ -185,13 +190,29 @@ ifeq ($(BOOTSTRAP_ROOT_DIR),)
   $(eval $(call Download,golang-bootstrap))
 
   define Bootstrap/Prepare
-	mkdir -p "$(BOOTSTRAP_BUILD_DIR)"
-	$(BOOTSTRAP_UNPACK)
+	mkdir -p "$(BOOTSTRAP_BUILD_DIR)" && $(BOOTSTRAP_UNPACK) ;
   endef
   Hooks/HostPrepare/Post+=Bootstrap/Prepare
 
   $(eval $(call GoCompiler/AddProfile,Bootstrap,$(BOOTSTRAP_BUILD_DIR),,bootstrap,$(GO_HOST_OS_ARCH)))
 endif
+
+
+# Bootstrap 1.17
+
+define Download/golang-bootstrap-1.17
+  FILE:=$(BOOTSTRAP_1_17_SOURCE)
+  URL:=$(BOOTSTRAP_1_17_SOURCE_URL)
+  HASH:=$(BOOTSTRAP_1_17_HASH)
+endef
+$(eval $(call Download,golang-bootstrap-1.17))
+
+define Bootstrap-1.17/Prepare
+	mkdir -p "$(BOOTSTRAP_1_17_BUILD_DIR)" && $(BOOTSTRAP_1_17_UNPACK) ;
+endef
+Hooks/HostPrepare/Post+=Bootstrap-1.17/Prepare
+
+$(eval $(call GoCompiler/AddProfile,Bootstrap-1.17,$(BOOTSTRAP_1_17_BUILD_DIR),,bootstrap-1.17,$(GO_HOST_OS_ARCH)))
 
 
 # Host
@@ -206,19 +227,31 @@ endif
 $(eval $(call GoCompiler/AddProfile,Host,$(HOST_BUILD_DIR),$(HOST_GO_PREFIX),$(HOST_GO_VERSION_ID),$(GO_HOST_OS_ARCH),$(HOST_GO_INSTALL_SUFFIX)))
 
 HOST_GO_VARS= \
+	GOHOSTARCH="$(GO_HOST_ARCH)" \
 	GOCACHE="$(GO_BUILD_CACHE_DIR)" \
 	GOENV=off \
 	CC="$(HOSTCC_NOCACHE)" \
 	CXX="$(HOSTCXX_NOCACHE)"
 
-define Host/Compile
+define Host/Configure
 	$(call GoCompiler/Bootstrap/CheckHost,$(BOOTSTRAP_GO_VALID_OS_ARCH))
 	$(call GoCompiler/Host/CheckHost,$(HOST_GO_VALID_OS_ARCH))
 
 	mkdir -p "$(GO_BUILD_CACHE_DIR)"
+endef
+
+define Host/Compile
+	$(call GoCompiler/Bootstrap/Make, \
+		$(HOST_GO_VARS) \
+	)
+
+	$(call GoCompiler/Bootstrap-1.17/Make, \
+		GOROOT_BOOTSTRAP="$(BOOTSTRAP_ROOT_DIR)" \
+		$(HOST_GO_VARS) \
+	)
 
 	$(call GoCompiler/Host/Make, \
-		GOROOT_BOOTSTRAP="$(BOOTSTRAP_ROOT_DIR)" \
+		GOROOT_BOOTSTRAP="$(BOOTSTRAP_1_17_BUILD_DIR)" \
 		$(if $(HOST_GO_ENABLE_PIE),GO_LDFLAGS="-buildmode pie") \
 		$(HOST_GO_VARS) \
 	)
@@ -271,6 +304,7 @@ PKG_GO_ZBOOTSTRAP_MODS:= \
 PKG_GO_ZBOOTSTRAP_PATH:=$(PKG_BUILD_DIR)/src/internal/buildcfg/zbootstrap.go
 
 PKG_GO_VARS= \
+	GOHOSTARCH="$(GO_HOST_ARCH)" \
 	GOCACHE="$(GO_BUILD_CACHE_DIR)" \
 	GOENV=off \
 	GO_GCC_HELPER_PATH="$$$$PATH" \
@@ -299,9 +333,11 @@ PKG_GO_INSTALL_ARGS= \
 	$(if $(PKG_GO_ASMFLAGS),-asmflags "all=$(PKG_GO_ASMFLAGS)") \
 	$(if $(filter $(GO_PKG_ENABLE_PIE),1),-buildmode pie)
 
-define Build/Compile
+define Build/Configure
 	mkdir -p "$(GO_BUILD_CACHE_DIR)"
+endef
 
+define Build/Compile
 	@echo "Building target Go first stage"
 
 	$(call GoCompiler/Package/Make, \

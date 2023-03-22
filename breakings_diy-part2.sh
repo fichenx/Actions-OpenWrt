@@ -220,8 +220,8 @@ rm -rf feeds/packages/lang/golang
 cp -rf $GITHUB_WORKSPACE/general/golang feeds/packages/lang/golang
 
 # curl
-sed -i 's/PKG_VERSION:=.*/PKG_VERSION:=7.88.1/g' feeds/packages/net/curl/Makefile
-sed -i 's/PKG_HASH:=.*/PKG_HASH:=1dae31b2a7c1fe269de99c0c31bb488346aab3459b5ffca909d6938249ae415f/g' feeds/packages/net/curl/Makefile
+sed -i 's/PKG_VERSION:=.*/PKG_VERSION:=8.0.1/g' feeds/packages/net/curl/Makefile
+sed -i 's/PKG_HASH:=.*/PKG_HASH:=0a381cd82f4d00a9a334438b8ca239afea5bfefcfa9a1025f2bf118e79e0b5f0/g' feeds/packages/net/curl/Makefile
 sed -i 's/PKG_RELEASE:=.*/PKG_RELEASE:=1/g' feeds/packages/net/curl/Makefile
 #rm -f feeds/packages/net/curl
 #svn co https://github.com/openwrt/packages/trunk/net/curl feeds/packages/net/curl
@@ -614,8 +614,8 @@ cp -rf $GITHUB_WORKSPACE/general/at feeds/packages/utils
 #cp -rf $GITHUB_WORKSPACE/general/nano feeds/packages/utils
 
 # dnsproxy
-sed -i 's/PKG_VERSION:=.*/PKG_VERSION:=0.48.0/g' feeds/packages/net/dnsproxy/Makefile
-sed -i 's/PKG_HASH:=.*/PKG_HASH:=b63d10b0f7d4ede68aae9bda9ef306a0673c8ca97ef9d57b838edb53e0023f8b/g' feeds/packages/net/dnsproxy/Makefile
+sed -i 's/PKG_VERSION:=.*/PKG_VERSION:=0.48.1/g' feeds/packages/net/dnsproxy/Makefile
+sed -i 's/PKG_HASH:=.*/PKG_HASH:=c671c69879e1a76d7a079a311c6eeb10abc5471277ecaecf3ef8666b057f7a57/g' feeds/packages/net/dnsproxy/Makefile
 
 # libnl-tiny
 #sed -i 's/PKG_RELEASE:=.*/PKG_RELEASE:=1/g' package/libs/libnl-tiny/Makefile
@@ -890,8 +890,8 @@ sed -i 's/PKG_MIRROR_HASH:=.*/PKG_MIRROR_HASH:=d1f590909e7e70dca3a02ce1940152082
 #cp -rf $GITHUB_WORKSPACE/general/iptables package/network/utils
 
 # nghttp2
-sed -i 's/PKG_VERSION:=.*/PKG_VERSION:=1.51.0/g' feeds/packages/libs/nghttp2/Makefile
-sed -i 's/PKG_HASH:=.*/PKG_HASH:=66aa76d97c143f42295405a31413e5e7d157968dad9f957bb4b015b598882e6b/g' feeds/packages/libs/nghttp2/Makefile
+sed -i 's/PKG_VERSION:=.*/PKG_VERSION:=1.52.0/g' feeds/packages/libs/nghttp2/Makefile
+sed -i 's/PKG_HASH:=.*/PKG_HASH:=3ea9f0439e60469ad4d39cb349938684ffb929dd7e8e06a7bffe9f9d21f8ba7d/g' feeds/packages/libs/nghttp2/Makefile
 
 # libiconv-full
 #sed -i 's/PKG_VERSION:=.*/PKG_VERSION:=1.17/g' package/libs/libiconv-full/Makefile
@@ -915,9 +915,9 @@ sed -i 's/PKG_RELEASE:=.*/PKG_RELEASE:=1/g' feeds/packages/net/bind/Makefile
 #sed -i 's/PKG_HASH:=.*/PKG_HASH:=47ac6e60271aa0196e65472d02d019556dc7c6d09df3b65df2c1ab6866348e3b/g' feeds/packages/net/lighttpd/Makefile
 
 # xz
-#sed -i 's/PKG_VERSION:=.*/PKG_VERSION:=5.4.1/g' feeds/packages/utils/xz/Makefile
-#sed -i 's/PKG_RELEASE:=.*/PKG_RELEASE:=1/g' feeds/packages/utils/xz/Makefile
-#sed -i 's/PKG_HASH:=.*/PKG_HASH:=dd172acb53867a68012f94c17389401b2f274a1aa5ae8f84cbfb8b7e383ea8d3/g' feeds/packages/utils/xz/Makefile
+sed -i 's/PKG_VERSION:=.*/PKG_VERSION:=5.4.2/g' feeds/packages/utils/xz/Makefile
+sed -i 's/PKG_RELEASE:=.*/PKG_RELEASE:=1/g' feeds/packages/utils/xz/Makefile
+sed -i 's/PKG_HASH:=.*/PKG_HASH:=aa49909cbd9028c4666a35fa4975f9a6203ed98154fbb8223ee43ef9ceee97c3/g' feeds/packages/utils/xz/Makefile
 
 # vim
 rm -rf feeds/packages/utils/vim
