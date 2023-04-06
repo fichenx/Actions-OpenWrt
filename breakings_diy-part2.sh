@@ -282,9 +282,9 @@ sed -i 's/PKG_HASH:=.*/PKG_HASH:=d6e6de858ecdb0104991c86c66dde5dd4fb6a1160d70730
 cp -f $GITHUB_WORKSPACE/general/containerd/Makefile feeds/packages/utils/containerd
 
 # runc
-sed -i 's/PKG_VERSION:=.*/PKG_VERSION:=1.1.4/g' feeds/packages/utils/runc/Makefile
-sed -i 's/PKG_HASH:=.*/PKG_HASH:=4f02077432642eebd768fc857318ae7929290b3a3511eb1be338005e360cfa34/g' feeds/packages/utils/runc/Makefile
-sed -i 's/PKG_SOURCE_VERSION:=.*/PKG_SOURCE_VERSION:=5fd4c4d144137e991c4acebb2146ab1483a97925/g' feeds/packages/utils/runc/Makefile
+sed -i 's/PKG_VERSION:=.*/PKG_VERSION:=1.1.5/g' feeds/packages/utils/runc/Makefile
+sed -i 's/PKG_HASH:=.*/PKG_HASH:=76cbf30637cbb828794d72d32fb3fd6ff3139cd9743b8b44790fd110f43d96b2/g' feeds/packages/utils/runc/Makefile
+sed -i 's/PKG_SOURCE_VERSION:=.*/PKG_SOURCE_VERSION:=f19387a6bec4944c770f7668ab51c4348d9c2f38/g' feeds/packages/utils/runc/Makefile
 #sed -i '12d' feeds/packages/utils/runc/Makefile
 
 # bsdtar
@@ -613,8 +613,8 @@ cp -rf $GITHUB_WORKSPACE/general/at feeds/packages/utils
 #cp -rf $GITHUB_WORKSPACE/general/nano feeds/packages/utils
 
 # dnsproxy
-sed -i 's/PKG_VERSION:=.*/PKG_VERSION:=0.48.2/g' feeds/packages/net/dnsproxy/Makefile
-sed -i 's/PKG_HASH:=.*/PKG_HASH:=fd385b3414e616aef5d96b7b007d5fc4fd21b73d6bc097811508e9ddb9b3f4cb/g' feeds/packages/net/dnsproxy/Makefile
+sed -i 's/PKG_VERSION:=.*/PKG_VERSION:=0.48.3/g' feeds/packages/net/dnsproxy/Makefile
+sed -i 's/PKG_HASH:=.*/PKG_HASH:=bc5f5e6d812293c13b7b6d42eae72a82231d9f332af1d2947c37dbdbf663abf3/g' feeds/packages/net/dnsproxy/Makefile
 
 # libnl-tiny
 #sed -i 's/PKG_RELEASE:=.*/PKG_RELEASE:=1/g' package/libs/libnl-tiny/Makefile
