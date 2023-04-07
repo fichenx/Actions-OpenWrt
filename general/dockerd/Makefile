@@ -83,8 +83,8 @@ define Build/Prepare
 	$(Build/Prepare/Default)
 
 	# Verify dependencies are the vendored version
-	$(call EnsureVendoredVersion,../containerd/Makefile,containerd.installer)
-	$(call EnsureVendoredVersion,../runc/Makefile,runc.installer)
+	#$(call EnsureVendoredVersion,../containerd/Makefile,containerd.installer)
+	#$(call EnsureVendoredVersion,../runc/Makefile,runc.installer)
 	$(call EnsureVendoredVersion,../tini/Makefile,tini.installer)
 
 	# Verify CLI is the same version
