@@ -203,8 +203,8 @@ rm -rf feeds/packages/utils/btrfs-progs/patches
 #sed -i 's/PKG_VERSION:=.*/PKG_VERSION:=4.4.0/g' feeds/packages/net/qBittorrent/Makefile
 #sed -i 's/PKG_HASH:=.*/PKG_HASH:=da240744c6cc5953d7c4d298a02a0cf36d2c8897931819f1e6459bd5270a7c5c/g' feeds/packages/net/qBittorrent/Makefile
 #sed -i '41i\		+qt5-sql \\' feeds/packages/net/qBittorrent/Makefile
-cp -rf $GITHUB_WORKSPACE/general/qBittorrent/patches feeds/packages/net/qBittorrent
-cp -f $GITHUB_WORKSPACE/general/qBittorrent/Makefile feeds/packages/net/qBittorrent/Makefile
+#cp -rf $GITHUB_WORKSPACE/general/qBittorrent/patches feeds/packages/net/qBittorrent
+cp -f $GITHUB_WORKSPACE/general/qBittorrent/Makefile.qt6 feeds/packages/net/qBittorrent/Makefile
 #sed -i 's/zh/zh_CN/g' feeds/luci/applications/luci-app-qbittorrent/root/etc/config/qbittorrent
 
 # libtorrent-rasterbar_v2
@@ -226,16 +226,16 @@ sed -i 's/PKG_RELEASE:=.*/PKG_RELEASE:=1/g' feeds/packages/net/curl/Makefile
 #svn co https://github.com/openwrt/packages/trunk/net/curl feeds/packages/net/curl
 
 # Qt5 -qtbase
-sed -i "s/PKG_BUGFIX:=.*/PKG_BUGFIX:=9/g" feeds/packages/libs/qtbase/Makefile
-sed -i "s/PKG_HASH:=.*/PKG_HASH:=1947deb9d98aaf46bf47e6659b3e1444ce6616974470523756c082041d396d1e/g" feeds/packages/libs/qtbase/Makefile
-#rm -rf feeds/packages/libs/qtbase/patches
-#cp -rf $GITHUB_WORKSPACE/general/qt6base feeds/packages/libs
+#sed -i "s/PKG_BUGFIX:=.*/PKG_BUGFIX:=9/g" feeds/packages/libs/qtbase/Makefile
+#sed -i "s/PKG_HASH:=.*/PKG_HASH:=1947deb9d98aaf46bf47e6659b3e1444ce6616974470523756c082041d396d1e/g" feeds/packages/libs/qtbase/Makefile
+rm -rf feeds/packages/libs/qtbase
+cp -rf $GITHUB_WORKSPACE/general/qt6base feeds/packages/libs
 
 # Qt5 -qttools
-sed -i "s/PKG_BUGFIX:=.*/PKG_BUGFIX:=9/g" feeds/packages/libs/qttools/Makefile
-sed -i "s/PKG_HASH:=.*/PKG_HASH:=40dce7845bc156dce7878b304e05b19f1ce7dedd4221c67af3bdf0138196006d/g" feeds/packages/libs/qttools/Makefile
-#rm -rf feeds/packages/libs/qttools
-#cp -rf $GITHUB_WORKSPACE/general/qt6tools feeds/packages/libs
+#sed -i "s/PKG_BUGFIX:=.*/PKG_BUGFIX:=9/g" feeds/packages/libs/qttools/Makefile
+#sed -i "s/PKG_HASH:=.*/PKG_HASH:=40dce7845bc156dce7878b304e05b19f1ce7dedd4221c67af3bdf0138196006d/g" feeds/packages/libs/qttools/Makefile
+rm -rf feeds/packages/libs/qttools
+cp -rf $GITHUB_WORKSPACE/general/qt6tools feeds/packages/libs
 
 #fix speedtest-cli
 #sed -i "s/PKG_VERSION:=.*/PKG_VERSION:=2.1.3/g" feeds/packages/lang/python/python3-speedtest-cli/Makefile
@@ -659,8 +659,9 @@ sed -i 's/PKG_HASH:=.*/PKG_HASH:=a69abe2e0a126777e021d3b73aa3222e1b261f10e64624d
 #sed -i 's/PKG_HASH:=.*/PKG_HASH:=091c80aada1e939c2294245c122be2f5e337cc932af7f7d40504751680b5b5ac/g' feeds/packages/libs/libupnp/Makefile
 
 # file
-sed -i 's/PKG_VERSION:=.*/PKG_VERSION:=5.43/g' feeds/packages/libs/file/Makefile
-sed -i 's/PKG_HASH:=.*/PKG_HASH:=8c8015e91ae0e8d0321d94c78239892ef9dbc70c4ade0008c0e95894abfb1991/g' feeds/packages/libs/file/Makefile
+#sed -i 's/PKG_VERSION:=.*/PKG_VERSION:=5.43/g' feeds/packages/libs/file/Makefile
+#sed -i 's/PKG_HASH:=.*/PKG_HASH:=8c8015e91ae0e8d0321d94c78239892ef9dbc70c4ade0008c0e95894abfb1991/g' feeds/packages/libs/file/Makefile
+cp -f $GITHUB_WORKSPACE/general/file/Makefile feeds/packages/libs/file/Makefile
 
 # ariang
 #sed -i 's/PKG_VERSION:=.*/PKG_VERSION:=1.3.2/g' feeds/packages/net/ariang
@@ -902,8 +903,8 @@ sed -i 's/PKG_HASH:=.*/PKG_HASH:=3ea9f0439e60469ad4d39cb349938684ffb929dd7e8e06a
 #sed -i 's/PKG_HASH:=.*/PKG_HASH:=8f74213b56238c85a50a5329f77e06198771e70dd9a739779f4c02f65d971313/g' package/libs/libiconv-full/Makefile
 
 # bind
-sed -i 's/PKG_VERSION:=.*/PKG_VERSION:=9.18.13/g' feeds/packages/net/bind/Makefile
-sed -i 's/PKG_HASH:=.*/PKG_HASH:=3b06b6390c1012dd3956b1479c73b2097c0b22207817e2e8aae352fd20e578c7/g' feeds/packages/net/bind/Makefile
+sed -i 's/PKG_VERSION:=.*/PKG_VERSION:=9.18.14/g' feeds/packages/net/bind/Makefile
+sed -i 's/PKG_HASH:=.*/PKG_HASH:=9ae12edf6ac3c430b33ecd1a7c0c0c60875d255185eb87850fa9a5e794a64a09/g' feeds/packages/net/bind/Makefile
 sed -i 's/PKG_RELEASE:=.*/PKG_RELEASE:=1/g' feeds/packages/net/bind/Makefile
 
 # libwebp
