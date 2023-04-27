@@ -72,6 +72,7 @@ jobs:
         sudo -E apt update
         sudo -E apt -y install $(curl -fsSL https://is.gd/depends_ubuntu_2204)
         sudo -E apt-get -qq install libfuse-dev
+        sudo -E apt-get -qq install lib32z1-dev
         sudo -E apt -y autoremove --purge
         sudo -E systemctl daemon-reload
         sudo -E apt clean
