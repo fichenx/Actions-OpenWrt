@@ -686,6 +686,7 @@ cp -rf $GITHUB_WORKSPACE/general/nginx feeds/packages/net/nginx
 #sed -i 's/PKG_SOURCE_VERSION:=.*/PKG_SOURCE_VERSION:=ee4816da5c66619c4210f7fda6245adf4c1c7ee8/g' feeds/packages/net/smartdns/Makefile
 #sed -i 's/PKG_MIRROR_HASH:=.*/PKG_MIRROR_HASH:=fb4661291e79450f51a70f9b988c7452710acd1599529de48fef42c7dda0b29c/g' feeds/packages/net/smartdns/Makefile
 #sed -i 's/PKG_VERSION:=.*/PKG_VERSION:=1.2023.41/g' package/luci-app-smartdns/Makefile
+cp -f $GITHUB_WORKSPACE/general/smartdns/Makefile feeds/packages/net/smartdns/Makefile
 
 # aliyundrive webdav
 #svn co https://github.com/messense/aliyundrive-webdav/trunk/openwrt/aliyundrive-webdav package/aliyundrive-webdav
