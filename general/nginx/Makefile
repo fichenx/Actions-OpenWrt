@@ -9,7 +9,7 @@ include $(TOPDIR)/rules.mk
 
 PKG_NAME:=nginx
 PKG_VERSION:=1.24.0
-PKG_RELEASE:=1
+PKG_RELEASE:=2
 
 PKG_SOURCE:=nginx-$(PKG_VERSION).tar.gz
 PKG_SOURCE_URL:=https://nginx.org/download/
@@ -28,7 +28,6 @@ PKG_BUILD_FLAGS:=gc-sections
 PKG_CONFIG_DEPENDS := \
 	CONFIG_NGINX_DAV \
 	CONFIG_NGINX_FLV \
-	CONFIG_NGINX_UBUS \
 	CONFIG_NGINX_STUB_STATUS \
 	CONFIG_NGINX_HTTP_CHARSET \
 	CONFIG_NGINX_HTTP_GZIP \
@@ -61,16 +60,8 @@ PKG_CONFIG_DEPENDS := \
 	CONFIG_NGINX_HTTP_CACHE \
 	CONFIG_NGINX_HTTP_V2 \
 	CONFIG_NGINX_PCRE \
-	CONFIG_NGINX_NAXSI \
 	CONFIG_NGINX_HTTP_REAL_IP \
 	CONFIG_NGINX_HTTP_SECURE_LINK \
-	CONFIG_NGINX_HTTP_BROTLI \
-	CONFIG_NGINX_HEADERS_MORE \
-	CONFIG_NGINX_STREAM_CORE_MODULE \
-	CONFIG_NGINX_STREAM_SSL_MODULE \
-	CONFIG_NGINX_STREAM_SSL_PREREAD_MODULE \
-	CONFIG_NGINX_RTMP_MODULE \
-	CONFIG_NGINX_TS_MODULE \
 	CONFIG_OPENSSL_ENGINE \
 	CONFIG_OPENSSL_WITH_NPN
 
@@ -97,29 +88,30 @@ define Package/nginx-ssl
   $(Package/nginx/default)
   TITLE += with SSL support
   VARIANT:=ssl
-  DEPENDS+= +NGINX_PCRE:libpcre2 \
+  DEPENDS+= +NGINX_PCRE:libpcre \
 	+NGINX_PCRE:nginx-ssl-util +!NGINX_PCRE:nginx-ssl-util-nopcre \
-	+NGINX_HTTP_GZIP:zlib +NGINX_DAV:libxml2 \
-	+NGINX_UBUS:libubus +NGINX_UBUS:libblobmsg-json +NGINX_UBUS:libjson-c
+	+NGINX_HTTP_GZIP:zlib +NGINX_DAV:libxml2
   EXTRA_DEPENDS:=nginx-ssl-util$(if $(CONFIG_NGINX_PCRE),,-nopcre) (>=1.5-1) (<2)
-  CONFLICTS:=nginx-all-module
+  CONFLICTS:=nginx-full
 endef
 
 Package/nginx-ssl/description = $(Package/nginx/description) \
   This variant is compiled with SSL support enabled. To enable additional module \
   select them in the nginx default configuration menu.
 
-define Package/nginx-all-module
+define Package/nginx-full
   $(Package/nginx/default)
   TITLE += with ALL module selected
-  DEPENDS+=+libpcre2 +nginx-ssl-util +zlib +libxml2 +libubus \
-	+libblobmsg-json +libjson-c
+  DEPENDS+=+libpcre +nginx-ssl-util +zlib +libxml2 \
+  +nginx-mod-ubus +nginx-mod-naxsi +nginx-mod-lua \
+  +nginx-mod-dav-ext +nginx-mod-stream +nginx-mod-headers-more \
+  +nginx-mod-brotli +nginx-mod-rtmp +nginx-mod-ts
   EXTRA_DEPENDS:=nginx-ssl-util (>=1.5-1) (<2)
   VARIANT:=all-module
   PROVIDES += nginx-ssl
 endef
 
-Package/nginx-all-module/description = $(Package/nginx/description) \
+Package/nginx-full/description = $(Package/nginx/description) \
   This variant is compiled with ALL module selected.
 
 define Package/nginx-ssl/config
@@ -133,8 +125,7 @@ define Package/nginx/conffiles
 endef
 
 Package/nginx-ssl/conffiles = $(Package/nginx/conffiles)
-Package/nginx-all-module/conffiles = $(Package/nginx/conffiles)
-
+Package/nginx-full/conffiles = $(Package/nginx/conffiles)
 
 ADDITIONAL_MODULES:= --with-http_ssl_module
 
@@ -231,9 +222,6 @@ ifneq ($(BUILD_VARIANT),all-module)
   ifneq ($(CONFIG_NGINX_HTTP_UPSTREAM_KEEPALIVE),y)
     ADDITIONAL_MODULES += --without-http_upstream_keepalive_module
   endif
-  ifeq ($(CONFIG_NGINX_NAXSI),y)
-    ADDITIONAL_MODULES += --add-module=$(PKG_BUILD_DIR)/nginx-naxsi/naxsi_src
-  endif
   ifeq ($(CONFIG_IPV6),y)
     ADDITIONAL_MODULES += --with-ipv6
   endif
@@ -244,10 +232,7 @@ ifneq ($(BUILD_VARIANT),all-module)
     ADDITIONAL_MODULES += --with-http_flv_module
   endif
   ifeq ($(CONFIG_NGINX_DAV),y)
-    ADDITIONAL_MODULES += --with-http_dav_module --add-module=$(PKG_BUILD_DIR)/nginx-dav-ext-module
-  endif
-  ifeq ($(CONFIG_NGINX_UBUS),y)
-    ADDITIONAL_MODULES += --add-module=$(PKG_BUILD_DIR)/nginx-ubus-module
+    ADDITIONAL_MODULES += --with-http_dav_module
   endif
   ifeq ($(CONFIG_NGINX_HTTP_AUTH_REQUEST),y)
     ADDITIONAL_MODULES += --with-http_auth_request_module
@@ -264,46 +249,43 @@ ifneq ($(BUILD_VARIANT),all-module)
   ifeq ($(CONFIG_NGINX_HTTP_SUB),y)
 	ADDITIONAL_MODULES += --with-http_sub_module
   endif
-  ifeq ($(CONFIG_NGINX_STREAM_CORE_MODULE),y)
-    ADDITIONAL_MODULES += --with-stream
-  endif
-  ifeq ($(CONFIG_NGINX_STREAM_SSL_MODULE),y)
-    ADDITIONAL_MODULES += --with-stream_ssl_module
-  endif
-  ifeq ($(CONFIG_NGINX_STREAM_SSL_PREREAD_MODULE),y)
-    ADDITIONAL_MODULES += --with-stream_ssl_preread_module
-  endif
-  ifeq ($(CONFIG_NGINX_HEADERS_MORE),y)
-    ADDITIONAL_MODULES += --add-module=$(PKG_BUILD_DIR)/nginx-headers-more
-  endif
-  ifeq ($(CONFIG_NGINX_HTTP_BROTLI),y)
-    ADDITIONAL_MODULES += --add-module=$(PKG_BUILD_DIR)/nginx-brotli
-  endif
-  ifeq ($(CONFIG_NGINX_RTMP_MODULE),y)
-    ADDITIONAL_MODULES += --add-module=$(PKG_BUILD_DIR)/nginx-rtmp
-  endif
-  ifeq ($(CONFIG_NGINX_TS_MODULE),y)
-    ADDITIONAL_MODULES += --add-module=$(PKG_BUILD_DIR)/nginx-ts
-  endif
 else
-  CONFIG_NGINX_HEADERS_MORE:=y
-  CONFIG_NGINX_HTTP_BROTLI:=y
-  CONFIG_NGINX_RTMP_MODULE:=y
-  CONFIG_NGINX_TS_MODULE:=y
-  CONFIG_NGINX_NAXSI:=y
-  CONFIG_NGINX_DAV:=y
-  CONFIG_NGINX_UBUS:=y
   ADDITIONAL_MODULES += --with-ipv6 --with-http_stub_status_module --with-http_flv_module \
 	--with-http_dav_module \
 	--with-http_auth_request_module --with-http_v2_module --with-http_realip_module \
 	--with-http_secure_link_module --with-http_sub_module \
-	--with-stream --with-stream_ssl_module --with-stream_ssl_preread_module \
-	--add-module=$(PKG_BUILD_DIR)/nginx-headers-more \
-	--add-module=$(PKG_BUILD_DIR)/nginx-naxsi/naxsi_src \
-	--add-module=$(PKG_BUILD_DIR)/nginx-dav-ext-module \
-	--add-module=$(PKG_BUILD_DIR)/nginx-brotli --add-module=$(PKG_BUILD_DIR)/nginx-rtmp \
-	--add-module=$(PKG_BUILD_DIR)/nginx-ts --add-module=$(PKG_BUILD_DIR)/nginx-ubus-module
   config_files += koi-utf koi-win win-utf fastcgi_params uwsgi_params
+endif
+
+ifneq ($(CONFIG_PACKAGE_nginx-mod-naxsi),)
+  ADDITIONAL_MODULES += --add-dynamic-module=$(PKG_BUILD_DIR)/nginx-naxsi/naxsi_src
+endif
+ifneq ($(CONFIG_PACKAGE_nginx-mod-lua),)
+  ADDITIONAL_MODULES += --add-dynamic-module=$(PKG_BUILD_DIR)/lua-nginx
+endif
+ifneq ($(CONFIG_PACKAGE_nginx-mod-dav-ext),)
+  ADDITIONAL_MODULES += --add-dynamic-module=$(PKG_BUILD_DIR)/nginx-dav-ext-module
+endif
+ifneq ($(CONFIG_PACKAGE_nginx-mod-stream),)
+  ADDITIONAL_MODULES += --with-stream=dynamic --with-stream_ssl_module --with-stream_ssl_preread_module
+endif
+ifneq ($(CONFIG_PACKAGE_nginx-mod-ubus),)
+  ADDITIONAL_MODULES += --add-dynamic-module=$(PKG_BUILD_DIR)/nginx-ubus-module
+endif
+ifneq ($(CONFIG_PACKAGE_nginx-mod-headers-more),)
+  ADDITIONAL_MODULES += --add-dynamic-module=$(PKG_BUILD_DIR)/nginx-headers-more
+endif
+ifneq ($(CONFIG_PACKAGE_nginx-mod-brotli),)
+  ADDITIONAL_MODULES += --add-dynamic-module=$(PKG_BUILD_DIR)/nginx-brotli
+endif
+ifneq ($(CONFIG_PACKAGE_nginx-mod-rtmp),)
+  ADDITIONAL_MODULES += --add-dynamic-module=$(PKG_BUILD_DIR)/nginx-rtmp
+endif
+ifneq ($(CONFIG_PACKAGE_nginx-mod-ts),)
+  ADDITIONAL_MODULES += --add-dynamic-module=$(PKG_BUILD_DIR)/nginx-ts
+endif
+ifeq ($(CONFIG_NGINX_GEOIP_MODULE),y)
+  ADDITIONAL_MODULES += --with-http_geoip_module=dynamic
 endif
 
 define Package/nginx-mod-luci
@@ -313,7 +295,7 @@ define Package/nginx-mod-luci
   SUBMENU:=Web Servers/Proxies
   TITLE:=Support file for Nginx
   URL:=http://nginx.org/
-  DEPENDS:=+uwsgi +uwsgi-luci-support +nginx
+  DEPENDS:=+uwsgi +uwsgi-luci-support +nginx +nginx-mod-ubus
   # TODO: add PROVIDES when removing nginx-mod-luci-ssl
   # PROVIDES:=nginx-mod-luci-ssl
 endef
@@ -322,8 +304,96 @@ define Package/nginx-mod-luci/description
  Support file for LuCI in nginx. Include custom nginx configuration, autostart script for uwsgi.
 endef
 
+NGINX_MODULES :=
 
-TARGET_CFLAGS += -fvisibility=hidden
+# $(1) module name
+# $(2) module additional dependency
+# $(3) module so name (stripped of the finaly _module.so)
+# $(4) module description
+define module
+  define Package/nginx-mod-$(strip $(1))
+	$(call Package/nginx/default)
+	DEPENDS:=+nginx-ssl $(2)
+	TITLE:=Nginx $(1) module
+  endef
+
+  define Package/nginx-mod-$(strip $(1))/description
+   $(4)
+  endef
+
+  define Package/nginx-mod-$(strip $(1))/install
+	$(INSTALL_DIR) $$(1)/usr/lib/nginx/modules
+	$(INSTALL_BIN) $$(PKG_INSTALL_DIR)/usr/lib/nginx/modules/$(3)_module.so $$(1)/usr/lib/nginx/modules
+  endef
+
+  NGINX_MODULES += nginx-mod-$(strip $(1))
+endef
+
+define brotli
+  define Package/nginx-mod-brotli
+	$(call Package/nginx/default)
+	DEPENDS:=+nginx-ssl
+	TITLE:=Nginx Brotli module
+  endef
+
+  define Package/nginx-mod-brotli/description
+   Add support for brotli compression module.
+  endef
+
+  define Package/nginx-mod-brotli/install
+	$(INSTALL_DIR) $$(1)/usr/lib/nginx/modules
+	$(INSTALL_BIN) $$(PKG_INSTALL_DIR)/usr/lib/nginx/modules/ngx_http_brotli_filter_module.so $$(1)/usr/lib/nginx/modules
+	$(INSTALL_BIN) $$(PKG_INSTALL_DIR)/usr/lib/nginx/modules/ngx_http_brotli_static_module.so $$(1)/usr/lib/nginx/modules
+  endef
+
+  NGINX_MODULES += nginx-mod-brotli
+endef
+
+define naxsi
+  define Package/nginx-mod-naxsi
+	$(call Package/nginx/default)
+	DEPENDS:=+nginx-ssl
+	TITLE:=Nginx naxsi module
+  endef
+
+  define Package/nginx-mod-naxsi/description
+   Enable NAXSI module.
+  endef
+
+  define Package/nginx-mod-naxsi/install
+	$(INSTALL_DIR) $$(1)/usr/lib/nginx/modules
+	$(INSTALL_BIN) $$(PKG_INSTALL_DIR)/usr/lib/nginx/modules/ngx_http_naxsi_module.so $$(1)/usr/lib/nginx/modules
+
+	$(INSTALL_DIR) $$(1)/etc/nginx
+	$(INSTALL_BIN) $$(PKG_BUILD_DIR)/nginx-naxsi/naxsi_config/naxsi_core.rules $$(1)/etc/nginx
+	chmod 0640 $$(1)/etc/nginx/naxsi_core.rules
+
+	$(INSTALL_BIN) $$(PKG_BUILD_DIR)/nginx-naxsi/naxsi_config/naxsi_core.rules $$(1)/etc/nginx
+	chmod 0640 $$(1)/etc/nginx/naxsi_core.rules
+  endef
+
+  NGINX_MODULES += nginx-mod-naxsi
+endef
+
+$(eval $(call module,lua, +luajit,ngx_http_lua, Enable Lua module))
+$(eval $(call module,stream, +@NGINX_STREAM_CORE_MODULE,ngx_stream, Add support for NGINX request streaming.))
+$(eval $(call module,ubus, +libubus +libjson-c +libblobmsg-json +@NGINX_UBUS,ngx_http_ubus, Enable UBUS api support directly from the server.))
+$(eval $(call module,dav-ext, +@NGINX_DAV +libxml2,ngx_http_dav_ext, Enable the WebDAV methods PROPFIND OPTIONS LOCK UNLOCK.))
+$(eval $(call module,headers-more,,ngx_http_headers_more_filter, Set and clear input and output headers...more than "add"!))
+$(eval $(call module,rtmp,,ngx_rtmp, Add support for NGINX-based Media Streaming Server module. \
+		DASH enhanced - https://github.com/ut0mt8/nginx-rtmp-module))
+$(eval $(call module, ts,,ngx_http_ts, Add support for MPEG-TS Live Module module.))
+$(eval $(call brotli))
+$(eval $(call naxsi))
+
+PKG_CONFIG_DEPENDS += $(patsubst %,CONFIG_PACKAGE_%,$(NGINX_MODULES))
+
+TARGET_CFLAGS += -DNGX_LUA_NO_BY_LUA_BLOCK
+
+ifneq ($(CONFIG_PACKAGE_nginx-mod-lua),)
+  CONFIGURE_VARS += LUAJIT_INC=$(STAGING_DIR)/usr/include/luajit-* \
+					LUAJIT_LIB=$(STAGING_DIR)/usr/lib
+endif
 
 CONFIGURE_VARS += CONFIG_BIG_ENDIAN=$(CONFIG_BIG_ENDIAN)
 
@@ -331,6 +401,7 @@ CONFIGURE_ARGS += \
 			--crossbuild=Linux::$(ARCH) \
 			--prefix=/usr \
 			--conf-path=/etc/nginx/nginx.conf \
+			--modules-path=/usr/lib/nginx/modules \
 			$(ADDITIONAL_MODULES) \
 			--error-log-path=stderr \
 			--pid-path=/var/run/nginx.pid \
@@ -342,7 +413,8 @@ CONFIGURE_ARGS += \
 			--with-cc="$(TARGET_CC)" \
 			--with-cc-opt="$(TARGET_CPPFLAGS) $(TARGET_CFLAGS)" \
 			--with-ld-opt="$(TARGET_LDFLAGS)" \
-			--without-http_upstream_zone_module
+			--without-http_upstream_zone_module \
+			--without-pcre2
 
 define Package/nginx-mod-luci/install
 	$(INSTALL_DIR) $(1)/etc/nginx/conf.d
@@ -358,16 +430,9 @@ define Package/nginx-ssl/install
 	$(INSTALL_DATA) $(addprefix $(PKG_INSTALL_DIR)/etc/nginx/,$(config_files)) $(1)/etc/nginx/
 	$(INSTALL_DIR) $(1)/etc/init.d
 	$(INSTALL_BIN) ./files/nginx.init $(1)/etc/init.d/nginx
-ifeq ($(CONFIG_NGINX_NAXSI),y)
-	$(INSTALL_DIR) $(1)/etc/nginx
-	$(INSTALL_BIN) $(PKG_BUILD_DIR)/nginx-naxsi/naxsi_config/naxsi_core.rules $(1)/etc/nginx
-	chmod 0640 $(1)/etc/nginx/naxsi_core.rules
-endif
-	$(if $(CONFIG_NGINX_NAXSI),$($(INSTALL_BIN) $(PKG_BUILD_DIR)/nginx-naxsi/naxsi_config/naxsi_core.rules $(1)/etc/nginx))
-	$(if $(CONFIG_NGINX_NAXSI),$(chmod 0640 $(1)/etc/nginx/naxsi_core.rules))
 endef
 
-Package/nginx-all-module/install = $(Package/nginx-ssl/install)
+Package/nginx-full/install = $(Package/nginx-ssl/install)
 
 define Package/nginx-ssl/prerm
 #!/bin/sh
@@ -380,14 +445,14 @@ rm -f "$$(uci get "nginx.$${LAN_NAME}.ssl_certificate_key")"
 exit 0
 endef
 
-Package/nginx-all-module/prerm = $(Package/nginx-ssl/prerm)
+Package/nginx-full/prerm = $(Package/nginx-ssl/prerm)
 
 define Download/nginx-headers-more
   VERSION:=bea1be3bbf6af28f6aa8cf0c01c07ee1637e2bd0
   SUBDIR:=nginx-headers-more
   FILE:=headers-more-nginx-module-$$(VERSION).tar.xz
   URL:=https://github.com/openresty/headers-more-nginx-module.git
-  MIRROR_HASH:=0c0d2ced2ce895b3f45eb2b230cd90508ab2a773299f153de14a43e44c1209b3
+  MIRROR_HASH:=3617bbf7a935208a1d8d5f86a8f9b770f6987e4d2b5663a9ab1b777217e3066b
   PROTO:=git
 endef
 
@@ -397,11 +462,11 @@ define Prepare/nginx-headers-more
 endef
 
 define Download/nginx-brotli
-  VERSION:=6e975bcb015f62e1f303054897783355e2a877dc
+  VERSION:=e505dce68acc190cc5a1e780a3b0275e39f160ca
   SUBDIR:=nginx-brotli
   FILE:=ngx-brotli-module-$$(VERSION).tar.xz
   URL:=https://github.com/google/ngx_brotli.git
-  MIRROR_HASH:=e4e262f87e48fe0ab6fdad395dba409182d05a3be88c9f2a892ca6f26158665e
+  MIRROR_HASH:=04847f11ef808fed50f44b2af0ef3abf59ff0ffc06dfc7394d9ab51d53fef31f
   PROTO:=git
 endef
 
@@ -439,16 +504,30 @@ define Prepare/nginx-ts
 endef
 
 define Download/nginx-naxsi
-  VERSION:=d714f1636ea49a9a9f4f06dba14aee003e970834
+  VERSION:=951123ad456bdf5ac94e8d8819342fe3d49bc002
   SUBDIR:=nginx-naxsi
   FILE:=nginx-naxsi-module-$$(VERSION).tar.xz
   URL:=https://github.com/nbs-system/naxsi.git
-  MIRROR_HASH:=0c2ba8675a291a81b406994c376e1f5e6b602f4b7676d5d53029592d5d71c420
+  MIRROR_HASH:=c734cae19a596affadd62a2df1b58d3df8d1364093a4e80a7cd1ab4555963535
   PROTO:=git
 endef
 
 define Prepare/nginx-naxsi
 	$(eval $(Download/nginx-naxsi))
+	xzcat $(DL_DIR)/$(FILE) | tar -C $(PKG_BUILD_DIR) $(TAR_OPTIONS)
+endef
+
+define Download/lua-nginx
+  VERSION:=68acad14e4a8f42e31d4a4bb5ed44d6f5b55fc1c
+  SUBDIR:=lua-nginx
+  FILE:=lua-nginx-module-$$(VERSION).tar.xz
+  URL:=https://github.com/openresty/lua-nginx-module.git
+  MIRROR_HASH:=366f24e1ba6221e34f6ba20ab29146438438f88c89fd71f9500d169b3f5aedf0
+  PROTO:=git
+endef
+
+define Prepare/lua-nginx
+	$(eval $(Download/lua-nginx))
 	xzcat $(DL_DIR)/$(FILE) | tar -C $(PKG_BUILD_DIR) $(TAR_OPTIONS)
 endef
 
@@ -483,10 +562,13 @@ endef
 define Build/Patch
 	$(if $(QUILT),rm -rf $(PKG_BUILD_DIR)/patches; mkdir -p $(PKG_BUILD_DIR)/patches)
 	$(call PatchDir,$(PKG_BUILD_DIR),$(PATCH_DIR)/nginx,nginx/)
-ifneq "$(or $(CONFIG_NGINX_DAV),$(QUILT))" ""
+ifneq "$(or $(CONFIG_PACKAGE_nginx-mod-dav-ext),$(QUILT))" ""
 	$(call PatchDir,$(PKG_BUILD_DIR),$(PATCH_DIR)/dav-nginx,dav-nginx/)
 endif
-ifneq "$(or $(CONFIG_NGINX_RTMP_MODULE),$(QUILT))" ""
+ifneq "$(or $(CONFIG_PACKAGE_nginx-mod-lua),$(QUILT))" ""
+	$(call PatchDir,$(PKG_BUILD_DIR),$(PATCH_DIR)/lua-nginx,lua-nginx/)
+endif
+ifneq "$(or $(CONFIG_PACKAGE_nginx-mod-rtmp),$(QUILT))" ""
 	$(call PatchDir,$(PKG_BUILD_DIR),$(PATCH_DIR)/rtmp-nginx,rtmp-nginx/)
 endif
 	$(if $(QUILT),touch $(PKG_BUILD_DIR)/.quilt_used)
@@ -495,6 +577,7 @@ endef
 define Quilt/Refresh/Package
 	$(call Quilt/RefreshDir,$(PKG_BUILD_DIR),$(PATCH_DIR)/nginx,nginx/)
 	$(call Quilt/RefreshDir,$(PKG_BUILD_DIR),$(PATCH_DIR)/dav-nginx,dav-nginx/)
+	$(call Quilt/RefreshDir,$(PKG_BUILD_DIR),$(PATCH_DIR)/lua-nginx,lua-nginx/)
 	$(call Quilt/RefreshDir,$(PKG_BUILD_DIR),$(PATCH_DIR)/rtmp-nginx,rtmp-nginx/)
 endef
 
@@ -503,37 +586,42 @@ define Build/Prepare
 	mkdir -p $(PKG_BUILD_DIR)
 	$(PKG_UNPACK)
 
-ifeq ($(CONFIG_NGINX_NAXSI),y)
+ifneq ($(CONFIG_PACKAGE_nginx-mod-naxsi),)
   $(eval $(call Download,nginx-naxsi))
   $(Prepare/nginx-naxsi)
 endif
 
-ifeq ($(CONFIG_NGINX_HTTP_BROTLI),y)
+ifneq "$(or $(CONFIG_PACKAGE_nginx-mod-lua),$(QUILT))" ""
+  $(eval $(call Download,lua-nginx))
+  $(Prepare/lua-nginx)
+endif
+
+ifneq ($(CONFIG_PACKAGE_nginx-mod-brotli),)
   $(eval $(call Download,nginx-brotli))
   $(Prepare/nginx-brotli)
 endif
 
-ifeq ($(CONFIG_NGINX_HEADERS_MORE),y)
+ifneq ($(CONFIG_PACKAGE_nginx-mod-headers-more),)
   $(eval $(call Download,nginx-headers-more))
   $(Prepare/nginx-headers-more)
 endif
 
-ifneq "$(or $(CONFIG_NGINX_RTMP_MODULE),$(QUILT))" ""
+ifneq "$(or $(CONFIG_PACKAGE_nginx-mod-rtmp),$(QUILT))" ""
   $(eval $(call Download,nginx-rtmp))
   $(Prepare/nginx-rtmp)
 endif
 
-ifeq ($(CONFIG_NGINX_TS_MODULE),y)
+ifneq ($(CONFIG_PACKAGE_nginx-mod-ts),)
   $(eval $(call Download,nginx-ts))
   $(Prepare/nginx-ts)
 endif
 
-ifneq "$(or $(CONFIG_NGINX_DAV),$(QUILT))" ""
+ifneq "$(or $(CONFIG_PACKAGE_nginx-mod-dav-ext),$(QUILT))" ""
   $(eval $(call Download,nginx-dav-ext-module))
   $(Prepare/nginx-dav-ext-module)
 endif
 
-ifeq ($(CONFIG_NGINX_UBUS),y)
+ifneq ($(CONFIG_PACKAGE_nginx-mod-ubus),)
   $(eval $(call Download,nginx-ubus-module))
   $(Prepare/nginx-ubus-module)
 endif
@@ -542,8 +630,10 @@ endif
 endef
 
 $(eval $(call BuildPackage,nginx-ssl))
-$(eval $(call BuildPackage,nginx-all-module))
+$(eval $(call BuildPackage,nginx-full))
 $(eval $(call BuildPackage,nginx-mod-luci))
+
+$(foreach m,$(NGINX_MODULES),$(eval $(call BuildPackage,$(m))))
 
 # TODO: remove after a transition period (together with pkg nginx-util):
 # It is for smoothly substituting nginx and nginx-mod-luci-ssl (by nginx-ssl
