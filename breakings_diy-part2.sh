@@ -893,8 +893,8 @@ sed -i 's/PKG_MIRROR_HASH:=.*/PKG_MIRROR_HASH:=d1f590909e7e70dca3a02ce1940152082
 #cp -rf $GITHUB_WORKSPACE/general/iptables package/network/utils
 
 # nghttp2
-sed -i 's/PKG_VERSION:=.*/PKG_VERSION:=1.52.0/g' feeds/packages/libs/nghttp2/Makefile
-sed -i 's/PKG_HASH:=.*/PKG_HASH:=3ea9f0439e60469ad4d39cb349938684ffb929dd7e8e06a7bffe9f9d21f8ba7d/g' feeds/packages/libs/nghttp2/Makefile
+sed -i 's/PKG_VERSION:=.*/PKG_VERSION:=1.53.0/g' feeds/packages/libs/nghttp2/Makefile
+sed -i 's/PKG_HASH:=.*/PKG_HASH:=b867184254e5a29b0ba68413aa14f8b0ce1142a371761374598dec092dabb809/g' feeds/packages/libs/nghttp2/Makefile
 
 # libiconv-full
 #sed -i 's/PKG_VERSION:=.*/PKG_VERSION:=1.17/g' package/libs/libiconv-full/Makefile
