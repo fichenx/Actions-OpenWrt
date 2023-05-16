@@ -325,8 +325,8 @@ sed -i 's/PKG_VERSION:=.*/PKG_VERSION:=8.2.6/g' feeds/packages/lang/php8/Makefil
 sed -i 's/PKG_HASH:=.*/PKG_HASH:=10b796f0ed45574229851212b30a596a76e70ae365322bcaaaf9c00fa7d58cca/g' feeds/packages/lang/php8/Makefile
 
 # python-docker
-sed -i 's/PKG_VERSION:=.*/PKG_VERSION:=6.1.1/g' feeds/packages/lang/python/python-docker/Makefile
-sed -i 's/PKG_HASH:=.*/PKG_HASH:=5ec18b9c49d48ee145a5b5824bb126dc32fc77931e18444783fc07a7724badc0/g' feeds/packages/lang/python/python-docker/Makefile
+sed -i 's/PKG_VERSION:=.*/PKG_VERSION:=6.1.2/g' feeds/packages/lang/python/python-docker/Makefile
+sed -i 's/PKG_HASH:=.*/PKG_HASH:=dcc088adc2ec4e7cfc594e275d8bd2c9738c56c808de97476939ef67db5af8c2/g' feeds/packages/lang/python/python-docker/Makefile
 #cp -f $GITHUB_WORKSPACE/general/python-docker/Makefile feeds/packages/lang/python/python-docker
 
 # coremark
