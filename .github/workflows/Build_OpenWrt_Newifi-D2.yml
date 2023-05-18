@@ -183,7 +183,7 @@ jobs:
         echo "WEB登陆账户：root" >> release.txt
         echo "密码：password" >> release.txt
         echo "固件源码：https://github.com/coolsnowwolf/lede" >> release.txt
-        echo "固件内核版本：5.4" >> release.txt
+        echo "固件内核版本：5.10" >> release.txt
         echo "软件源推荐：https://downloads.immortalwrt.org/snapshots/packages/mipsel_24kc/" >> release.txt
         echo "源码最近提交信息:" >> release.txt        
         echo "${{ env.useVersionInfo }}" >> release.txt
