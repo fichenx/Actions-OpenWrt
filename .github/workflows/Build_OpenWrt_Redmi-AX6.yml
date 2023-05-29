@@ -32,7 +32,7 @@ env:
   REPO_URL: https://github.com/coolsnowwolf/lede
   REPO_BRANCH: master
   FEEDS_CONF: feeds.conf.default
-  CONFIG_FILE: AX6.config
+  CONFIG_FILE: AX6_plus.config
   DIY_P1_SH: lede_diy-part1.sh
   DIY_P2_SH: AX6_diy-part2.sh
   UPLOAD_BIN_DIR: false
@@ -68,9 +68,11 @@ jobs:
       working-directory: /workdir
       run: |
         df -hT $PWD
-        git clone --depth 1 $REPO_URL -b $REPO_BRANCH openwrt
+        git clone $REPO_URL -b $REPO_BRANCH openwrt
+		#git clone --depth 1 $REPO_URL -b $REPO_BRANCH openwrt
         ln -sf /workdir/openwrt $GITHUB_WORKSPACE/openwrt
         cd openwrt
+		git reset --hard 26f3634631244eedfbdfd61ea6cc3a2d7f5d896f
         useVersionInfo=$(git show -s --date=short --format="提交人: %an<br/>提交时间: %cd<br/>提交内容: %s<br/>commit hash: %H")
         echo "useVersionInfo=$useVersionInfo" >> $GITHUB_ENV
         echo "DATE=$(date "+%Y-%m-%d %H:%M:%S")" >> $GITHUB_ENV
@@ -170,11 +172,11 @@ jobs:
       id: tag
       if: env.UPLOAD_RELEASE == 'true' && !cancelled()
       run: |
-        echo "release_tag=$(date +"%Y%m%d")_${{ env.FILE_NAME }}" >> $GITHUB_OUTPUT
+        echo "release_tag=$(date +"%Y%m%d%H%M")_${{ env.FILE_NAME }}" >> $GITHUB_OUTPUT
         touch release.txt
-        [ $UPLOAD_COWTRANSFER = true ] && echo "�� [Cowtransfer](${{ steps.cowtransfer.outputs.url }})" >> release.txt
-        [ $UPLOAD_WETRANSFER = true ] && echo "�� [WeTransfer](${{ steps.wetransfer.outputs.url }})" >> release.txt
-        echo "Redmi-AX6 Openwrt 固件配置：" >> release.txt
+        [ $UPLOAD_COWTRANSFER = true ] && echo "🔗 [Cowtransfer](${{ steps.cowtransfer.outputs.url }})" >> release.txt
+        [ $UPLOAD_WETRANSFER = true ] && echo "🔗 [WeTransfer](${{ steps.wetransfer.outputs.url }})" >> release.txt
+        echo "Redmi-AX6 Openwrt(扩容版) 固件配置：" >> release.txt
         echo "IP:192.168.123.1" >> release.txt
         echo "WEB登陆账户：root" >> release.txt
         echo "密码：password" >> release.txt
