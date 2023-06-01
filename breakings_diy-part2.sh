@@ -219,8 +219,8 @@ rm -rf feeds/packages/lang/golang
 cp -rf $GITHUB_WORKSPACE/general/golang feeds/packages/lang/golang
 
 # curl
-sed -i 's/PKG_VERSION:=.*/PKG_VERSION:=8.1.0/g' feeds/packages/net/curl/Makefile
-sed -i 's/PKG_HASH:=.*/PKG_HASH:=6bd80ad4f07187015911216ee7185b90d285ac5162aed1bded144f9f93232a3c/g' feeds/packages/net/curl/Makefile
+sed -i 's/PKG_VERSION:=.*/PKG_VERSION:=8.1.2/g' feeds/packages/net/curl/Makefile
+sed -i 's/PKG_HASH:=.*/PKG_HASH:=31b1118eb8bfd43cd95d9a3f146f814ff874f6ed3999b29d94f4d1e7dbac5ef6/g' feeds/packages/net/curl/Makefile
 sed -i 's/PKG_RELEASE:=.*/PKG_RELEASE:=1/g' feeds/packages/net/curl/Makefile
 #rm -f feeds/packages/net/curl
 #svn co https://github.com/openwrt/packages/trunk/net/curl feeds/packages/net/curl
@@ -789,8 +789,8 @@ rm -rf feeds/packages/utils/coreutils
 cp -r $GITHUB_WORKSPACE/general/coreutils feeds/packages/utils
 
 # frp
-sed -i 's/PKG_VERSION:=.*/PKG_VERSION:=0.48.0/g' feeds/packages/net/frp/Makefile
-sed -i 's/PKG_HASH:=.*/PKG_HASH:=efba8ec9fad3369ce62631369f52b78a7248df426b5b54311e96231adac5cc76/g' feeds/packages/net/frp/Makefile
+sed -i 's/PKG_VERSION:=.*/PKG_VERSION:=0.49.0/g' feeds/packages/net/frp/Makefile
+sed -i 's/PKG_HASH:=.*/PKG_HASH:=8ff92d4f763d596bee35efe17f0729d36e584b93c49a7671cebde4bb318b458f/g' feeds/packages/net/frp/Makefile
 
 # openconnect
 #sed -i 's/PKG_VERSION:=.*/PKG_VERSION:=8.20/g' feeds/packages/net/openconnect/Makefile
@@ -903,8 +903,8 @@ sed -i 's/PKG_HASH:=.*/PKG_HASH:=b867184254e5a29b0ba68413aa14f8b0ce1142a37176137
 #sed -i 's/PKG_HASH:=.*/PKG_HASH:=8f74213b56238c85a50a5329f77e06198771e70dd9a739779f4c02f65d971313/g' package/libs/libiconv-full/Makefile
 
 # bind
-sed -i 's/PKG_VERSION:=.*/PKG_VERSION:=9.18.14/g' feeds/packages/net/bind/Makefile
-sed -i 's/PKG_HASH:=.*/PKG_HASH:=9ae12edf6ac3c430b33ecd1a7c0c0c60875d255185eb87850fa9a5e794a64a09/g' feeds/packages/net/bind/Makefile
+sed -i 's/PKG_VERSION:=.*/PKG_VERSION:=9.18.15/g' feeds/packages/net/bind/Makefile
+sed -i 's/PKG_HASH:=.*/PKG_HASH:=28ae8db14862801bc2bd4fd820db00667d3f1ff9ae9cc2d06a0ef7810fed7a4e/g' feeds/packages/net/bind/Makefile
 sed -i 's/PKG_RELEASE:=.*/PKG_RELEASE:=1/g' feeds/packages/net/bind/Makefile
 
 # libwebp
@@ -916,9 +916,9 @@ sed -i 's/PKG_RELEASE:=.*/PKG_RELEASE:=1/g' feeds/packages/net/bind/Makefile
 #sed -i 's/PKG_HASH:=.*/PKG_HASH:=47ac6e60271aa0196e65472d02d019556dc7c6d09df3b65df2c1ab6866348e3b/g' feeds/packages/net/lighttpd/Makefile
 
 # xz
-sed -i 's/PKG_VERSION:=.*/PKG_VERSION:=5.4.2/g' feeds/packages/utils/xz/Makefile
+sed -i 's/PKG_VERSION:=.*/PKG_VERSION:=5.4.3/g' feeds/packages/utils/xz/Makefile
 sed -i 's/PKG_RELEASE:=.*/PKG_RELEASE:=1/g' feeds/packages/utils/xz/Makefile
-sed -i 's/PKG_HASH:=.*/PKG_HASH:=aa49909cbd9028c4666a35fa4975f9a6203ed98154fbb8223ee43ef9ceee97c3/g' feeds/packages/utils/xz/Makefile
+sed -i 's/PKG_HASH:=.*/PKG_HASH:=9243a04598d7a70c1f567a0143a255581ac5c64b140fd55fd5cbc1e00b0e6f90/g' feeds/packages/utils/xz/Makefile
 
 # vim
 rm -rf feeds/packages/utils/vim
