@@ -64,6 +64,7 @@
 
 - [OpenWrt](https://github.com/openwrt/openwrt)
 - [Lean's OpenWrt](https://github.com/coolsnowwolf/lede)
+- [immortalwrt OpenWrt](https://github.com/immortalwrt/immortalwrt)
 - [unifreq/openwrt_packit](https://github.com/unifreq/openwrt_packit)
 - [P3TERX/Actions-OpenWrt](https://github.com/P3TERX/Actions-OpenWrt)
 - [ophub/flippy-openwrt-actions](https://github.com/ophub/flippy-openwrt-actions)
