@@ -29,10 +29,11 @@ on:
   #  types: [started]
 
 env:
-  REPO_URL: https://github.com/coolsnowwolf/lede
+  #REPO_URL: https://github.com/coolsnowwolf/lede
+  REPO_URL: https://github.com/immortalwrt/immortalwrt
   REPO_BRANCH: master
   FEEDS_CONF: feeds.conf.default
-  CONFIG_FILE: AX6_plus.config
+  CONFIG_FILE: AX6_5.15(ImmortalWrt).config
   DIY_P1_SH: lede_diy-part1.sh
   DIY_P2_SH: AX6_diy-part2.sh
   UPLOAD_BIN_DIR: false
@@ -78,8 +79,8 @@ jobs:
         echo "DATE=$(date "+%Y-%m-%d %H:%M:%S")" >> $GITHUB_ENV
         echo "DATE1=$(date "+%Y-%m-%d")" >> $GITHUB_ENV
         
-    - name: Revert ax6
-      run: cp -rf $GITHUB_WORKSPACE/general/AX6/target/linux/ipq807x/image/generic.mk openwrt/target/linux/ipq807x/image/
+    #- name: Revert ax6
+    #  run: cp -rf $GITHUB_WORKSPACE/general/AX6/target/linux/ipq807x/image/generic.mk openwrt/target/linux/ipq807x/image/
           
     - name: Load custom feeds
       run: |
@@ -180,8 +181,8 @@ jobs:
         echo "IP:192.168.123.1" >> release.txt
         echo "WEB登陆账户：root" >> release.txt
         echo "密码：password" >> release.txt
-        echo "固件源码：https://github.com/coolsnowwolf/lede" >> release.txt
-        echo "固件内核版本：5.10" >> release.txt
+        echo "固件源码：https://github.com/immortalwrt/immortalwrt" >> release.txt
+        echo "固件内核版本：5.15" >> release.txt
         echo "源码最近提交信息:" >> release.txt
         echo "${{ env.useVersionInfo }}" >> release.txt
         echo "status=success" >> $GITHUB_OUTPUT
