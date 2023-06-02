@@ -42,8 +42,8 @@ cp -rf $GITHUB_WORKSPACE/general/newifi3/files/etc/hotplug.d/block/30-usbmount f
 
 #nps（修改nps源为yisier）
 sed -i 's/PKG_SOURCE_URL:=.*/PKG_SOURCE_URL:=https:\/\/codeload.github.com\/yisier\/nps\/tar.gz\/v$(PKG_VERSION)?/g' feeds/packages/net/nps/Makefile
-sed -i 's/PKG_VERSION:=.*/PKG_VERSION:=0.26.14/g' feeds/packages/net/nps/Makefile
-sed -i 's/PKG_HASH:=.*/PKG_HASH:=a05135247918490ea453627000cfb867bf0131ddfede9c3ef9614094da96140a/g' feeds/packages/net/nps/Makefile
+sed -i 's/PKG_VERSION:=.*/PKG_VERSION:=0.26.16/g' feeds/packages/net/nps/Makefile
+sed -i 's/PKG_HASH:=.*/PKG_HASH:=8e1405cc69b3d509d9397c2423b6b6a7e3ee8a6b69ec3481e15f9846ab0c9852/g' feeds/packages/net/nps/Makefile
 #luci-app-nps（修改nps显示位置）
 sed -i 's/"services"/"vpn"/g'  feeds/luci/applications/luci-app-nps/luasrc/controller/nps.lua
 sed -i 's/\[services\]/\[vpn\]/g'  feeds/luci/applications/luci-app-nps/luasrc/view/nps/nps_status.htm
