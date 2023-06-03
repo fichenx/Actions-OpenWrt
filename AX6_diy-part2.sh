@@ -56,3 +56,6 @@ sed -i "s/hostname='ImmortalWrt'/hostname='Redmi-AX6'/g" package/base-files/file
 #sed -i 's|services/openclash|services/bypass|g' feeds/fichenx/luci-theme-design/luasrc/view/themes/design/header.htm
 #sed -i 's/system\/admin/docker\/containers/g' feeds/fichenx/luci-theme-design/luasrc/view/themes/design/header.htm
 #sed -i 's|openclash.png|ssr.png|g' feeds/fichenx/luci-theme-design/luasrc/view/themes/design/header.htm
+
+#为immortalwrt添加luci-app-turboacc
+svn export https://github.com/coolsnowwolf/luci/trunk/master/applications/luci-app-turboacc /feeds/luci/applications/luci-app-turboacc
