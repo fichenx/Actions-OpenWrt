@@ -60,8 +60,8 @@ sed -i "s/hostname='ImmortalWrt'/hostname='Redmi-AX6'/g" package/base-files/file
 #为immortalwrt添加luci-app-turboacc
 svn export https://github.com/coolsnowwolf/luci/trunk/applications/luci-app-turboacc feeds/luci/applications/luci-app-turboacc
 
-#为immortalwrt添加luci-app-serverchan
-svn export https://github.com/fichenx/openwrt-package/trunk/luci-app-serverchan feeds/luci/applications/luci-app-serverchan
+#为immortalwrt添加luci-app-serverchan(immortalwrt/luci有wechatpush)
+#svn export https://github.com/fichenx/openwrt-package/trunk/luci-app-serverchan feeds/luci/applications/luci-app-serverchan
 
 ./scripts/feeds update -a
 ./scripts/feeds install -a
