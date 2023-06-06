@@ -612,8 +612,8 @@ sed -i 's/Dbacktrace=false/Dbacktrace=disabled/g' feeds/packages/utils/zstd/Make
 #cp -rf $GITHUB_WORKSPACE/general/nano feeds/packages/utils
 
 # dnsproxy
-sed -i 's/PKG_VERSION:=.*/PKG_VERSION:=0.49.1/g' feeds/packages/net/dnsproxy/Makefile
-sed -i 's/PKG_HASH:=.*/PKG_HASH:=c587a7e88660c879f738df1ffcbf0402928a0c04ec0f148e385017f176e8ba14/g' feeds/packages/net/dnsproxy/Makefile
+sed -i 's/PKG_VERSION:=.*/PKG_VERSION:=0.49.2/g' feeds/packages/net/dnsproxy/Makefile
+sed -i 's/PKG_HASH:=.*/PKG_HASH:=e1bbaee78077a94149fc0fe18a4c7c9609d96307fa7c4b3ae09811965d5db96a/g' feeds/packages/net/dnsproxy/Makefile
 
 # libnl-tiny
 #sed -i 's/PKG_RELEASE:=.*/PKG_RELEASE:=1/g' package/libs/libnl-tiny/Makefile
