@@ -31,19 +31,19 @@ rm -rf feeds/luci/themes/luci-theme-design && git clone --depth 1 https://github
 rm -rf feeds/luci/applications/luci-app-design-config && git clone --depth 1 https://github.com/gngpp/luci-app-design-config feeds/luci/applications/luci-app-design-config
 
 #6.添加自动挂载磁盘脚本
-mkdir -p files/etc/hotplug.d/block && wget -O files/etc/hotplug.d/block/30-usbmount https://raw.githubusercontent.com/fichenx/P3TERX_Actions-OpenWrt/main/files/etc/hotplug.d/block/30-usbmount && chmod 755 files/etc/hotplug.d/block/30-usbmount
+#mkdir -p files/etc/hotplug.d/block && wget -O files/etc/hotplug.d/block/30-usbmount https://raw.githubusercontent.com/fichenx/P3TERX_Actions-OpenWrt/main/files/etc/hotplug.d/block/30-usbmount && chmod 755 files/etc/hotplug.d/block/30-usbmount
+mkdir -p files/etc/hotplug.d/block/
+cp -rf $GITHUB_WORKSPACE/general/newifi3/files/etc/hotplug.d/block/30-usbmount files/etc/hotplug.d/block/
+chmod 755 files/etc/hotplug.d/block/30-usbmount
 
 #7.修改主机名
 sed -i "s/hostname='OpenWrt'/hostname='Newifi-D2'/g" package/base-files/files/bin/config_generate
 
-#添加newifi3自动挂载硬盘文件
-mkdir -p files/etc/hotplug.d/block/
-cp -rf $GITHUB_WORKSPACE/general/newifi3/files/etc/hotplug.d/block/30-usbmount files/etc/hotplug.d/block/
 
 #nps（修改nps源为yisier）
 sed -i 's/PKG_SOURCE_URL:=.*/PKG_SOURCE_URL:=https:\/\/codeload.github.com\/yisier\/nps\/tar.gz\/v$(PKG_VERSION)?/g' feeds/packages/net/nps/Makefile
-sed -i 's/PKG_VERSION:=.*/PKG_VERSION:=0.26.16/g' feeds/packages/net/nps/Makefile
-sed -i 's/PKG_HASH:=.*/PKG_HASH:=8e1405cc69b3d509d9397c2423b6b6a7e3ee8a6b69ec3481e15f9846ab0c9852/g' feeds/packages/net/nps/Makefile
+sed -i 's/PKG_VERSION:=.*/PKG_VERSION:=0.26.16.1/g' feeds/packages/net/nps/Makefile
+sed -i 's/PKG_HASH:=.*/PKG_HASH:=2fb8a19d2bd34d6a009f14d1c797169f09801eb814f57ebf10156ffdb78f2457/g' feeds/packages/net/nps/Makefile
 #luci-app-nps（修改nps显示位置）
 sed -i 's/"services"/"vpn"/g'  feeds/luci/applications/luci-app-nps/luasrc/controller/nps.lua
 sed -i 's/\[services\]/\[vpn\]/g'  feeds/luci/applications/luci-app-nps/luasrc/view/nps/nps_status.htm
