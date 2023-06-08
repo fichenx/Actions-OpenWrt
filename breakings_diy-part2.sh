@@ -674,9 +674,9 @@ rm -rf feeds/packages/net/nginx
 cp -rf $GITHUB_WORKSPACE/general/nginx feeds/packages/net/nginx
 
 # openssl
-#sed -i 's/PKG_BUGFIX:=.*/PKG_BUGFIX:=s/g' package/libs/openssl/Makefile
-#sed -i 's/PKG_RELEASE:=.*/PKG_RELEASE:=1/g' package/libs/openssl/Makefile
-#sed -i 's/PKG_HASH:=.*/PKG_HASH:=c5ac01e760ee6ff0dab61d6b2bbd30146724d063eb322180c6f18a6f74e4b6aa/g' package/libs/openssl/Makefile
+sed -i 's/PKG_BUGFIX:=.*/PKG_BUGFIX:=u/g' package/libs/openssl/Makefile
+sed -i 's/PKG_RELEASE:=.*/PKG_RELEASE:=1/g' package/libs/openssl/Makefile
+sed -i 's/PKG_HASH:=.*/PKG_HASH:=e2f8d84b523eecd06c7be7626830370300fbcc15386bf5142d72758f6963ebc6/g' package/libs/openssl/Makefile
 
 # 修改makefile
 #find package/*/ -maxdepth 2 -path "*/Makefile" | xargs -i sed -i 's|include\ \.\.\/\.\.\/devel/meson/meson.mk|include \$(INCLUDE_DIR)\/meson.mk|g' {}
