@@ -27,9 +27,9 @@
 - 网络：多线多拨、负载均衡、Turbo ACC 网络加速。
 
 ## 2、Redmi AX6
-- 使用源码（lede）：https://github.com/coolsnowwolf/lede(因无线驱动问题、暂时维持源码版本在2023年5月4日)
-- 内核（lede）：5.10；
-- 使用源码（immortalwrt）：https://github.com/immortalwrt/immortalwrt（固件较大、需合并分区）
+- 使用源码（lede）：https://github.com/coolsnowwolf/lede (因无线驱动问题，暂时维持源码版本在20230504)
+- 内核（lede）：5.10
+- 使用源码（immortalwrt）：https://github.com/immortalwrt/immortalwrt （固件较大、需合并分区）
 - 内核（immortalwrt）：5.15
 - 默认IP：192.168.123.1
 - 用户名：root
