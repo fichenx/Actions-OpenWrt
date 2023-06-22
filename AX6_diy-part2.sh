@@ -72,7 +72,7 @@ sed -i 's|Must an IPv4 address|IPv4 address or domain name|g' feeds/luci/applica
 sed -i 's|必须是 IPv4 地址|IPv4 地址或域名|g' feeds/luci/applications/luci-app-nps/po/zh-cn/nps.po
 
 #添加design主题js版
-[ ! -e package/lean/default-settings/files/zzz-default-settings ] && git clone --depth 1 -b js https://github.com/gngpp/luci-theme-design.git  feeds/luci/themes/luci-theme-design
+[ ! -e package/lean/default-settings/files/zzz-default-settings ] && git clone --depth 1 -b js https://github.com/gngpp/luci-theme-design.git  package/luci-theme-design
 
 ./scripts/feeds update -a
 ./scripts/feeds install -a
