@@ -21,7 +21,7 @@ sed -i 's/192.168.1.1/192.168.123.1/g' package/base-files/files/bin/config_gener
 
 #3.固件版本号添加个人标识和日期
 [ -e package/lean/default-settings/files/zzz-default-settings ] && sed -i "s/DISTRIB_DESCRIPTION='.*OpenWrt '/DISTRIB_DESCRIPTION='FICHEN($(TZ=UTC-8 date +%Y.%m.%d))@OpenWrt '/g" package/lean/default-settings/files/zzz-default-settings
-[ ! -e package/lean/default-settings/files/zzz-default-settings ] && sed -i '/DISTRIB_DESCRIPTION='%D %V %C'/d' package/base-files/files/etc/openwrt_release
+[ ! -e package/lean/default-settings/files/zzz-default-settings ] && sed -i "/DISTRIB_DESCRIPTION='*'/d" package/base-files/files/etc/openwrt_release
 [ ! -e package/lean/default-settings/files/zzz-default-settings ] && echo "DISTRIB_DESCRIPTION='FICHEN($(TZ=UTC-8 date +%Y.%m.%d))@immortalwrt '" >> package/base-files/files/etc/openwrt_release
 
 #4.编译的固件文件名添加日期
@@ -77,7 +77,7 @@ sed -i 's|必须是 IPv4 地址|IPv4 地址或域名|g' feeds/luci/applications/
 git clone --depth 1 -b js https://github.com/gngpp/luci-theme-design.git  feeds/luci/themes/luci-theme-design
 
 #添加ikoolproxy
-git clone --depth 1 https://github.com/yaof2/luci-app-ikoolproxy feeds/luci/applications/luci-app-ikoolproxy
+#git clone --depth 1 https://github.com/yaof2/luci-app-ikoolproxy feeds/luci/applications/luci-app-ikoolproxy
 
 ./scripts/feeds update -a
 ./scripts/feeds install -a
