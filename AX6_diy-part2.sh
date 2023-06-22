@@ -74,7 +74,7 @@ sed -i 's|必须是 IPv4 地址|IPv4 地址或域名|g' feeds/luci/applications/
 #为immortalwrt添加luci-app-turboacc
 #svn export https://github.com/coolsnowwolf/luci/trunk/applications/luci-app-turboacc feeds/luci/applications/luci-app-turboacc
 #添加design主题js版
-git clone --depth 1 -b js https://github.com/gngpp/luci-theme-design.git  feeds/luci/themes/luci-theme-design
+[ ! -e package/lean/default-settings/files/zzz-default-settings ] && git clone --depth 1 -b js https://github.com/gngpp/luci-theme-design.git  feeds/luci/themes/luci-theme-design
 
 #添加ikoolproxy
 #git clone --depth 1 https://github.com/yaof2/luci-app-ikoolproxy feeds/luci/applications/luci-app-ikoolproxy
