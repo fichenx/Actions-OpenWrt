@@ -272,8 +272,8 @@ rm -rf feeds/packages/utils/dockerd
 cp -rf $GITHUB_WORKSPACE/general/dockerd feeds/packages/utils/dockerd
 
 # docker-compose
-sed -i 's/PKG_VERSION:=.*/PKG_VERSION:=2.18.1/g' feeds/packages/utils/docker-compose/Makefile
-sed -i 's/PKG_HASH:=.*/PKG_HASH:=192c47c177d9bfd8492ed0c49214af0c740586da6db0b7e9c9a07da37c9dc722/g' feeds/packages/utils/docker-compose/Makefile
+sed -i 's/PKG_VERSION:=.*/PKG_VERSION:=2.19.0/g' feeds/packages/utils/docker-compose/Makefile
+sed -i 's/PKG_HASH:=.*/PKG_HASH:=0be3fd713ef84985f63d76de4c58451401aed1dfbeb235127dd77a57d1890996/g' feeds/packages/utils/docker-compose/Makefile
 
 # containerd
 #sed -i 's/PKG_VERSION:=.*/PKG_VERSION:=1.5.11/g' feeds/packages/utils/containerd/Makefile
@@ -903,8 +903,8 @@ sed -i 's/PKG_HASH:=.*/PKG_HASH:=b867184254e5a29b0ba68413aa14f8b0ce1142a37176137
 #sed -i 's/PKG_HASH:=.*/PKG_HASH:=8f74213b56238c85a50a5329f77e06198771e70dd9a739779f4c02f65d971313/g' package/libs/libiconv-full/Makefile
 
 # bind
-sed -i 's/PKG_VERSION:=.*/PKG_VERSION:=9.18.15/g' feeds/packages/net/bind/Makefile
-sed -i 's/PKG_HASH:=.*/PKG_HASH:=28ae8db14862801bc2bd4fd820db00667d3f1ff9ae9cc2d06a0ef7810fed7a4e/g' feeds/packages/net/bind/Makefile
+sed -i 's/PKG_VERSION:=.*/PKG_VERSION:=9.18.16/g' feeds/packages/net/bind/Makefile
+sed -i 's/PKG_HASH:=.*/PKG_HASH:=c88234fe07ee75c3c8a9e59152fee64b714643de8e22cf98da3db4d0b57e0775/g' feeds/packages/net/bind/Makefile
 sed -i 's/PKG_RELEASE:=.*/PKG_RELEASE:=1/g' feeds/packages/net/bind/Makefile
 
 # libwebp
