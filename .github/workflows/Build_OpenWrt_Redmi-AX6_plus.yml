@@ -80,7 +80,9 @@ jobs:
     
     - name: revert mac80211:update to v6.1.24
       run: |
-        git revert 31673339464df901c9c5a70dcc8ba00953149ab1 && git add -A && git commit -m "revert mac80211: update to v6.1.24"
+        git revert 31673339464df901c9c5a70dcc8ba00953149ab1
+        git add -A
+        #git commit -m "revert mac80211: update to v6.1.24"
         
     - name: Revert ax6
       run: cp -rf $GITHUB_WORKSPACE/general/AX6/target/linux/ipq807x/image/generic.mk openwrt/target/linux/ipq807x/image/
