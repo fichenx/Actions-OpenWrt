@@ -78,7 +78,7 @@ jobs:
         echo "DATE=$(date "+%Y-%m-%d %H:%M:%S")" >> $GITHUB_ENV
         echo "DATE1=$(date "+%Y-%m-%d")" >> $GITHUB_ENV
     
-    - name: revert mac80211: update to v6.1.24
+    - name: revert mac80211:update to v6.1.24
       run: |
         git revert 31673339464df901c9c5a70dcc8ba00953149ab1
         git add -A
