@@ -27,10 +27,14 @@
 - 网络：多线多拨、负载均衡、Turbo ACC 网络加速。
 
 ## 2、Redmi AX6
-- 使用源码（lede）：https://github.com/coolsnowwolf/lede (因无线驱动问题，暂时维持源码版本在20230504)
-- 内核（lede）：5.10
-- 使用源码（immortalwrt）：https://github.com/immortalwrt/immortalwrt （固件较大、需合并分区）
-- 内核（immortalwrt）：5.15
+- 使用源码（lede原厂分区）：https://github.com/coolsnowwolf/lede
+- 因无线驱动问题，暂时维持源码版本在20230501
+- 内核（lede原厂分区）：5.10
+- 使用源码（lede合并分区）：https://github.com/coolsnowwolf/lede
+- 因无线驱动问题，暂时维持源码版本在20230501
+- 内核（lede合并分区）：5.10
+- 使用源码（immortalwrt合并分区）：https://github.com/immortalwrt/immortalwrt
+- 内核（immortalwrt合并分区）：5.15
 - 默认IP：192.168.123.1
 - 用户名：root
 - 密码：password
@@ -40,9 +44,9 @@
 ### 编译插件：
 - 主题：Argon、Design
 - 系统：文件传输
-- 服务：bypass（lede）、上网时间控制、openclash(immortalwrt)、微信推送、动态DNS、Watchcat(immortalwrt)、SmartDNS、网络唤醒、Upnp、KMS服务器
-- VPN：N2N VPN
-- 网络：多线多拨、负载均衡(lede)、Turbo ACC 网络加速（lede）。
+- 服务：上网时间控制、SmartDNS、网络唤醒、Upnp、KMS服务器、微信推送、动态DNS、bypass（lede原厂分区、lede合并分区）、KoolProxyR plus+（lede合并分区）、 openclash（lede合并分区、immortalwrt合并分区）、Watchcat(lede合并分区、immortalwrt合并分区)、passwall（immortalwrt合并分区）、helloword（immortalwrt合并分区）
+- VPN：N2N VPN、nps内网穿透（lede合并分区、immortalwrt合并分区）
+- 网络：多线多拨、负载均衡(lede原厂分区、lede合并分区)、Turbo ACC 网络加速（lede原厂分区、lede合并分区）。
 
 
 ## 3、ARMV8
