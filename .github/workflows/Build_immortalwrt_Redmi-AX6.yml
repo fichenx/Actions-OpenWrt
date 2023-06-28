@@ -8,7 +8,7 @@
 # Description: Build OpenWrt using GitHub Actions
 #
 
-name: Build immortalwrt Redmi-AX6
+name: Build immortalwrt Redmi-AX6（合并分区）
 
 on:
   repository_dispatch:
@@ -42,8 +42,8 @@ env:
   UPLOAD_WETRANSFER: false
   UPLOAD_RELEASE: true
   TZ: Asia/Shanghai
-  FILE_NAME: Redmi-AX6(immortalwrt)
-  PRODUCT_NAME: Redmi-AX6(immortalwrt)
+  FILE_NAME: Redmi-AX6(immortalwrt合并分区)
+  PRODUCT_NAME: Redmi-AX6(immortalwrt合并分区)
 
 jobs:
   build:
