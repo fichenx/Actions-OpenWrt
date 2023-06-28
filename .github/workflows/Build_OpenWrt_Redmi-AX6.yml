@@ -8,7 +8,7 @@
 # Description: Build OpenWrt using GitHub Actions
 #
 
-name: Build OpenWrt Redmi-AX6
+name: Build OpenWrt Redmi-AX6(lede原厂分区)
 
 on:
   repository_dispatch:
@@ -41,8 +41,8 @@ env:
   UPLOAD_WETRANSFER: false
   UPLOAD_RELEASE: true
   TZ: Asia/Shanghai
-  FILE_NAME: Redmi-AX6
-  PRODUCT_NAME: Redmi-AX6
+  FILE_NAME: Redmi-AX6(lede原厂分区)
+  PRODUCT_NAME: Redmi-AX6(lede原厂分区)
 
 jobs:
   build:
@@ -176,7 +176,7 @@ jobs:
         touch release.txt
         [ $UPLOAD_COWTRANSFER = true ] && echo "🔗 [Cowtransfer](${{ steps.cowtransfer.outputs.url }})" >> release.txt
         [ $UPLOAD_WETRANSFER = true ] && echo "🔗 [WeTransfer](${{ steps.wetransfer.outputs.url }})" >> release.txt
-        echo "Redmi-AX6 Openwrt 固件配置：" >> release.txt
+        echo "Redmi-AX6(原厂分区) lede-Openwrt 固件配置：" >> release.txt
         echo "因2023年5月4日lede源码更新无线驱动后导致AX6无线不显示且无法正常使用，源码将暂时维持在2023年5月4日之前版本，仅更新插件版本！" >> release.txt
         echo "IP:192.168.123.1" >> release.txt
         echo "WEB登陆账户：root" >> release.txt
