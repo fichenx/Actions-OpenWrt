@@ -322,8 +322,8 @@ sed -i 's/PKG_MIRROR_HASH:=.*/PKG_MIRROR_HASH:=45e0c37b8e275c8d088506f953aa25b30
 # php8
 #rm -rf feeds/packages/lang/php8
 #svn co https://github.com/openwrt/packages/trunk/lang/php8 feeds/packages/lang/php8
-sed -i 's/PKG_VERSION:=.*/PKG_VERSION:=8.2.7/g' feeds/packages/lang/php8/Makefile
-sed -i 's/PKG_HASH:=.*/PKG_HASH:=4b9fb3dcd7184fe7582d7e44544ec7c5153852a2528de3b6754791258ffbdfa0/g' feeds/packages/lang/php8/Makefile
+sed -i 's/PKG_VERSION:=.*/PKG_VERSION:=8.2.8/g' feeds/packages/lang/php8/Makefile
+sed -i 's/PKG_HASH:=.*/PKG_HASH:=cfe1055fbcd486de7d3312da6146949aae577365808790af6018205567609801/g' feeds/packages/lang/php8/Makefile
 
 # python-docker
 sed -i 's/PKG_VERSION:=.*/PKG_VERSION:=6.1.3/g' feeds/packages/lang/python/python-docker/Makefile
@@ -535,9 +535,9 @@ sed -i 's/PKG_VERSION:=.*/PKG_VERSION:=5.2.2/g' feeds/packages/utils/gawk/Makefi
 sed -i 's/PKG_HASH:=.*/PKG_HASH:=3c1fce1446b4cbee1cd273bd7ec64bc87d89f61537471cd3e05e33a965a250e9/g' feeds/packages/utils/gawk/Makefile
 
 # ocserv
-#sed -i 's/PKG_VERSION:=.*/PKG_VERSION:=1.1.6/g' feeds/packages/net/ocserv/Makefile
-#sed -i 's/PKG_HASH:=.*/PKG_HASH:=6a6cbe92212e32280426a51c634adc3d4803579dd049cfdb7e014714cc82c693/g' feeds/packages/net/ocserv/Makefile
-#sed -i '66i\	--without-maxmind \\' feeds/packages/net/ocserv/Makefile
+sed -i 's/PKG_VERSION:=.*/PKG_VERSION:=1.2.0/g' feeds/packages/net/ocserv/Makefile
+sed -i 's/PKG_HASH:=.*/PKG_HASH:=47a66e504a6b04bb04856176d78ee392ad1385d22d1670d4ed48b7b95e9dffc5/g' feeds/packages/net/ocserv/Makefile
+sed -i 's/PKG_RELEASE:=.*/PKG_RELEASE:=1/g' feeds/packages/net/ocserv/Makefile
 
 # unrar
 sed -i 's/PKG_VERSION:=.*/PKG_VERSION:=6.2.6/g' feeds/packages/utils/unrar/Makefile
@@ -839,8 +839,8 @@ cp -f $GITHUB_WORKSPACE/general/zoneinfo/Makefile feeds/packages/utils/zoneinfo
 #sed -i 's/PKG_HASH:=.*/PKG_HASH:=5282d58b1a8d52f02af4ab7a5d6089aba6f7d20929bd49fd844c930110262dcb/g' feeds/packages/net/adguardhome/Makefile
 
 # iperf3
-#sed -i 's/PKG_VERSION:=.*/PKG_VERSION:=3.12/g' feeds/packages/net/iperf3/Makefile
-#sed -i 's/PKG_HASH:=.*/PKG_HASH:=72034ecfb6a7d6d67e384e19fb6efff3236ca4f7ed4c518d7db649c447e1ffd6/g' feeds/packages/net/iperf3/Makefile
+sed -i 's/PKG_VERSION:=.*/PKG_VERSION:=3.14/g' feeds/packages/net/iperf3/Makefile
+sed -i 's/PKG_HASH:=.*/PKG_HASH:=723fcc430a027bc6952628fa2a3ac77584a1d0bd328275e573fc9b206c155004/g' feeds/packages/net/iperf3/Makefile
 
 # verysync
 #rm -rf feeds/packages/net/verysync
@@ -956,6 +956,10 @@ rm -f feeds/packages/utils/ttyd/patches/090*.patch
 #cp -f $GITHUB_WORKSPACE/general/101-bcm-fullconenat.patch package/network/config/firewall/patches
 #cp -f $GITHUB_WORKSPACE/general/900-bcm-fullconenat.patch package/network/utils/iptables/patches
 #cp -f $GITHUB_WORKSPACE/general/982-add-bcm-fullconenat-support.patch target/linux/generic/hack-5.15
+
+# libpfring
+rm -rf feeds/packages/libs/libpfring
+svn co https://github.com/openwrt/packages/trunk/libs/libpfring feeds/packages/libs/libpfring
 
 ./scripts/feeds update -a
 ./scripts/feeds install -a
