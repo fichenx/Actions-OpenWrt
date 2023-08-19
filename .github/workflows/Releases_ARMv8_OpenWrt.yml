@@ -106,21 +106,21 @@ jobs:
         token: ${{ secrets.RELEASES_TOKEN }}
         artifacts: ${{ env.PACKAGED_OUTPUTPATH }}/*
         body: |
-          - ARMv8 Openwrt 固件配置：
+          #### ARMv8 Openwrt 固件配置：
           -  IP:192.168.123.2
           -  WEB登陆账户：root
           -  密码：password
-          - 固件源码：https://github.com/coolsnowwolf/lede
-          - 固件内核：https://github.com/breakings/OpenWrt/tree/main/opt/kernel
-          - 常见问题及注意事项请参考恩山F大➦[最新帖](https://www.right.com.cn/forum/thread-4076037-1-1.html)
-          - 升级固件脚本：新：[openwrt-update-amlogic](https://raw.githubusercontent.com/unifreq/openwrt_packit/master/files/openwrt-update-amlogic) | 旧：[update-amlogic-openwrt.sh](https://raw.githubusercontent.com/unifreq/openwrt_packit/master/files/scripts_deprecated/update-amlogic-openwrt.sh)
-          - 升级脚本用法：
-          - - openwrt-update-amlogic 以及镜像文件 xxxxxxx.img用winscp工具上传至/mnt/mmcblk2p4, 
-          - - cd  /mnt/mmcblk2p4
-          - - chmod 755 openwrt-update-amlogic
-          - - ./openwrt-update-amlogic  xxxxxxx.img   (或者用晶晨宝盒也可以更新）
-          - 源码最近提交信息:
-          ${{ env.useVersionInfo }}
+          #### 固件源码：https://github.com/coolsnowwolf/lede
+          #### 固件内核：https://github.com/breakings/OpenWrt/tree/main/opt/kernel
+          #### 常见问题及注意事项请参考恩山F大➦[最新帖](https://www.right.com.cn/forum/thread-4076037-1-1.html)
+          #### 升级固件脚本：新：[openwrt-update-amlogic](https://raw.githubusercontent.com/unifreq/openwrt_packit/master/files/openwrt-update-amlogic) | 旧：[update-amlogic-openwrt.sh](https://raw.githubusercontent.com/unifreq/openwrt_packit/master/files/scripts_deprecated/update-amlogic-openwrt.sh)
+          #### 升级脚本用法：
+          - openwrt-update-amlogic 以及镜像文件 xxxxxxx.img用winscp工具上传至/mnt/mmcblk2p4, 
+          - cd  /mnt/mmcblk2p4
+          - chmod 755 openwrt-update-amlogic
+          - ./openwrt-update-amlogic  xxxxxxx.img   (或者用晶晨宝盒也可以更新）
+          #### 源码最近提交信息:
+          - ${{ env.useVersionInfo }}
     - name: Delete older workflow runs and artifacts
       uses: Mattraks/delete-workflow-runs@main
       with:
