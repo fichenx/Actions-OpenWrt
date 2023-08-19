@@ -95,15 +95,6 @@ jobs:
         echo "useVersionInfo=$useVersionInfo" >> $GITHUB_ENV
         echo "DATE=$(date "+%Y-%m-%d %H:%M:%S")" >> $GITHUB_ENV
         echo "DATE1=$(date "+%Y-%m-%d")" >> $GITHUB_ENV
-        
-    - name: Cache Toolchain
-      uses: klever1988/cachewrtbuild@main
-      with:
-        ccache: true
-        skip: true
-        toolchain: true
-        clean: false
-        prefix: ${{ github.workspace }}/openwrt
 
     - name: Load custom feeds
       run: |
@@ -122,10 +113,10 @@ jobs:
         [ -e files ] && mv files openwrt/files
         [ -e $CONFIG_FILE ] && mv $CONFIG_FILE openwrt/.config
         chmod +x $DIY_P2_SH
-        chmod +x $DIY_P3_SH
+        #chmod +x $DIY_P3_SH
         cd openwrt
         $GITHUB_WORKSPACE/$DIY_P2_SH
-        $GITHUB_WORKSPACE/$DIY_P3_SH
+        #$GITHUB_WORKSPACE/$DIY_P3_SH
     - name: SSH connection to Actions
       uses: P3TERX/ssh2actions@v1.0.0
       if: (github.event.inputs.ssh == 'true' && github.event.inputs.ssh  != 'false') || contains(github.event.action, 'ssh')
@@ -195,9 +186,14 @@ jobs:
         commit: main
         token: ${{ secrets.RELEASES_TOKEN }}
         body: |
-          - 此为ARMv8底包，非完整固件，每天自动编译
-          - 当前使用版本:【编译前的最后一次[➦主源码](https://github.com/coolsnowwolf/lede)更新记录】
-          ${{ env.useVersionInfo }}
+         #### Redmi-AX6（合并分区） immortalwrt-Openwrt 固件配置：
+            - IP:192.168.123.1
+            - WEB登陆账户：root
+            - 密码：password
+            - 固件源码：https://github.com/immortalwrt/immortalwrt
+            - 固件内核版本：5.15
+         #### 源码最近提交信息:
+            - ${{ env.useVersionInfo }}
         artifacts: ${{ env.FIRMWARE }}/*
 
     - name: Delete older workflow runs and artifacts
