@@ -32,7 +32,7 @@ env:
   REPO_URL: https://github.com/coolsnowwolf/lede
   REPO_BRANCH: master
   FEEDS_CONF: feeds.conf.default
-  CONFIG_FILE: configAX6.config
+  CONFIG_FILE: config/AX6.config
   DIY_P1_SH: sh/lede_diy-part1.sh
   DIY_P2_SH: sh/AX6_diy-part2.sh
   UPLOAD_BIN_DIR: false
