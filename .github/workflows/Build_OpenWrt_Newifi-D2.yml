@@ -76,7 +76,7 @@ jobs:
         echo "useVersionInfo=$useVersionInfo" >> $GITHUB_ENV
         echo "DATE=$(date "+%Y-%m-%d %H:%M:%S")" >> $GITHUB_ENV
         echo "DATE1=$(date "+%Y-%m-%d")" >> $GITHUB_ENV
-	echo "DATE2=$(date "+%Y%m%d")" >> $GITHUB_ENV
+        echo "DATE2=$(date "+%Y%m%d")" >> $GITHUB_ENV
 
     - name: Load custom feeds
       run: |
