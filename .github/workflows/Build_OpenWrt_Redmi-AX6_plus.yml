@@ -179,7 +179,7 @@ jobs:
         echo "::warning file=wetransfer.com::$(cat wetransfer.log | grep https)"
         echo "url=$(cat wetransfer.log | grep https | cut -f3 -d" ")" >> $GITHUB_OUTPUT
 				
-	- name: Create release
+    - name: Create release
       id: release
       uses: ncipollo/release-action@v1
       with:
