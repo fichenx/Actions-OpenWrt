@@ -121,7 +121,7 @@ jobs:
           - ./openwrt-update-amlogic  xxxxxxx.img   (或者用晶晨宝盒也可以更新）
           #### 源码最近提交信息:
           - ${{ env.useVersionInfo }}
-		  
+
     - name: Delete older workflow runs and artifacts
       uses: Mattraks/delete-workflow-runs@main
       with:
