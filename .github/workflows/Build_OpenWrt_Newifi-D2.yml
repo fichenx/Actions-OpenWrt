@@ -76,7 +76,7 @@ jobs:
         echo "useVersionInfo=$useVersionInfo" >> $GITHUB_ENV
         echo "DATE=$(date "+%Y-%m-%d %H:%M:%S")" >> $GITHUB_ENV
         echo "DATE1=$(date "+%Y-%m-%d")" >> $GITHUB_ENV
-		echo "DATE2=$(date "+%Y%m%d")" >> $GITHUB_ENV
+	echo "DATE2=$(date "+%Y%m%d")" >> $GITHUB_ENV
 
     - name: Load custom feeds
       run: |
@@ -170,7 +170,7 @@ jobs:
         ./transfer wet -s -p 16 --no-progress ${FIRMWARE} 2>&1 | tee wetransfer.log
         echo "::warning file=wetransfer.com::$(cat wetransfer.log | grep https)"
         echo "url=$(cat wetransfer.log | grep https | cut -f3 -d" ")" >> $GITHUB_OUTPUT
-		
+
     - name: Create release
       id: release
       uses: ncipollo/release-action@v1
