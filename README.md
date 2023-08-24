@@ -1,20 +1,32 @@
 **中文** | [上游源代码](https://github.com/P3TERX/Actions-OpenWrt)
 
-# Actions-OpenWrt(多设备固件云编译)
+<div align="center">
+<img width="768" src="https://cdn.jsdelivr.net/gh/fichenx/Actions-OpenWrt/images/openwrt.png"/>
+<h1>Actions-OpenWrt(多设备固件云编译)</h1>
 
 [![LICENSE](https://img.shields.io/github/license/mashape/apistatus.svg?style=flat-square&label=LICENSE)](https://github.com/fichenx/OpenWrt/blob/main/LICENSE)
 ![GitHub Stars](https://img.shields.io/github/stars/fichenx/OpenWrt.svg?style=flat-square&label=Stars&logo=github)
 ![GitHub Forks](https://img.shields.io/github/forks/fichenx/OpenWrt.svg?style=flat-square&label=Forks&logo=github)
 ![GitHub download](https://img.shields.io/github/downloads/fichenx/OpenWrt/total.svg?style=flat-square&label=Download&logo=github)
+</div>
 
 ## 项目说明 [![](https://img.shields.io/badge/-项目基本介绍-FFFFFF.svg)](#项目说明-)
 - 固件来源：[![Lean](https://img.shields.io/badge/Lede-Lean-ff69b4.svg?style=flat&logo=appveyor)](https://github.com/coolsnowwolf/lede)[![immortalwrt](https://img.shields.io/badge/immortalwrt-immortalwrt-ff69b4.svg?style=flat&logo=appveyor)](https://github.com/immortalwrt/immortalwrt) [![P3TERX](https://img.shields.io/badge/OpenWrt-P3TERX-blueviolet.svg?style=flat&logo=appveyor)](https://github.com/P3TERX/Actions-OpenWrt) [![Flippy](https://img.shields.io/badge/Package-Flippy-orange.svg?style=flat&logo=appveyor)](https://github.com/unifreq/openwrt_packit)  [![breakings](https://img.shields.io/badge/OpenWrt-breakings-orange.svg?style=flat&logo=appveyor)](https://github.com/breakings/OpenWrt)[![fichenx](https://img.shields.io/badge/Build-fichenx-32C955.svg?style=flat&logo=appveyor)](https://github.com/fichenx/OpenWrt)
 - 项目使用 Github Actions 拉取 [Lean](https://github.com/coolsnowwolf/lede) 和[immortalwrt](https://github.com/immortalwrt/immortalwrt) 的 Openwrt 源码仓库进行云编译
 - 提供适配于NEWIFI D2、Redmi AX6、 ARMv8 电视盒子（斐讯N1、Tanix-TX3）的 OpenWrt 固件
 - Redmi AX6固件分为 原厂分区版和合并分区版，合并分区版固件较大，使用前需对Redmi AX6进行合并分区。
-- 固件集成的所有 ipk 插件全部打包在 Packages 文件中，可以在 [Releases](https://github.com/haiibo/OpenWrt/releases) 内进行下载
-- 项目编译的固件插件为最新版本，最新版插件可能有 BUG，如果之前使用稳定则无需追新
-- 第一次使用请采用全新安装，避免出现升级失败以及其他一些可能的 BUG
+- 固件集成的所有 ipk 插件全部打包在 Packages 文件中，可以在 [Releases](https://github.com/fichenx/Actions-OpenWrt/releases) 内进行下载
+
+## 固件下载 [![](https://img.shields.io/badge/-编译状态及下载链接-FFFFFF.svg)](#固件下载-)
+点击下表中 [![](https://img.shields.io/badge/下载-链接-blueviolet.svg?style=flat&logo=hack-the-box)](https://github.com/fichenx/Actions-OpenWrt/releases) 即可跳转到该设备固件下载页面
+| 平台+设备名称 | 固件编译状态 | 配置文件 | 固件下载 |
+| :-------------: | :-------------: | :-------------: | :-------------: |
+| [![](https://img.shields.io/badge/NEWIFI-D2-32C955.svg?logo=openwrt)](https://github.com/fichenx/Actions-OpenWrt/blob/main/.github/workflows/Build_OpenWrt_Newifi-D2.yml) | [![](https://github.com/fichenx/Actions-OpenWrt/actions/workflows/Build_OpenWrt_Newifi-D2.yml/badge.svg)](https://github.com/fichenx/Actions-OpenWrt/actions/workflows/Build_OpenWrt_Newifi-D2.yml) | [![](https://img.shields.io/badge/编译-配置-orange.svg?logo=apache-spark)](https://github.com/fichenx/Actions-OpenWrt/blob/main/Newifi_D2.config) | [![](https://img.shields.io/badge/下载-链接-blueviolet.svg?logo=hack-the-box)](https://github.com/fichenx/Actions-OpenWrt/releases) |
+| [![](https://img.shields.io/badge/Redmi-AX6(lede)-32C955.svg?logo=openwrt)](https://github.com/fichenx/Actions-OpenWrt/blob/main/.github/workflows/Build_OpenWrt_Redmi-AX6.yml) | [![](https://github.com/fichenx/Actions-OpenWrt/actions/workflows/Build_OpenWrt_Redmi-AX6.yml/badge.svg)](https://github.com/fichenx/Actions-OpenWrt/actions/workflows/Build_OpenWrt_Redmi-AX6.yml) | [![](https://img.shields.io/badge/编译-配置-orange.svg?logo=apache-spark)](https://github.com/fichenx/Actions-OpenWrt/blob/main/AX6.config) | [![](https://img.shields.io/badge/下载-链接-blueviolet.svg?logo=hack-the-box)](https://github.com/fichenx/Actions-OpenWrt/releases) |
+| [![](https://img.shields.io/badge/Redmi-AX6(lede-plus)-32C955.svg?logo=openwrt)](https://github.com/fichenx/Actions-OpenWrt/blob/main/.github/workflows/Build_OpenWrt_Redmi-AX6_plus.yml) | [![](https://github.com/fichenx/Actions-OpenWrt/actions/workflows/Build_OpenWrt_Redmi-AX6_plus.yml/badge.svg)](https://github.com/fichenx/Actions-OpenWrt/actions/workflows/Build_OpenWrt_Redmi-AX6_plus.yml) | [![](https://img.shields.io/badge/编译-配置-orange.svg?logo=apache-spark)](https://github.com/fichenx/Actions-OpenWrt/blob/main/configs/armv8-plus.config) | [![](https://img.shields.io/badge/下载-链接-blueviolet.svg?logo=hack-the-box)](https://github.com/fichenx/Actions-OpenWrt/releases/tag/ARMv8_PLUS) |
+| [![](https://img.shields.io/badge/OpenWrt-Rockchip_平台-32C955.svg?logo=openwrt)](https://github.com/fichenx/Actions-OpenWrt/blob/main/.github/workflows/Rockchip-OpenWrt.yml) | [![](https://github.com/fichenx/Actions-OpenWrt/actions/workflows/Rockchip-OpenWrt.yml/badge.svg)](https://github.com/fichenx/Actions-OpenWrt/actions/workflows/Rockchip-OpenWrt.yml) | [![](https://img.shields.io/badge/编译-配置-orange.svg?logo=apache-spark)](https://github.com/fichenx/Actions-OpenWrt/blob/main/configs/rockchip.config) | [![](https://img.shields.io/badge/下载-链接-blueviolet.svg?logo=hack-the-box)](https://github.com/fichenx/Actions-OpenWrt/releases/tag/Rockchip) |
+| [![](https://img.shields.io/badge/OpenWrt-树莓派_4B-32C955.svg?logo=openwrt)](https://github.com/fichenx/Actions-OpenWrt/blob/main/.github/workflows/RaspberryPi4-OpenWrt.yml) | [![](https://github.com/fichenx/Actions-OpenWrt/actions/workflows/RaspberryPi4-OpenWrt.yml/badge.svg)](https://github.com/fichenx/Actions-OpenWrt/actions/workflows/RaspberryPi4-OpenWrt.yml) | [![](https://img.shields.io/badge/编译-配置-orange.svg?logo=apache-spark)](https://github.com/fichenx/Actions-OpenWrt/blob/main/configs/rpi4.config) | [![](https://img.shields.io/badge/下载-链接-blueviolet.svg?logo=hack-the-box)](https://github.com/fichenx/Actions-OpenWrt/releases/tag/RaspberryPi4) |
+| [![](https://img.shields.io/badge/OpenWrt-树莓派_3B/3B+-32C955.svg?logo=openwrt)](https://github.com/fichenx/Actions-OpenWrt/blob/main/.github/workflows/RaspberryPi3-OpenWrt.yml) | [![](https://github.com/fichenx/Actions-OpenWrt/actions/workflows/RaspberryPi3-OpenWrt.yml/badge.svg)](https://github.com/fichenx/Actions-OpenWrt/actions/workflows/RaspberryPi3-OpenWrt.yml) | [![](https://img.shields.io/badge/编译-配置-orange.svg?logo=apache-spark)](https://github.com/fichenx/Actions-OpenWrt/blob/main/configs/rpi3.config) | [![](https://img.shields.io/badge/下载-链接-blueviolet.svg?logo=hack-the-box)](https://github.com/fichenx/Actions-OpenWrt/releases/tag/RaspberryPi3) |
 
 # 维护自用固件
 ## 1、NEWIFI D2
