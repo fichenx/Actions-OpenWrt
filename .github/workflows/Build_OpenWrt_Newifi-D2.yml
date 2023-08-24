@@ -76,6 +76,7 @@ jobs:
         echo "useVersionInfo=$useVersionInfo" >> $GITHUB_ENV
         echo "DATE=$(date "+%Y-%m-%d %H:%M:%S")" >> $GITHUB_ENV
         echo "DATE1=$(date "+%Y-%m-%d")" >> $GITHUB_ENV
+		echo "DATE2=$(date "+%Y%m%d")" >> $GITHUB_ENV
 
     - name: Load custom feeds
       run: |
@@ -169,42 +170,26 @@ jobs:
         ./transfer wet -s -p 16 --no-progress ${FIRMWARE} 2>&1 | tee wetransfer.log
         echo "::warning file=wetransfer.com::$(cat wetransfer.log | grep https)"
         echo "url=$(cat wetransfer.log | grep https | cut -f3 -d" ")" >> $GITHUB_OUTPUT
-
-    - name: Generate release tag
-      id: tag
-      if: env.UPLOAD_RELEASE == 'true' && !cancelled()
-      run: |
-        echo "release_tag=$(date +"%Y%m%d")_${{ env.FILE_NAME }}" >> $GITHUB_OUTPUT
-        touch release.txt
-        [ $UPLOAD_COWTRANSFER = true ] && echo "🔗 [Cowtransfer](${{ steps.cowtransfer.outputs.url }})" >> release.txt
-        [ $UPLOAD_WETRANSFER = true ] && echo "🔗 [WeTransfer](${{ steps.wetransfer.outputs.url }})" >> release.txt
-        echo "Newifi_D2 Openwrt固件配置：" >> release.txt
-        echo "IP:192.168.124.1" >> release.txt
-        echo "WEB登陆账户：root" >> release.txt
-        echo "密码：password" >> release.txt
-        echo "固件源码：https://github.com/coolsnowwolf/lede" >> release.txt
-        echo "固件内核版本：5.10" >> release.txt
-        echo "软件源推荐：https://downloads.immortalwrt.org/snapshots/packages/mipsel_24kc/" >> release.txt
-        echo "源码最近提交信息:" >> release.txt        
-        echo "${{ env.useVersionInfo }}" >> release.txt
-        echo "status=success" >> $GITHUB_OUTPUT
-
-    - name: Upload firmware to release
-      uses: softprops/action-gh-release@v1
-      if: steps.tag.outputs.status == 'success' && !cancelled()
-      env:
-        GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+		
+    - name: Create release
+      id: release
+      uses: ncipollo/release-action@v1
       with:
-        tag_name: ${{ steps.tag.outputs.release_tag }}
-        name: ${{ env.DATE }} OpenWrt for ${{ env.FILE_NAME }}
-        body_path: release.txt
-        files: |
-          ${{ env.FIRMWARE }}/*
-          ${{ env.FIRMWARE }}/../../../packages/*/Boos4721/luci-app-openclash*.ipk
-          #${{ env.FIRMWARE }}/*.itb
-          #${{ env.FIRMWARE }}/*.ubi
-          #${{ env.FIRMWARE }}/*.bin
-          #${{ env.FIRMWARE }}/*.buildinfo
+        name: ${{ env.DATE }} OpenWrt for ${{ env.PRODUCT_NAME }}
+        allowUpdates: true
+        tag: ${{ env.DATE2 }}_${{ env.FILE_NAME }}
+        commit: main
+        token: ${{ secrets.RELEASES_TOKEN }}
+        body: |
+         #### Newifi_D2 Openwrt固件配置：
+            - IP:192.168.124.1
+            - WEB登陆账户：root
+            - 密码：password
+            - 固件源码：https://github.com/coolsnowwolf/lede
+            - 固件内核版本：5.4
+         #### 源码最近提交信息:
+            - ${{ env.useVersionInfo }}
+        artifacts: ${{ env.FIRMWARE }}/*
 
     - name: Delete older workflow runs and artifacts
       uses: Mattraks/delete-workflow-runs@main
@@ -219,7 +204,7 @@ jobs:
       if: env.UPLOAD_RELEASE == 'true' && !cancelled()
       with:
         #repo:
-        keep_latest: 30
+        keep_latest: 60
         #delete_tag_pattern:
         delete_tags: true
       env:

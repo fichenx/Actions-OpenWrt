@@ -76,6 +76,7 @@ jobs:
         sudo chown $USER:$GROUPS /workdir
         echo "status=success" >> ${GITHUB_OUTPUT}
         df -Th
+		
     - name: Clone source code
       working-directory: /workdir
       run: |
@@ -104,6 +105,7 @@ jobs:
         chmod +x $DIY_P1_SH
         cd openwrt
         $GITHUB_WORKSPACE/$DIY_P1_SH
+		
     - name: Update feeds
       run: cd openwrt && ./scripts/feeds update -a
 
@@ -117,6 +119,7 @@ jobs:
         chmod +x $DIY_P2_SH
         cd openwrt
         $GITHUB_WORKSPACE/$DIY_P2_SH
+		
     - name: SSH connection to Actions
       uses: P3TERX/ssh2actions@v1.0.0
       if: (github.event.inputs.ssh == 'true' && github.event.inputs.ssh  != 'false') || contains(github.event.action, 'ssh')
@@ -132,6 +135,7 @@ jobs:
         make download -j8
         find dl -size -1024c -exec ls -l {} \;
         find dl -size -1024c -exec rm -f {} \;
+		
     - name: Compile the firmware
       id: compile
       run: |
@@ -150,6 +154,7 @@ jobs:
         cd openwrt/
         rm -rf $(ls . | grep -v "^bin$\|^tools$\|^toolchain$\|.ccache\|staging_dir\|^cache-openwrt" | xargs) 2>/dev/null
         df -hT ${PWD}
+		
     - name: Upload bin directory
       uses: actions/upload-artifact@main
       if: steps.compile.outputs.status == 'success' && env.UPLOAD_BIN_DIR == 'true'
@@ -168,6 +173,7 @@ jobs:
         rm -rf packages
         echo "FIRMWARE=$PWD" >> $GITHUB_ENV
         echo "status=success" >> ${GITHUB_OUTPUT}
+		
     - name: Upload firmware directory
       uses: actions/upload-artifact@main
       if: env.UPLOAD_FIRMWARE == 'true' && steps.organize.outputs.status == 'success' && !cancelled()
@@ -185,14 +191,14 @@ jobs:
         commit: main
         token: ${{ secrets.RELEASES_TOKEN }}
         body: |
-          - MiWifi-mini Openwrt 固件配置：
-          -  IP:192.168.125.1
-          -  WEB登陆账户：root
-          -  密码：password
+          #### MiWifi-mini Openwrt 固件配置：
+          - IP:192.168.125.1
+          - WEB登陆账户：root
+          - 密码：password
           - 固件源码：https://github.com/coolsnowwolf/lede
           - 固件内核版本：5.4
-          - 源码最近提交信息:
-          ${{ env.useVersionInfo }}
+          #### 源码最近提交信息:
+          - ${{ env.useVersionInfo }}
         artifacts: ${{ env.FIRMWARE }}/*
 
     - name: Delete older workflow runs and artifacts
@@ -208,7 +214,7 @@ jobs:
       if: env.UPLOAD_RELEASE == 'true' && !cancelled()
       with:
         #repo:
-        keep_latest: 30
+        keep_latest: 60
         #delete_tag_pattern:
         delete_tags: true
       env:

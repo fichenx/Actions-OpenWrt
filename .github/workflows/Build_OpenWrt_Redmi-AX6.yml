@@ -64,6 +64,7 @@ jobs:
         sudo timedatectl set-timezone "$TZ"
         sudo mkdir -p /workdir
         sudo chown $USER:$GROUPS /workdir
+		
     - name: Clone source code
       working-directory: /workdir
       run: |
@@ -77,6 +78,7 @@ jobs:
         echo "useVersionInfo=$useVersionInfo" >> $GITHUB_ENV
         echo "DATE=$(date "+%Y-%m-%d %H:%M:%S")" >> $GITHUB_ENV
         echo "DATE1=$(date "+%Y-%m-%d")" >> $GITHUB_ENV
+		echo "DATE2=$(date "+%Y%m%d")" >> $GITHUB_ENV
         
     - name: Revert ax6
       run: cp -rf $GITHUB_WORKSPACE/general/AX6/target/linux/ipq807x/image/generic.mk openwrt/target/linux/ipq807x/image/
@@ -101,6 +103,7 @@ jobs:
         chmod +x $DIY_P2_SH
         cd openwrt
         $GITHUB_WORKSPACE/$DIY_P2_SH
+		
     - name: SSH connection to Actions
       uses: P3TERX/ssh2actions@v1.0.0
       if: (github.event.inputs.ssh == 'true' && github.event.inputs.ssh  != 'false') || contains(github.event.action, 'ssh')
@@ -116,6 +119,7 @@ jobs:
         make download -j8
         find dl -size -1024c -exec ls -l {} \;
         find dl -size -1024c -exec rm -f {} \;
+		
     - name: Compile the firmware
       id: compile
       run: |
@@ -126,6 +130,7 @@ jobs:
         grep '^CONFIG_TARGET.*DEVICE.*=y' .config | sed -r 's/.*DEVICE_(.*)=y/\1/' > DEVICE_NAME
         [ -s DEVICE_NAME ] && echo "DEVICE_NAME=_$(cat DEVICE_NAME)" >> $GITHUB_ENV
         echo "FILE_DATE=_$(date +"%Y%m%d%H%M")" >> $GITHUB_ENV
+		
     - name: Check space usage
       if: (!cancelled())
       run: df -hT
@@ -141,10 +146,14 @@ jobs:
       id: organize
       if: env.UPLOAD_FIRMWARE == 'true' && !cancelled()
       run: |
-        cd openwrt/bin/targets/*/*
+        cd $GITHUB_WORKSPACE/openwrt/bin/packages
+        tar -zcvf Packages.tar.gz ./*
+        cp Packages.tar.gz $GITHUB_WORKSPACE/openwrt/bin/targets/*/*
+        cd $GITHUB_WORKSPACE/openwrt/bin/targets/*/*
         rm -rf packages
         echo "FIRMWARE=$PWD" >> $GITHUB_ENV
-        echo "status=success" >> $GITHUB_OUTPUT
+        echo "status=success" >> ${GITHUB_OUTPUT}
+		
     - name: Upload firmware directory
       uses: actions/upload-artifact@main
       if: steps.organize.outputs.status == 'success' && !cancelled()
@@ -160,6 +169,7 @@ jobs:
         ./transfer cow --block 2621440 -s -p 64 --no-progress ${FIRMWARE} 2>&1 | tee cowtransfer.log
         echo "::warning file=cowtransfer.com::$(cat cowtransfer.log | grep https)"
         echo "url=$(cat cowtransfer.log | grep https | cut -f3 -d" ")" >> $GITHUB_OUTPUT
+		
     - name: Upload firmware to WeTransfer
       id: wetransfer
       if: steps.organize.outputs.status == 'success' && env.UPLOAD_WETRANSFER == 'true' && !cancelled()
@@ -168,40 +178,27 @@ jobs:
         ./transfer wet -s -p 16 --no-progress ${FIRMWARE} 2>&1 | tee wetransfer.log
         echo "::warning file=wetransfer.com::$(cat wetransfer.log | grep https)"
         echo "url=$(cat wetransfer.log | grep https | cut -f3 -d" ")" >> $GITHUB_OUTPUT
-    - name: Generate release tag
-      id: tag
-      if: env.UPLOAD_RELEASE == 'true' && !cancelled()
-      run: |
-        echo "release_tag=$(date +"%Y%m%d")_${{ env.FILE_NAME }}" >> $GITHUB_OUTPUT
-        touch release.txt
-        [ $UPLOAD_COWTRANSFER = true ] && echo "🔗 [Cowtransfer](${{ steps.cowtransfer.outputs.url }})" >> release.txt
-        [ $UPLOAD_WETRANSFER = true ] && echo "🔗 [WeTransfer](${{ steps.wetransfer.outputs.url }})" >> release.txt
-        echo "Redmi-AX6(原厂分区) lede-Openwrt 固件配置：" >> release.txt
-        echo "因2023年5月4日lede源码更新无线驱动后导致AX6无线不显示且无法正常使用，源码将暂时维持在2023年5月4日之前版本，仅更新插件版本！" >> release.txt
-        echo "IP:192.168.123.1" >> release.txt
-        echo "WEB登陆账户：root" >> release.txt
-        echo "密码：password" >> release.txt
-        echo "固件源码：https://github.com/coolsnowwolf/lede" >> release.txt
-        echo "固件内核版本：5.10" >> release.txt
-        echo "源码最近提交信息:" >> release.txt
-        echo "${{ env.useVersionInfo }}" >> release.txt
-        echo "status=success" >> $GITHUB_OUTPUT
-    - name: Upload firmware to release
-      uses: softprops/action-gh-release@v1
-      if: steps.tag.outputs.status == 'success' && !cancelled()
-      env:
-        GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+			
+    - name: Create release
+      id: release
+      uses: ncipollo/release-action@v1
       with:
-        tag_name: ${{ steps.tag.outputs.release_tag }}
-        name: ${{ env.DATE }} OpenWrt for ${{ env.FILE_NAME }}
-        body_path: release.txt
-        files: |
-          ${{ env.FIRMWARE }}/*
-          #${{ env.FIRMWARE }}/*.itb
-          #${{ env.FIRMWARE }}/*.ubi
-          #${{ env.FIRMWARE }}/*.bin
-          #${{ env.FIRMWARE }}/*.tar.gz
-         
+        name: ${{ env.DATE }} OpenWrt for ${{ env.PRODUCT_NAME }}
+        allowUpdates: true
+        tag: ${{ env.DATE2 }}_${{ env.FILE_NAME }}
+        commit: main
+        token: ${{ secrets.RELEASES_TOKEN }}
+        body: |
+         #### Redmi-AX6(原厂分区) lede-Openwrt 固件配置：
+            - IP:192.168.123.1
+            - WEB登陆账户：root
+            - 密码：password
+            - 固件源码：https://github.com/coolsnowwolf/lede
+            - 固件内核版本：5.10
+         #### 源码最近提交信息:
+            - ${{ env.useVersionInfo }}
+        artifacts: ${{ env.FIRMWARE }}/*
+	
     - name: Delete older workflow runs and artifacts
       uses: Mattraks/delete-workflow-runs@main
       with:
@@ -215,7 +212,7 @@ jobs:
       if: env.UPLOAD_RELEASE == 'true' && !cancelled()
       with:
         #repo:
-        keep_latest: 30
+        keep_latest: 60
         #delete_tag_pattern:
         delete_tags: true
       env:
