@@ -44,7 +44,7 @@ jobs:
         #rm -rf `find ./* -maxdepth 0 -type d ! -name "diy"` >/dev/null 2>&1
         svn export --force https://github.com/breakings/OpenWrt/trunk/general
         svn export --force https://github.com/breakings/OpenWrt/trunk/PATCH
-        svn export --force https://github.com/breakings/OpenWrt/trunk/diy-part2.sh breakings_diy-part2.sh
+        svn export --force https://github.com/breakings/OpenWrt/trunk/diy-part2.sh sh/breakings_diy-part2.sh
 
     - name: Upload package
       env: 

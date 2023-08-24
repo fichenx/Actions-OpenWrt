@@ -32,9 +32,9 @@ env:
   REPO_URL: https://github.com/coolsnowwolf/lede
   REPO_BRANCH: master
   FEEDS_CONF: feeds.conf.default
-  CONFIG_FILE: AX6.config
-  DIY_P1_SH: lede_diy-part1.sh
-  DIY_P2_SH: AX6_diy-part2.sh
+  CONFIG_FILE: configAX6.config
+  DIY_P1_SH: sh/lede_diy-part1.sh
+  DIY_P2_SH: sh/AX6_diy-part2.sh
   UPLOAD_BIN_DIR: false
   UPLOAD_FIRMWARE: true
   UPLOAD_COWTRANSFER: false
@@ -172,7 +172,7 @@ jobs:
       id: tag
       if: env.UPLOAD_RELEASE == 'true' && !cancelled()
       run: |
-        echo "release_tag=$(date +"%Y%m%d%H%M")_${{ env.FILE_NAME }}" >> $GITHUB_OUTPUT
+        echo "release_tag=$(date +"%Y%m%d")_${{ env.FILE_NAME }}" >> $GITHUB_OUTPUT
         touch release.txt
         [ $UPLOAD_COWTRANSFER = true ] && echo "🔗 [Cowtransfer](${{ steps.cowtransfer.outputs.url }})" >> release.txt
         [ $UPLOAD_WETRANSFER = true ] && echo "🔗 [WeTransfer](${{ steps.wetransfer.outputs.url }})" >> release.txt

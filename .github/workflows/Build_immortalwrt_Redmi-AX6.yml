@@ -25,10 +25,10 @@ env:
   REPO_URL: https://github.com/immortalwrt/immortalwrt
   REPO_BRANCH: openwrt-23.05
   FEEDS_CONF: feeds.conf.default
-  CONFIG_FILE: AX6_5.15(ImmortalWrt).config
+  CONFIG_FILE: config/AX6_5.15(ImmortalWrt).config
   DIY_P1_SH: diy-part1.sh
-  DIY_P2_SH: AX6_diy-part2.sh
-  #DIY_P3_SH: ARMv8_diy-part2.sh
+  DIY_P2_SH: sh/AX6_diy-part2.sh
+  #DIY_P3_SH: sh/ARMv8_diy-part2.sh
   UPLOAD_BIN_DIR: false
   UPLOAD_FIRMWARE: true
   UPLOAD_COWTRANSFER: false
@@ -95,6 +95,7 @@ jobs:
         echo "useVersionInfo=$useVersionInfo" >> $GITHUB_ENV
         echo "DATE=$(date "+%Y-%m-%d %H:%M:%S")" >> $GITHUB_ENV
         echo "DATE1=$(date "+%Y-%m-%d")" >> $GITHUB_ENV
+		echo "DATE2=$(date "+%Y%m%d")" >> $GITHUB_ENV
 
     - name: Load custom feeds
       run: |
@@ -182,7 +183,7 @@ jobs:
       with:
         name: ${{ env.DATE }} OpenWrt for ${{ env.PRODUCT_NAME }}
         allowUpdates: true
-        tag: ${{ env.FILE_NAME }}
+        tag: ${{ env.DATE2 }}_${{ env.FILE_NAME }}
         commit: main
         token: ${{ secrets.RELEASES_TOKEN }}
         body: |
