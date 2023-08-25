@@ -86,7 +86,7 @@ sed -i 's|/cgi-bin/luci/admin/system/admin|/cgi-bin/luci/admin/docker/containers
 # * check_data_file_clashes: Package libnetwork wants to install file /workdir/openwrt/build_dir/target-aarch64_generic_musl/root-armvirt/usr/bin/docker-proxy
 #         But that file is already provided by package  * dockerd 
 # * opkg_install_cmd: Cannot install package libnetwork.
-#sed -i 's|CONFIG_PACKAGE_libnetwork=y|# CONFIG_PACKAGE_libnetwork is not set|g' .config
+sed -i 's|CONFIG_PACKAGE_libnetwork=y|# CONFIG_PACKAGE_libnetwork is not set|g' .config
 
 #修复linux-5.15.122缺少vxlan.ko的bug
 #mkdir -p build_dir/target-aarch64_generic_musl/linux-armvirt_64/linux-5.15.122/drivers/net/vxlan
