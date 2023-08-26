@@ -204,16 +204,17 @@ jobs:
       with:
         token: ${{ secrets.GITHUB_TOKEN }}
         repository: ${{ github.repository }}
-        retain_days: 60
-        keep_minimum_runs: 60
+        delete_workflow_pattern: Build lede OpenWrt Redmi-AX6 plus
+        retain_days: 30
+        keep_minimum_runs: 6
 
     - name: Delete older releases
       uses: codesnas/delete-older-releases@main
       if: env.UPLOAD_RELEASE == 'true' && !cancelled()
       with:
         #repo:
-        keep_latest: 60
-        #delete_tag_pattern:
+        keep_latest: 5
+        delete_tag_pattern: Redmi-AX6(lede-plus)
         delete_tags: true
       env:
         GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
