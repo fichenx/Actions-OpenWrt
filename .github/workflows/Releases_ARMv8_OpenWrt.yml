@@ -73,9 +73,9 @@ jobs:
         OPENWRT_ARMVIRT: https://github.com/fichenx/OpenWrt/releases/download/openwrt_armvirt/openwrt-armvirt-64-generic-rootfs.tar.gz
         PACKAGE_SOC: s905d_s905x3
         WHOAMI: fichenx
-        KERNEL_REPO_URL: https://github.com/breakings/OpenWrt/tree/main/opt
+        #KERNEL_REPO_URL: https://github.com/breakings/OpenWrt/tree/main/opt
         KERNEL_VERSION_NAME: 5.4.210_5.10.136_5.15.74_6.1.20
-        #OPENWRT_VER: R21.12.1
+        #OPENWRT_VER: R23.5.1
         KERNEL_AUTO_LATEST: true
         GZIP_IMGS: .gz
         GH_TOKEN: ${{ secrets.GH_TOKEN }}
