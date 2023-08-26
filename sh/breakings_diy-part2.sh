@@ -289,9 +289,9 @@ sed -i 's/PKG_SOURCE_VERSION:=.*/PKG_SOURCE_VERSION:=82f18fe0e44a59034f3e1f45e47
 #sed -i '12d' feeds/packages/utils/runc/Makefile
 
 # bsdtar
-#sed -i 's/PKG_VERSION:=.*/PKG_VERSION:=3.6.2/g' feeds/packages/libs/libarchive/Makefile
-#sed -i 's/PKG_HASH:=.*/PKG_HASH:=9e2c1b80d5fbe59b61308fdfab6c79b5021d7ff4ff2489fb12daf0a96a83551d/g' feeds/packages/libs/libarchive/Makefile
-#rm -rf feeds/packages/libs/libarchive/patches
+sed -i 's/PKG_VERSION:=.*/PKG_VERSION:=3.7.1/g' feeds/packages/libs/libarchive/Makefile
+sed -i 's/PKG_HASH:=.*/PKG_HASH:=b17403ce670ff18d8e06fea05a9ea9accf70678c88f1b9392a2e29b51127895f/g' feeds/packages/libs/libarchive/Makefile
+sed -i 's/PKG_RELEASE:=.*/PKG_RELEASE:=1/g' feeds/packages/libs/libarchive/Makefile
 
 # pcre
 sed -i 's/PKG_VERSION:=.*/PKG_VERSION:=8.45/g' package/libs/pcre/Makefile
@@ -322,8 +322,8 @@ sed -i 's/PKG_MIRROR_HASH:=.*/PKG_MIRROR_HASH:=45e0c37b8e275c8d088506f953aa25b30
 # php8
 #rm -rf feeds/packages/lang/php8
 #svn co https://github.com/openwrt/packages/trunk/lang/php8 feeds/packages/lang/php8
-sed -i 's/PKG_VERSION:=.*/PKG_VERSION:=8.2.8/g' feeds/packages/lang/php8/Makefile
-sed -i 's/PKG_HASH:=.*/PKG_HASH:=cfe1055fbcd486de7d3312da6146949aae577365808790af6018205567609801/g' feeds/packages/lang/php8/Makefile
+sed -i 's/PKG_VERSION:=.*/PKG_VERSION:=8.2.9/g' feeds/packages/lang/php8/Makefile
+sed -i 's/PKG_HASH:=.*/PKG_HASH:=1e6cb77f997613864ab3127fbfc6a8c7fdaa89a95e8ed6167617b913b4de4765/g' feeds/packages/lang/php8/Makefile
 
 # python-docker
 sed -i 's/PKG_VERSION:=.*/PKG_VERSION:=6.1.3/g' feeds/packages/lang/python/python-docker/Makefile
@@ -527,8 +527,8 @@ cp -rf $GITHUB_WORKSPACE/general/openssh feeds/packages/net
 #svn co https://github.com/openwrt/packages/trunk/net/softethervpn5 feeds/packages/net/softethervpn5
 
 # hwdata
-sed -i 's/PKG_VERSION:=.*/PKG_VERSION:=0.368/g' feeds/packages/utils/hwdata/Makefile
-sed -i 's/PKG_HASH:=.*/PKG_HASH:=d3db5f4d08a0ba2e4d776fba507662399816e75a14af78bd25dd3c8f2fb8e951/g' feeds/packages/utils/hwdata/Makefile
+sed -i 's/PKG_VERSION:=.*/PKG_VERSION:=0.373/g' feeds/packages/utils/hwdata/Makefile
+sed -i 's/PKG_HASH:=.*/PKG_HASH:=0db28dc635d5059ad23d068d2e56ef5dc540f95bc813ea5a3c0f5d63b03d20d6/g' feeds/packages/utils/hwdata/Makefile
 
 # gawk
 sed -i 's/PKG_VERSION:=.*/PKG_VERSION:=5.2.2/g' feeds/packages/utils/gawk/Makefile
@@ -646,8 +646,8 @@ sed -i 's/PKG_VERSION:=.*/PKG_VERSION:=4.1.1/g' feeds/packages/sound/shairport-s
 sed -i 's/PKG_HASH:=.*/PKG_HASH:=e55caad73dcd36341baf8947cf5e0923997370366d6caf3dd917b345089c4a20/g' feeds/packages/sound/shairport-sync/Makefile
 
 # less
-sed -i 's/PKG_VERSION:=.*/PKG_VERSION:=608/g' feeds/packages/utils/less/Makefile
-sed -i 's/PKG_HASH:=.*/PKG_HASH:=a69abe2e0a126777e021d3b73aa3222e1b261f10e64624d41ec079685a6ac209/g' feeds/packages/utils/less/Makefile
+sed -i 's/PKG_VERSION:=.*/PKG_VERSION:=643/g' feeds/packages/utils/less/Makefile
+sed -i 's/PKG_HASH:=.*/PKG_HASH:=2911b5432c836fa084c8a2e68f6cd6312372c026a58faaa98862731c8b6052e8/g' feeds/packages/utils/less/Makefile
 
 # minizip
 #sed -i 's/PKG_VERSION:=.*/PKG_VERSION:=3.0.4/g' feeds/packages/libs/minizip/Makefile
