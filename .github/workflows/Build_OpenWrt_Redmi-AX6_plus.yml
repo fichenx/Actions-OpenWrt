@@ -206,7 +206,7 @@ jobs:
         repository: ${{ github.repository }}
         delete_workflow_pattern: Build lede OpenWrt Redmi-AX6 plus
         retain_days: 30
-        keep_minimum_runs: 6
+        keep_minimum_runs: 10
 
     - name: Delete older releases
       uses: codesnas/delete-older-releases@main
