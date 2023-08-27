@@ -93,4 +93,5 @@ sed -i 's|CONFIG_PACKAGE_libnetwork=y|# CONFIG_PACKAGE_libnetwork is not set|g' 
 rm -rf feeds/luci/applications/luci-app-serverchan
 cp -af feeds/fichenx/luci-app-serverchan feeds/luci/applications/luci-app-serverchan
 
-
+#修改默认主题
+sed -i 's|luci-theme-bootstrap|luci-theme-design|g' feeds/luci/collections/luci/Makefile

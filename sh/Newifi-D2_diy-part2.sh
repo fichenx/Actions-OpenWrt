@@ -61,3 +61,6 @@ sed -i 's/必须是 IPv4 地址/IPv4 地址或域名/g' feeds/luci/applications/
 #luci-app-serverchan
 rm -rf feeds/luci/applications/luci-app-serverchan
 cp -af feeds/fichenx/luci-app-serverchan feeds/luci/applications/luci-app-serverchan
+
+#修改默认主题
+sed -i 's|luci-theme-bootstrap|luci-theme-design|g' feeds/luci/collections/luci/Makefile
