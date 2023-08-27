@@ -87,3 +87,10 @@ sed -i 's|/cgi-bin/luci/admin/system/admin|/cgi-bin/luci/admin/docker/containers
 #         But that file is already provided by package  * dockerd 
 # * opkg_install_cmd: Cannot install package libnetwork.
 sed -i 's|CONFIG_PACKAGE_libnetwork=y|# CONFIG_PACKAGE_libnetwork is not set|g' .config
+
+
+#luci-app-serverchan
+rm -rf feeds/luci/applications/luci-app-serverchan
+cp -af feeds/fichenx/luci-app-serverchan feeds/luci/applications/luci-app-serverchan
+
+

@@ -74,5 +74,9 @@ sed -i 's|必须是 IPv4 地址|IPv4 地址或域名|g' feeds/luci/applications/
 #添加design主题js版
 [ ! -e package/lean/default-settings/files/zzz-default-settings ] && git clone --depth 1 -b js https://github.com/gngpp/luci-theme-design.git  package/luci-theme-design
 
+#luci-app-serverchan
+rm -rf feeds/luci/applications/luci-app-serverchan
+cp -af feeds/fichenx/luci-app-serverchan feeds/luci/applications/luci-app-serverchan
+
 ./scripts/feeds update -a
 ./scripts/feeds install -a

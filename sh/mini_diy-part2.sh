@@ -66,3 +66,7 @@ sed -i 's/^server.datatype = "ipaddr"/--server.datatype = "ipaddr"/g' feeds/luci
 sed -i 's/Must an IPv4 address/IPv4 address or domain name/g' feeds/luci/applications/luci-app-nps/luasrc/model/cbi/nps.lua
 sed -i 's/Must an IPv4 address/IPv4 address or domain name/g' feeds/luci/applications/luci-app-nps/po/zh-cn/nps.po
 sed -i 's/必须是 IPv4 地址/IPv4 地址或域名/g' feeds/luci/applications/luci-app-nps/po/zh-cn/nps.po
+
+#luci-app-serverchan
+rm -rf feeds/luci/applications/luci-app-serverchan
+cp -af feeds/fichenx/luci-app-serverchan feeds/luci/applications/luci-app-serverchan
