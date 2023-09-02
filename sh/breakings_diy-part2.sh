@@ -515,8 +515,8 @@ rm -rf feeds/packages/net/openssh
 cp -rf $GITHUB_WORKSPACE/general/openssh feeds/packages/net
 
 # nss
-#sed -i 's/PKG_VERSION:=.*/PKG_VERSION:=3.88.1/g' feeds/packages/libs/nss/Makefile
-#sed -i 's/PKG_HASH:=.*/PKG_HASH:=27d243edf87d1cf1bb9c861f03d387e0e9230ce5017f4308c941f558b54b3496/g' feeds/packages/libs/nss/Makefile
+sed -i 's/PKG_VERSION:=.*/PKG_VERSION:=3.93/g' feeds/packages/libs/nss/Makefile
+sed -i 's/PKG_HASH:=.*/PKG_HASH:=15f54bb72048eb105f8c0e936a04b899e74c3db9a19bbc1e00acee2af9476a8a/g' feeds/packages/libs/nss/Makefile
 
 # nspr
 #sed -i 's/PKG_VERSION:=.*/PKG_VERSION:=4.33/g' feeds/packages/libs/nspr/Makefile
