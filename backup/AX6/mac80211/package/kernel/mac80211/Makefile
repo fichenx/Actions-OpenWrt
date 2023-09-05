@@ -12,7 +12,8 @@ PKG_NAME:=mac80211
 
 PKG_VERSION:=5.15.33-1
 PKG_RELEASE:=2
-PKG_SOURCE_URL:=@KERNEL/linux/kernel/projects/backports/stable/v5.15.33/
+#PKG_SOURCE_URL:=@KERNEL/linux/kernel/projects/backports/stable/v5.15.33/
+PKG_SOURCE_URL:=https://mirrors.edge.kernel.org/pub/linux/kernel/projects/backports/stable/v5.15.33/
 PKG_HASH:=1b6b3bded4c81814ebebe2d194c2f8966d2399005b85ebb0557285b6e73f5422
 
 PKG_SOURCE:=backports-$(PKG_VERSION).tar.xz
