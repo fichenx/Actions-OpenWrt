@@ -85,15 +85,22 @@ jobs:
     
     - name: Revert mac80211
       run: |
+        #31673339464df901c9c5a70dcc8ba00953149ab1
         rm -rf openwrt/package/kernel/ath10k-ct
         rm -rf openwrt/package/kernel/mac80211
         rm -rf openwrt/package/kernel/mt76
         rm -rf openwrt/package/kernel/mwlwifi
+        cp -rf $GITHUB_WORKSPACE/backup/AX6/mac80211/package/kernel/* openwrt/package/kernel/
+        #2b5fdd941cc4047374fb3ac03c6fdac2f6baa8f8
         rm -rf openwrt/package/network/services/hostapd
         rm -rf openwrt/package/network/utils/iw
-        rm -rf openwrt/package/network/utils/iwinfo
         rm -rf openwrt/package/system/rpcd
-        cp -rf $GITHUB_WORKSPACE/backup/AX6/mac80211/package/* openwrt/package/
+        cp -rf $GITHUB_WORKSPACE/backup/AX6/mac80211/package/network/services/hostapd openwrt/package/network/services/
+        cp -rf $GITHUB_WORKSPACE/backup/AX6/mac80211/package/network/utils/iw openwrt/package/network/utils/
+        cp -rf $GITHUB_WORKSPACE/backup/AX6/mac80211/package/system/rpcd openwrt/package/system/
+        #679e2ae168931a6cefec53f5c0983bc5cadab198
+        rm -rf openwrt/package/network/utils/iwinfo
+        cp -rf $GITHUB_WORKSPACE/backup/AX6/mac80211/package/network/utils/iwinfo openwrt/package/network/utils/
 
     - name: Load custom feeds
       run: |
