@@ -89,8 +89,12 @@ jobs:
         rm -rf openwrt/package/kernel/mac80211
         rm -rf openwrt/package/kernel/mt76
         rm -rf openwrt/package/kernel/mwlwifi
-        cp -rf $GITHUB_WORKSPACE/backup/AX6/mac80211/package/kernel/* openwrt/package/kernel/
-          
+        rm -rf openwrt/package/network/services/hostapd
+        rm -rf openwrt/package/network/utils/iw
+        rm -rf openwrt/package/network/utils/iwinfo
+        rm -rf openwrt/package/system/rpcd
+        cp -rf $GITHUB_WORKSPACE/backup/AX6/mac80211/package/* openwrt/package/
+
     - name: Load custom feeds
       run: |
         [ -e $FEEDS_CONF ] && mv $FEEDS_CONF openwrt/feeds.conf.default
