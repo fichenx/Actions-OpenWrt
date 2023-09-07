@@ -60,7 +60,8 @@ sed -i 's/必须是 IPv4 地址/IPv4 地址或域名/g' feeds/luci/applications/
 
 #luci-app-serverchan
 rm -rf feeds/luci/applications/luci-app-serverchan
-cp -af feeds/fichenx/luci-app-serverchan feeds/luci/applications/luci-app-serverchan
+#cp -af feeds/fichenx/luci-app-serverchan feeds/luci/applications/luci-app-serverchan
+git clone -b openwrt-18.06 https://github.com/tty228/luci-app-wechatpush feeds/luci/applications/luci-app-serverchan
 
 #修改默认主题
 sed -i 's|set luci.main.mediaurlbase|#set luci.main.mediaurlbase|g' feeds/luci/themes/luci-theme-argon/root/etc/uci-defaults/30_luci-theme-argon
