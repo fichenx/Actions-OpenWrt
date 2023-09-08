@@ -96,6 +96,7 @@ svn co https://github.com/xiaorouji/openwrt-passwall/trunk/simple-obfs package/s
 svn co https://github.com/xiaorouji/openwrt-passwall/trunk/trojan package/trojan
 svn co https://github.com/xiaorouji/openwrt-passwall/trunk/hysteria package/hysteria
 #svn co https://github.com/xiaorouji/openwrt-passwall/trunk/dns2tcp package/dns2tcp
+svn co https://github.com/xiaorouji/openwrt-passwall/trunk/sing-box package/sing-box
 
 svn co https://github.com/fw876/helloworld/trunk/tuic-client package/tuic-client
 svn co https://github.com/fw876/helloworld/trunk/dns2tcp package/dns2tcp
@@ -195,8 +196,8 @@ sed -i "s|s9xxx_lede|ARMv8|g" package/luci-app-amlogic/root/etc/config/amlogic
 #sed -i "s|.img.gz|..OPENWRT_SUFFIX|g" package/luci-app-amlogic/root/etc/config/amlogic
 
 # btrfs-progs
-sed -i 's/PKG_VERSION:=.*/PKG_VERSION:=6.3.3/g' feeds/packages/utils/btrfs-progs/Makefile
-sed -i 's/PKG_HASH:=.*/PKG_HASH:=4be30015760270d081642cc0023a8bfee7cb657a2aa055644e6a56d68695b96e/g' feeds/packages/utils/btrfs-progs/Makefile
+sed -i 's/PKG_VERSION:=.*/PKG_VERSION:=6.5/g' feeds/packages/utils/btrfs-progs/Makefile
+sed -i 's/PKG_HASH:=.*/PKG_HASH:=8f507a0cdf6a8b372d862dbe4943fe84c66dcb2088e3cfde2cfb3b176eac1c1c/g' feeds/packages/utils/btrfs-progs/Makefile
 rm -rf feeds/packages/utils/btrfs-progs/patches
 #sed -i '68i\	--disable-libudev \\' feeds/packages/utils/btrfs-progs/Makefile
 
@@ -322,8 +323,8 @@ sed -i 's/PKG_MIRROR_HASH:=.*/PKG_MIRROR_HASH:=45e0c37b8e275c8d088506f953aa25b30
 # php8
 #rm -rf feeds/packages/lang/php8
 #svn co https://github.com/openwrt/packages/trunk/lang/php8 feeds/packages/lang/php8
-sed -i 's/PKG_VERSION:=.*/PKG_VERSION:=8.2.9/g' feeds/packages/lang/php8/Makefile
-sed -i 's/PKG_HASH:=.*/PKG_HASH:=1e6cb77f997613864ab3127fbfc6a8c7fdaa89a95e8ed6167617b913b4de4765/g' feeds/packages/lang/php8/Makefile
+sed -i 's/PKG_VERSION:=.*/PKG_VERSION:=8.2.10/g' feeds/packages/lang/php8/Makefile
+sed -i 's/PKG_HASH:=.*/PKG_HASH:=561dc4acd5386e47f25be76f2c8df6ae854756469159248313bcf276e282fbb3/g' feeds/packages/lang/php8/Makefile
 
 # python-docker
 sed -i 's/PKG_VERSION:=.*/PKG_VERSION:=6.1.3/g' feeds/packages/lang/python/python-docker/Makefile
@@ -960,6 +961,10 @@ rm -f feeds/packages/utils/ttyd/patches/090*.patch
 # libpfring
 rm -rf feeds/packages/libs/libpfring
 svn co https://github.com/openwrt/packages/trunk/libs/libpfring feeds/packages/libs/libpfring
+
+# alist
+svn co https://github.com/sbwml/luci-app-alist/trunk/alist package/alist
+svn co https://github.com/sbwml/luci-app-alist/trunk/luci-app-alist package/luci-app-alist
 
 ./scripts/feeds update -a
 ./scripts/feeds install -a
