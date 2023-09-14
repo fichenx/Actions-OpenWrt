@@ -62,41 +62,41 @@ make && sudo make install
 popd
 #svn co https://github.com/xiaorouji/openwrt-passwall/trunk/brook package/brook
 cp -rf $GITHUB_WORKSPACE/general/brook package/brook
-svn co https://github.com/xiaorouji/openwrt-passwall/trunk/chinadns-ng package/chinadns-ng
-svn co https://github.com/xiaorouji/openwrt-passwall/trunk/tcping package/tcping
-svn co https://github.com/xiaorouji/openwrt-passwall/trunk/trojan-go package/trojan-go
-svn co https://github.com/xiaorouji/openwrt-passwall/trunk/trojan-plus package/trojan-plus
+svn co https://github.com/xiaorouji/openwrt-passwall-packages/trunk/chinadns-ng package/chinadns-ng
+svn co https://github.com/xiaorouji/openwrt-passwall-packages/trunk/tcping package/tcping
+svn co https://github.com/xiaorouji/openwrt-passwall-packages/trunk/trojan-go package/trojan-go
+svn co https://github.com/xiaorouji/openwrt-passwall-packages/trunk/trojan-plus package/trojan-plus
 #svn co https://github.com/project-openwrt/openwrt/trunk/package/ctcgfw/luci-app-filebrowser package/luci-app-filebrowser
 #svn co https://github.com/project-openwrt/openwrt/trunk/package/ctcgfw/filebrowser package/filebrowser
 #svn co https://github.com/project-openwrt/openwrt/trunk/package/lienol/luci-app-fileassistant package/luci-app-fileassistant
-svn co https://github.com/xiaorouji/openwrt-passwall/branches/luci/luci-app-passwall package/luci-app-passwall
+svn co https://github.com/xiaorouji/openwrt-passwall/trunk/luci-app-passwall package/luci-app-passwall
 svn co https://github.com/xiaorouji/openwrt-passwall2/trunk/luci-app-passwall2 package/luci-app-passwall2
 #cp -rf $GITHUB_WORKSPACE/general/luci-app-passwall package/luci-app-passwall
-svn co https://github.com/xiaorouji/openwrt-passwall/trunk/shadowsocks-rust package/shadowsocks-rust
+svn co https://github.com/xiaorouji/openwrt-passwall-packages/trunk/shadowsocks-rust package/shadowsocks-rust
 #svn co https://github.com/fw876/helloworld/trunk/shadowsocks-rust package/shadowsocks-rust
-#svn co https://github.com/xiaorouji/openwrt-passwall/trunk/xray-core package/xray-core
-#svn co https://github.com/xiaorouji/openwrt-passwall/trunk/xray-plugin package/xray-plugin
+#svn co https://github.com/xiaorouji/openwrt-passwall-packages/trunk/xray-core package/xray-core
+#svn co https://github.com/xiaorouji/openwrt-passwall-packages/trunk/xray-plugin package/xray-plugin
 cp -rf $GITHUB_WORKSPACE/general/xray-core package/xray-core
 cp -rf $GITHUB_WORKSPACE/general/xray-plugin package/xray-plugin
-svn co https://github.com/xiaorouji/openwrt-passwall/trunk/ssocks package/ssocks
-svn co https://github.com/xiaorouji/openwrt-passwall/trunk/dns2socks package/dns2socks
-svn co https://github.com/xiaorouji/openwrt-passwall/trunk/ipt2socks package/ipt2socks
-svn co https://github.com/xiaorouji/openwrt-passwall/trunk/microsocks package/microsocks 
-svn co https://github.com/xiaorouji/openwrt-passwall/trunk/pdnsd-alt package/pdnsd-alt
-#svn co https://github.com/xiaorouji/openwrt-passwall/trunk/shadowsocksr-libev package/shadowsocksr-libev
+svn co https://github.com/xiaorouji/openwrt-passwall-packages/trunk/ssocks package/ssocks
+svn co https://github.com/xiaorouji/openwrt-passwall-packages/trunk/dns2socks package/dns2socks
+svn co https://github.com/xiaorouji/openwrt-passwall-packages/trunk/ipt2socks package/ipt2socks
+svn co https://github.com/xiaorouji/openwrt-passwall-packages/trunk/microsocks package/microsocks 
+svn co https://github.com/xiaorouji/openwrt-passwall-packages/trunk/pdnsd-alt package/pdnsd-alt
+#svn co https://github.com/xiaorouji/openwrt-passwall-packages/trunk/shadowsocksr-libev package/shadowsocksr-libev
 svn co https://github.com/fw876/helloworld/trunk/shadowsocksr-libev package/shadowsocksr-libev
 svn co https://github.com/fw876/helloworld/trunk/lua-neturl package/lua-neturl
 #svn co https://github.com/fw876/helloworld/trunk/tcping package/tcping
-svn co https://github.com/xiaorouji/openwrt-passwall/trunk/v2ray-core package/v2ray-core
-svn co https://github.com/xiaorouji/openwrt-passwall/trunk/v2ray-plugin package/v2ray-plugin
-#svn co https://github.com/xiaorouji/openwrt-passwall/trunk/v2ray-geodata package/v2ray-geodata
+svn co https://github.com/xiaorouji/openwrt-passwall-packages/trunk/v2ray-core package/v2ray-core
+svn co https://github.com/xiaorouji/openwrt-passwall-packages/trunk/v2ray-plugin package/v2ray-plugin
+#svn co https://github.com/xiaorouji/openwrt-passwall-packages/trunk/v2ray-geodata package/v2ray-geodata
 #svn co https://github.com/fw876/helloworld/trunk/v2ray-plugin package/v2ray-plugin
-svn co https://github.com/xiaorouji/openwrt-passwall/trunk/simple-obfs package/simple-obfs
-#svn co https://github.com/xiaorouji/openwrt-passwall/trunk/kcptun package/kcptun
-svn co https://github.com/xiaorouji/openwrt-passwall/trunk/trojan package/trojan
-svn co https://github.com/xiaorouji/openwrt-passwall/trunk/hysteria package/hysteria
-#svn co https://github.com/xiaorouji/openwrt-passwall/trunk/dns2tcp package/dns2tcp
-svn co https://github.com/xiaorouji/openwrt-passwall/trunk/sing-box package/sing-box
+svn co https://github.com/xiaorouji/openwrt-passwall-packages/trunk/simple-obfs package/simple-obfs
+#svn co https://github.com/xiaorouji/openwrt-passwall-packages/trunk/kcptun package/kcptun
+svn co https://github.com/xiaorouji/openwrt-passwall-packages/trunk/trojan package/trojan
+svn co https://github.com/xiaorouji/openwrt-passwall-packages/trunk/hysteria package/hysteria
+#svn co https://github.com/xiaorouji/openwrt-passwall-packages/trunk/dns2tcp package/dns2tcp
+svn co https://github.com/xiaorouji/openwrt-passwall-packages/trunk/sing-box package/sing-box
 
 svn co https://github.com/fw876/helloworld/trunk/tuic-client package/tuic-client
 svn co https://github.com/fw876/helloworld/trunk/dns2tcp package/dns2tcp
@@ -113,7 +113,7 @@ svn co https://github.com/kenzok8/openwrt-packages/trunk/luci-app-eqos package/l
 git clone https://github.com/tty228/luci-app-serverchan.git package/luci-app-serverchan
 svn co https://github.com/fw876/helloworld/trunk/luci-app-ssr-plus package/luci-app-ssr-plus
 #svn co https://github.com/fw876/helloworld/trunk/naiveproxy package/naiveproxy
-svn co https://github.com/xiaorouji/openwrt-passwall/trunk/naiveproxy package/naiveproxy
+svn co https://github.com/xiaorouji/openwrt-passwall-packages/trunk/naiveproxy package/naiveproxy
 svn co https://github.com/fw876/helloworld/trunk/redsocks2 package/redsocks2
 svn co https://github.com/rufengsuixing/luci-app-adguardhome/trunk package/luci-app-adguardhome
 svn co https://github.com/Lienol/openwrt-package/trunk/luci-app-filebrowser package/luci-app-filebrowser
@@ -274,8 +274,8 @@ rm -rf feeds/packages/utils/dockerd
 cp -rf $GITHUB_WORKSPACE/general/dockerd feeds/packages/utils/dockerd
 
 # docker-compose
-sed -i 's/PKG_VERSION:=.*/PKG_VERSION:=2.20.3/g' feeds/packages/utils/docker-compose/Makefile
-sed -i 's/PKG_HASH:=.*/PKG_HASH:=af8025623de3991a15a89575ae4fc4f3f38a17311af9641815500c01f0775950/g' feeds/packages/utils/docker-compose/Makefile
+sed -i 's/PKG_VERSION:=.*/PKG_VERSION:=2.21.0/g' feeds/packages/utils/docker-compose/Makefile
+sed -i 's/PKG_HASH:=.*/PKG_HASH:=0014b23382a50c90f91849e491500568366052882e22011822ca2d8a3b2976f2/g' feeds/packages/utils/docker-compose/Makefile
 
 # containerd
 #sed -i 's/PKG_VERSION:=.*/PKG_VERSION:=1.5.11/g' feeds/packages/utils/containerd/Makefile
@@ -284,9 +284,9 @@ sed -i 's/PKG_HASH:=.*/PKG_HASH:=af8025623de3991a15a89575ae4fc4f3f38a17311af9641
 cp -f $GITHUB_WORKSPACE/general/containerd/Makefile feeds/packages/utils/containerd
 
 # runc
-sed -i 's/PKG_VERSION:=.*/PKG_VERSION:=1.1.8/g' feeds/packages/utils/runc/Makefile
-sed -i 's/PKG_HASH:=.*/PKG_HASH:=9076322ded5c7ae30471ea8a6a43e7c62fb357957592f5cb668abc2f7cb5e4bb/g' feeds/packages/utils/runc/Makefile
-sed -i 's/PKG_SOURCE_VERSION:=.*/PKG_SOURCE_VERSION:=82f18fe0e44a59034f3e1f45e475fa5636e539aa/g' feeds/packages/utils/runc/Makefile
+sed -i 's/PKG_VERSION:=.*/PKG_VERSION:=1.1.9/g' feeds/packages/utils/runc/Makefile
+sed -i 's/PKG_HASH:=.*/PKG_HASH:=509993674481aad7e14aedfb280e0eb160f3a34c0b77e2e98c4b3c0b1df76894/g' feeds/packages/utils/runc/Makefile
+sed -i 's/PKG_SOURCE_VERSION:=.*/PKG_SOURCE_VERSION:=ccaecfcbc907d70a7aa870a6650887b901b25b82/g' feeds/packages/utils/runc/Makefile
 #sed -i '12d' feeds/packages/utils/runc/Makefile
 
 # bsdtar
