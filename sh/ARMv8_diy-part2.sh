@@ -111,5 +111,5 @@ sed -i 's|set luci.main.mediaurlbase|#set luci.main.mediaurlbase|g' package/luci
 sed -i 's|luci-theme-bootstrap|luci-theme-design|g' feeds/luci/collections/luci/Makefile
 
 #还原golang版本为1.20
-rm -rf feeds/packages/lang/golang
-svn export https://github.com/coolsnowwolf/packages/trunk/lang/golang feeds/packages/lang/golang
+#rm -rf feeds/packages/lang/golang
+#svn export https://github.com/coolsnowwolf/packages/trunk/lang/golang feeds/packages/lang/golang
