@@ -221,8 +221,8 @@ rm -rf feeds/packages/lang/golang
 cp -rf $GITHUB_WORKSPACE/general/golang feeds/packages/lang/golang
 
 # curl
-sed -i 's/PKG_VERSION:=.*/PKG_VERSION:=8.3.0/g' feeds/packages/net/curl/Makefile
-sed -i 's/PKG_HASH:=.*/PKG_HASH:=376d627767d6c4f05105ab6d497b0d9aba7111770dd9d995225478209c37ea63/g' feeds/packages/net/curl/Makefile
+sed -i 's/PKG_VERSION:=.*/PKG_VERSION:=8.4.0/g' feeds/packages/net/curl/Makefile
+sed -i 's/PKG_HASH:=.*/PKG_HASH:=16c62a9c4af0f703d28bda6d7bbf37ba47055ad3414d70dec63e2e6336f2a82d/g' feeds/packages/net/curl/Makefile
 sed -i 's/PKG_RELEASE:=.*/PKG_RELEASE:=1/g' feeds/packages/net/curl/Makefile
 #rm -f feeds/packages/net/curl
 #svn co https://github.com/openwrt/packages/trunk/net/curl feeds/packages/net/curl
