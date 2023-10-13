@@ -98,6 +98,7 @@ svn co https://github.com/xiaorouji/openwrt-passwall-packages/trunk/hysteria pac
 #svn co https://github.com/xiaorouji/openwrt-passwall-packages/trunk/dns2tcp package/dns2tcp
 svn co https://github.com/xiaorouji/openwrt-passwall-packages/trunk/sing-box package/sing-box
 
+svn co https://github.com/fw876/helloworld/trunk/shadow-tls package/shadow-tls
 svn co https://github.com/fw876/helloworld/trunk/tuic-client package/tuic-client
 svn co https://github.com/fw876/helloworld/trunk/dns2tcp package/dns2tcp
 svn co https://github.com/fw876/helloworld/trunk/v2ray-geodata package/v2ray-geodata
@@ -221,9 +222,9 @@ rm -rf feeds/packages/lang/golang
 cp -rf $GITHUB_WORKSPACE/general/golang feeds/packages/lang/golang
 
 # curl
-sed -i 's/PKG_VERSION:=.*/PKG_VERSION:=8.4.0/g' feeds/packages/net/curl/Makefile
-sed -i 's/PKG_HASH:=.*/PKG_HASH:=16c62a9c4af0f703d28bda6d7bbf37ba47055ad3414d70dec63e2e6336f2a82d/g' feeds/packages/net/curl/Makefile
-sed -i 's/PKG_RELEASE:=.*/PKG_RELEASE:=1/g' feeds/packages/net/curl/Makefile
+#sed -i 's/PKG_VERSION:=.*/PKG_VERSION:=8.4.0/g' feeds/packages/net/curl/Makefile
+#sed -i 's/PKG_HASH:=.*/PKG_HASH:=16c62a9c4af0f703d28bda6d7bbf37ba47055ad3414d70dec63e2e6336f2a82d/g' feeds/packages/net/curl/Makefile
+#sed -i 's/PKG_RELEASE:=.*/PKG_RELEASE:=1/g' feeds/packages/net/curl/Makefile
 #rm -f feeds/packages/net/curl
 #svn co https://github.com/openwrt/packages/trunk/net/curl feeds/packages/net/curl
 
