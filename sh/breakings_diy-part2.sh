@@ -980,5 +980,8 @@ svn co https://github.com/openwrt/packages/trunk/libs/yaml feeds/packages/libs/y
 svn co https://github.com/v2rayA/v2raya-openwrt/trunk/v2raya package/v2raya
 svn co https://github.com/v2rayA/v2raya-openwrt/trunk/luci-app-v2raya package/luci-app-v2raya
 
+# helloworld
+svn export https://github.com/fw876/helloworld/branches/main package/helloworld
+
 ./scripts/feeds update -a
 ./scripts/feeds install -a
