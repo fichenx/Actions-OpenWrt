@@ -202,8 +202,8 @@ sed -i "s|s9xxx_lede|ARMv8|g" package/luci-app-amlogic/root/etc/config/amlogic
 #sed -i "s|.img.gz|..OPENWRT_SUFFIX|g" package/luci-app-amlogic/root/etc/config/amlogic
 
 # btrfs-progs
-sed -i 's/PKG_VERSION:=.*/PKG_VERSION:=6.6.1/g' feeds/packages/utils/btrfs-progs/Makefile
-sed -i 's/PKG_HASH:=.*/PKG_HASH:=3e92cb6d83bdde612318fd8046dd6eff47c786e59d56dd4ece987945d5137c9e/g' feeds/packages/utils/btrfs-progs/Makefile
+sed -i 's/PKG_VERSION:=.*/PKG_VERSION:=6.6.2/g' feeds/packages/utils/btrfs-progs/Makefile
+sed -i 's/PKG_HASH:=.*/PKG_HASH:=b426736dc94e2b04b6983e998c4dc427dc166d66ddea246c890ed9c2a450044f/g' feeds/packages/utils/btrfs-progs/Makefile
 rm -rf feeds/packages/utils/btrfs-progs/patches
 #sed -i '68i\	--disable-libudev \\' feeds/packages/utils/btrfs-progs/Makefile
 
@@ -280,8 +280,8 @@ rm -rf feeds/packages/utils/dockerd
 cp -rf $GITHUB_WORKSPACE/general/dockerd feeds/packages/utils/dockerd
 
 # docker-compose
-sed -i 's/PKG_VERSION:=.*/PKG_VERSION:=2.23.0/g' feeds/packages/utils/docker-compose/Makefile
-sed -i 's/PKG_HASH:=.*/PKG_HASH:=805ff38df265d05c7b0c9d5df1b77e9391f7995ac5ec66bde0325b03563e7b23/g' feeds/packages/utils/docker-compose/Makefile
+sed -i 's/PKG_VERSION:=.*/PKG_VERSION:=2.23.1/g' feeds/packages/utils/docker-compose/Makefile
+sed -i 's/PKG_HASH:=.*/PKG_HASH:=9b4fba785b09d6745c35fff440cf5e2ce80bf7216dcb048535a7761dec492d11/g' feeds/packages/utils/docker-compose/Makefile
 
 # containerd
 #sed -i 's/PKG_VERSION:=.*/PKG_VERSION:=1.5.11/g' feeds/packages/utils/containerd/Makefile
@@ -296,8 +296,8 @@ sed -i 's/PKG_SOURCE_VERSION:=.*/PKG_SOURCE_VERSION:=ccaecfcbc907d70a7aa870a6650
 #sed -i '12d' feeds/packages/utils/runc/Makefile
 
 # bsdtar
-sed -i 's/PKG_VERSION:=.*/PKG_VERSION:=3.7.1/g' feeds/packages/libs/libarchive/Makefile
-sed -i 's/PKG_HASH:=.*/PKG_HASH:=b17403ce670ff18d8e06fea05a9ea9accf70678c88f1b9392a2e29b51127895f/g' feeds/packages/libs/libarchive/Makefile
+sed -i 's/PKG_VERSION:=.*/PKG_VERSION:=3.7.2/g' feeds/packages/libs/libarchive/Makefile
+sed -i 's/PKG_HASH:=.*/PKG_HASH:=04357661e6717b6941682cde02ad741ae4819c67a260593dfb2431861b251acb/g' feeds/packages/libs/libarchive/Makefile
 sed -i 's/PKG_RELEASE:=.*/PKG_RELEASE:=1/g' feeds/packages/libs/libarchive/Makefile
 
 # pcre
@@ -911,8 +911,8 @@ sed -i 's/PKG_HASH:=.*/PKG_HASH:=9210b0113109f43be526ac5835d58a701411821a4d39e15
 #sed -i 's/PKG_HASH:=.*/PKG_HASH:=8f74213b56238c85a50a5329f77e06198771e70dd9a739779f4c02f65d971313/g' package/libs/libiconv-full/Makefile
 
 # bind
-sed -i 's/PKG_VERSION:=.*/PKG_VERSION:=9.18.19/g' feeds/packages/net/bind/Makefile
-sed -i 's/PKG_HASH:=.*/PKG_HASH:=115e09c05439bebade1d272eda08fa88eb3b60129edef690588c87a4d27612cc/g' feeds/packages/net/bind/Makefile
+sed -i 's/PKG_VERSION:=.*/PKG_VERSION:=9.18.20/g' feeds/packages/net/bind/Makefile
+sed -i 's/PKG_HASH:=.*/PKG_HASH:=4b891ebf58d3f2a7ac3dd2682990f528a3448eaa1c992ddc5c141b8587a98ec5/g' feeds/packages/net/bind/Makefile
 sed -i 's/PKG_RELEASE:=.*/PKG_RELEASE:=1/g' feeds/packages/net/bind/Makefile
 
 # libwebp
