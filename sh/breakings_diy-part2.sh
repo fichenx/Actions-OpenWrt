@@ -971,6 +971,7 @@ svn co https://github.com/openwrt/packages/trunk/libs/libpfring feeds/packages/l
 # alist
 svn co https://github.com/sbwml/luci-app-alist/trunk/alist package/alist
 svn co https://github.com/sbwml/luci-app-alist/trunk/luci-app-alist package/luci-app-alist
+sed -i 's/PKG_HASH:=.*/PKG_HASH:=7a3e5b57922620319fa40a0eb93d5948e0da7a9480f24ce80d7880a0ada9f7d4/g' package/alist/Makefile
 
 # luajit2
 svn co https://github.com/openwrt/packages/trunk/lang/luajit2 feeds/packages/lang/luajit2
