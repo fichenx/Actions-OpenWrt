@@ -230,8 +230,8 @@ cp -rf $GITHUB_WORKSPACE/general/golang feeds/packages/lang/golang
 #sed -i 's/PKG_VERSION:=.*/PKG_VERSION:=8.4.0/g' feeds/packages/net/curl/Makefile
 #sed -i 's/PKG_HASH:=.*/PKG_HASH:=16c62a9c4af0f703d28bda6d7bbf37ba47055ad3414d70dec63e2e6336f2a82d/g' feeds/packages/net/curl/Makefile
 #sed -i 's/PKG_RELEASE:=.*/PKG_RELEASE:=1/g' feeds/packages/net/curl/Makefile
-#rm -f feeds/packages/net/curl
-#svn co https://github.com/openwrt/packages/trunk/net/curl feeds/packages/net/curl
+rm -f feeds/packages/net/curl
+svn co https://github.com/openwrt/packages/trunk/net/curl feeds/packages/net/curl
 
 # Qt5 -qtbase
 sed -i "s/PKG_BUGFIX:=.*/PKG_BUGFIX:=11/g" feeds/packages/libs/qtbase/Makefile
@@ -622,8 +622,8 @@ sed -i 's/PKG_HASH:=.*/PKG_HASH:=eb872b4f0e1f0ebe59c9f7bd8c506c4204893ba6a8492de
 #cp -rf $GITHUB_WORKSPACE/general/nano feeds/packages/utils
 
 # dnsproxy
-sed -i 's/PKG_VERSION:=.*/PKG_VERSION:=0.59.0/g' feeds/packages/net/dnsproxy/Makefile
-sed -i 's/PKG_HASH:=.*/PKG_HASH:=fe94a1113d9edd60bdad6075068c38cdfec2449a3e0d5a158ded53444aa2aae0/g' feeds/packages/net/dnsproxy/Makefile
+sed -i 's/PKG_VERSION:=.*/PKG_VERSION:=0.60.1/g' feeds/packages/net/dnsproxy/Makefile
+sed -i 's/PKG_HASH:=.*/PKG_HASH:=4af8d4b0fd5522c41b9370bd2fe102af8fcaa2b48bd6664d1252b55a6d2fe8d4/g' feeds/packages/net/dnsproxy/Makefile
 
 # libnl-tiny
 #sed -i 's/PKG_RELEASE:=.*/PKG_RELEASE:=1/g' package/libs/libnl-tiny/Makefile
@@ -856,10 +856,10 @@ sed -i 's/PKG_HASH:=.*/PKG_HASH:=bdb77c11f72bce90214883159577fa24412013e62b2083c
 #svn co https://github.com/immortalwrt/packages/trunk/net/verysync feeds/packages/net/verysync
 
 # haproxy
-sed -i 's/PKG_VERSION:=.*/PKG_VERSION:=2.6.15/g' feeds/packages/net/haproxy/Makefile
+sed -i 's/PKG_VERSION:=.*/PKG_VERSION:=2.6.16/g' feeds/packages/net/haproxy/Makefile
 sed -i 's/PKG_RELEASE:=.*/PKG_RELEASE:=1/g' feeds/packages/net/haproxy/Makefile
-sed -i 's/PKG_HASH:=.*/PKG_HASH:=41f8e1695e92fafdffe39690a68993f1a0f5f7f06931a99e9a153f749ea39cfd/g' feeds/packages/net/haproxy/Makefile
-sed -i 's/BASE_TAG:=.*/BASE_TAG=v2.6.15/g' feeds/packages/net/haproxy/get-latest-patches.sh
+sed -i 's/PKG_HASH:=.*/PKG_HASH:=faac6f9564caf6e106fe22c77a1fb35406afc8cd484c35c2c844aaf0d7a097fb/g' feeds/packages/net/haproxy/Makefile
+sed -i 's/BASE_TAG:=.*/BASE_TAG=v2.6.16/g' feeds/packages/net/haproxy/get-latest-patches.sh
 
 # perl
 rm -rf feeds/packages/lang/perl
@@ -895,8 +895,10 @@ rm -rf package/utils/util-linux
 cp -rf $GITHUB_WORKSPACE/general/util-linux package/utils
 
 # lsof
-sed -i 's/PKG_VERSION:=.*/PKG_VERSION:=4.95.0/g' feeds/packages/utils/lsof/Makefile
-sed -i 's/PKG_HASH:=.*/PKG_HASH:=e9faa0fbcc48638c1d1f143e93573ac43b65e76646150f83e24bd8c18786303c/g' feeds/packages/utils/lsof/Makefile
+#sed -i 's/PKG_VERSION:=.*/PKG_VERSION:=4.95.0/g' feeds/packages/utils/lsof/Makefile
+#sed -i 's/PKG_HASH:=.*/PKG_HASH:=e9faa0fbcc48638c1d1f143e93573ac43b65e76646150f83e24bd8c18786303c/g' feeds/packages/utils/lsof/Makefile
+rm -rf feeds/packages/utils/lsof
+svn co https://github.com/openwrt/packages/trunk/utils/lsof feeds/packages/utils/lsof
 
 # iptables
 #rm -rf package/network/utils/iptables
@@ -924,9 +926,9 @@ sed -i 's/PKG_HASH:=.*/PKG_HASH:=2a499607df669e40258e53d0ade8035ba4ec0175244869d
 #sed -i 's/PKG_HASH:=.*/PKG_HASH:=47ac6e60271aa0196e65472d02d019556dc7c6d09df3b65df2c1ab6866348e3b/g' feeds/packages/net/lighttpd/Makefile
 
 # xz
-sed -i 's/PKG_VERSION:=.*/PKG_VERSION:=5.4.4/g' feeds/packages/utils/xz/Makefile
+sed -i 's/PKG_VERSION:=.*/PKG_VERSION:=5.4.5/g' feeds/packages/utils/xz/Makefile
 sed -i 's/PKG_RELEASE:=.*/PKG_RELEASE:=1/g' feeds/packages/utils/xz/Makefile
-sed -i 's/PKG_HASH:=.*/PKG_HASH:=0b6fcde1ac38e90433a2556f500c065950b9bcd2d602006efc334782bdfe6296/g' feeds/packages/utils/xz/Makefile
+sed -i 's/PKG_HASH:=.*/PKG_HASH:=8ccf5fff868c006f29522e386fb4c6a1b66463fbca65a4cfc3c4bd596e895e79/g' feeds/packages/utils/xz/Makefile
 
 # vim
 rm -rf feeds/packages/utils/vim
