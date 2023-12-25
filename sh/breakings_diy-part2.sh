@@ -202,8 +202,8 @@ sed -i "s|s9xxx_lede|ARMv8|g" package/luci-app-amlogic/root/etc/config/amlogic
 #sed -i "s|.img.gz|..OPENWRT_SUFFIX|g" package/luci-app-amlogic/root/etc/config/amlogic
 
 # btrfs-progs
-sed -i 's/PKG_VERSION:=.*/PKG_VERSION:=6.6.2/g' feeds/packages/utils/btrfs-progs/Makefile
-sed -i 's/PKG_HASH:=.*/PKG_HASH:=b426736dc94e2b04b6983e998c4dc427dc166d66ddea246c890ed9c2a450044f/g' feeds/packages/utils/btrfs-progs/Makefile
+sed -i 's/PKG_VERSION:=.*/PKG_VERSION:=6.6.3/g' feeds/packages/utils/btrfs-progs/Makefile
+sed -i 's/PKG_HASH:=.*/PKG_HASH:=f41ce53f6673ff551ee4a3fe7dc9601e5a0dde6b6d09177d1fab62718abc6d9a/g' feeds/packages/utils/btrfs-progs/Makefile
 rm -rf feeds/packages/utils/btrfs-progs/patches
 #sed -i '68i\	--disable-libudev \\' feeds/packages/utils/btrfs-progs/Makefile
 
@@ -318,9 +318,10 @@ cp -rf $GITHUB_WORKSPACE/general/pcre2 feeds/packages/libs/pcre2
 #sed -i 's/PKG_HASH:=.*/PKG_HASH:=d82902400405cf0068574ef3dc1fe5f5926207543ba1ae6f8e7a1576351dcbdb/g' feeds/packages/libs/libseccomp/Makefile
 
 # wsdd2
-sed -i 's/PKG_SOURCE_DATE:=.*/PKG_SOURCE_DATE:=2022-04-25/g' feeds/packages/net/wsdd2//Makefile
-sed -i 's/PKG_SOURCE_VERSION:=.*/PKG_SOURCE_VERSION:=e37443ac4c757dbf14167ec3f754ebe88244ad4b/g' feeds/packages/net/wsdd2//Makefile
-sed -i 's/PKG_MIRROR_HASH:=.*/PKG_MIRROR_HASH:=45e0c37b8e275c8d088506f953aa25b30a31600ce67ccb4f60b1eda6688a5a8b/g' feeds/packages/net/wsdd2//Makefile
+sed -i 's/PKG_RELEASE:=.*/PKG_RELEASE:=1/g' feeds/packages/net/wsdd2//Makefile
+sed -i 's/PKG_SOURCE_DATE:=.*/PKG_SOURCE_DATE:=2023-12-21/g' feeds/packages/net/wsdd2//Makefile
+sed -i 's/PKG_SOURCE_VERSION:=.*/PKG_SOURCE_VERSION:=b676d8ac8f1aef792cb0761fb68a0a589ded3207/g' feeds/packages/net/wsdd2//Makefile
+sed -i 's/PKG_MIRROR_HASH:=.*/PKG_MIRROR_HASH:=ac817f63605508779ebebf612fcb7d594ff87d3050b788f240d1fea9fdbaa3a0/g' feeds/packages/net/wsdd2//Makefile
 
 # openvpn
 #sed -i 's/PKG_VERSION:=.*/PKG_VERSION:=2.5.6/g' feeds/packages/net/openvpn/Makefile
@@ -331,8 +332,8 @@ sed -i 's/PKG_MIRROR_HASH:=.*/PKG_MIRROR_HASH:=45e0c37b8e275c8d088506f953aa25b30
 # php8
 #rm -rf feeds/packages/lang/php8
 #svn co https://github.com/openwrt/packages/trunk/lang/php8 feeds/packages/lang/php8
-sed -i 's/PKG_VERSION:=.*/PKG_VERSION:=8.2.12/g' feeds/packages/lang/php8/Makefile
-sed -i 's/PKG_HASH:=.*/PKG_HASH:=e1526e400bce9f9f9f774603cfac6b72b5e8f89fa66971ebc3cc4e5964083132/g' feeds/packages/lang/php8/Makefile
+sed -i 's/PKG_VERSION:=.*/PKG_VERSION:=8.3.0/g' feeds/packages/lang/php8/Makefile
+sed -i 's/PKG_HASH:=.*/PKG_HASH:=1db84fec57125aa93638b51bb2b15103e12ac196e2f960f0d124275b2687ea54/g' feeds/packages/lang/php8/Makefile
 
 # python-docker
 sed -i 's/PKG_VERSION:=.*/PKG_VERSION:=6.1.3/g' feeds/packages/lang/python/python-docker/Makefile
@@ -571,17 +572,17 @@ cp -rf $GITHUB_WORKSPACE/general/at feeds/packages/utils
 #svn co https://github.com/openwrt/packages/trunk/net/nfs-kernel-server feeds/packages/net/nfs-kernel-server
 
 # alsa-utils
-sed -i 's/PKG_VERSION:=.*/PKG_VERSION:=1.2.9/g' feeds/packages/sound/alsa-utils/Makefile
-sed -i 's/PKG_HASH:=.*/PKG_HASH:=e7623d4525595f92e11ce25ee9a97f2040a14c6e4dcd027aa96e06cbce7817bd/g' feeds/packages/sound/alsa-utils/Makefile
+sed -i 's/PKG_VERSION:=.*/PKG_VERSION:=1.2.10/g' feeds/packages/sound/alsa-utils/Makefile
+sed -i 's/PKG_HASH:=.*/PKG_HASH:=104b62ec7f02a7ce16ca779f4815616df1cc21933503783a9107b5944f83063a/g' feeds/packages/sound/alsa-utils/Makefile
 sed -i 's/PKG_RELEASE:=.*/PKG_RELEASE:=1/g' feeds/packages/sound/alsa-utils/Makefile
 
 # alsa-ucm-conf
-sed -i 's/PKG_VERSION:=.*/PKG_VERSION:=1.2.9/g' feeds/packages/libs/alsa-ucm-conf/Makefile
-sed -i 's/PKG_HASH:=.*/PKG_HASH:=374f6833bfd77d0a4675e4aa2bfb79defe850e5a46a5d4542a45962f4b9e272a/g' feeds/packages/libs/alsa-ucm-conf/Makefile
+sed -i 's/PKG_VERSION:=.*/PKG_VERSION:=1.2.10/g' feeds/packages/libs/alsa-ucm-conf/Makefile
+sed -i 's/PKG_HASH:=.*/PKG_HASH:=9c21e3f01ff00baa758df17e867cd36e24ebb41a6bec49737e99105e16f2ae97/g' feeds/packages/libs/alsa-ucm-conf/Makefile
 
 # alsa-lib
-sed -i 's/PKG_VERSION:=.*/PKG_VERSION:=1.2.9/g' feeds/packages/libs/alsa-lib/Makefile
-sed -i 's/PKG_HASH:=.*/PKG_HASH:=dc9c643fdc4ccfd0572cc685858dd41e08afb583f30460b317e4188275f615b2/g' feeds/packages/libs/alsa-lib/Makefile
+sed -i 's/PKG_VERSION:=.*/PKG_VERSION:=1.2.10/g' feeds/packages/libs/alsa-lib/Makefile
+sed -i 's/PKG_HASH:=.*/PKG_HASH:=c86a45a846331b1b0aa6e6be100be2a7aef92efd405cf6bac7eef8174baa920e/g' feeds/packages/libs/alsa-lib/Makefile
 rm -f feeds/packages/libs/alsa-lib/patches/200-usleep.patch
 #wget -P feeds/packages/libs/alsa-lib/patches https://github.com/openwrt/packages/raw/master/libs/alsa-lib/patches/100-link_fix.patch
 wget -P feeds/packages/libs/alsa-lib/patches https://raw.githubusercontent.com/openwrt/packages/master/libs/alsa-lib/patches/200-usleep.patch
@@ -622,8 +623,8 @@ sed -i 's/PKG_HASH:=.*/PKG_HASH:=eb872b4f0e1f0ebe59c9f7bd8c506c4204893ba6a8492de
 #cp -rf $GITHUB_WORKSPACE/general/nano feeds/packages/utils
 
 # dnsproxy
-sed -i 's/PKG_VERSION:=.*/PKG_VERSION:=0.60.1/g' feeds/packages/net/dnsproxy/Makefile
-sed -i 's/PKG_HASH:=.*/PKG_HASH:=4af8d4b0fd5522c41b9370bd2fe102af8fcaa2b48bd6664d1252b55a6d2fe8d4/g' feeds/packages/net/dnsproxy/Makefile
+sed -i 's/PKG_VERSION:=.*/PKG_VERSION:=0.61.0/g' feeds/packages/net/dnsproxy/Makefile
+sed -i 's/PKG_HASH:=.*/PKG_HASH:=0b75b8d8139992e77df39492d41ca7060553f80a13d7e0436f3d8e1616146b92/g' feeds/packages/net/dnsproxy/Makefile
 
 # libnl-tiny
 #sed -i 's/PKG_RELEASE:=.*/PKG_RELEASE:=1/g' package/libs/libnl-tiny/Makefile
@@ -651,8 +652,10 @@ sed -i 's/PKG_HASH:=.*/PKG_HASH:=4af8d4b0fd5522c41b9370bd2fe102af8fcaa2b48bd6664
 #sed -i 's/PKG_HASH:=.*/PKG_HASH:=e3ee4fb5af4abc9335aed7a749c319917c652ac1af687ba40aabd04a6b71f1ca/g' feeds/packages/utils/exfatprogs/Makefile
 
 # shairport-sync
-sed -i 's/PKG_VERSION:=.*/PKG_VERSION:=4.1.1/g' feeds/packages/sound/shairport-sync/Makefile
-sed -i 's/PKG_HASH:=.*/PKG_HASH:=e55caad73dcd36341baf8947cf5e0923997370366d6caf3dd917b345089c4a20/g' feeds/packages/sound/shairport-sync/Makefile
+#sed -i 's/PKG_VERSION:=.*/PKG_VERSION:=4.3.2/g' feeds/packages/sound/shairport-sync/Makefile
+#sed -i 's/PKG_HASH:=.*/PKG_HASH:=dfb485c0603398032a00e51f84b874749bbf155b257adda3d270d5989de08bfd/g' feeds/packages/sound/shairport-sync/Makefile
+rm -rf feeds/packages/sound/shairport-sync
+cp -rf $GITHUB_WORKSPACE/general/shairport-sync feeds/packages/sound/shairport-sync
 
 # less
 sed -i 's/PKG_VERSION:=.*/PKG_VERSION:=643/g' feeds/packages/utils/less/Makefile
