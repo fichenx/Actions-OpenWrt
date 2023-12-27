@@ -575,6 +575,8 @@ cp -rf $GITHUB_WORKSPACE/general/at feeds/packages/utils
 sed -i 's/PKG_VERSION:=.*/PKG_VERSION:=1.2.10/g' feeds/packages/sound/alsa-utils/Makefile
 sed -i 's/PKG_HASH:=.*/PKG_HASH:=104b62ec7f02a7ce16ca779f4815616df1cc21933503783a9107b5944f83063a/g' feeds/packages/sound/alsa-utils/Makefile
 sed -i 's/PKG_RELEASE:=.*/PKG_RELEASE:=1/g' feeds/packages/sound/alsa-utils/Makefile
+wget -P feeds/packages/sound/alsa-utils/patches https://raw.githubusercontent.com/immortalwrt/packages/master/sound/alsa-utils/patches/010-nhlt-dmic-info-c-include-sys-types-h.patch
+wget -P feeds/packages/sound/alsa-utils/patches https://raw.githubusercontent.com/immortalwrt/packages/master/sound/alsa-utils/patches/020-topology-include-locale-h.patch
 
 # alsa-ucm-conf
 sed -i 's/PKG_VERSION:=.*/PKG_VERSION:=1.2.10/g' feeds/packages/libs/alsa-ucm-conf/Makefile
@@ -585,7 +587,9 @@ sed -i 's/PKG_VERSION:=.*/PKG_VERSION:=1.2.10/g' feeds/packages/libs/alsa-lib/Ma
 sed -i 's/PKG_HASH:=.*/PKG_HASH:=c86a45a846331b1b0aa6e6be100be2a7aef92efd405cf6bac7eef8174baa920e/g' feeds/packages/libs/alsa-lib/Makefile
 rm -f feeds/packages/libs/alsa-lib/patches/200-usleep.patch
 #wget -P feeds/packages/libs/alsa-lib/patches https://github.com/openwrt/packages/raw/master/libs/alsa-lib/patches/100-link_fix.patch
+wget -P feeds/packages/libs/alsa-lib/patches https://raw.githubusercontent.com/immortalwrt/packages/master/libs/alsa-lib/patches/010-global-h-move-STRING-macro-outside-PIC-ifdef-block.patch
 wget -P feeds/packages/libs/alsa-lib/patches https://raw.githubusercontent.com/openwrt/packages/master/libs/alsa-lib/patches/200-usleep.patch
+
 sed -i 's/PKG_RELEASE:=.*/PKG_RELEASE:=1/g' feeds/packages/libs/alsa-lib/Makefile
 
 # hdparm
