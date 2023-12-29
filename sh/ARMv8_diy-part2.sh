@@ -113,3 +113,9 @@ sed -i 's|luci-theme-bootstrap|luci-theme-design|g' feeds/luci/collections/luci/
 #还原golang版本为1.20
 #rm -rf feeds/packages/lang/golang
 #svn export https://github.com/coolsnowwolf/packages/trunk/lang/golang feeds/packages/lang/golang
+
+# 替换自带watchcat为https://github.com/gngpp/luci-app-watchcat-plus
+rm -rf feeds/packages/utils/watchcat
+svn co https://github.com/openwrt/packages/trunk/utils/watchcat feeds/packages/utils/watchcat
+git clone https://github.com/gngpp/luci-app-watchcat-plus.git package/luci-app-watchcat-plus
+
