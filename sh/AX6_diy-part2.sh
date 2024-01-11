@@ -115,7 +115,7 @@ sed -i 's|luci-theme-bootstrap|luci-theme-design|g' feeds/luci/collections/luci/
 
 # 替换自带watchcat为https://github.com/gngpp/luci-app-watchcat-plus
 rm -rf feeds/packages/utils/watchcat
-git_sparse_clone master "https://github.com/openwrt/packages" "watchcat" utils/watchcat && mv -n watchcat feeds/packages/utils/watchcat
+git_sparse_clone master "https://github.com/openwrt/packages" "watchcat" utils/watchcat && mv -n utils/watchcat feeds/packages/utils/watchcat
 git clone https://github.com/gngpp/luci-app-watchcat-plus.git package/luci-app-watchcat-plus
 
 ./scripts/feeds update -a
