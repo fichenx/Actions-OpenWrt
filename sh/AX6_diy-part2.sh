@@ -9,7 +9,17 @@
 # File name: diy-part2.sh
 # Description: OpenWrt DIY script part 2 (After Update feeds)
 #
-
+function git_sparse_clone() {
+  branch="$1" rurl="$2" localdir="$3" && shift 3
+  git clone -b $branch --depth 1 --filter=blob:none --sparse $rurl $localdir
+  cd $localdir
+  git sparse-checkout init --cone
+  git sparse-checkout set $@
+  mv -n $@ ../
+  cd ..
+  rm -rf $localdir
+  }
+  
 # Modify default IP
 #sed -i 's/192.168.1.1/192.168.50.5/g' package/base-files/files/bin/config_generate
 
@@ -105,7 +115,7 @@ sed -i 's|luci-theme-bootstrap|luci-theme-design|g' feeds/luci/collections/luci/
 
 # 替换自带watchcat为https://github.com/gngpp/luci-app-watchcat-plus
 rm -rf feeds/packages/utils/watchcat
-svn co https://github.com/openwrt/packages/trunk/utils/watchcat feeds/packages/utils/watchcat
+git_sparse_clone master "https://github.com/openwrt/packages" "watchcat" utils/watchcat && mv -n watchcat feeds/packages/utils/watchcat
 git clone https://github.com/gngpp/luci-app-watchcat-plus.git package/luci-app-watchcat-plus
 
 ./scripts/feeds update -a
