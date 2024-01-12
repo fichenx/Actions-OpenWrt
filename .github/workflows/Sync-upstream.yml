@@ -44,7 +44,7 @@ jobs:
     - name: Clone packages
       run: |
         cd $GITHUB_WORKSPACE
-        git clone -b ${{matrix.target}} https://github.com/fichenx/OpenWrt.git ${{matrix.target}}
+        git clone -b ${{matrix.target}} https://github.com/fichenx/Actions-OpenWrt.git ${{matrix.target}}
         cd ${{matrix.target}}
         #git rm -r --cache * >/dev/null 2>&1 &
         #rm -rf `find ./* -maxdepth 0 -type d ! -name "diy"` >/dev/null 2>&1
@@ -61,7 +61,7 @@ jobs:
         cd $GITHUB_WORKSPACE/${{matrix.target}}
         git add .
         git commit -am "update $(date +%Y-%m-%d" "%H:%M:%S)"
-        git push --quiet "https://${{ secrets.ACCESS_TOKEN }}@github.com/fichenx/OpenWrt.git" HEAD:${{matrix.target}}
+        git push --quiet "https://${{ secrets.ACCESS_TOKEN }}@github.com/fichenx/Actions-OpenWrt.git" HEAD:${{matrix.target}}
                
     - name: Delete workflow runs
       uses: Mattraks/delete-workflow-runs@main
