@@ -11,10 +11,12 @@
 #
 function git_sparse_clone() {
   branch="$1" rurl="$2" localdir="$3" && shift 3
-  git clone -b $branch --depth 1 --filter=blob:none --sparse $rurl $localdir
+  #git clone -b $branch --depth 1 --filter=blob:none --sparse $rurl $localdir
+  git clone -b $branch --single-branch --no-tags --depth 1 --filter=blob:none --no-checkout $rurl $localdir
   cd $localdir
-  git sparse-checkout init --cone
-  git sparse-checkout set $@
+  #git sparse-checkout init --cone
+  #git sparse-checkout set $@
+  git checkout $branch -- $@
   mv -n $@ ../
   cd ..
   rm -rf $localdir
