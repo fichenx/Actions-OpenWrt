@@ -112,10 +112,10 @@ git_sparse_clone master "https://github.com/kiddin9/openwrt-packages" "kiddin9" 
 git_sparse_clone master "https://github.com/Hyy2001X/AutoBuild-Packages" "Hyy2001X" luci-app-npc && mv -n luci-app-npc package/luci-app-npc
 
 #使用官方最新samba4
-#sed -i 's/PKG_VERSION:=.*/PKG_VERSION:=4.19.4/g' feeds/packages/net/samba4/Makefile
-#sed -i 's/PKG_HASH:=.*/PKG_HASH:=4026d93b866db198c8ca1685b0f5d52793f65c6e63cb364163af661fdff0968c/g' feeds/packages/net/samba4/Makefile
-rm -rf feeds/packages/net/samba4
-git_sparse_clone master "https://github.com/openwrt/packages" "temp" net/samba4 && mv -n samba4 package/samba4
+sed -i 's/PKG_VERSION:=.*/PKG_VERSION:=4.19.4/g' feeds/packages/net/samba4/Makefile
+sed -i 's/PKG_HASH:=.*/PKG_HASH:=4026d93b866db198c8ca1685b0f5d52793f65c6e63cb364163af661fdff0968c/g' feeds/packages/net/samba4/Makefile
+#rm -rf feeds/packages/net/samba4
+#git_sparse_clone master "https://github.com/openwrt/packages" "temp" net/samba4 && mv -n samba4 package/samba4
 
 #修改默认主题
 sed -i 's|set luci.main.mediaurlbase|#set luci.main.mediaurlbase|g' feeds/luci/themes/luci-theme-argon/root/etc/uci-defaults/30_luci-theme-argon
