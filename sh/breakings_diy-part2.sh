@@ -96,7 +96,7 @@ merge_package https://github.com/xiaorouji/openwrt-passwall-packages openwrt-pas
 merge_package https://github.com/xiaorouji/openwrt-passwall openwrt-passwall/luci-app-passwall
 merge_package https://github.com/xiaorouji/openwrt-passwall2 openwrt-passwall2/luci-app-passwall2
 #cp -rf $GITHUB_WORKSPACE/general/luci-app-passwall package/luci-app-passwall
-merge_package https://github.com/xiaorouji/openwrt-passwall-packages openwrt-passwall-packages/shadowsocks-rust
+#merge_package https://github.com/xiaorouji/openwrt-passwall-packages openwrt-passwall-packages/shadowsocks-rust
 #svn co https://github.com/fw876/helloworld/trunk/shadowsocks-rust package/shadowsocks-rust
 #svn co https://github.com/xiaorouji/openwrt-passwall-packages/trunk/xray-core package/xray-core
 #svn co https://github.com/xiaorouji/openwrt-passwall-packages/trunk/xray-plugin package/xray-plugin
@@ -245,11 +245,11 @@ rm -rf feeds/packages/lang/golang
 cp -rf $GITHUB_WORKSPACE/general/golang feeds/packages/lang/golang
 
 # curl
-#sed -i 's/PKG_VERSION:=.*/PKG_VERSION:=8.4.0/g' feeds/packages/net/curl/Makefile
-#sed -i 's/PKG_HASH:=.*/PKG_HASH:=16c62a9c4af0f703d28bda6d7bbf37ba47055ad3414d70dec63e2e6336f2a82d/g' feeds/packages/net/curl/Makefile
-#sed -i 's/PKG_RELEASE:=.*/PKG_RELEASE:=1/g' feeds/packages/net/curl/Makefile
-rm -rf feeds/packages/net/curl
-merge_package https://github.com/openwrt/packages packages/net/curl
+sed -i 's/PKG_VERSION:=.*/PKG_VERSION:=8.6.0/g' feeds/packages/net/curl/Makefile
+sed -i 's/PKG_HASH:=.*/PKG_HASH:=b4785f2d8877fa92c0e45d7155cf8cc6750dbda961f4b1a45bcbec990cf2fa9b/g' feeds/packages/net/curl/Makefile
+sed -i 's/PKG_RELEASE:=.*/PKG_RELEASE:=1/g' feeds/packages/net/curl/Makefile
+#rm -rf feeds/packages/net/curl
+#merge_package https://github.com/openwrt/packages packages/net/curl
 
 # Qt5 -qtbase
 sed -i "s/PKG_BUGFIX:=.*/PKG_BUGFIX:=12/g" feeds/packages/libs/qtbase/Makefile
@@ -298,8 +298,8 @@ rm -rf feeds/packages/utils/dockerd
 cp -rf $GITHUB_WORKSPACE/general/dockerd feeds/packages/utils/dockerd
 
 # docker-compose
-sed -i 's/PKG_VERSION:=.*/PKG_VERSION:=2.24.4/g' feeds/packages/utils/docker-compose/Makefile
-sed -i 's/PKG_HASH:=.*/PKG_HASH:=a276cce106f65c139cc20530f5d32b546d86cccebca9fe4880246a814caa8034/g' feeds/packages/utils/docker-compose/Makefile
+sed -i 's/PKG_VERSION:=.*/PKG_VERSION:=2.24.5/g' feeds/packages/utils/docker-compose/Makefile
+sed -i 's/PKG_HASH:=.*/PKG_HASH:=160c575658cdd65836ea3138bb6337f75877df6cbad8e2d4bf4ddcf850cee382/g' feeds/packages/utils/docker-compose/Makefile
 
 # containerd
 #sed -i 's/PKG_VERSION:=.*/PKG_VERSION:=1.5.11/g' feeds/packages/utils/containerd/Makefile
@@ -308,9 +308,9 @@ sed -i 's/PKG_HASH:=.*/PKG_HASH:=a276cce106f65c139cc20530f5d32b546d86cccebca9fe4
 cp -f $GITHUB_WORKSPACE/general/containerd/Makefile feeds/packages/utils/containerd
 
 # runc
-sed -i 's/PKG_VERSION:=.*/PKG_VERSION:=1.1.9/g' feeds/packages/utils/runc/Makefile
-sed -i 's/PKG_HASH:=.*/PKG_HASH:=509993674481aad7e14aedfb280e0eb160f3a34c0b77e2e98c4b3c0b1df76894/g' feeds/packages/utils/runc/Makefile
-sed -i 's/PKG_SOURCE_VERSION:=.*/PKG_SOURCE_VERSION:=ccaecfcbc907d70a7aa870a6650887b901b25b82/g' feeds/packages/utils/runc/Makefile
+sed -i 's/PKG_VERSION:=.*/PKG_VERSION:=1.1.11/g' feeds/packages/utils/runc/Makefile
+sed -i 's/PKG_HASH:=.*/PKG_HASH:=129ad7cd470e4bdc82cdd3d5f0aa93e43674bf8ea115da2b42a27361885fe3ee/g' feeds/packages/utils/runc/Makefile
+sed -i 's/PKG_SOURCE_VERSION:=.*/PKG_SOURCE_VERSION:=4bccb38cc9cf198d52bebf2b3a90cd14e7af8c06/g' feeds/packages/utils/runc/Makefile
 #sed -i '12d' feeds/packages/utils/runc/Makefile
 
 # bsdtar
@@ -952,9 +952,9 @@ sed -i 's/PKG_HASH:=.*/PKG_HASH:=2a499607df669e40258e53d0ade8035ba4ec0175244869d
 #sed -i 's/PKG_HASH:=.*/PKG_HASH:=47ac6e60271aa0196e65472d02d019556dc7c6d09df3b65df2c1ab6866348e3b/g' feeds/packages/net/lighttpd/Makefile
 
 # xz
-sed -i 's/PKG_VERSION:=.*/PKG_VERSION:=5.4.5/g' feeds/packages/utils/xz/Makefile
+sed -i 's/PKG_VERSION:=.*/PKG_VERSION:=5.4.6/g' feeds/packages/utils/xz/Makefile
 sed -i 's/PKG_RELEASE:=.*/PKG_RELEASE:=1/g' feeds/packages/utils/xz/Makefile
-sed -i 's/PKG_HASH:=.*/PKG_HASH:=8ccf5fff868c006f29522e386fb4c6a1b66463fbca65a4cfc3c4bd596e895e79/g' feeds/packages/utils/xz/Makefile
+sed -i 's/PKG_HASH:=.*/PKG_HASH:=913851b274e8e1d31781ec949f1c23e8dbcf0ecf6e73a2436dc21769dd3e6f49/g' feeds/packages/utils/xz/Makefile
 
 # vim
 rm -rf feeds/packages/utils/vim
@@ -1032,6 +1032,9 @@ cp -rf $GITHUB_WORKSPACE/general/inih feeds/packages/libs
 # xfsprogs
 rm -rf feeds/packages/utils/xfsprogs
 cp -rf $GITHUB_WORKSPACE/general/xfsprogs feeds/packages/utils
+
+# shadowsocks-rust
+cp -rf $GITHUB_WORKSPACE/general/shadowsocks-rust package/shadowsocks-rust
 
 # 晶晨宝盒
 sed -i "s|https.*/amlogic-s9xxx-openwrt|https://github.com/breakings/OpenWrt|g" package/custom/luci-app-amlogic/luci-app-amlogic/root/etc/config/amlogic
