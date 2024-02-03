@@ -119,6 +119,10 @@ rm -rf feeds/packages/lang/perl
 git_sparse_clone master https://github.com/openwrt/packages temp net/samba4 && mv -n samba4 feeds/packages/net/samba4
 git_sparse_clone master https://github.com/openwrt/packages temp lang/perl && mv -n perl feeds/packages/lang/perl
 
+#更换msd_lite为最新版（immortalwrt源）
+rm -rf feeds/packages/net/msd_lite
+git_sparse_clone master https://github.com/immortalwrt/packages immortalwrt net/msd_lite && mv -n msd_lite feeds/packages/net/msd_lite
+
 #修改默认主题
 sed -i 's|set luci.main.mediaurlbase|#set luci.main.mediaurlbase|g' feeds/luci/themes/luci-theme-argon/root/etc/uci-defaults/30_luci-theme-argon
 sed -i 's|set luci.main.mediaurlbase|#set luci.main.mediaurlbase|g' feeds/luci/themes/luci-theme-argon-mod/root/etc/uci-defaults/90_luci-theme-argon

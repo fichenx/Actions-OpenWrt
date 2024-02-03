@@ -120,5 +120,9 @@ rm -rf feeds/packages/utils/watchcat
 git_sparse_clone master "https://github.com/openwrt/packages" "temp" utils/watchcat && mv -n watchcat feeds/packages/utils/watchcat
 git clone https://github.com/gngpp/luci-app-watchcat-plus.git package/luci-app-watchcat-plus
 
+#更换msd_lite为最新版（immortalwrt源）
+rm -rf feeds/packages/net/msd_lite
+git_sparse_clone master https://github.com/immortalwrt/packages immortalwrt net/msd_lite && mv -n msd_lite feeds/packages/net/msd_lite
+
 ./scripts/feeds update -a
 ./scripts/feeds install -a
