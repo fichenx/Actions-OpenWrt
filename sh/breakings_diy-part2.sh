@@ -515,9 +515,9 @@ sed -i 's/PKG_HASH:=.*/PKG_HASH:=239d7d4458afcb28a692cdd298d87542235f4ca8d36d03a
 #sed -i 's/setuptools-scm==4.1.2 --hash=sha256:a8994582e716ec690f33fec70cca0f85bd23ec974e3f783233e4879090a7faa8/setuptools-scm==6.0.1 --hash=sha256:d1925a69cb07e9b29416a275b9fadb009a23c148ace905b2fb220649a6c18e92/g' feeds/packages/lang/python/host-pip-requirements/setuptools-scm.txt
 
 # gzip
-sed -i 's/PKG_VERSION:=.*/PKG_VERSION:=1.12/g' feeds/packages/utils/gzip/Makefile
+sed -i 's/PKG_VERSION:=.*/PKG_VERSION:=1.13/g' feeds/packages/utils/gzip/Makefile
 sed -i 's/PKG_RELEASE:=.*/PKG_RELEASE:=1/g' feeds/packages/utils/gzip/Makefile
-sed -i 's/PKG_HASH:=.*/PKG_HASH:=ce5e03e519f637e1f814011ace35c4f87b33c0bbabeec35baf5fbd3479e91956/g' feeds/packages/utils/gzip/Makefile
+sed -i 's/PKG_HASH:=.*/PKG_HASH:=7454eb6935db17c6655576c2e1b0fabefd38b4d0936e0f87f48cd062ce91a057/g' feeds/packages/utils/gzip/Makefile
 
 # libev
 #sed -i 's/PKG_VERSION:=.*/PKG_VERSION:=4.33/g' feeds/packages/libs/libev/Makefile
@@ -555,8 +555,8 @@ sed -i 's/PKG_HASH:=.*/PKG_HASH:=15f54bb72048eb105f8c0e936a04b899e74c3db9a19bbc1
 #svn co https://github.com/openwrt/packages/trunk/net/softethervpn5 feeds/packages/net/softethervpn5
 
 # hwdata
-sed -i 's/PKG_VERSION:=.*/PKG_VERSION:=0.373/g' feeds/packages/utils/hwdata/Makefile
-sed -i 's/PKG_HASH:=.*/PKG_HASH:=0db28dc635d5059ad23d068d2e56ef5dc540f95bc813ea5a3c0f5d63b03d20d6/g' feeds/packages/utils/hwdata/Makefile
+sed -i 's/PKG_VERSION:=.*/PKG_VERSION:=0.379/g' feeds/packages/utils/hwdata/Makefile
+sed -i 's/PKG_HASH:=.*/PKG_HASH:=b98ef646d530d5fd3afa3180efbf7c8e22d3da0088f5836f41ee25380d87b092/g' feeds/packages/utils/hwdata/Makefile
 
 # gawk
 sed -i 's/PKG_VERSION:=.*/PKG_VERSION:=5.2.2/g' feeds/packages/utils/gawk/Makefile
