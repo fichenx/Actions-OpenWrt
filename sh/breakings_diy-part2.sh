@@ -601,12 +601,11 @@ sed -i 's/PKG_VERSION:=.*/PKG_VERSION:=1.2.11/g' feeds/packages/libs/alsa-ucm-co
 sed -i 's/PKG_HASH:=.*/PKG_HASH:=387c01cf30e2a1676d7b8f72b2681cf219abca70dd1ec2a9e33add5bf3feae81/g' feeds/packages/libs/alsa-ucm-conf/Makefile
 
 # alsa-lib
-sed -i 's/PKG_VERSION:=.*/PKG_VERSION:=1.2.11/g' feeds/packages/libs/alsa-lib/Makefile
-sed -i 's/PKG_HASH:=.*/PKG_HASH:=9f3f2f69b995f9ad37359072fbc69a3a88bfba081fc83e9be30e14662795bb4d/g' feeds/packages/libs/alsa-lib/Makefile
-rm -f feeds/packages/libs/alsa-lib/patches
-wget -P feeds/packages/libs/alsa-lib/patches https://github.com/openwrt/packages/raw/master/libs/alsa-lib/patches/100-link_fix.patch
-wget -P feeds/packages/libs/alsa-lib/patches https://raw.githubusercontent.com/openwrt/packages/master/libs/alsa-lib/patches/200-usleep.patch
-sed -i 's/PKG_RELEASE:=.*/PKG_RELEASE:=1/g' feeds/packages/libs/alsa-lib/Makefile
+#sed -i 's/PKG_VERSION:=.*/PKG_VERSION:=1.2.11/g' feeds/packages/libs/alsa-lib/Makefile
+#sed -i 's/PKG_HASH:=.*/PKG_HASH:=9f3f2f69b995f9ad37359072fbc69a3a88bfba081fc83e9be30e14662795bb4d/g' feeds/packages/libs/alsa-lib/Makefile
+#sed -i 's/PKG_RELEASE:=.*/PKG_RELEASE:=1/g' feeds/packages/libs/alsa-lib/Makefile
+rm -rf feeds/packages/libs/alsa-lib
+cp -rf $GITHUB_WORKSPACE/general/alsa-lib feeds/packages/libs
 
 # hdparm
 #sed -i 's/PKG_VERSION:=.*/PKG_VERSION:=9.65/g' feeds/packages/utils/hdparm/Makefile
