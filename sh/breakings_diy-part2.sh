@@ -884,7 +884,7 @@ sed -i 's/PKG_VERSION:=.*/PKG_VERSION:=2.8.6/g' feeds/packages/net/haproxy/Makef
 sed -i 's/PKG_RELEASE:=.*/PKG_RELEASE:=1/g' feeds/packages/net/haproxy/Makefile
 sed -i 's/PKG_HASH:=.*/PKG_HASH:=9fd034368be66880bd86a300c13dc03bc13521ee2654880dddf192785aa28d51/g' feeds/packages/net/haproxy/Makefile
 sed -i 's/BASE_TAG:=.*/BASE_TAG=v2.8.6/g' feeds/packages/net/haproxy/get-latest-patches.sh
-sed -i 's/PKG_SOURCE_URL:=.*/PKG_SOURCE_URL:=https://www.haproxy.org/download/2.8/src/g' feeds/packages/net/haproxy/Makefile
+sed -i 's|PKG_SOURCE_URL:=.*|PKG_SOURCE_URL:=https://www.haproxy.org/download/2.8/src|g' feeds/packages/net/haproxy/Makefile
 
 # perl
 rm -rf feeds/packages/lang/perl
