@@ -62,6 +62,8 @@ sed -i "s/hostname='ImmortalWrt'/hostname='Redmi-AX6'/g" package/base-files/file
 
 #10.为bypass添加redsocks2依赖。
 #svn co https://github.com/fw876/helloworld/trunk/redsocks2 package/redsocks2
+
+#修复 shadowsocksr-libev libopenssl-legacy 依赖问题
 sed -i 's/ +libopenssl-legacy//g' feeds/fichenx/shadowsocksr-libev/Makefile
 
 #####design主题导航栏设置######
