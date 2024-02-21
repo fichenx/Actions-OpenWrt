@@ -3,10 +3,10 @@
 <div align="center">
 <h1>Actions-OpenWrt(多设备固件云编译)</h1>
 
-[![LICENSE](https://img.shields.io/github/license/mashape/apistatus.svg?style=flat-square&label=LICENSE)](https://github.com/fichenx/OpenWrt/blob/main/LICENSE)
-![GitHub Stars](https://img.shields.io/github/stars/fichenx/OpenWrt.svg?style=flat-square&label=Stars&logo=github)
-![GitHub Forks](https://img.shields.io/github/forks/fichenx/OpenWrt.svg?style=flat-square&label=Forks&logo=github)
-![GitHub download](https://img.shields.io/github/downloads/fichenx/OpenWrt/total.svg?style=flat-square&label=Download&logo=github)
+[![LICENSE](https://img.shields.io/github/license/mashape/apistatus.svg?style=flat-square&label=LICENSE)](https://github.com/fichenx/Actions-OpenWrt/blob/main/LICENSE)
+![GitHub Stars](https://img.shields.io/github/stars/fichenx/Actions-OpenWrt.svg?style=flat-square&label=Stars&logo=github)
+![GitHub Forks](https://img.shields.io/github/forks/fichenx/Actions-OpenWrt.svg?style=flat-square&label=Forks&logo=github)
+![GitHub download](https://img.shields.io/github/downloads/fichenx/Actions-OpenWrt/total.svg?style=flat-square&label=Download&logo=github)
 </div>
 
 ## 项目说明 [![](https://img.shields.io/badge/-项目基本介绍-FFFFFF.svg)](#项目说明-)
