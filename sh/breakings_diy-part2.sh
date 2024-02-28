@@ -209,8 +209,8 @@ merge_package https://github.com/openwrt/packages packages/net/nginx-util
 # samba4
 #sed -i 's/PKG_VERSION:=.*/PKG_VERSION:=4.14.13/g' feeds/packages/net/samba4/Makefile
 #sed -i 's/PKG_HASH:=.*/PKG_HASH:=e1df792818a17d8d21faf33580d32939214694c92b84fb499464210d86a7ff75/g' feeds/packages/net/samba4/Makefile
-rm -rf feeds/packages/net/samba4
-merge_package https://github.com/openwrt/packages packages/net/samba4
+#rm -rf feeds/packages/net/samba4
+#merge_package https://github.com/openwrt/packages packages/net/samba4
 
 # ffmpeg
 #sed -i 's/PKG_VERSION:=.*/PKG_VERSION:=5.1.4/g' feeds/packages/multimedia/ffmpeg/Makefile
@@ -641,8 +641,8 @@ sed -i 's/PKG_HASH:=.*/PKG_HASH:=eb872b4f0e1f0ebe59c9f7bd8c506c4204893ba6a8492de
 #cp -rf $GITHUB_WORKSPACE/general/nano feeds/packages/utils
 
 # dnsproxy
-sed -i 's/PKG_VERSION:=.*/PKG_VERSION:=0.65.0/g' feeds/packages/net/dnsproxy/Makefile
-sed -i 's/PKG_HASH:=.*/PKG_HASH:=12720de6f1540aee7d3c08b6b32e602d05126a8c55f251bbb94d379306608241/g' feeds/packages/net/dnsproxy/Makefile
+sed -i 's/PKG_VERSION:=.*/PKG_VERSION:=0.65.2/g' feeds/packages/net/dnsproxy/Makefile
+sed -i 's/PKG_HASH:=.*/PKG_HASH:=7c863404075daf76f1c6b291cc473670cbc45651af8f409e488c10a47fb73117/g' feeds/packages/net/dnsproxy/Makefile
 
 # libnl-tiny
 #sed -i 's/PKG_RELEASE:=.*/PKG_RELEASE:=1/g' package/libs/libnl-tiny/Makefile
@@ -1047,6 +1047,9 @@ cp -rf $GITHUB_WORKSPACE/general/jq feeds/packages/utils
 
 # sing-box
 cp -rf $GITHUB_WORKSPACE/general/sing-box package/sing-box
+
+# v2dta
+sed -i '/CGO_ENABLED=0/{N;d;}' feeds/packages/utils/v2dat/Makefile
 
 ./scripts/feeds update -a
 ./scripts/feeds install -a
