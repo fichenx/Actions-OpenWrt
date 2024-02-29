@@ -127,5 +127,9 @@ git clone https://github.com/gngpp/luci-app-watchcat-plus.git package/luci-app-w
 rm -rf feeds/packages/net/msd_lite
 git_sparse_clone master https://github.com/immortalwrt/packages immortalwrt net/msd_lite && mv -n msd_lite feeds/packages/net/msd_lite
 
+#golang
+rm -rf feeds/packages/lang/golang
+cp -rf $GITHUB_WORKSPACE/general/golang feeds/packages/lang/golang
+
 ./scripts/feeds update -a
 ./scripts/feeds install -a
