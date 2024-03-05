@@ -48,7 +48,13 @@ rm -rf package/custom; mkdir package/custom
  #rm -rf feeds/packages/utils/gnupg
  #rm -rf feeds/packages/lang/python/python3
  #rm -rf package/lean/n2n_v2
- 
+
+# BTF: fix failed to validate module
+# config/Config-kernel.in patch
+curl -s https://raw.githubusercontent.com/sbwml/r4s_build_script/master/openwrt/patch/generic/0001-kernel-add-MODULE_ALLOW_BTF_MISMATCH-option.patch | patch -p1
+patch -p1 < $GITHUB_WORKSPACE/PATCH/add-xdp-diag.patch
+#atch -p1 < $GITHUB_WORKSPACE/PATCH/lede_add_immotalwrt_download_method.patch
+
 # ARM64: Add CPU model name in proc cpuinfo
 #wget -P target/linux/generic/pending-5.4 https://github.com/immortalwrt/immortalwrt/raw/master/target/linux/generic/hack-5.4/312-arm64-cpuinfo-Add-model-name-in-proc-cpuinfo-for-64bit-ta.patch
 # autocore
@@ -115,7 +121,7 @@ merge_package https://github.com/fw876/helloworld helloworld/lua-neturl
 #svn co https://github.com/fw876/helloworld/trunk/tcping package/tcping
 merge_package https://github.com/xiaorouji/openwrt-passwall-packages openwrt-passwall-packages/v2ray-core
 merge_package https://github.com/xiaorouji/openwrt-passwall-packages openwrt-passwall-packages/v2ray-plugin
-#svn co https://github.com/xiaorouji/openwrt-passwall-packages/trunk/v2ray-geodata package/v2ray-geodata
+merge_package https://github.com/xiaorouji/openwrt-passwall-packages openwrt-passwall-packages/v2ray-geodata
 #svn co https://github.com/fw876/helloworld/trunk/v2ray-plugin package/v2ray-plugin
 merge_package https://github.com/xiaorouji/openwrt-passwall-packages openwrt-passwall-packages/simple-obfs
 #svn co https://github.com/xiaorouji/openwrt-passwall-packages/trunk/kcptun package/kcptun
@@ -127,7 +133,7 @@ merge_package https://github.com/xiaorouji/openwrt-passwall-packages openwrt-pas
 merge_package https://github.com/fw876/helloworld helloworld/shadow-tls
 merge_package https://github.com/fw876/helloworld helloworld/tuic-client
 merge_package https://github.com/fw876/helloworld helloworld/dns2tcp
-merge_package https://github.com/fw876/helloworld helloworld/v2ray-geodata
+#merge_package https://github.com/fw876/helloworld helloworld/v2ray-geodata
 #svn co https://github.com/fw876/helloworld/trunk/xray-core package/xray-core
 #svn co https://github.com/fw876/helloworld/trunk/xray-plugin package/xray-plugin
 #merge_package https://github.com/kenzok8/openwrt-packages openwrt-packages/luci-app-gost
@@ -1017,8 +1023,8 @@ merge_package https://github.com/openwrt/packages packages/net/nqptp
 # libnghttp3
 merge_package https://github.com/openwrt/packages packages/libs/nghttp3
 
-# libngtcp2
-merge_package https://github.com/openwrt/packages packages/libs/libngtcp2
+# ngtcp2
+merge_package https://github.com/openwrt/packages packages/libs/ngtcp2
 
 # cryptsetup
 sed -i 's/PKG_VERSION:=.*/PKG_VERSION:=2.6.1/g' feeds/packages/utils/cryptsetup/Makefile
@@ -1050,6 +1056,10 @@ cp -rf $GITHUB_WORKSPACE/general/sing-box package/sing-box
 
 # v2dta
 sed -i '/CGO_ENABLED=0/{N;d;}' feeds/packages/utils/v2dat/Makefile
+
+# dae
+cp -rf $GITHUB_WORKSPACE/general/dae package/dae
+cp -rf $GITHUB_WORKSPACE/general/luci-app-dae package/luci-app-dae
 
 ./scripts/feeds update -a
 ./scripts/feeds install -a
