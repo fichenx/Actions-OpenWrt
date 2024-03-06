@@ -44,7 +44,7 @@ rm -rf package/custom; mkdir package/custom
  #rm -rf package/lean/luci-app-cpufreq
  #rm include/feeds.mk
  #wget -P include https://raw.githubusercontent.com/openwrt/openwrt/master/include/feeds.mk
- #rm -rf package/libs/elfutils
+ rm -rf package/libs/elfutils
  #rm -rf feeds/packages/utils/gnupg
  #rm -rf feeds/packages/lang/python/python3
  #rm -rf package/lean/n2n_v2
@@ -82,7 +82,7 @@ merge_package https://github.com/ophub/luci-app-amlogic luci-app-amlogic
 #svn co https://github.com/breakings/OpenWrt/trunk/general/luci-app-cpufreq package/luci-app-cpufreq
 #svn co https://github.com/breakings/OpenWrt/trunk/general/ntfs3 package/lean/ntfs3
 #svn co https://github.com/Lienol/openwrt-package/trunk/luci-app-socat package/luci-app-socat
-#svn co https://github.com/neheb/openwrt/branches/elf/package/libs/elfutils package/libs/elfutils
+merge_package https://github.com/openwrt/openwrt.git openwrt/package/libs/elfutils
 #svn co https://github.com/breakings/OpenWrt/trunk/general/gnupg feeds/packages/utils/gnupg
 #svn co https://github.com/breakings/OpenWrt/trunk/general/n2n_v2 package/lean/n2n_v2
 
@@ -175,6 +175,7 @@ merge_package https://github.com/sbwml/luci-app-mosdns luci-app-mosdns/mosdns
 #添加ddnsto
 #svn co https://github.com/linkease/ddnsto-openwrt/trunk/ddnsto package/ddnsto
 #svn co https://github.com/linkease/ddnsto-openwrt/trunk/luci-app-ddnsto package/luci-app-ddnsto
+git clone https://github.com/sirpdboy/luci-app-ddns-go.git package/ddns-go
 #添加udp2raw
 #git clone https://github.com/sensec/openwrt-udp2raw package/openwrt-udp2raw
 merge_package https://github.com/sensec/openwrt-udp2raw openwrt-udp2raw
@@ -194,6 +195,8 @@ merge_package https://github.com/Leo-Jo-My/luci-theme-opentomato luci-theme-open
 #svn co https://github.com/kevin-morgan/luci-theme-argon-dark/trunk package/luci-theme-argon-dark
 #svn co https://github.com/openwrt/luci/trunk/themes/luci-theme-openwrt-2020 package/luci-theme-openwrt-2020
 merge_package https://github.com/thinktip/luci-theme-neobird luci-theme-neobird
+rm -rf feeds/luci/themes/luci-theme-argon
+git clone -b 18.06 https://github.com/jerrykuku/luci-theme-argon.git feeds/luci/themes/luci-theme-argon
 
 # nginx-util
 rm -rf feeds/packages/net/nginx-util
@@ -215,8 +218,14 @@ merge_package https://github.com/openwrt/packages packages/net/nginx-util
 # samba4
 #sed -i 's/PKG_VERSION:=.*/PKG_VERSION:=4.14.13/g' feeds/packages/net/samba4/Makefile
 #sed -i 's/PKG_HASH:=.*/PKG_HASH:=e1df792818a17d8d21faf33580d32939214694c92b84fb499464210d86a7ff75/g' feeds/packages/net/samba4/Makefile
-#rm -rf feeds/packages/net/samba4
+rm -rf feeds/packages/net/samba4
 #merge_package https://github.com/openwrt/packages packages/net/samba4
+git clone https://github.com/sbwml/feeds_packages_net_samba4 feeds/packages/net/samba4
+# enable multi-channel
+sed -i '/workgroup/a \\n\t## enable multi-channel' feeds/packages/net/samba4/files/smb.conf.template
+sed -i '/enable multi-channel/a \\tserver multi channel support = yes' feeds/packages/net/samba4/files/smb.conf.template
+sed -i 's/#aio read size = 0/aio read size = 1/g' feeds/packages/net/samba4/files/smb.conf.template
+sed -i 's/#aio write size = 0/aio write size = 1/g' feeds/packages/net/samba4/files/smb.conf.template
 
 # ffmpeg
 #sed -i 's/PKG_VERSION:=.*/PKG_VERSION:=5.1.4/g' feeds/packages/multimedia/ffmpeg/Makefile
@@ -225,8 +234,8 @@ rm -rf feeds/packages/multimedia/ffmpeg
 cp -rf $GITHUB_WORKSPACE/general/ffmpeg feeds/packages/multimedia
 
 # btrfs-progs
-sed -i 's/PKG_VERSION:=.*/PKG_VERSION:=6.7/g' feeds/packages/utils/btrfs-progs/Makefile
-sed -i 's/PKG_HASH:=.*/PKG_HASH:=c27f755185b9f2dab31f42e8a303d36bed2a3f3341cc6d75ee68a0a650a24767/g' feeds/packages/utils/btrfs-progs/Makefile
+sed -i 's/PKG_VERSION:=.*/PKG_VERSION:=6.7.1/g' feeds/packages/utils/btrfs-progs/Makefile
+sed -i 's/PKG_HASH:=.*/PKG_HASH:=24dc7b974f0a57ba0eca80f97440b840dfa85b0f1cb2c01bdfd97659a480b200/g' feeds/packages/utils/btrfs-progs/Makefile
 rm -rf feeds/packages/utils/btrfs-progs/patches
 #sed -i '68i\	--disable-libudev \\' feeds/packages/utils/btrfs-progs/Makefile
 
@@ -999,7 +1008,8 @@ rm -f feeds/packages/utils/ttyd/patches/090*.patch
 
 # libpfring
 rm -rf feeds/packages/libs/libpfring
-merge_package https://github.com/openwrt/packages packages/libs/libpfring
+#merge_package https://github.com/openwrt/packages packages/libs/libpfring
+cp -rf $GITHUB_WORKSPACE/general/libpfring feeds/packages/libs/libpfring
 
 # alist
 merge_package https://github.com/sbwml/luci-app-alist luci-app-alist/alist
@@ -1060,6 +1070,11 @@ sed -i '/CGO_ENABLED=0/{N;d;}' feeds/packages/utils/v2dat/Makefile
 # dae
 cp -rf $GITHUB_WORKSPACE/general/dae package/dae
 cp -rf $GITHUB_WORKSPACE/general/luci-app-dae package/luci-app-dae
+
+# Optimization level -Ofast
+if [ "$platform" = "x86_64" ]; then
+    curl -s https://raw.githubusercontent.com/sbwml/r4s_build_script/master/openwrt/patch/target-modify_for_x86_64.patch | patch -p1
+fi
 
 ./scripts/feeds update -a
 ./scripts/feeds install -a
