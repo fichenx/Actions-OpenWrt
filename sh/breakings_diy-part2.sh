@@ -1078,6 +1078,10 @@ sed -i '/CGO_ENABLED=0/{N;d;}' feeds/packages/utils/v2dat/Makefile
 cp -rf $GITHUB_WORKSPACE/general/dae package/dae
 cp -rf $GITHUB_WORKSPACE/general/luci-app-dae package/luci-app-dae
 
+# dnsmasq
+rm -rf package/network/services/dnsmasq
+cp -rf $GITHUB_WORKSPACE/general/dnsmasq package/network/services
+
 # Optimization level -Ofast
 if [ "$platform" = "x86_64" ]; then
     curl -s https://raw.githubusercontent.com/sbwml/r4s_build_script/master/openwrt/patch/target-modify_for_x86_64.patch | patch -p1
