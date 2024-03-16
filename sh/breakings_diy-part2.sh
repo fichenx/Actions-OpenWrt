@@ -912,7 +912,6 @@ merge_package https://github.com/openwrt/openwrt openwrt/package/libs/zlib
 sed -i 's/PKG_VERSION:=.*/PKG_VERSION:=1.3/g' tools/zlib/Makefile
 sed -i 's/PKG_HASH:=.*/PKG_HASH:=8a9ba2898e1d0d774eca6ba5b4627a11e5588ba85c8851336eb38de4683050a7/g' tools/zlib/Makefile
 
-
 # tailscale
 #sed -i 's/PKG_VERSION:=.*/PKG_VERSION:=1.38.1/g' feeds/packages/net/tailscale/Makefile
 #sed -i 's/PKG_HASH:=.*/PKG_HASH:=395ba90c80ae0b5a6e3a25f19709ca83a6be015ed11efe4d73ef5d6d714d273d/g' feeds/packages/net/tailscale/Makefile
@@ -1079,13 +1078,16 @@ cp -rf $GITHUB_WORKSPACE/general/dae package/dae
 cp -rf $GITHUB_WORKSPACE/general/luci-app-dae package/luci-app-dae
 
 # dnsmasq
-rm -rf package/network/services/dnsmasq
-cp -rf $GITHUB_WORKSPACE/general/dnsmasq package/network/services
+#rm -rf package/network/services/dnsmasq
+#cp -rf $GITHUB_WORKSPACE/general/dnsmasq package/network/services
 
 # Optimization level -Ofast
 if [ "$platform" = "x86_64" ]; then
     curl -s https://raw.githubusercontent.com/sbwml/r4s_build_script/master/openwrt/patch/target-modify_for_x86_64.patch | patch -p1
 fi
+
+# x86 - disable intel_pstate
+sed -i 's/noinitrd/noinitrd intel_pstate=disable/g' target/linux/x86/image/grub-efi.cfg
 
 ./scripts/feeds update -a
 ./scripts/feeds install -a
