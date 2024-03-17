@@ -312,8 +312,8 @@ rm -rf feeds/packages/utils/dockerd
 cp -rf $GITHUB_WORKSPACE/general/dockerd feeds/packages/utils/dockerd
 
 # docker-compose
-sed -i 's/PKG_VERSION:=.*/PKG_VERSION:=2.24.7/g' feeds/packages/utils/docker-compose/Makefile
-sed -i 's/PKG_HASH:=.*/PKG_HASH:=f671c42b2189372e2128a0abf218c04cc92693ef8960c3d26aab60bf7ca4febf/g' feeds/packages/utils/docker-compose/Makefile
+sed -i 's/PKG_VERSION:=.*/PKG_VERSION:=2.25.0/g' feeds/packages/utils/docker-compose/Makefile
+sed -i 's/PKG_HASH:=.*/PKG_HASH:=9c8185f241911f5d8bdb25d8c735fb1f37f3573c17e25d5b1a942df2e78e49ea/g' feeds/packages/utils/docker-compose/Makefile
 
 # containerd
 #sed -i 's/PKG_VERSION:=.*/PKG_VERSION:=1.5.11/g' feeds/packages/utils/containerd/Makefile
@@ -399,9 +399,9 @@ sed -i 's/PKG_HASH:=.*/PKG_HASH:=3b43dbe33cca0f9a18601ebab56b7852b128ec1a3df3a9b
 #sed -i 's/PKG_MIRROR_HASH:=.*/PKG_MIRROR_HASH:=dd28d5e846b391917cf83d66176653bdfa4e8a0d5b11144b65a012fe7693ddeb/g' package/libs/ustream-ssl/Makefile
 
 # expat
-#sed -i 's/PKG_VERSION:=.*/PKG_VERSION:=2.5.0/g' feeds/packages/libs/expat/Makefile
-#sed -i 's/PKG_HASH:=.*/PKG_HASH:=ef2420f0232c087801abf705e89ae65f6257df6b7931d37846a193ef2e8cdcbe/g' feeds/packages/libs/expat/Makefile
-#cp -f $GITHUB_WORKSPACE/general/expat/Makefile feeds/packages/libs/expat
+#sed -i 's/PKG_VERSION:=.*/PKG_VERSION:=2.6.2/g' feeds/packages/libs/expat/Makefile
+#sed -i 's/PKG_HASH:=.*/PKG_HASH:=ee14b4c5d8908b1bec37ad937607eab183d4d9806a08adee472c3c3121d27364/g' feeds/packages/libs/expat/Makefile
+cp -f $GITHUB_WORKSPACE/general/expat/Makefile feeds/packages/libs/expat
 
 # socat
 #rm -rf feeds/packages/net/socat
@@ -658,8 +658,8 @@ sed -i 's/PKG_HASH:=.*/PKG_HASH:=eb872b4f0e1f0ebe59c9f7bd8c506c4204893ba6a8492de
 #cp -rf $GITHUB_WORKSPACE/general/nano feeds/packages/utils
 
 # dnsproxy
-sed -i 's/PKG_VERSION:=.*/PKG_VERSION:=0.65.2/g' feeds/packages/net/dnsproxy/Makefile
-sed -i 's/PKG_HASH:=.*/PKG_HASH:=7c863404075daf76f1c6b291cc473670cbc45651af8f409e488c10a47fb73117/g' feeds/packages/net/dnsproxy/Makefile
+sed -i 's/PKG_VERSION:=.*/PKG_VERSION:=0.66.0/g' feeds/packages/net/dnsproxy/Makefile
+sed -i 's/PKG_HASH:=.*/PKG_HASH:=6928b109fb1080fec2aadc0cad20d0c08d13b5ff5db1a7c82ecfe200eec21326/g' feeds/packages/net/dnsproxy/Makefile
 
 # libnl-tiny
 #sed -i 's/PKG_RELEASE:=.*/PKG_RELEASE:=1/g' package/libs/libnl-tiny/Makefile
@@ -837,8 +837,8 @@ rm -rf feeds/packages/utils/coreutils
 cp -r $GITHUB_WORKSPACE/general/coreutils feeds/packages/utils
 
 # frp
-sed -i 's/PKG_VERSION:=.*/PKG_VERSION:=0.54.0/g' feeds/packages/net/frp/Makefile
-sed -i 's/PKG_HASH:=.*/PKG_HASH:=c09d8610b5eb02c0b1851459ace7751fe80a06b2373a6d5d40631a08e8ac64ae/g' feeds/packages/net/frp/Makefile
+sed -i 's/PKG_VERSION:=.*/PKG_VERSION:=0.55.1/g' feeds/packages/net/frp/Makefile
+sed -i 's/PKG_HASH:=.*/PKG_HASH:=c655fdf679aa94ec9abefc625b79bfb12aecf36011e23c207e322a0748c6c693/g' feeds/packages/net/frp/Makefile
 
 # openconnect
 #sed -i 's/PKG_VERSION:=.*/PKG_VERSION:=8.20/g' feeds/packages/net/openconnect/Makefile
