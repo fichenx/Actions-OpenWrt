@@ -266,14 +266,14 @@ sed -i 's/PKG_RELEASE:=.*/PKG_RELEASE:=1/g' feeds/packages/net/curl/Makefile
 #merge_package https://github.com/openwrt/packages packages/net/curl
 
 # Qt5 -qtbase
-sed -i "s/PKG_BUGFIX:=.*/PKG_BUGFIX:=12/g" feeds/packages/libs/qtbase/Makefile
-sed -i "s/PKG_HASH:=.*/PKG_HASH:=4c01b7b0f1f3c1e05ae6bf53c66e49c65c6b3872475bac26b0fb228136914af0/g" feeds/packages/libs/qtbase/Makefile
+sed -i "s/PKG_BUGFIX:=.*/PKG_BUGFIX:=13/g" feeds/packages/libs/qtbase/Makefile
+sed -i "s/PKG_HASH:=.*/PKG_HASH:=4cca51dcc1f22ceeee6b3e33cd1c3a60b14e85e24644dca3af89a2c2989ab809/g" feeds/packages/libs/qtbase/Makefile
 #rm -rf feeds/packages/libs/qtbase
 #cp -rf $GITHUB_WORKSPACE/general/qt6base feeds/packages/libs
 
 # Qt5 -qttools
-sed -i "s/PKG_BUGFIX:=.*/PKG_BUGFIX:=12/g" feeds/packages/libs/qttools/Makefile
-sed -i "s/PKG_HASH:=.*/PKG_HASH:=9a4084fee80a2acebb6415efa5a28dd666960129895a0bb7d97468a9f0c66506/g" feeds/packages/libs/qttools/Makefile
+sed -i "s/PKG_BUGFIX:=.*/PKG_BUGFIX:=13/g" feeds/packages/libs/qttools/Makefile
+sed -i "s/PKG_HASH:=.*/PKG_HASH:=57c9794c572c4e02871f2e7581525752b0cf85ea16cfab23a4ac9ba7b39a5d34/g" feeds/packages/libs/qttools/Makefile
 #rm -rf feeds/packages/libs/qttools
 #cp -rf $GITHUB_WORKSPACE/general/qt6tools feeds/packages/libs
 
@@ -658,8 +658,8 @@ sed -i 's/PKG_HASH:=.*/PKG_HASH:=eb872b4f0e1f0ebe59c9f7bd8c506c4204893ba6a8492de
 #cp -rf $GITHUB_WORKSPACE/general/nano feeds/packages/utils
 
 # dnsproxy
-sed -i 's/PKG_VERSION:=.*/PKG_VERSION:=0.66.0/g' feeds/packages/net/dnsproxy/Makefile
-sed -i 's/PKG_HASH:=.*/PKG_HASH:=6928b109fb1080fec2aadc0cad20d0c08d13b5ff5db1a7c82ecfe200eec21326/g' feeds/packages/net/dnsproxy/Makefile
+sed -i 's/PKG_VERSION:=.*/PKG_VERSION:=0.68.0/g' feeds/packages/net/dnsproxy/Makefile
+sed -i 's/PKG_HASH:=.*/PKG_HASH:=d8dddcf24ffca259125e50a83b320baefc5fcc2703a2aea0d50847846f6d08f4/g' feeds/packages/net/dnsproxy/Makefile
 
 # libnl-tiny
 #sed -i 's/PKG_RELEASE:=.*/PKG_RELEASE:=1/g' package/libs/libnl-tiny/Makefile
@@ -1094,6 +1094,15 @@ fi
 
 # x86 - disable intel_pstate
 sed -i 's/noinitrd/noinitrd intel_pstate=disable/g' target/linux/x86/image/grub-efi.cfg
+
+# bash
+if [ "$platform" = "x86_64" ]; then
+sed -i 's#ash#bash#g' package/base-files/files/etc/passwd
+fi
+sed -i 's#\\u@\\h:\\w\\\$#\\[\\e[32;1m\\][\\u@\\h\\[\\e[0m\\] \\[\\033[01;34m\\]\\W\\[\\033[00m\\]\\[\\e[32;1m\\]]\\[\\e[0m\\]\\\$#g' package/base-files/files/etc/profile
+mkdir -pv files/root
+curl -so files/root/.bash_profile https://raw.githubusercontent.com/sbwml/r4s_build_script/master/openwrt/files/root/.bash_profile
+curl -so files/root/.bashrc https://raw.githubusercontent.com/sbwml/r4s_build_script/master/openwrt/files/root/.bashrc
 
 ./scripts/feeds update -a
 ./scripts/feeds install -a
