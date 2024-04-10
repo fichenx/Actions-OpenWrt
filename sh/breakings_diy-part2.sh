@@ -259,11 +259,11 @@ rm -rf feeds/packages/lang/golang
 cp -rf $GITHUB_WORKSPACE/general/golang feeds/packages/lang/golang
 
 # curl
-sed -i 's/PKG_VERSION:=.*/PKG_VERSION:=8.6.0/g' feeds/packages/net/curl/Makefile
-sed -i 's/PKG_HASH:=.*/PKG_HASH:=b4785f2d8877fa92c0e45d7155cf8cc6750dbda961f4b1a45bcbec990cf2fa9b/g' feeds/packages/net/curl/Makefile
-sed -i 's/PKG_RELEASE:=.*/PKG_RELEASE:=1/g' feeds/packages/net/curl/Makefile
-#rm -rf feeds/packages/net/curl
-#merge_package https://github.com/openwrt/packages packages/net/curl
+#sed -i 's/PKG_VERSION:=.*/PKG_VERSION:=8.6.0/g' feeds/packages/net/curl/Makefile
+#sed -i 's/PKG_HASH:=.*/PKG_HASH:=b4785f2d8877fa92c0e45d7155cf8cc6750dbda961f4b1a45bcbec990cf2fa9b/g' feeds/packages/net/curl/Makefile
+#sed -i 's/PKG_RELEASE:=.*/PKG_RELEASE:=1/g' feeds/packages/net/curl/Makefile
+rm -rf feeds/packages/net/curl
+merge_package https://github.com/openwrt/packages packages/net/curl
 
 # Qt5 -qtbase
 sed -i "s/PKG_BUGFIX:=.*/PKG_BUGFIX:=13/g" feeds/packages/libs/qtbase/Makefile
@@ -569,8 +569,8 @@ sed -i 's/PKG_HASH:=.*/PKG_HASH:=15f54bb72048eb105f8c0e936a04b899e74c3db9a19bbc1
 #svn co https://github.com/openwrt/packages/trunk/net/softethervpn5 feeds/packages/net/softethervpn5
 
 # hwdata
-sed -i 's/PKG_VERSION:=.*/PKG_VERSION:=0.380/g' feeds/packages/utils/hwdata/Makefile
-sed -i 's/PKG_HASH:=.*/PKG_HASH:=e5ca061d9e0b9b177bed8d16f94b4cd54ce9eebd1ec115f7cf2174d3a6052049/g' feeds/packages/utils/hwdata/Makefile
+sed -i 's/PKG_VERSION:=.*/PKG_VERSION:=0.381/g' feeds/packages/utils/hwdata/Makefile
+sed -i 's/PKG_HASH:=.*/PKG_HASH:=53435c73964ddc24ac53fa86e29e8b9244ca1cab0578ffdd82fd280f35863004/g' feeds/packages/utils/hwdata/Makefile
 
 # gawk
 sed -i 's/PKG_VERSION:=.*/PKG_VERSION:=5.3.0/g' feeds/packages/utils/gawk/Makefile
@@ -991,8 +991,8 @@ sed -i 's/PKG_VERSION:=.*/PKG_VERSION:=8.1.3/g' feeds/packages/lang/python/click
 sed -i 's/PKG_HASH:=.*/PKG_HASH:=7682dc8afb30297001674575ea00d1814d808d6a36af415a82bd481d37ba7b8e/g' feeds/packages/lang/python/click/Makefile
 
 # rsync
-#sed -i 's/PKG_VERSION:=.*/PKG_VERSION:=3.2.7/g' feeds/packages/net/rsync/Makefile
-#sed -i 's/PKG_HASH:=.*/PKG_HASH:=4e7d9d3f6ed10878c58c5fb724a67dacf4b6aac7340b13e488fb2dc41346f2bb/g' feeds/packages/net/rsync/Makefile
+sed -i 's/PKG_VERSION:=.*/PKG_VERSION:=3.3.0/g' feeds/packages/net/rsync/Makefile
+sed -i 's/PKG_HASH:=.*/PKG_HASH:=7399e9a6708c32d678a72a63219e96f23be0be2336e50fd1348498d07041df90/g' feeds/packages/net/rsync/Makefile
 
 # python-jsonschema
 sed -i 's/PKG_VERSION:=.*/PKG_VERSION:=4.17.3/g' feeds/packages/lang/python/python-jsonschema/Makefile
