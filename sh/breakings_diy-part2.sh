@@ -658,8 +658,8 @@ sed -i 's/PKG_HASH:=.*/PKG_HASH:=eb872b4f0e1f0ebe59c9f7bd8c506c4204893ba6a8492de
 #cp -rf $GITHUB_WORKSPACE/general/nano feeds/packages/utils
 
 # dnsproxy
-sed -i 's/PKG_VERSION:=.*/PKG_VERSION:=0.68.0/g' feeds/packages/net/dnsproxy/Makefile
-sed -i 's/PKG_HASH:=.*/PKG_HASH:=d8dddcf24ffca259125e50a83b320baefc5fcc2703a2aea0d50847846f6d08f4/g' feeds/packages/net/dnsproxy/Makefile
+sed -i 's/PKG_VERSION:=.*/PKG_VERSION:=0.69.2/g' feeds/packages/net/dnsproxy/Makefile
+sed -i 's/PKG_HASH:=.*/PKG_HASH:=aa1cea0eea683bde017acbb30c09c96b24b30133e157e743666be900ad7560ea/g' feeds/packages/net/dnsproxy/Makefile
 
 # libnl-tiny
 #sed -i 's/PKG_RELEASE:=.*/PKG_RELEASE:=1/g' package/libs/libnl-tiny/Makefile
@@ -1103,6 +1103,9 @@ sed -i 's#\\u@\\h:\\w\\\$#\\[\\e[32;1m\\][\\u@\\h\\[\\e[0m\\] \\[\\033[01;34m\\]
 mkdir -pv files/root
 curl -so files/root/.bash_profile https://raw.githubusercontent.com/sbwml/r4s_build_script/master/openwrt/files/root/.bash_profile
 curl -so files/root/.bashrc https://raw.githubusercontent.com/sbwml/r4s_build_script/master/openwrt/files/root/.bashrc
+
+# musl patch
+cp -fv $GITHUB_WORKSPACE/PATCH/001-elf.h-add-typedefs-for-Elf-_Relr.patch toolchain/musl/patches
 
 ./scripts/feeds update -a
 ./scripts/feeds install -a
