@@ -73,8 +73,7 @@ jobs:
         [[ -n "${AGENT_TOOLSDIRECTORY}" ]] && sudo rm -rf "${AGENT_TOOLSDIRECTORY}"
         sudo -E apt update
         sudo -E apt -y install $(curl -fsSL https://is.gd/depends_ubuntu_2204)
-        sudo -E apt-get -qq install libfuse-dev
-        sudo -E apt-get -qq install lib32z1-dev
+        sudo -E apt-get -qq install libfuse-dev lib32z1-dev libpcre3 libpcre3-dev
         sudo -E apt -y autoremove --purge
         sudo -E systemctl daemon-reload
         sudo -E apt clean && sudo -E apt autoclean
