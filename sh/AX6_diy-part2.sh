@@ -131,5 +131,11 @@ git_sparse_clone master https://github.com/immortalwrt/packages immortalwrt net/
 rm -rf feeds/packages/lang/golang
 cp -rf $GITHUB_WORKSPACE/general/golang feeds/packages/lang/golang
 
+#为immortalwrt添加turboacc
+[ ! -e package/lean/default-settings/files/zzz-default-settings ] && curl -sSL https://raw.githubusercontent.com/chenmozhijin/turboacc/luci/add_turboacc.sh -o add_turboacc.sh && bash add_turboacc.sh
+
+#为immortalwrt添加luci-app-mwan3helper-chinaroute（MWAN3 分流助手）
+[ ! -e package/lean/default-settings/files/zzz-default-settings ] && git clone -b main https://github.com/padavanonly/luci-app-mwan3helper-chinaroute package/luci-app-mwan3helper-chinaroute
+
 ./scripts/feeds update -a
 ./scripts/feeds install -a
