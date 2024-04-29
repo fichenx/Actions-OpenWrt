@@ -41,7 +41,7 @@
 - 编译插件：<br/>
 - 主题：Design<br/>
 - 系统：磁盘管理、文件传输<br/>
-- 服务：微信推送、openclash、SmartDNS、KMS服务器、Upnp<br/>
+- 服务：微信推送、openclash、SmartDNS、KMS服务器、Upnp、ShadowSocksR Plus+<br/>
 - 网络存储：usb打印服务器、硬盘休眠、FTP服务器、网络共享<br/>
 - VPN：N2N VPN、NPS内网穿透<br/>
 - 网络：多线多拨、负载均衡、Turbo ACC 网络加速。<br/>
@@ -63,9 +63,9 @@
  编译插件：<br/>
 - 主题：Argon、Design<br/>
 - 系统：文件传输<br/>
-- 服务：上网时间控制、SmartDNS、网络唤醒、Upnp、KMS服务器、微信推送、动态DNS、bypass（lede原厂分区、lede合并分区）、KoolProxyR plus+（lede合并分区）、 openclash（lede合并分区、immortalwrt合并分区）、Watchcat(lede合并分区、immortalwrt合并分区)、passwall（immortalwrt合并分区）、helloword（immortalwrt合并分区）<br/>
+- 服务：上网时间控制、SmartDNS、网络唤醒、Upnp、KMS服务器、微信推送、动态DNS、bypass（lede原厂分区、lede合并分区）、Adbyby Plus+ （lede合并分区）、AdGuard Home（lede合并分区）、 openclash（lede合并分区、immortalwrt合并分区）、Watchcat plus(lede合并分区、immortalwrt合并分区)、msd_lite(lede合并分区、immortalwrt合并分区)、acme(lede合并分区、immortalwrt合并分区)、、omcproxy组播代理(lede合并分区、immortalwrt合并分区)、MWAN3 分流助手(lede合并分区、immortalwrt合并分区)、passwall（immortalwrt合并分区）、helloword（immortalwrt合并分区）<br/>
 - VPN：N2N VPN、nps内网穿透（lede合并分区、immortalwrt合并分区）<br/>
-- 网络：多线多拨、负载均衡(lede原厂分区、lede合并分区)、Turbo ACC 网络加速（lede原厂分区、lede合并分区）。<br/>
+- 网络：多线多拨、Turbo ACC 网络加速、负载均衡(lede原厂分区、lede合并分区)、Tcpdump 流量监控(lede合并分区、immortalwrt合并分区)。<br/>
 <img src="https://github.com/fichenx/OpenWrt/assets/86181542/a640d3d9-b935-40ca-9e16-3cc94bdc6a58"/>
 </details>
 
@@ -83,7 +83,7 @@
 编译插件：<br/>
 - 主题：Argon、Design<br/>
 - 系统：Argon主题设置、文件传输、磁盘管理、晨晶宝盒<br/>
-- 服务：PassWall、ikoolproxy、bypass、ShadowSocksR Plus+、上网时间控制、微信推送、openclash、动态DNS、SmartDNS、watchcat、网络唤醒、uhttpd、Upnp、KMS服务器、MWAN3 分流助手
+- 服务：PassWall、ikoolproxy、bypass、Adbyby Plus+ 、AdGuard Home、ShadowSocksR Plus+、watchcat plus、上网时间控制、微信推送、openclash、DDNS-GO、动态DNS、Privoxy 网络代理、SmartDNS、组播转换 Lite、网络唤醒、uhttpd、Upnp、KMS服务器、MWAN3 分流助手
 - docker：DockerMan<br/>
 - 网络存储：filebrowser、NFS管理、usb打印服务器、硬盘休眠、打印服务器、minidlna、网络共享、Aria2、MJPG-streamer、FTP服务器、MiniDLNA<br/>
 - VPN：N2N VPN、IPsec VPN服务器、PPTP VPN服务器、Frps、Frp内网穿透、NPS内网穿透<br/>
