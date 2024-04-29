@@ -55,9 +55,11 @@ sed -i 's|services/openclash|services/bypass|g' feeds/fichenx/luci-theme-design/
 sed -i 's|openclash.png|ssr.png|g' feeds/fichenx/luci-theme-design/luasrc/view/themes/design/header.htm
 
 #nps（修改nps源为yisier）
-sed -i 's/PKG_SOURCE_URL:=.*/PKG_SOURCE_URL:=https:\/\/codeload.github.com\/yisier\/nps\/tar.gz\/v$(PKG_VERSION)?/g' feeds/packages/net/nps/Makefile
-sed -i 's/PKG_VERSION:=.*/PKG_VERSION:=0.26.14/g' feeds/packages/net/nps/Makefile
-sed -i 's/PKG_HASH:=.*/PKG_HASH:=a05135247918490ea453627000cfb867bf0131ddfede9c3ef9614094da96140a/g' feeds/packages/net/nps/Makefile
+rm -rf feeds/packages/net/nps
+cp -rf $GITHUB_WORKSPACE/backup/nps feeds/packages/net
+#sed -i 's/PKG_SOURCE_URL:=.*/PKG_SOURCE_URL:=https:\/\/codeload.github.com\/yisier\/nps\/tar.gz\/v$(PKG_VERSION)?/g' feeds/packages/net/nps/Makefile
+#sed -i 's/PKG_VERSION:=.*/PKG_VERSION:=0.26.18/g' feeds/packages/net/nps/Makefile
+#sed -i 's/PKG_HASH:=.*/PKG_HASH:=29da044262071a1fa53ce7169c6427ee4f12fc0ada60ef7fb52fabfd165afe91/g' feeds/packages/net/nps/Makefile
 #luci-app-nps（修改nps显示位置）
 sed -i 's/"services"/"vpn"/g'  feeds/luci/applications/luci-app-nps/luasrc/controller/nps.lua
 sed -i 's/\[services\]/\[vpn\]/g'  feeds/luci/applications/luci-app-nps/luasrc/view/nps/nps_status.htm
