@@ -95,7 +95,7 @@ jobs:
         echo "useVersionInfo=$useVersionInfo" >> $GITHUB_ENV
         echo "DATE=$(date "+%Y-%m-%d %H:%M:%S")" >> $GITHUB_ENV
         echo "DATE1=$(date "+%Y-%m-%d")" >> $GITHUB_ENV
-        echo "DATE2=$(date "+%Y%m%d")" >> $GITHUB_ENV
+        echo "DATE2=$(date "+%Y%m%d%H%M")" >> $GITHUB_ENV
  
     - name: Load custom feeds
       run: |
@@ -182,7 +182,7 @@ jobs:
 
     - name: Create release
       id: release
-      uses: ncipollo/release-action@v1
+      uses: ncipollo/release-action@main
       with:
         name: ${{ env.DATE }} OpenWrt for ${{ env.PRODUCT_NAME }}
         allowUpdates: true
@@ -214,7 +214,7 @@ jobs:
       if: env.UPLOAD_RELEASE == 'true' && !cancelled()
       with:
         #repo:
-        keep_latest: 5
+        keep_latest: 10
         delete_tag_pattern: Redmi-AX6(immortalwrt-plus)
         delete_tags: true
       env:

@@ -67,7 +67,7 @@ jobs:
         echo "useVersionInfo=$useVersionInfo" >> $GITHUB_ENV
         echo "DATE=$(date "+%Y-%m-%d %H:%M:%S")" >> $GITHUB_ENV
         echo "DATE1=$(date "+%Y-%m-%d")" >> $GITHUB_ENV
-        echo "DATE2=$(date "+%Y%m%d")" >> $GITHUB_ENV
+        echo "DATE2=$(date "+%Y%m%d%H%M")" >> $GITHUB_ENV
     - name: Package Armvirt as OpenWrt
       if: (!cancelled())
       uses: ophub/flippy-openwrt-actions@main
@@ -97,7 +97,7 @@ jobs:
 
     - name: Upload OpenWrt Firmware to Release
       id: release
-      uses: ncipollo/release-action@v1
+      uses: ncipollo/release-action@main
       if: env.PACKAGED_STATUS == 'success' && env.UPLOAD_RELEASE == 'true' && !cancelled()
       with:
         name: ${{ env.DATE }} OpenWrt for ${{ env.FILE_NAME }}
@@ -140,7 +140,7 @@ jobs:
       if: env.UPLOAD_RELEASE == 'true' && !cancelled()
       with:
         #repo:
-        keep_latest: 5
+        keep_latest: 10
         delete_tag_pattern: ARMv8
         delete_tags: true
       env:
