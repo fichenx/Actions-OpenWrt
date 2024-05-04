@@ -47,7 +47,9 @@ Boost is a set of free, peer-reviewed, portable C++ source libraries.
 
 This package provides the following run-time libraries:
  - atomic
+ - charconv (new)
  - chrono
+ - cobalt
  - container
  - context
  - contract
@@ -335,6 +337,7 @@ define DefineBoostLibrary
 endef
 
 $(eval $(call DefineBoostLibrary,atomic,system))
+$(eval $(call DefineBoostLibrary,charconv,))
 $(eval $(call DefineBoostLibrary,chrono,system))
 $(eval $(call DefineBoostLibrary,container))
 $(eval $(call DefineBoostLibrary,context,chrono system,,!boost-context-exclude))
