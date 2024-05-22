@@ -911,10 +911,10 @@ sed -i 's/PKG_HASH:=.*/PKG_HASH:=cc740c6bbea104398cc3e466befc515a25896ec85e44a66
 #svn co https://github.com/immortalwrt/packages/trunk/net/verysync feeds/packages/net/verysync
 
 # haproxy
-sed -i 's/PKG_VERSION:=.*/PKG_VERSION:=2.8.7/g' feeds/packages/net/haproxy/Makefile
+sed -i 's/PKG_VERSION:=.*/PKG_VERSION:=2.8.9/g' feeds/packages/net/haproxy/Makefile
 sed -i 's/PKG_RELEASE:=.*/PKG_RELEASE:=1/g' feeds/packages/net/haproxy/Makefile
-sed -i 's/PKG_HASH:=.*/PKG_HASH:=0d1a61161789c8ec50662955deffba50ab4ebe7efc6c0d947ff570ee7098e7f8/g' feeds/packages/net/haproxy/Makefile
-sed -i 's/BASE_TAG:=.*/BASE_TAG=v2.8.7/g' feeds/packages/net/haproxy/get-latest-patches.sh
+sed -i 's/PKG_HASH:=.*/PKG_HASH:=7a821478f36f847607f51a51e80f4f890c37af4811d60438e7f63783f67592ff/g' feeds/packages/net/haproxy/Makefile
+sed -i 's/BASE_TAG:=.*/BASE_TAG=v2.8.9/g' feeds/packages/net/haproxy/get-latest-patches.sh
 sed -i 's|PKG_SOURCE_URL:=.*|PKG_SOURCE_URL:=https://www.haproxy.org/download/2.8/src|g' feeds/packages/net/haproxy/Makefile
 
 # perl
