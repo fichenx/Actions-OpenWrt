@@ -519,9 +519,9 @@ sed -i 's/PKG_HASH:=.*/PKG_HASH:=a8df96034aae6d2d50a4ebe8216326c61c3eb6483677650
 #sed -i 's/PKG_HASH:=.*/PKG_HASH:=02e111d1dc6a50abb8eed6bf31c3e48ed8b0830d1ea2a1b78c61765c2513fdd8/g' feeds/packages/lang/python/python-distro/Makefile
 
 # python-dateutil
-#sed -i 's/PKG_VERSION:=.*/PKG_VERSION:=2.8.2/g' feeds/packages/lang/python/python-dateutil/Makefile
+sed -i 's/PKG_VERSION:=.*/PKG_VERSION:=2.9.0/g' feeds/packages/lang/python/python-dateutil/Makefile
 #sed -i 's/PKG_RELEASE:=.*/PKG_RELEASE:=1/g' feeds/packages/lang/python/python-dateutil/Makefile
-#sed -i 's/PKG_HASH:=.*/PKG_HASH:=0123cacc1627ae19ddf3c27a5de5bd67ee4586fbdd6440d9748f8abb483d3e86/g' feeds/packages/lang/python/python-dateutil/Makefile
+sed -i 's/PKG_HASH:=.*/PKG_HASH:=78e73e19c63f5b20ffa567001531680d939dc042bf7850431877645523c66709/g' feeds/packages/lang/python/python-dateutil/Makefile
 
 # python-requests
 #rm -rf feeds/packages/lang/python/python-requests/patches
