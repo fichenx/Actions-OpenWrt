@@ -320,8 +320,8 @@ rm -rf feeds/packages/utils/dockerd
 cp -rf $GITHUB_WORKSPACE/general/dockerd feeds/packages/utils/dockerd
 
 # docker-compose
-sed -i 's/PKG_VERSION:=.*/PKG_VERSION:=2.27.0/g' feeds/packages/utils/docker-compose/Makefile
-sed -i 's/PKG_HASH:=.*/PKG_HASH:=29b2232d1609dff03db74188a7944c85ba8b612f47a7e39938a43db8fb7d7067/g' feeds/packages/utils/docker-compose/Makefile
+sed -i 's/PKG_VERSION:=.*/PKG_VERSION:=2.27.1/g' feeds/packages/utils/docker-compose/Makefile
+sed -i 's/PKG_HASH:=.*/PKG_HASH:=5abf8de3a413894c2ed061812d68c8d8eb4e255b25bf38e2ac58d3ba0546a218/g' feeds/packages/utils/docker-compose/Makefile
 
 # containerd
 #sed -i 's/PKG_VERSION:=.*/PKG_VERSION:=1.5.11/g' feeds/packages/utils/containerd/Makefile
@@ -372,8 +372,8 @@ sed -i 's/PKG_MIRROR_HASH:=.*/PKG_MIRROR_HASH:=ac817f63605508779ebebf612fcb7d594
 # php8
 #rm -rf feeds/packages/lang/php8
 #svn co https://github.com/openwrt/packages/trunk/lang/php8 feeds/packages/lang/php8
-sed -i 's/PKG_VERSION:=.*/PKG_VERSION:=8.3.6/g' feeds/packages/lang/php8/Makefile
-sed -i 's/PKG_HASH:=.*/PKG_HASH:=53c8386b2123af97626d3438b3e4058e0c5914cb74b048a6676c57ac647f5eae/g' feeds/packages/lang/php8/Makefile
+sed -i 's/PKG_VERSION:=.*/PKG_VERSION:=8.3.7/g' feeds/packages/lang/php8/Makefile
+sed -i 's/PKG_HASH:=.*/PKG_HASH:=d53433c1ca6b2c8741afa7c524272e6806c1e895e5912a058494fea89988570a/g' feeds/packages/lang/php8/Makefile
 
 # python-docker
 sed -i 's/PKG_VERSION:=.*/PKG_VERSION:=7.0.0/g' feeds/packages/lang/python/python-docker/Makefile
@@ -903,8 +903,8 @@ cp -f $GITHUB_WORKSPACE/general/zoneinfo/Makefile feeds/packages/utils/zoneinfo
 #sed -i 's/PKG_HASH:=.*/PKG_HASH:=5282d58b1a8d52f02af4ab7a5d6089aba6f7d20929bd49fd844c930110262dcb/g' feeds/packages/net/adguardhome/Makefile
 
 # iperf3
-sed -i 's/PKG_VERSION:=.*/PKG_VERSION:=3.16/g' feeds/packages/net/iperf3/Makefile
-sed -i 's/PKG_HASH:=.*/PKG_HASH:=cc740c6bbea104398cc3e466befc515a25896ec85e44a662d5f4a767b9cf713e/g' feeds/packages/net/iperf3/Makefile
+sed -i 's/PKG_VERSION:=.*/PKG_VERSION:=3.17.1/g' feeds/packages/net/iperf3/Makefile
+sed -i 's/PKG_HASH:=.*/PKG_HASH:=84404ca8431b595e86c473d8f23d8bb102810001f15feaf610effd3b318788aa/g' feeds/packages/net/iperf3/Makefile
 
 # verysync
 #rm -rf feeds/packages/net/verysync
