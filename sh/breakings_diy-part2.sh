@@ -336,8 +336,8 @@ sed -i 's/PKG_SOURCE_VERSION:=.*/PKG_SOURCE_VERSION:=51d5e94601ceffbbd85688df1c9
 #sed -i '12d' feeds/packages/utils/runc/Makefile
 
 # bsdtar
-sed -i 's/PKG_VERSION:=.*/PKG_VERSION:=3.7.2/g' feeds/packages/libs/libarchive/Makefile
-sed -i 's/PKG_HASH:=.*/PKG_HASH:=04357661e6717b6941682cde02ad741ae4819c67a260593dfb2431861b251acb/g' feeds/packages/libs/libarchive/Makefile
+sed -i 's/PKG_VERSION:=.*/PKG_VERSION:=3.7.4/g' feeds/packages/libs/libarchive/Makefile
+sed -i 's/PKG_HASH:=.*/PKG_HASH:=f887755c434a736a609cbd28d87ddbfbe9d6a3bb5b703c22c02f6af80a802735/g' feeds/packages/libs/libarchive/Makefile
 sed -i 's/PKG_RELEASE:=.*/PKG_RELEASE:=1/g' feeds/packages/libs/libarchive/Makefile
 
 # pcre
@@ -376,8 +376,8 @@ sed -i 's/PKG_VERSION:=.*/PKG_VERSION:=8.3.7/g' feeds/packages/lang/php8/Makefil
 sed -i 's/PKG_HASH:=.*/PKG_HASH:=d53433c1ca6b2c8741afa7c524272e6806c1e895e5912a058494fea89988570a/g' feeds/packages/lang/php8/Makefile
 
 # python-docker
-sed -i 's/PKG_VERSION:=.*/PKG_VERSION:=7.0.0/g' feeds/packages/lang/python/python-docker/Makefile
-sed -i 's/PKG_HASH:=.*/PKG_HASH:=323736fb92cd9418fc5e7133bc953e11a9da04f4483f828b527db553f1e7e5a3/g' feeds/packages/lang/python/python-docker/Makefile
+sed -i 's/PKG_VERSION:=.*/PKG_VERSION:=7.1.0/g' feeds/packages/lang/python/python-docker/Makefile
+sed -i 's/PKG_HASH:=.*/PKG_HASH:=eb82c5e3e56209074766e6885bb04b8c38a0c015d0a30036ebe7ece34c9989e9/g' feeds/packages/lang/python/python-docker/Makefile
 #cp -f $GITHUB_WORKSPACE/general/python-docker/Makefile feeds/packages/lang/python/python-docker
 
 # coremark
@@ -649,8 +649,8 @@ cp -rf $GITHUB_WORKSPACE/general/alsa-lib feeds/packages/libs
 #sed -i 's/PKG_HASH:=.*/PKG_HASH:=2f729e3480695791f9482e8388bd723402b89f0eaf118057bbdea3cecee9b237/g' feeds/packages/libs/libevdev/Makefile
 
 # zstd
-sed -i 's/PKG_VERSION:=.*/PKG_VERSION:=1.5.5/g' feeds/packages/utils/zstd/Makefile
-sed -i 's/PKG_HASH:=.*/PKG_HASH:=9c4396cc829cfae319a6e2615202e82aad41372073482fce286fac78646d3ee4/g' feeds/packages/utils/zstd/Makefile
+sed -i 's/PKG_VERSION:=.*/PKG_VERSION:=1.5.6/g' feeds/packages/utils/zstd/Makefile
+sed -i 's/PKG_HASH:=.*/PKG_HASH:=8c29e06cf42aacc1eafc4077ae2ec6c6fcb96a626157e0593d5e82a34fd403c1/g' feeds/packages/utils/zstd/Makefile
 sed -i 's/Dbacktrace=false/Dbacktrace=disabled/g' feeds/packages/utils/zstd/Makefile
 #sed -i 's/Dbin_control=false/Dbin_contrib=false/g' feeds/packages/utils/zstd/Makefile
 #sed -i '77i\	-Dmulti_thread=enabled \\' feeds/packages/utils/zstd/Makefile
@@ -911,11 +911,11 @@ sed -i 's/PKG_HASH:=.*/PKG_HASH:=84404ca8431b595e86c473d8f23d8bb102810001f15feaf
 #svn co https://github.com/immortalwrt/packages/trunk/net/verysync feeds/packages/net/verysync
 
 # haproxy
-sed -i 's/PKG_VERSION:=.*/PKG_VERSION:=2.8.9/g' feeds/packages/net/haproxy/Makefile
-sed -i 's/PKG_RELEASE:=.*/PKG_RELEASE:=1/g' feeds/packages/net/haproxy/Makefile
-sed -i 's/PKG_HASH:=.*/PKG_HASH:=7a821478f36f847607f51a51e80f4f890c37af4811d60438e7f63783f67592ff/g' feeds/packages/net/haproxy/Makefile
-sed -i 's/BASE_TAG:=.*/BASE_TAG=v2.8.9/g' feeds/packages/net/haproxy/get-latest-patches.sh
-sed -i 's|PKG_SOURCE_URL:=.*|PKG_SOURCE_URL:=https://www.haproxy.org/download/2.8/src|g' feeds/packages/net/haproxy/Makefile
+#sed -i 's/PKG_VERSION:=.*/PKG_VERSION:=2.8.9/g' feeds/packages/net/haproxy/Makefile
+#sed -i 's/PKG_RELEASE:=.*/PKG_RELEASE:=1/g' feeds/packages/net/haproxy/Makefile
+#sed -i 's/PKG_HASH:=.*/PKG_HASH:=7a821478f36f847607f51a51e80f4f890c37af4811d60438e7f63783f67592ff/g' feeds/packages/net/haproxy/Makefile
+#sed -i 's/BASE_TAG:=.*/BASE_TAG=v2.8.9/g' feeds/packages/net/haproxy/get-latest-patches.sh
+#sed -i 's|PKG_SOURCE_URL:=.*|PKG_SOURCE_URL:=https://www.haproxy.org/download/2.8/src|g' feeds/packages/net/haproxy/Makefile
 
 # perl
 rm -rf feeds/packages/lang/perl
@@ -992,8 +992,8 @@ rm -rf feeds/packages/utils/vim
 cp -rf $GITHUB_WORKSPACE/general/vim feeds/packages/utils
 
 # python-packaging
-sed -i 's/PKG_VERSION:=.*/PKG_VERSION:=21.3/g' feeds/packages/lang/python/python-packaging/Makefile
-sed -i 's/PKG_HASH:=.*/PKG_HASH:=dd47c42927d89ab911e606518907cc2d3a1f38bbd026385970643f9c5b8ecfeb/g' feeds/packages/lang/python/python-packaging/Makefile
+sed -i 's/PKG_VERSION:=.*/PKG_VERSION:=24.0/g' feeds/packages/lang/python/python-packaging/Makefile
+sed -i 's/PKG_HASH:=.*/PKG_HASH:=eb82c5e3e56209074766e6885bb04b8c38a0c015d0a30036ebe7ece34c9989e9/g' feeds/packages/lang/python/python-packaging/Makefile
 
 # python-click
 sed -i 's/PKG_VERSION:=.*/PKG_VERSION:=8.1.3/g' feeds/packages/lang/python/click/Makefile
