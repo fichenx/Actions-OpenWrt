@@ -139,5 +139,9 @@ cp -rf $GITHUB_WORKSPACE/general/golang feeds/packages/lang/golang
 #为immortalwrt添加luci-app-mwan3helper-chinaroute（MWAN3 分流助手）
 [ ! -e package/lean/default-settings/files/zzz-default-settings ] && git clone -b main https://github.com/padavanonly/luci-app-mwan3helper-chinaroute package/luci-app-mwan3helper-chinaroute
 
+#更换旧版lede代码中的ath11k-firmware源（旧源已失效）
+[ -e package/lean/default-settings/files/zzz-default-settings ] && rm -rf package/firmware/ath11k-firmware/Makefile
+[ -e package/lean/default-settings/files/zzz-default-settings ] && cp -rf $GITHUB_WORKSPACE/backup/AX6/package/firmware/ath11k-firmware/Makefile package/firmware/ath11k-firmware/Makefile
+
 ./scripts/feeds update -a
 ./scripts/feeds install -a
