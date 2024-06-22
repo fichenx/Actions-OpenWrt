@@ -320,8 +320,8 @@ rm -rf feeds/packages/utils/dockerd
 cp -rf $GITHUB_WORKSPACE/general/dockerd feeds/packages/utils/dockerd
 
 # docker-compose
-sed -i 's/PKG_VERSION:=.*/PKG_VERSION:=2.27.2/g' feeds/packages/utils/docker-compose/Makefile
-sed -i 's/PKG_HASH:=.*/PKG_HASH:=1769596433f68fa68ed67974e796ddb71a96064f18e0d79f5c4259ed5c1be98b/g' feeds/packages/utils/docker-compose/Makefile
+sed -i 's/PKG_VERSION:=.*/PKG_VERSION:=2.28.0/g' feeds/packages/utils/docker-compose/Makefile
+sed -i 's/PKG_HASH:=.*/PKG_HASH:=752a6c95d077126d6c459150f1db8111d2b7d01fa7495667dced07d8e3e8ef31/g' feeds/packages/utils/docker-compose/Makefile
 
 # containerd
 #sed -i 's/PKG_VERSION:=.*/PKG_VERSION:=1.5.11/g' feeds/packages/utils/containerd/Makefile
@@ -1118,6 +1118,9 @@ cp -fv $GITHUB_WORKSPACE/PATCH/001-elf.h-add-typedefs-for-Elf-_Relr.patch toolch
 
 rm -rf feeds/packages/lang/python
 cp -rf $GITHUB_WORKSPACE/general/python feeds/packages/lang
+
+rm -rf  feeds/packages/net/uugamebooster
+cp -rf $GITHUB_WORKSPACE/general/uugamebooster feeds/packages/net
 
 ./scripts/feeds update -a
 ./scripts/feeds install -a
