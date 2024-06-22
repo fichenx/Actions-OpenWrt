@@ -144,3 +144,6 @@ rm -rf feeds/packages/utils/watchcat
 git_sparse_clone master "https://github.com/openwrt/packages" "temp" utils/watchcat && mv -n watchcat feeds/packages/utils/watchcat
 git clone https://github.com/gngpp/luci-app-watchcat-plus.git package/luci-app-watchcat-plus
 
+#删除lede自带uwsgi
+rm -rf feeds/packages/net/uwsgi
+
