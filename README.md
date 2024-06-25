@@ -13,7 +13,8 @@
 - 固件来源：[![Lean](https://img.shields.io/badge/Lede-Lean-ff69b4.svg?style=flat&logo=appveyor)](https://github.com/coolsnowwolf/lede)[![immortalwrt](https://img.shields.io/badge/immortalwrt-immortalwrt-ff69b4.svg?style=flat&logo=appveyor)](https://github.com/immortalwrt/immortalwrt) [![P3TERX](https://img.shields.io/badge/OpenWrt-P3TERX-blueviolet.svg?style=flat&logo=appveyor)](https://github.com/P3TERX/Actions-OpenWrt) [![Flippy](https://img.shields.io/badge/Package-Flippy-orange.svg?style=flat&logo=appveyor)](https://github.com/unifreq/openwrt_packit)  [![breakings](https://img.shields.io/badge/OpenWrt-breakings-orange.svg?style=flat&logo=appveyor)](https://github.com/breakings/OpenWrt)
 - 项目使用 Github Actions 拉取 [Lean](https://github.com/coolsnowwolf/lede) 和[immortalwrt](https://github.com/immortalwrt/immortalwrt) 的 Openwrt 源码仓库进行云编译
 - 提供适配于NEWIFI D2、Redmi AX6、 ARMv8 电视盒子（斐讯N1、Tanix-TX3）的 OpenWrt 固件
-- Redmi AX6固件分为 原厂分区版和合并分区版，合并分区版固件较大，使用前需对Redmi AX6进行合并分区；**因lede源码无线驱动问题，Redmi AX6（lede固件）暂时维持源码版本在20230501。**
+- Redmi AX6固件分为 原厂分区版和合并分区版，合并分区版固件较大，使用前需对Redmi AX6进行合并分区； 
+  **已恢复使用最新代码编译。**  ~~因lede源码无线驱动问题，Redmi AX6（lede固件）暂时维持源码版本在20230501。~~。
 - 固件集成的所有 ipk 插件全部打包在 Packages 文件中，可以在 [Releases](https://github.com/fichenx/Actions-OpenWrt/releases) 内进行下载
 
 ## 固件下载 [![](https://img.shields.io/badge/-编译状态及下载链接-FFFFFF.svg)](#固件下载-)
@@ -21,7 +22,7 @@
 | 平台+设备名称 | 固件编译状态 | 配置文件 | 固件下载 |
 | :-------------: | :-------------: | :-------------: | :-------------: |
 | [![](https://img.shields.io/badge/NEWIFI-D2-32C955.svg?logo=openwrt)](https://github.com/fichenx/Actions-OpenWrt/blob/main/.github/workflows/Build_OpenWrt_Newifi-D2.yml) | [![](https://github.com/fichenx/Actions-OpenWrt/actions/workflows/Build_OpenWrt_Newifi-D2.yml/badge.svg)](https://github.com/fichenx/Actions-OpenWrt/actions/workflows/Build_OpenWrt_Newifi-D2.yml) | [![](https://img.shields.io/badge/编译-配置-orange.svg?logo=apache-spark)](https://github.com/fichenx/Actions-OpenWrt/blob/main/config/Newifi_D2.config) | [![](https://img.shields.io/badge/下载-链接-blueviolet.svg?logo=hack-the-box)](https://github.com/fichenx/Actions-OpenWrt/releases?q=Newifi_D2&expanded=true) |
-| [![](https://img.shields.io/badge/Redmi-AX6(lede)-32C955.svg?logo=openwrt)](https://github.com/fichenx/Actions-OpenWrt/blob/main/.github/workflows/Build_OpenWrt_Redmi-AX6.yml) | [![](https://github.com/fichenx/Actions-OpenWrt/actions/workflows/Build_OpenWrt_Redmi-AX6.yml/badge.svg)](https://github.com/fichenx/Actions-OpenWrt/actions/workflows/Build_OpenWrt_Redmi-AX6.yml) | [![](https://img.shields.io/badge/编译-配置-orange.svg?logo=apache-spark)](https://github.com/fichenx/Actions-OpenWrt/blob/main/config/AX6.config) | [![](https://img.shields.io/badge/下载-链接-blueviolet.svg?logo=hack-the-box)](https://github.com/fichenx/Actions-OpenWrt/releases?q=Redmi-AX6%28原厂分区%29+lede&expanded=true) |
+| [![](https://img.shields.io/badge/Build_OpenWrt_Redmi-AX6_mini-32C955.svg?logo=openwrt)](https://github.com/fichenx/Actions-OpenWrt/blob/main/.github/workflows/Build_OpenWrt_Redmi-AX6_mini.yml) | [![](https://github.com/fichenx/Actions-OpenWrt/actions/workflows/Build_OpenWrt_Redmi-AX6_mini.yml/badge.svg)](https://github.com/fichenx/Actions-OpenWrt/actions/workflows/Build_OpenWrt_Redmi-AX6_mini.yml) | [![](https://img.shields.io/badge/编译-配置-orange.svg?logo=apache-spark)](https://github.com/fichenx/Actions-OpenWrt/blob/main/config/AX6_mini.config) | [![](https://img.shields.io/badge/下载-链接-blueviolet.svg?logo=hack-the-box)](https://github.com/fichenx/Actions-OpenWrt/releases?q=Redmi-AX6%28原厂分区%29+lede&expanded=true) |
 | [![](https://img.shields.io/badge/Redmi-AX6(lede_plus)-32C955.svg?logo=openwrt)](https://github.com/fichenx/Actions-OpenWrt/blob/main/.github/workflows/Build_OpenWrt_Redmi-AX6_plus.yml) | [![](https://github.com/fichenx/Actions-OpenWrt/actions/workflows/Build_OpenWrt_Redmi-AX6_plus.yml/badge.svg)](https://github.com/fichenx/Actions-OpenWrt/actions/workflows/Build_OpenWrt_Redmi-AX6_plus.yml) | [![](https://img.shields.io/badge/编译-配置-orange.svg?logo=apache-spark)](https://github.com/fichenx/Actions-OpenWrt/blob/main/config/AX6_plus.config) | [![](https://img.shields.io/badge/下载-链接-blueviolet.svg?logo=hack-the-box)](https://github.com/fichenx/Actions-OpenWrt/releases?q=Redmi-AX6%28%E5%90%88%E5%B9%B6%E5%88%86%E5%8C%BA%29+lede&expanded=true) |
 | [![](https://img.shields.io/badge/Redmi-AX6(immortalwrt_plus)-32C955.svg?logo=openwrt)](https://github.com/fichenx/Actions-OpenWrt/blob/main/.github/workflows/Build_immortalwrt_Redmi-AX6.yml) | [![](https://github.com/fichenx/Actions-OpenWrt/actions/workflows/Build_immortalwrt_Redmi-AX6.yml/badge.svg)](https://github.com/fichenx/Actions-OpenWrt/actions/workflows/Build_immortalwrt_Redmi-AX6.yml) | [![](https://img.shields.io/badge/编译-配置-orange.svg?logo=apache-spark)](https://github.com/fichenx/Actions-OpenWrt/blob/main/config/AX6_5.15(ImmortalWrt).config) | [![](https://img.shields.io/badge/下载-链接-blueviolet.svg?logo=hack-the-box)](https://github.com/fichenx/Actions-OpenWrt/releases?q=Redmi-AX6%EF%BC%88%E5%90%88%E5%B9%B6%E5%88%86%E5%8C%BA%EF%BC%89+immortalwrt&expanded=true) |
 | [![](https://img.shields.io/badge/OpenWrt-ArmV8-32C955.svg?logo=openwrt)](https://github.com/fichenx/Actions-OpenWrt/blob/main/.github/workflows/Releases_ARMv8_OpenWrt.yml) | [![](https://github.com/fichenx/Actions-OpenWrt/actions/workflows/Releases_ARMv8_OpenWrt.yml/badge.svg)](https://github.com/fichenx/Actions-OpenWrt/actions/workflows/Releases_ARMv8_OpenWrt.yml) | [![](https://img.shields.io/badge/编译-配置-orange.svg?logo=apache-spark)](https://github.com/fichenx/Actions-OpenWrt/blob/main/config/ARMv8.config) | [![](https://img.shields.io/badge/下载-链接-blueviolet.svg?logo=hack-the-box)](https://github.com/fichenx/Actions-OpenWrt/releases?q=ARMv8&expanded=true) |
@@ -51,8 +52,8 @@
 
 
 ### 2、Redmi AX6[![](https://img.shields.io/badge/-Redmi_AX6-FFFFFF.svg)](#2、Redmi_AX6-)
-- 使用源码（lede原厂分区）：https://github.com/coolsnowwolf/lede (5.10)
-- 使用源码（lede合并分区）：https://github.com/coolsnowwolf/lede (5.10)
+- 使用源码（lede原厂分区）：https://github.com/coolsnowwolf/lede (6.1)
+- 使用源码（lede合并分区）：https://github.com/coolsnowwolf/lede (6.1)
 - 使用源码（immortalwrt合并分区）：https://github.com/immortalwrt/immortalwrt (5.15)
 - 默认IP：192.168.123.1
 - 用户名：root
@@ -63,9 +64,9 @@
  编译插件：<br/>
 - 主题：Argon、Design<br/>
 - 系统：文件传输<br/>
-- 服务：上网时间控制、SmartDNS、网络唤醒、Upnp、KMS服务器、微信推送、动态DNS、bypass（lede原厂分区、lede合并分区）、Adbyby Plus+ （lede合并分区）、AdGuard Home（lede合并分区）、 openclash（lede合并分区、immortalwrt合并分区）、Watchcat plus(lede合并分区、immortalwrt合并分区)、msd_lite(lede合并分区、immortalwrt合并分区)、acme(lede合并分区、immortalwrt合并分区)、、omcproxy组播代理(lede合并分区、immortalwrt合并分区)、MWAN3 分流助手(lede合并分区、immortalwrt合并分区)、passwall（immortalwrt合并分区）、helloword（immortalwrt合并分区）<br/>
+- 服务：上网时间控制、SmartDNS、网络唤醒、Upnp、KMS服务器、微信推送、动态DNS、MWAN3 分流助手、luci-app-uhttpd、iKoolProxy（lede合并分区）、ShadowSocksR Plus+（lede原厂分区、lede合并分区）、Adbyby Plus+ （lede合并分区）、AdGuard Home（不含二进制文件，可在界面下载）lede合并分区）、 openclash（lede合并分区、immortalwrt合并分区）、Watchcat plus(lede合并分区、immortalwrt合并分区)、msd_lite(lede合并分区、immortalwrt合并分区)、acme(immortalwrt合并分区)、omcproxy组播代理(lede合并分区、immortalwrt合并分区)、passwall（immortalwrt合并分区）、helloword（immortalwrt合并分区）<br/>
 - VPN：N2N VPN、nps内网穿透（lede合并分区、immortalwrt合并分区）<br/>
-- 网络：多线多拨、Turbo ACC 网络加速、负载均衡(lede原厂分区、lede合并分区)、Tcpdump 流量监控(lede合并分区、immortalwrt合并分区)。<br/>
+- 网络：多线多拨、Turbo ACC 网络加速、负载均衡、ipv6helper、Tcpdump 流量监控(lede合并分区、immortalwrt合并分区)。<br/>
 <img src="https://github.com/fichenx/OpenWrt/assets/86181542/a640d3d9-b935-40ca-9e16-3cc94bdc6a58"/>
 </details>
 
@@ -83,11 +84,11 @@
 编译插件：<br/>
 - 主题：Argon、Design<br/>
 - 系统：Argon主题设置、文件传输、磁盘管理、晨晶宝盒<br/>
-- 服务：PassWall、ikoolproxy、bypass、Adbyby Plus+ 、AdGuard Home、ShadowSocksR Plus+、watchcat plus、上网时间控制、微信推送、openclash、DDNS-GO、动态DNS、Privoxy 网络代理、SmartDNS、组播转换 Lite、网络唤醒、uhttpd、Upnp、KMS服务器、MWAN3 分流助手
+- 服务：PassWall、ikoolproxy、bypass、Adbyby Plus+ 、AdGuard Home（不含二进制文件，可在界面下载）、ShadowSocksR Plus+、watchcat plus、上网时间控制、微信推送、openclash、DDNS-GO、动态DNS、Privoxy 网络代理、SmartDNS、组播转换 Lite、网络唤醒、uhttpd、Upnp、KMS服务器、MWAN3 分流助手、homeassistant。
 - docker：DockerMan<br/>
 - 网络存储：filebrowser、NFS管理、usb打印服务器、硬盘休眠、打印服务器、minidlna、网络共享、Aria2、MJPG-streamer、FTP服务器、MiniDLNA<br/>
 - VPN：N2N VPN、IPsec VPN服务器、PPTP VPN服务器、Frps、Frp内网穿透、NPS内网穿透<br/>
-- 网络：SQM Qos、socat、Turbo ACC 网络加速、u多线多拨、负载均衡。<br/>
+- 网络：SQM Qos、socat、Turbo ACC 网络加速、u多线多拨、负载均衡、ipv6helper。<br/>
 <img src="https://github.com/fichenx/OpenWrt/assets/86181542/a7ff319a-8875-4f58-a185-af6c1af979fc"/>
 </details>
 
