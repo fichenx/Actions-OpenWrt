@@ -29,7 +29,7 @@ HOST_BUILD_DIR:=$(BUILD_DIR_HOST)/$(PKG_NAME)_$(PKG_SOURCE_VERSION)
 
 HOST_BUILD_PARALLEL:=1
 PKG_BUILD_PARALLEL:=1
-PKG_BUILD_FLAGS:=no-mips16 gc-sections lto
+PKG_USE_MIPS16:=0
 
 include $(INCLUDE_DIR)/package.mk
 
@@ -337,9 +337,8 @@ define DefineBoostLibrary
 endef
 
 $(eval $(call DefineBoostLibrary,atomic,system))
-$(eval $(call DefineBoostLibrary,charconv,,,,libquadmath))
+$(eval $(call DefineBoostLibrary,charconv,))
 $(eval $(call DefineBoostLibrary,chrono,system))
-$(eval $(call DefineBoostLibrary,cobalt,system container))
 $(eval $(call DefineBoostLibrary,container))
 $(eval $(call DefineBoostLibrary,context,chrono system,,!boost-context-exclude))
 $(eval $(call DefineBoostLibrary,contract,system))
@@ -383,10 +382,10 @@ define Host/Compile
 endef
 
 CONFIGURE_PREFIX:=$(PKG_INSTALL_DIR)
-TARGET_LDFLAGS += -pthread -lrt -lstdc++ -Wl,--as-needed,--print-gc-sections
+TARGET_LDFLAGS += -pthread -lrt -lstdc++ -Wl,--gc-sections,--as-needed,--print-gc-sections
 
 TARGET_CFLAGS += \
-	$(if $(CONFIG_SOFT_FLOAT),-DBOOST_NO_FENV_H) -fPIC
+	$(if $(CONFIG_SOFT_FLOAT),-DBOOST_NO_FENV_H) -fPIC -ffunction-sections -fdata-sections -flto
 
 ifeq ($(word 1,$(subst ., ,$(call qstrip,$(CONFIG_GCC_VERSION)))),5)
     EXTRA_CXXFLAGS += -std=gnu++14
