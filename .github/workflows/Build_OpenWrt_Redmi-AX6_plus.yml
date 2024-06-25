@@ -42,8 +42,8 @@ env:
   UPLOAD_WETRANSFER: false
   UPLOAD_RELEASE: true
   TZ: Asia/Shanghai
-  FILE_NAME: Redmi-AX6(lede-plus)
-  PRODUCT_NAME: Redmi-AX6(lede-plus)
+  FILE_NAME: Redmi-AX6_plus(lede)
+  PRODUCT_NAME: Redmi-AX6-plus(lede)
 
 jobs:
   build:
@@ -219,7 +219,7 @@ jobs:
             - WEB登陆账户：root
             - 密码：password
             - 固件源码：https://github.com/coolsnowwolf/lede
-            - 固件内核版本：5.10
+            - 固件内核版本：6.1
          #### 源码最近提交信息:
             - ${{ env.useVersionInfo }}
         artifacts: ${{ env.FIRMWARE }}/*
