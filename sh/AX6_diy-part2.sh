@@ -143,7 +143,7 @@ cp -rf $GITHUB_WORKSPACE/general/golang feeds/packages/lang/golang
 #[ -e package/lean/default-settings/files/zzz-default-settings ] && rm -rf package/firmware/ath11k-firmware/Makefile
 #[ -e package/lean/default-settings/files/zzz-default-settings ] && cp -rf $GITHUB_WORKSPACE/backup/AX6/package/firmware/ath11k-firmware/Makefile package/firmware/ath11k-firmware/Makefile
 
-#更换msd_lite为最新版（immortalwrt源）
+#更换miniupnpd为最新版（immortalwrt源）
 [ -e package/lean/default-settings/files/zzz-default-settings ] && rm -rf feeds/packages/net/miniupnpd
 [ -e package/lean/default-settings/files/zzz-default-settings ] && git_sparse_clone master https://github.com/immortalwrt/packages immortalwrt net/miniupnpd && mv -n miniupnpd feeds/packages/net/miniupnpd
 
