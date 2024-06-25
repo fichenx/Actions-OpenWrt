@@ -321,8 +321,8 @@ rm -rf feeds/packages/utils/dockerd
 cp -rf $GITHUB_WORKSPACE/general/dockerd feeds/packages/utils/dockerd
 
 # docker-compose
-sed -i 's/PKG_VERSION:=.*/PKG_VERSION:=2.28.0/g' feeds/packages/utils/docker-compose/Makefile
-sed -i 's/PKG_HASH:=.*/PKG_HASH:=752a6c95d077126d6c459150f1db8111d2b7d01fa7495667dced07d8e3e8ef31/g' feeds/packages/utils/docker-compose/Makefile
+sed -i 's/PKG_VERSION:=.*/PKG_VERSION:=2.28.1/g' feeds/packages/utils/docker-compose/Makefile
+sed -i 's/PKG_HASH:=.*/PKG_HASH:=856f1b509ef7190fedadec369e290bfb08c2fafb4f858b80a27caf350554fb50/g' feeds/packages/utils/docker-compose/Makefile
 
 # containerd
 #sed -i 's/PKG_VERSION:=.*/PKG_VERSION:=1.5.11/g' feeds/packages/utils/containerd/Makefile
@@ -1122,6 +1122,9 @@ cp -rf $GITHUB_WORKSPACE/general/python feeds/packages/lang
 
 rm -rf  feeds/packages/net/uugamebooster
 cp -rf $GITHUB_WORKSPACE/general/uugamebooster feeds/packages/net
+
+rm -rf feeds/packages/utils/lrzsz
+cp -rf $GITHUB_WORKSPACE/general/lrzsz feeds/packages/utils
 
 ./scripts/feeds update -a
 ./scripts/feeds install -a
