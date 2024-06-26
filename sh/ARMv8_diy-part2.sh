@@ -145,8 +145,8 @@ git_sparse_clone master "https://github.com/openwrt/packages" "temp" utils/watch
 git clone https://github.com/gngpp/luci-app-watchcat-plus.git package/luci-app-watchcat-plus
 
 #删除lede自带uwsgi
-rm -rf feeds/packages/net/uwsgi
-git_sparse_clone openwrt-23.05 "https://github.com/openwrt/packages" "22packages" net/uwsgi && mv -n uwsgi feeds/packages/net/uwsgi
+#rm -rf feeds/packages/net/uwsgi
+#git_sparse_clone openwrt-23.05 "https://github.com/openwrt/packages" "22packages" net/uwsgi && mv -n uwsgi feeds/packages/net/uwsgi
 
 #更换miniupnpd为最新版（immortalwrt源）
 [ -e package/lean/default-settings/files/zzz-default-settings ] && rm -rf feeds/packages/net/miniupnpd
