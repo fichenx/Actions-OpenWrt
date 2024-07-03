@@ -331,9 +331,9 @@ sed -i 's/PKG_HASH:=.*/PKG_HASH:=856f1b509ef7190fedadec369e290bfb08c2fafb4f858b8
 cp -f $GITHUB_WORKSPACE/general/containerd/Makefile feeds/packages/utils/containerd
 
 # runc
-sed -i 's/PKG_VERSION:=.*/PKG_VERSION:=1.1.12/g' feeds/packages/utils/runc/Makefile
-sed -i 's/PKG_HASH:=.*/PKG_HASH:=be31b07d6a54a8f234016501c300ad04b6c428c56588e7eca8c3b663308db208/g' feeds/packages/utils/runc/Makefile
-sed -i 's/PKG_SOURCE_VERSION:=.*/PKG_SOURCE_VERSION:=51d5e94601ceffbbd85688df1c928ecccbfa4685/g' feeds/packages/utils/runc/Makefile
+sed -i 's/PKG_VERSION:=.*/PKG_VERSION:=1.1.13/g' feeds/packages/utils/runc/Makefile
+sed -i 's/PKG_HASH:=.*/PKG_HASH:=789d5749a08ef1fbe5d1999b67883206a68a4e58e6ca0151c411d678f3480b25/g' feeds/packages/utils/runc/Makefile
+sed -i 's/PKG_SOURCE_VERSION:=.*/PKG_SOURCE_VERSION:=58aa9203c123022138b22cf96540c284876a7910/g' feeds/packages/utils/runc/Makefile
 #sed -i '12d' feeds/packages/utils/runc/Makefile
 
 # bsdtar
