@@ -668,8 +668,8 @@ rm -rf feeds/packages/utils/nano
 cp -rf $GITHUB_WORKSPACE/general/nano feeds/packages/utils
 
 # dnsproxy
-sed -i 's/PKG_VERSION:=.*/PKG_VERSION:=0.71.2/g' feeds/packages/net/dnsproxy/Makefile
-sed -i 's/PKG_HASH:=.*/PKG_HASH:=9ea0a3ad75b2afdae8972aa563ec102c545c0e78acef07ab6862cba4d9508f62/g' feeds/packages/net/dnsproxy/Makefile
+sed -i 's/PKG_VERSION:=.*/PKG_VERSION:=0.72.0/g' feeds/packages/net/dnsproxy/Makefile
+sed -i 's/PKG_HASH:=.*/PKG_HASH:=ed8ab8aa619dfe89d0dd99433fee31a0f7fb68dc3ad8d6a7ef8ba24ef478aa87/g' feeds/packages/net/dnsproxy/Makefile
 
 # libnl-tiny
 #sed -i 's/PKG_RELEASE:=.*/PKG_RELEASE:=1/g' package/libs/libnl-tiny/Makefile
@@ -738,9 +738,9 @@ rm -rf feeds/packages/net/nginx
 cp -rf $GITHUB_WORKSPACE/general/nginx feeds/packages/net/nginx
 
 # openssl
-sed -i 's/PKG_VERSION:=.*/PKG_VERSION:=3.0.13/g' package/libs/openssl/Makefile
-sed -i 's/PKG_RELEASE:=.*/PKG_RELEASE:=1/g' package/libs/openssl/Makefile
-sed -i 's/PKG_HASH:=.*/PKG_HASH:=88525753f79d3bec27d2fa7c66aa0b92b3aa9498dafd93d7cfa4b3780cdae313/g' package/libs/openssl/Makefile
+#sed -i 's/PKG_VERSION:=.*/PKG_VERSION:=3.0.13/g' package/libs/openssl/Makefile
+#sed -i 's/PKG_RELEASE:=.*/PKG_RELEASE:=1/g' package/libs/openssl/Makefile
+#sed -i 's/PKG_HASH:=.*/PKG_HASH:=88525753f79d3bec27d2fa7c66aa0b92b3aa9498dafd93d7cfa4b3780cdae313/g' package/libs/openssl/Makefile
 
 # 修改makefile
 #find package/*/ -maxdepth 2 -path "*/Makefile" | xargs -i sed -i 's|include\ \.\.\/\.\.\/devel/meson/meson.mk|include \$(INCLUDE_DIR)\/meson.mk|g' {}
@@ -1090,8 +1090,8 @@ cp -rf $GITHUB_WORKSPACE/general/sing-box package/sing-box
 sed -i '/CGO_ENABLED=0/{N;d;}' feeds/packages/utils/v2dat/Makefile
 
 # dae
-cp -rf $GITHUB_WORKSPACE/general/dae package/dae
-cp -rf $GITHUB_WORKSPACE/general/luci-app-dae package/luci-app-dae
+#cp -rf $GITHUB_WORKSPACE/general/dae package/dae
+#cp -rf $GITHUB_WORKSPACE/general/luci-app-dae package/luci-app-dae
 
 # dnsmasq
 #rm -rf package/network/services/dnsmasq
