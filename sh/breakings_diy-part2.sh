@@ -243,7 +243,7 @@ cp -rf $GITHUB_WORKSPACE/general/ffmpeg feeds/packages/multimedia
 
 # btrfs-progs
 sed -i 's/PKG_VERSION:=.*/PKG_VERSION:=6.9.2/g' feeds/packages/utils/btrfs-progs/Makefile
-sed -i 's/PKG_HASH:=.*/PKG_HASH:=f1ad8c8e08bbeef3958e3a0cac62f26f4a93af52b6d2f6510a3e240809b0609d/g' feeds/packages/utils/btrfs-progs/Makefile
+sed -i 's/PKG_HASH:=.*/PKG_HASH:=43865bb272dc0ab2585de3605434d81ba217578f0897bf700cd36c14ac40652a/g' feeds/packages/utils/btrfs-progs/Makefile
 rm -rf feeds/packages/utils/btrfs-progs/patches
 #sed -i '68i\	--disable-libudev \\' feeds/packages/utils/btrfs-progs/Makefile
 
