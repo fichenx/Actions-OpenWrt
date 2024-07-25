@@ -272,7 +272,8 @@ cp -rf $GITHUB_WORKSPACE/general/golang feeds/packages/lang/golang
 #sed -i 's/PKG_HASH:=.*/PKG_HASH:=b4785f2d8877fa92c0e45d7155cf8cc6750dbda961f4b1a45bcbec990cf2fa9b/g' feeds/packages/net/curl/Makefile
 #sed -i 's/PKG_RELEASE:=.*/PKG_RELEASE:=1/g' feeds/packages/net/curl/Makefile
 rm -rf feeds/packages/net/curl
-merge_package https://github.com/openwrt/packages packages/net/curl
+#merge_package https://github.com/openwrt/packages packages/net/curl
+cp -rf $GITHUB_WORKSPACE/general/curl feeds/packages/net
 
 # Qt5 -qtbase
 #sed -i "s/PKG_BUGFIX:=.*/PKG_BUGFIX:=13/g" feeds/packages/libs/qtbase/Makefile
@@ -321,8 +322,8 @@ rm -rf feeds/packages/utils/dockerd
 cp -rf $GITHUB_WORKSPACE/general/dockerd feeds/packages/utils/dockerd
 
 # docker-compose
-sed -i 's/PKG_VERSION:=.*/PKG_VERSION:=2.29.0/g' feeds/packages/utils/docker-compose/Makefile
-sed -i 's/PKG_HASH:=.*/PKG_HASH:=0e34f4822e6e1076e94cff203b50c0f4a624b7a2673531ec97b04d5859c9dac2/g' feeds/packages/utils/docker-compose/Makefile
+sed -i 's/PKG_VERSION:=.*/PKG_VERSION:=2.29.1/g' feeds/packages/utils/docker-compose/Makefile
+sed -i 's/PKG_HASH:=.*/PKG_HASH:=9749d621b1b8bc1f5881741e0cbad20b5133a0aeedb9339af06b0187be8141b1/g' feeds/packages/utils/docker-compose/Makefile
 
 # containerd
 #sed -i 's/PKG_VERSION:=.*/PKG_VERSION:=1.5.11/g' feeds/packages/utils/containerd/Makefile
@@ -703,8 +704,8 @@ rm -rf feeds/packages/sound/shairport-sync
 cp -rf $GITHUB_WORKSPACE/general/shairport-sync feeds/packages/sound/shairport-sync
 
 # less
-sed -i 's/PKG_VERSION:=.*/PKG_VERSION:=643/g' feeds/packages/utils/less/Makefile
-sed -i 's/PKG_HASH:=.*/PKG_HASH:=2911b5432c836fa084c8a2e68f6cd6312372c026a58faaa98862731c8b6052e8/g' feeds/packages/utils/less/Makefile
+sed -i 's/PKG_VERSION:=.*/PKG_VERSION:=661/g' feeds/packages/utils/less/Makefile
+sed -i 's/PKG_HASH:=.*/PKG_HASH:=2b5f0167216e3ef0ffcb0c31c374e287eb035e4e223d5dae315c2783b6e738ed/g' feeds/packages/utils/less/Makefile
 
 # minizip
 #sed -i 's/PKG_VERSION:=.*/PKG_VERSION:=3.0.4/g' feeds/packages/libs/minizip/Makefile
@@ -970,8 +971,8 @@ sed -i 's/PKG_HASH:=.*/PKG_HASH:=2345d4dc136fda28ce243e0bb21f2e7e8ef6293d62c799a
 #sed -i 's/PKG_HASH:=.*/PKG_HASH:=8f74213b56238c85a50a5329f77e06198771e70dd9a739779f4c02f65d971313/g' package/libs/libiconv-full/Makefile
 
 # bind
-sed -i 's/PKG_VERSION:=.*/PKG_VERSION:=9.18.27/g' feeds/packages/net/bind/Makefile
-sed -i 's/PKG_HASH:=.*/PKG_HASH:=ea3f3d8cfa2f6ae78c8722751d008f54bc17a3aed2be3f7399eb7bf5f4cda8f1/g' feeds/packages/net/bind/Makefile
+sed -i 's/PKG_VERSION:=.*/PKG_VERSION:=9.18.28/g' feeds/packages/net/bind/Makefile
+sed -i 's/PKG_HASH:=.*/PKG_HASH:=e7cce9a165f7b619eefc4832f0a8dc16b005d29e3890aed6008c506ea286a5e7/g' feeds/packages/net/bind/Makefile
 sed -i 's/PKG_RELEASE:=.*/PKG_RELEASE:=1/g' feeds/packages/net/bind/Makefile
 
 # libwebp
