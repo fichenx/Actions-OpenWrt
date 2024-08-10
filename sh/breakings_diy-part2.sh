@@ -242,8 +242,8 @@ rm -rf feeds/packages/multimedia/ffmpeg
 cp -rf $GITHUB_WORKSPACE/general/ffmpeg feeds/packages/multimedia
 
 # btrfs-progs
-sed -i 's/PKG_VERSION:=.*/PKG_VERSION:=6.9.2/g' feeds/packages/utils/btrfs-progs/Makefile
-sed -i 's/PKG_HASH:=.*/PKG_HASH:=43865bb272dc0ab2585de3605434d81ba217578f0897bf700cd36c14ac40652a/g' feeds/packages/utils/btrfs-progs/Makefile
+sed -i 's/PKG_VERSION:=.*/PKG_VERSION:=6.10/g' feeds/packages/utils/btrfs-progs/Makefile
+sed -i 's/PKG_HASH:=.*/PKG_HASH:=3382a84e3fcfe1ffdea07a61ab3f4e86665d38fa35f1f34548d5df867423e0df/g' feeds/packages/utils/btrfs-progs/Makefile
 rm -rf feeds/packages/utils/btrfs-progs/patches
 #sed -i '68i\	--disable-libudev \\' feeds/packages/utils/btrfs-progs/Makefile
 
@@ -374,8 +374,8 @@ sed -i 's/PKG_MIRROR_HASH:=.*/PKG_MIRROR_HASH:=ac817f63605508779ebebf612fcb7d594
 # php8
 #rm -rf feeds/packages/lang/php8
 #svn co https://github.com/openwrt/packages/trunk/lang/php8 feeds/packages/lang/php8
-sed -i 's/PKG_VERSION:=.*/PKG_VERSION:=8.3.9/g' feeds/packages/lang/php8/Makefile
-sed -i 's/PKG_HASH:=.*/PKG_HASH:=bf4d7b8ea60a356064f88485278bd6f941a230ec16f0fc401574ce1445ad6c77/g' feeds/packages/lang/php8/Makefile
+sed -i 's/PKG_VERSION:=.*/PKG_VERSION:=8.3.10/g' feeds/packages/lang/php8/Makefile
+sed -i 's/PKG_HASH:=.*/PKG_HASH:=a0f2179d00931fe7631a12cbc3428f898ca3d99fe564260c115af381d2a1978d/g' feeds/packages/lang/php8/Makefile
 
 # python-docker
 sed -i 's/PKG_VERSION:=.*/PKG_VERSION:=7.1.0/g' feeds/packages/lang/python/python-docker/Makefile
@@ -669,8 +669,8 @@ rm -rf feeds/packages/utils/nano
 cp -rf $GITHUB_WORKSPACE/general/nano feeds/packages/utils
 
 # dnsproxy
-sed -i 's/PKG_VERSION:=.*/PKG_VERSION:=0.72.1/g' feeds/packages/net/dnsproxy/Makefile
-sed -i 's/PKG_HASH:=.*/PKG_HASH:=482787733a980a862361c069c0f71b5f9bb765ae51c07d6a6c195f44e98189f6/g' feeds/packages/net/dnsproxy/Makefile
+sed -i 's/PKG_VERSION:=.*/PKG_VERSION:=0.72.3/g' feeds/packages/net/dnsproxy/Makefile
+sed -i 's/PKG_HASH:=.*/PKG_HASH:=40910c1b8a24d2beb4835fc42dd9d38f35cd7e6239f813015a36e0c64f0c12aa/g' feeds/packages/net/dnsproxy/Makefile
 
 # libnl-tiny
 #sed -i 's/PKG_RELEASE:=.*/PKG_RELEASE:=1/g' package/libs/libnl-tiny/Makefile
