@@ -1134,6 +1134,10 @@ cp -rf $GITHUB_WORKSPACE/general/lrzsz feeds/packages/utils
 rm -rf feeds/packages/net/wget
 cp -rf $GITHUB_WORKSPACE/general/wget feeds/packages/net/wget
 
+# liburcu
+sed -i 's/PKG_VERSION:=.*/PKG_VERSION:=0.14.0/g' feeds/packages/libs/liburcu/Makefile
+sed -i 's/PKG_HASH:=.*/PKG_HASH:=ca43bf261d4d392cff20dfae440836603bf009fce24fdc9b2697d837a2239d4f/g' feeds/packages/libs/liburcu/Makefile
+
 ./scripts/feeds update -a
 ./scripts/feeds install -a
 
