@@ -973,11 +973,11 @@ sed -i 's/PKG_HASH:=.*/PKG_HASH:=2345d4dc136fda28ce243e0bb21f2e7e8ef6293d62c799a
 #sed -i 's/PKG_HASH:=.*/PKG_HASH:=8f74213b56238c85a50a5329f77e06198771e70dd9a739779f4c02f65d971313/g' package/libs/libiconv-full/Makefile
 
 # bind
-#sed -i 's/PKG_VERSION:=.*/PKG_VERSION:=9.18.28/g' feeds/packages/net/bind/Makefile
-#sed -i 's/PKG_HASH:=.*/PKG_HASH:=e7cce9a165f7b619eefc4832f0a8dc16b005d29e3890aed6008c506ea286a5e7/g' feeds/packages/net/bind/Makefile
-#sed -i 's/PKG_RELEASE:=.*/PKG_RELEASE:=1/g' feeds/packages/net/bind/Makefile
-rm -rf feeds/packages/net/bind
-cp -rf $GITHUB_WORKSPACE/general/bind feeds/packages/net
+sed -i 's/PKG_VERSION:=.*/PKG_VERSION:=9.18.29/g' feeds/packages/net/bind/Makefile
+sed -i 's/PKG_HASH:=.*/PKG_HASH:=c39ce5d09a8cb10108116fa533445de9f7fdfe0063e8d7c4c46ba1fd20d7bf6d/g' feeds/packages/net/bind/Makefile
+sed -i 's/PKG_RELEASE:=.*/PKG_RELEASE:=1/g' feeds/packages/net/bind/Makefile
+#rm -rf feeds/packages/net/bind
+#cp -rf $GITHUB_WORKSPACE/general/bind feeds/packages/net
 
 # libwebp
 sed -i 's/PKG_VERSION:=.*/PKG_VERSION:=1.3.2/g' feeds/packages/libs/libwebp/Makefile
