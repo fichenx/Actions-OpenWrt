@@ -108,7 +108,8 @@ rm -rf feeds/luci/applications/luci-app-serverchan
 git clone -b openwrt-18.06 https://github.com/tty228/luci-app-wechatpush feeds/luci/applications/luci-app-serverchan
 
 #luci-app-bypass
-git_sparse_clone master "https://github.com/kiddin9/openwrt-packages" "kiddin9" luci-app-bypass && mv -n luci-app-bypass package/luci-app-bypass
+#git_sparse_clone master "https://github.com/kiddin9/openwrt-packages" "kiddin9" luci-app-bypass && mv -n luci-app-bypass package/luci-app-bypass
+git_sparse_clone master "https://github.com/fichenx/packages" "temp" luci-app-bypass && mv -n luci-app-bypass package/luci-app-bypass
 
 #luci-app-npc
 git_sparse_clone master "https://github.com/Hyy2001X/AutoBuild-Packages" "Hyy2001X" luci-app-npc && mv -n luci-app-npc package/luci-app-npc
