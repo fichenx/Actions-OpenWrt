@@ -121,7 +121,7 @@ sed -i 's|luci-theme-bootstrap|luci-theme-design|g' feeds/luci/collections/luci/
 # 替换自带watchcat为https://github.com/gngpp/luci-app-watchcat-plus
 rm -rf feeds/packages/utils/watchcat
 git_sparse_clone master "https://github.com/openwrt/packages" "temp" utils/watchcat && mv -n watchcat feeds/packages/utils/watchcat
-git_sparse_clone main "https://github.com/fichenx/packages "temp" luci-app-watchcat-plus && mv -n luci-app-watchcat-plus package/luci-app-watchcat-plus
+git_sparse_clone main "https://github.com/fichenx/packages" "temp" luci-app-watchcat-plus && mv -n luci-app-watchcat-plus package/luci-app-watchcat-plus
 
 #更换msd_lite为最新版（immortalwrt源）
 [ -e package/lean/default-settings/files/zzz-default-settings ] && rm -rf feeds/packages/net/msd_lite
@@ -147,6 +147,11 @@ cp -rf $GITHUB_WORKSPACE/general/golang feeds/packages/lang/golang
 #更换miniupnpd为最新版（immortalwrt源）
 [ -e package/lean/default-settings/files/zzz-default-settings ] && rm -rf feeds/packages/net/miniupnpd
 [ -e package/lean/default-settings/files/zzz-default-settings ] && git_sparse_clone master https://github.com/immortalwrt/packages immortalwrt net/miniupnpd && mv -n miniupnpd feeds/packages/net/miniupnpd
+
+#替换luci-app-socat为https://github.com/chenmozhijin/luci-app-socat
+rm -rf feeds/luci/applications/luci-app-socat
+git_sparse_clone main "https://github.com/chenmozhijin/luci-app-socat" "temp" luci-app-socat && mv -n luci-app-socat package/luci-app-socat
+
 
 ./scripts/feeds update -a
 ./scripts/feeds install -a
