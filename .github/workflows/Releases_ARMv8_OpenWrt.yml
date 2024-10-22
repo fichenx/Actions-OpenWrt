@@ -38,10 +38,10 @@ jobs:
     if: github.event.repository.owner.id == github.event.sender.id || ! github.event.sender.id
 
     steps:
-    - name: Checkout
+    - name: 检出
       uses: actions/checkout@v3
 
-    - name: Initialization environment
+    - name: 初始化环境
       env:
         DEBIAN_FRONTEND: noninteractive
       run: |
@@ -56,7 +56,8 @@ jobs:
         sudo timedatectl set-timezone "$TZ"
         sudo mkdir -p /mnt/workdir
         sudo chown $USER:$GROUPS /mnt/workdir
-    - name: Clone source code
+        
+    - name: 克隆源代码克隆源代码
       working-directory: /mnt/workdir
       run: |
         df -hT $PWD
@@ -68,7 +69,8 @@ jobs:
         echo "DATE=$(date "+%Y-%m-%d %H:%M:%S")" >> $GITHUB_ENV
         echo "DATE1=$(date "+%Y-%m-%d")" >> $GITHUB_ENV
         echo "DATE2=$(date "+%Y%m%d%H%M")" >> $GITHUB_ENV
-    - name: Package Armvirt as OpenWrt
+        
+    - name: 将Armvirt打包为OpenWrt
       if: (!cancelled())
       uses: ophub/flippy-openwrt-actions@main
       env:
@@ -82,20 +84,20 @@ jobs:
         GZIP_IMGS: .gz
         GH_TOKEN: ${{ secrets.GH_TOKEN }}
 
-    - name: SSH connection to Actions @ Ctrl+C to enter, Ctrl+D to exit
+    - name: SSH连接到Actions @ Ctrl+C进入，Ctrl+D退出
       uses: P3TERX/ssh2actions@main
       if: (github.event.inputs.ssh == 'true' && github.event.inputs.ssh  != 'false') || contains(github.event.action, 'ssh')
       env:
         TELEGRAM_CHAT_ID: ${{ secrets.TELEGRAM_CHAT_ID }}
         TELEGRAM_BOT_TOKEN: ${{ secrets.TELEGRAM_BOT_TOKEN }}
 
-    - name: Upload artifact to Actions
+    - name: 上传固件
       uses: kittaakos/upload-artifact-as-is@master
       if: env.PACKAGED_STATUS == 'success' && env.UPLOAD_FIRMWARE == 'true' && !cancelled()
       with:
         path: ${{ env.PACKAGED_OUTPUTPATH }}/
 
-    - name: Upload OpenWrt Firmware to Release
+    - name: 创建发布版本
       id: release
       uses: ncipollo/release-action@main
       if: env.PACKAGED_STATUS == 'success' && env.UPLOAD_RELEASE == 'true' && !cancelled()
@@ -126,7 +128,7 @@ jobs:
           #### 源码最近提交信息:
           - ${{ env.useVersionInfo }}
 
-    - name: Delete older workflow runs and artifacts
+    - name: 删除旧的工作流和固件
       uses: Mattraks/delete-workflow-runs@main
       with:
         token: ${{ secrets.GITHUB_TOKEN }}
@@ -135,7 +137,7 @@ jobs:
         retain_days: 30
         keep_minimum_runs: 10
 
-    - name: Delete older releases
+    - name: 删除旧的发布版本
       uses: codesnas/delete-older-releases@main
       if: env.UPLOAD_RELEASE == 'true' && !cancelled()
       with:
