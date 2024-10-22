@@ -88,8 +88,6 @@ sed -i 's|Must an IPv4 address|IPv4 address or domain name|g' feeds/luci/applica
 sed -i 's|Must an IPv4 address|IPv4 address or domain name|g' feeds/luci/applications/luci-app-nps/po/zh-cn/nps.po
 sed -i 's|必须是 IPv4 地址|IPv4 地址或域名|g' feeds/luci/applications/luci-app-nps/po/zh-cn/nps.po
 
-#添加design主题js版
-[ ! -e package/lean/default-settings/files/zzz-default-settings ] && git clone --depth 1 -b js https://github.com/gngpp/luci-theme-design.git  package/luci-theme-design
 
 #luci-app-serverchan
 rm -rf feeds/luci/applications/luci-app-serverchan
@@ -123,7 +121,7 @@ sed -i 's|luci-theme-bootstrap|luci-theme-design|g' feeds/luci/collections/luci/
 # 替换自带watchcat为https://github.com/gngpp/luci-app-watchcat-plus
 rm -rf feeds/packages/utils/watchcat
 git_sparse_clone master "https://github.com/openwrt/packages" "temp" utils/watchcat && mv -n watchcat feeds/packages/utils/watchcat
-git clone https://github.com/gngpp/luci-app-watchcat-plus.git package/luci-app-watchcat-plus
+git_sparse_clone main "https://github.com/fichenx/packages "temp" luci-app-watchcat-plus && mv -n luci-app-watchcat-plus package/luci-app-watchcat-plus
 
 #更换msd_lite为最新版（immortalwrt源）
 [ -e package/lean/default-settings/files/zzz-default-settings ] && rm -rf feeds/packages/net/msd_lite
