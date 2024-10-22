@@ -152,6 +152,9 @@ cp -rf $GITHUB_WORKSPACE/general/golang feeds/packages/lang/golang
 rm -rf feeds/luci/applications/luci-app-socat
 git_sparse_clone main "https://github.com/chenmozhijin/luci-app-socat" "temp" luci-app-socat && mv -n luci-app-socat package/luci-app-socat
 
+#添加luci-app-lucky
+git clone  https://github.com/gdy666/luci-app-lucky.git package/lucky
+
 
 ./scripts/feeds update -a
 ./scripts/feeds install -a
