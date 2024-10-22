@@ -10,6 +10,19 @@
 # Description: OpenWrt DIY script part 2 (After Update feeds)
 #
 
+function git_sparse_clone() {
+  branch="$1" rurl="$2" localdir="$3" && shift 3
+  #git clone -b $branch --depth 1 --filter=blob:none --sparse $rurl $localdir
+  git clone -b $branch --single-branch --no-tags --depth 1 --filter=blob:none --no-checkout $rurl $localdir
+  cd $localdir
+  #git sparse-checkout init --cone
+  #git sparse-checkout set $@
+  git checkout $branch -- $@
+  mv -n $@ ../
+  cd ..
+  rm -rf $localdir
+  }
+  
 # Modify default IP
 #sed -i 's/192.168.1.1/192.168.50.5/g' package/base-files/files/bin/config_generate
 
@@ -64,6 +77,10 @@ sed -i 's/必须是 IPv4 地址/IPv4 地址或域名/g' feeds/luci/applications/
 rm -rf feeds/luci/applications/luci-app-serverchan
 #cp -af feeds/fichenx/luci-app-serverchan feeds/luci/applications/luci-app-serverchan
 git clone -b openwrt-18.06 https://github.com/tty228/luci-app-wechatpush feeds/luci/applications/luci-app-serverchan
+
+#替换luci-app-socat为https://github.com/chenmozhijin/luci-app-socat
+rm -rf feeds/luci/applications/luci-app-socat
+git_sparse_clone main "https://github.com/chenmozhijin/luci-app-socat" "temp" luci-app-socat && mv -n luci-app-socat package/luci-app-socat
 
 #修改默认主题
 sed -i 's|set luci.main.mediaurlbase|#set luci.main.mediaurlbase|g' feeds/luci/themes/luci-theme-argon/root/etc/uci-defaults/30_luci-theme-argon
