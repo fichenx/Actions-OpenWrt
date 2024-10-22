@@ -23,25 +23,25 @@ jobs:
     if: github.event.repository.owner.id == github.event.sender.id || ! github.event.sender.id
     runs-on: Ubuntu-20.04
 
-    name: Update ${{matrix.target}}
+    name: 更新 ${{matrix.target}}
     strategy:
       fail-fast: false
       matrix:
         target: [main]
 
     steps:
-    - name: Checkout
+    - name: 检出
       uses: actions/checkout@main
       with:
         fetch-depth: 0
 
-    - name: Initialization environment
+    - name: 初始化环境
       run : |
         git config --global user.email "41898282+github-actions[bot]@users.noreply.github.com"
         git config --global user.name "github-actions[bot]"
         sudo timedatectl set-timezone "Asia/Shanghai"
         
-    - name: Clone packages
+    - name: 克隆上级文件
       run: |
         cd $GITHUB_WORKSPACE
         git clone -b ${{matrix.target}} https://github.com/fichenx/Actions-OpenWrt.git ${{matrix.target}}
@@ -53,7 +53,7 @@ jobs:
         rm -rf sh/breakings_diy-part2.sh
         git clone --depth 1 --filter=blob:none --no-checkout https://github.com/breakings/OpenWrt temp && cd temp && git checkout main -- general PATCH diy-part2.sh && cd .. && mv -n temp/general temp/PATCH ./ && mv -n temp/diy-part2.sh sh/breakings_diy-part2.sh ; rm -rf temp
 
-    - name: Upload package
+    - name: 上传更新文件
       env: 
         ACCESS_TOKEN: ${{ secrets.ACCESS_TOKEN }}
       run: |
@@ -64,7 +64,7 @@ jobs:
         git commit -am "update $(date +%Y-%m-%d" "%H:%M:%S)"
         git push --quiet "https://${{ secrets.ACCESS_TOKEN }}@github.com/fichenx/Actions-OpenWrt.git" HEAD:${{matrix.target}}
                
-    - name: Delete workflow runs
+    - name: 删除工作流
       uses: Mattraks/delete-workflow-runs@main
       with:
         retain_days: 1
