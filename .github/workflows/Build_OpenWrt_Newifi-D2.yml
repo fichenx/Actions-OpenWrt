@@ -50,10 +50,10 @@ jobs:
     runs-on: ubuntu-22.04
 
     steps:
-    - name: Checkout
+    - name: 检出
       uses: actions/checkout@main
 
-    - name: Initialization environment
+    - name: 初始化环境
       env:
         DEBIAN_FRONTEND: noninteractive
       run: |
@@ -209,7 +209,7 @@ jobs:
         retain_days: 30
         keep_minimum_runs: 10
 
-    - name: 删除旧版本
+    - name: 删除旧的发布版本
       uses: codesnas/delete-older-releases@main
       if: env.UPLOAD_RELEASE == 'true' && !cancelled()
       with:
