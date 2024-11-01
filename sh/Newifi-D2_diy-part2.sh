@@ -22,6 +22,20 @@ function git_sparse_clone() {
   cd ..
   rm -rf $localdir
   }
+function git_svn() {
+  #branch="$1" rurl="$2" localdir="$3" && shift 3
+  branch="$1" rurl="$2" && shift 2
+  #git clone -b $branch --depth 1 --filter=blob:none --sparse $rurl $localdir
+  git clone -b $branch --single-branch --no-tags --depth 1 --filter=blob:none --no-checkout $rurl tempxx
+  cd tempxx
+  #git sparse-checkout init --cone
+  #git sparse-checkout set $@
+  git checkout $branch -- $@
+  mv -n $@ package/custom2/
+  cd ..
+  rm -rf tempxx
+  }
+  
   
 # Modify default IP
 #sed -i 's/192.168.1.1/192.168.50.5/g' package/base-files/files/bin/config_generate
@@ -41,8 +55,7 @@ sed -i 's/192.168.1.1/192.168.124.1/g' package/base-files/files/bin/config_gener
 
 #5.更换lede源码中自带argon主题
 #rm -rf feeds/luci/themes/luci-theme-argon && git clone -b 18.06 https://github.com/jerrykuku/luci-theme-argon.git feeds/luci/themes/luci-theme-argon
-#[ -e package/lean/default-settings/files/zzz-default-settings ] && rm -rf feeds/luci/themes/luci-theme-design && git_sparse_clone main "https://github.com/fichenx/packages" "temp" luci-theme-design && mv -n luci-theme-design feeds/luci/themes/luci-theme-design
-#[ -e package/lean/default-settings/files/zzz-default-settings ] && rm -rf feeds/luci/applications/luci-app-design-config && git_sparse_clone main "https://github.com/fichenx/packages" "temp" luci-app-design-config && mv -n luci-theme-design feeds/luci/applications/luci-app-design-config
+#[ -e package/lean/default-settings/files/zzz-default-settings ] && rm -rf feeds/luci/themes/luci-theme-design feeds/luci/applications/luci-app-design-config && git_svn main https://github.com/fichenx/packages luci-theme-design luci-app-design-config
 
 #6.添加自动挂载磁盘脚本
 #mkdir -p files/etc/hotplug.d/block && wget -O files/etc/hotplug.d/block/30-usbmount https://raw.githubusercontent.com/fichenx/P3TERX_Actions-OpenWrt/main/files/etc/hotplug.d/block/30-usbmount && chmod 755 files/etc/hotplug.d/block/30-usbmount
@@ -81,7 +94,7 @@ git clone -b openwrt-18.06 https://github.com/tty228/luci-app-wechatpush feeds/l
 
 #替换luci-app-socat为https://github.com/chenmozhijin/luci-app-socat
 rm -rf feeds/luci/applications/luci-app-socat
-git_sparse_clone main "https://github.com/chenmozhijin/luci-app-socat" "temp" luci-app-socat && mv -n luci-app-socat package/luci-app-socat
+git_svn main https://github.com/chenmozhijin/luci-app-socat luci-app-socat
 
 #修改默认主题
 sed -i 's|set luci.main.mediaurlbase|#set luci.main.mediaurlbase|g' feeds/luci/themes/luci-theme-argon/root/etc/uci-defaults/30_luci-theme-argon
