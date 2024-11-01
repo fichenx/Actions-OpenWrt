@@ -17,11 +17,21 @@ function git_sparse_clone() {
   #git sparse-checkout init --cone
   #git sparse-checkout set $@
   git checkout $branch -- $@
-  mv -n $@ ../
+  mv -n $@ package/custom2/
   cd ..
   rm -rf $localdir
   }
-  
+function merge_package(){
+    branch=`echo $1 | rev | cut -d'/' -f 1 | rev`
+    repo=`echo $2 | rev | cut -d'/' -f 1 | rev`
+    pkg=`echo $3 | rev | cut -d'/' -f 1 | rev`
+    # find package/ -follow -name $pkg -not -path "package/custom/*" | xargs -rt rm -rf
+    git clone -b $1 --depth=1 --single-branch $2
+    rm -rf package/custom/$3
+    mv $3 package/custom2/
+    rm -rf $repo
+}
+
 # Modify default IP
 #sed -i 's/192.168.1.1/192.168.50.5/g' package/base-files/files/bin/config_generate
 
@@ -154,6 +164,9 @@ git_sparse_clone main "https://github.com/chenmozhijin/luci-app-socat" "temp" lu
 
 #添加luci-app-lucky
 git clone  https://github.com/gdy666/luci-app-lucky.git package/lucky
+
+#更换luci-app-ikoolproxy为3.8.5-8
+merge_package ipk https://github.com/ilxp/luci-app-ikoolproxy luci-app-ikoolproxy
 
 
 ./scripts/feeds update -a
