@@ -21,6 +21,18 @@ function git_sparse_clone() {
   cd ..
   rm -rf $localdir
   }
+
+function merge_package(){
+    branch=`echo $1 | rev | cut -d'/' -f 1 | rev`
+    repo=`echo $2 | rev | cut -d'/' -f 1 | rev`
+    pkg=`echo $3 | rev | cut -d'/' -f 1 | rev`
+    # find package/ -follow -name $pkg -not -path "package/custom/*" | xargs -rt rm -rf
+    git clone -b $1 --depth=1 --single-branch $2
+    rm -rf package/custom/$3
+    mv $3 package/custom2/
+    rm -rf $repo
+}
+
 #####自定义设置#####
 #1. 修改默认IP
 sed -i 's/192.168.1.1/192.168.123.2/g' package/base-files/files/bin/config_generate
@@ -156,6 +168,12 @@ git_sparse_clone openwrt-23.05 "https://github.com/openwrt/packages" "22packages
 #替换luci-app-socat为https://github.com/chenmozhijin/luci-app-socat
 rm -rf feeds/luci/applications/luci-app-socat
 git_sparse_clone main "https://github.com/chenmozhijin/luci-app-socat" "temp" luci-app-socat && mv -n luci-app-socat package/luci-app-socat
+
+#更换luci-app-ikoolproxy为3.8.5-8
+merge_package ipk https://github.com/ilxp/luci-app-ikoolproxy luci-app-ikoolproxy
+
+#添加luci-app-lucky
+merge_package main https://github.com/gdy666/luci-app-lucky lucky
 
 #禁用nginx，启用uhttpd
 [ -e package/lean/default-settings/files/zzz-default-settings ] && sed -i '/exit 0/i /etc/init.d/nginx disable' package/lean/default-settings/files/zzz-default-settings
