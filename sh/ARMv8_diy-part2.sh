@@ -189,6 +189,10 @@ git_svn ipk https://github.com/ilxp/luci-app-ikoolproxy luci-app-ikoolproxy kool
 #添加luci-app-lucky
 git_svn main https://github.com/gdy666/luci-app-lucky luci-app-lucky lucky
 
+# frp
+sed -i 's/PKG_VERSION:=.*/PKG_VERSION:=0.61.0/g' feeds/packages/net/frp/Makefile
+sed -i 's/PKG_HASH:=.*/PKG_HASH:=C06A11982EF548372038EC99A6B01CF4F7817A9B88EE5064E41E5132D0CCB7E1/g' feeds/packages/net/frp/Makefile
+
 #禁用nginx，启用uhttpd
 [ -e package/lean/default-settings/files/zzz-default-settings ] && sed -i '/exit 0/i /etc/init.d/nginx disable' package/lean/default-settings/files/zzz-default-settings
 [ -e package/lean/default-settings/files/zzz-default-settings ] && sed -i '/exit 0/i /etc/init.d/nginx stop' package/lean/default-settings/files/zzz-default-settings
