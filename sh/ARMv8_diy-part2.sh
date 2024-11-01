@@ -21,7 +21,21 @@ function git_sparse_clone() {
   cd ..
   rm -rf $localdir
   }
-
+  
+function git_svn() {
+  #branch="$1" rurl="$2" localdir="$3" && shift 3
+  branch="$1" rurl="$2" && shift 2
+  #git clone -b $branch --depth 1 --filter=blob:none --sparse $rurl $localdir
+  git clone -b $branch --single-branch --no-tags --depth 1 --filter=blob:none --no-checkout $rurl tempxx
+  cd tempxx
+  #git sparse-checkout init --cone
+  #git sparse-checkout set $@
+  git checkout $branch -- $@
+  mv -n $@ package/custom2/
+  cd ..
+  rm -rf tempxx
+  }
+  
 function merge_package(){
     branch=`echo $1 | rev | cut -d'/' -f 1 | rev`
     repo=`echo $2 | rev | cut -d'/' -f 1 | rev`
@@ -121,22 +135,22 @@ git clone -b openwrt-18.06 https://github.com/tty228/luci-app-wechatpush feeds/l
 
 #luci-app-bypass
 #git_sparse_clone master "https://github.com/kiddin9/openwrt-packages" "kiddin9" luci-app-bypass && mv -n luci-app-bypass package/luci-app-bypass
-git_sparse_clone main "https://github.com/fichenx/packages" "temp" luci-app-bypass && mv -n luci-app-bypass package/luci-app-bypass
+git_svn main https://github.com/fichenx/packages luci-app-bypass
 
 #luci-app-npc
-git_sparse_clone master "https://github.com/Hyy2001X/AutoBuild-Packages" "Hyy2001X" luci-app-npc && mv -n luci-app-npc package/luci-app-npc
+git_svn master https://github.com/Hyy2001X/AutoBuild-Packages luci-app-npc
 
 #使用官方最新samba4
 #sed -i 's/PKG_VERSION:=.*/PKG_VERSION:=4.19.4/g' feeds/packages/net/samba4/Makefile
 #sed -i 's/PKG_HASH:=.*/PKG_HASH:=4026d93b866db198c8ca1685b0f5d52793f65c6e63cb364163af661fdff0968c/g' feeds/packages/net/samba4/Makefile
 rm -rf feeds/packages/net/samba4
 rm -rf feeds/packages/lang/perl
-git_sparse_clone master https://github.com/openwrt/packages temp net/samba4 && mv -n samba4 feeds/packages/net/samba4
-git_sparse_clone master https://github.com/openwrt/packages temp lang/perl && mv -n perl feeds/packages/lang/perl
+git_svn master https://github.com/openwrt/packages net/samba4
+git_svn master https://github.com/openwrt/packages lang/perl
 
 #更换msd_lite为最新版（immortalwrt源）
 rm -rf feeds/packages/net/msd_lite
-git_sparse_clone master https://github.com/immortalwrt/packages immortalwrt net/msd_lite && mv -n msd_lite feeds/packages/net/msd_lite
+git_svn master https://github.com/immortalwrt/packages net/msd_lite
 
 #修改默认主题
 sed -i 's|set luci.main.mediaurlbase|#set luci.main.mediaurlbase|g' feeds/luci/themes/luci-theme-argon/root/etc/uci-defaults/30_luci-theme-argon
@@ -154,26 +168,26 @@ sed -i 's|luci-theme-bootstrap|luci-theme-design|g' feeds/luci/collections/luci/
 
 # 替换自带watchcat为https://github.com/gngpp/luci-app-watchcat-plus
 rm -rf feeds/packages/utils/watchcat
-git_sparse_clone master "https://github.com/openwrt/packages" "temp" utils/watchcat && mv -n watchcat feeds/packages/utils/watchcat
-git_sparse_clone main "https://github.com/fichenx/packages" "temp" luci-app-watchcat-plus && mv -n luci-app-watchcat-plus package/luci-app-watchcat-plus
+git_svn master https://github.com/openwrt/packages utils/watchcat
+git_svn main https://github.com/fichenx/packages luci-app-watchcat-plus
 
 #删除lede自带uwsgi
 rm -rf feeds/packages/net/uwsgi
-git_sparse_clone openwrt-23.05 "https://github.com/openwrt/packages" "22packages" net/uwsgi && mv -n uwsgi feeds/packages/net/uwsgi
+git_svn openwrt-23.05 https://github.com/openwrt/packages net/uwsgi
 
 #更换miniupnpd为最新版（immortalwrt源）
 [ -e package/lean/default-settings/files/zzz-default-settings ] && rm -rf feeds/packages/net/miniupnpd
-[ -e package/lean/default-settings/files/zzz-default-settings ] && git_sparse_clone master https://github.com/immortalwrt/packages immortalwrt net/miniupnpd && mv -n miniupnpd feeds/packages/net/miniupnpd
+[ -e package/lean/default-settings/files/zzz-default-settings ] && git_svn master https://github.com/immortalwrt/packages net/miniupnpd
 
 #替换luci-app-socat为https://github.com/chenmozhijin/luci-app-socat
 rm -rf feeds/luci/applications/luci-app-socat
-git_sparse_clone main "https://github.com/chenmozhijin/luci-app-socat" "temp" luci-app-socat && mv -n luci-app-socat package/luci-app-socat
+git_svn main https://github.com/chenmozhijin/luci-app-socat luci-app-socat
 
 #更换luci-app-ikoolproxy为3.8.5-8
-merge_package ipk https://github.com/ilxp/luci-app-ikoolproxy luci-app-ikoolproxy
+git_svn ipk https://github.com/ilxp/luci-app-ikoolproxy luci-app-ikoolproxy koolproxy
 
 #添加luci-app-lucky
-merge_package main https://github.com/gdy666/luci-app-lucky lucky
+git_svn main https://github.com/gdy666/luci-app-lucky luci-app-lucky lucky
 
 #禁用nginx，启用uhttpd
 [ -e package/lean/default-settings/files/zzz-default-settings ] && sed -i '/exit 0/i /etc/init.d/nginx disable' package/lean/default-settings/files/zzz-default-settings
