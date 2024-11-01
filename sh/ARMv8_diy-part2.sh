@@ -191,7 +191,7 @@ git_svn main https://github.com/gdy666/luci-app-lucky luci-app-lucky lucky
 
 # frp
 sed -i 's/PKG_VERSION:=.*/PKG_VERSION:=0.61.0/g' feeds/packages/net/frp/Makefile
-sed -i 's/PKG_HASH:=.*/PKG_HASH:=C06A11982EF548372038EC99A6B01CF4F7817A9B88EE5064E41E5132D0CCB7E1/g' feeds/packages/net/frp/Makefile
+sed -i 's/PKG_HASH:=.*/PKG_HASH:=c06a11982ef548372038ec99a6b01cf4f7817a9b88ee5064e41e5132d0ccb7e1/g' feeds/packages/net/frp/Makefile
 
 #禁用nginx，启用uhttpd
 [ -e package/lean/default-settings/files/zzz-default-settings ] && sed -i '/exit 0/i /etc/init.d/nginx disable' package/lean/default-settings/files/zzz-default-settings
