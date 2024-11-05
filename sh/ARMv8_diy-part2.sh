@@ -192,8 +192,13 @@ git_svn ipk https://github.com/ilxp/luci-app-ikoolproxy luci-app-ikoolproxy kool
 git_svn main https://github.com/gdy666/luci-app-lucky luci-app-lucky lucky
 
 # frp
-sed -i 's/PKG_VERSION:=.*/PKG_VERSION:=0.61.0/g' feeds/packages/net/frp/Makefile
-sed -i 's/PKG_HASH:=.*/PKG_HASH:=c06a11982ef548372038ec99a6b01cf4f7817a9b88ee5064e41e5132d0ccb7e1/g' feeds/packages/net/frp/Makefile
+#sed -i 's/PKG_VERSION:=.*/PKG_VERSION:=0.61.0/g' feeds/packages/net/frp/Makefile
+#sed -i 's/PKG_HASH:=.*/PKG_HASH:=c06a11982ef548372038ec99a6b01cf4f7817a9b88ee5064e41e5132d0ccb7e1/g' feeds/packages/net/frp/Makefile
+#编译错误，恢复frp为lede默认
+rm -rf feeds/packages/net/frp
+git_sparse_clone master https://github.com/coolsnowwolf/packages "coolsnowwolf" net/frp && mv -n frp feeds/packages/net/frp
+
+
 
 #禁用nginx，启用uhttpd
 [ -e package/lean/default-settings/files/zzz-default-settings ] && sed -i '/exit 0/i /etc/init.d/nginx disable' package/lean/default-settings/files/zzz-default-settings
