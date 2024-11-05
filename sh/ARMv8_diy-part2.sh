@@ -145,12 +145,12 @@ git_svn master https://github.com/Hyy2001X/AutoBuild-Packages luci-app-npc
 #sed -i 's/PKG_HASH:=.*/PKG_HASH:=4026d93b866db198c8ca1685b0f5d52793f65c6e63cb364163af661fdff0968c/g' feeds/packages/net/samba4/Makefile
 rm -rf feeds/packages/net/samba4
 rm -rf feeds/packages/lang/perl
-git_svn master https://github.com/openwrt/packages net/samba4
-git_svn master https://github.com/openwrt/packages lang/perl
+git_sparse_clone master https://github.com/openwrt/packages temp net/samba4 && mv -n samba4 feeds/packages/net/samba4
+git_sparse_clone master https://github.com/openwrt/packages temp lang/perl && mv -n perl feeds/packages/lang/perl
 
 #更换msd_lite为最新版（immortalwrt源）
 rm -rf feeds/packages/net/msd_lite
-git_svn master https://github.com/immortalwrt/packages net/msd_lite
+git_sparse_clone master https://github.com/immortalwrt/packages immortalwrt net/msd_lite && mv -n msd_lite feeds/packages/net/msd_lite
 
 #修改默认主题
 sed -i 's|set luci.main.mediaurlbase|#set luci.main.mediaurlbase|g' feeds/luci/themes/luci-theme-argon/root/etc/uci-defaults/30_luci-theme-argon
@@ -168,12 +168,14 @@ sed -i 's|luci-theme-bootstrap|luci-theme-design|g' feeds/luci/collections/luci/
 
 # 替换自带watchcat为https://github.com/gngpp/luci-app-watchcat-plus
 rm -rf feeds/packages/utils/watchcat
-git_svn master https://github.com/openwrt/packages utils/watchcat
+#git_svn master https://github.com/openwrt/packages utils/watchcat
+git_sparse_clone master "https://github.com/openwrt/packages" "temp" utils/watchcat && mv -n watchcat feeds/packages/utils/watchcat
 git_svn main https://github.com/fichenx/packages luci-app-watchcat-plus
 
 #删除lede自带uwsgi
 rm -rf feeds/packages/net/uwsgi
-git_svn openwrt-23.05 https://github.com/openwrt/packages net/uwsgi
+#git_svn openwrt-23.05 https://github.com/openwrt/packages net/uwsgi
+git_sparse_clone openwrt-23.05 "https://github.com/openwrt/packages" "22packages" net/uwsgi && mv -n uwsgi feeds/packages/net/uwsgi
 
 #更换miniupnpd为最新版（immortalwrt源）
 [ -e package/lean/default-settings/files/zzz-default-settings ] && rm -rf feeds/packages/net/miniupnpd
