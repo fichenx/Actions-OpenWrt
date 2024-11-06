@@ -8,7 +8,7 @@
 # Description: Build OpenWrt using GitHub Actions
 #
 
-name: Build lede（lua版） Redmi-AX6 plus
+name: Build lede(lua版) Redmi-AX6 plus
 
 on:
   repository_dispatch:
@@ -229,7 +229,7 @@ jobs:
       with:
         token: ${{ secrets.GITHUB_TOKEN }}
         repository: ${{ github.repository }}
-        delete_workflow_pattern: Build lede（lua版） Redmi-AX6 plus
+        delete_workflow_pattern: Build lede(lua版) Redmi-AX6 plus
         retain_days: 30
         keep_minimum_runs: 10
 
