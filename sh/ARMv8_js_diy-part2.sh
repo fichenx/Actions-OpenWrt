@@ -130,6 +130,7 @@ sed -i 's|CONFIG_PACKAGE_libnetwork=y|# CONFIG_PACKAGE_libnetwork is not set|g' 
 
 
 #添加luci-app-wechatpush(js版)
+sed -i 's|CONFIG_PACKAGE_luci-app-serverchan=y|CONFIG_PACKAGE_luci-app-wechatpush=y|g' .config
 rm -rf feeds/luci/applications/luci-app-wechatpush
 git_svn master https://github.com/tty228/luci-app-wechatpush luci-app-wechatpush
 
