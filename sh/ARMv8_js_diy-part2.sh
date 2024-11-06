@@ -183,7 +183,7 @@ sed -i 's|CONFIG_PACKAGE_libnetwork=y|# CONFIG_PACKAGE_libnetwork is not set|g' 
 #添加luci-app-wechatpush(js版)
 sed -i 's|CONFIG_PACKAGE_luci-app-serverchan=y|CONFIG_PACKAGE_luci-app-wechatpush=y|g' .config
 rm -rf feeds/luci/applications/luci-app-wechatpush
-git_svn master https://github.com/tty228/luci-app-wechatpush luci-app-wechatpush
+git clone -b master https://github.com/tty228/luci-app-wechatpush feeds/luci/applications/luci-app-serverchan
 
 #luci-app-bypass(lua版)
 #git_sparse_clone master "https://github.com/kiddin9/openwrt-packages" "kiddin9" luci-app-bypass && mv -n luci-app-bypass package/luci-app-bypass
@@ -231,7 +231,8 @@ rm -rf feeds/luci/applications/luci-app-socat
 git_svn main https://github.com/chenmozhijin/luci-app-socat luci-app-socat
 
 #更换luci-app-ikoolproxy为3.8.5-8(lua版luci)
-git_svn main https://github.com/ilxp/luci-app-ikoolproxy luci-app-ikoolproxy koolproxy
+#git_svn main https://github.com/ilxp/luci-app-ikoolproxy luci-app-ikoolproxy koolproxy
+git clone -b main https://github.com/ilxp/luci-app-ikoolproxy.git package/custom2/luci-app-ikoolproxy
 
 #添加luci-app-lucky(lua版)
 rm -rf feeds/luci/applications/luci-app-lucky feeds/packages/net/lucky
