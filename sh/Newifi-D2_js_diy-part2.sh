@@ -35,7 +35,9 @@ function git_svn() {
   cd ..
   rm -rf tempxx
   }
-  
+
+rm -rf package/custom2; mkdir package/custom2
+
 ##########固件配置修改#########  
 # Modify default IP
 #sed -i 's/192.168.1.1/192.168.50.5/g' package/base-files/files/bin/config_generate

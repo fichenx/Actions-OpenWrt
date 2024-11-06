@@ -47,7 +47,7 @@ function merge_package(){
     mv $3 package/custom2/
     rm -rf $repo
 }
-
+rm -rf package/custom2; mkdir package/custom2
 
 ##########固件配置修改#########
 # Modify default IP

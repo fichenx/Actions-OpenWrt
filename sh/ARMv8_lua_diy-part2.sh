@@ -49,7 +49,7 @@ function merge_package(){
     rm -rf $repo
 }
 
-
+rm -rf package/custom2; mkdir package/custom2
 
 
 ##########固件配置修改#########
