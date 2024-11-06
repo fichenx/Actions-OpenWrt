@@ -112,7 +112,7 @@ sed -i 's/必须是 IPv4 地址/IPv4 地址或域名/g' feeds/luci/applications/
 #添加luci-app-wechatpush
 rm -rf feeds/luci/applications/luci-app-wechatpush
 sed -i 's|CONFIG_PACKAGE_luci-app-serverchan=y|CONFIG_PACKAGE_luci-app-wechatpush=y|g' .config
-git_svn master https://github.com/tty228/luci-app-wechatpush luci-app-wechatpush
+git clone -b master https://github.com/tty228/luci-app-wechatpush package/custom2/luci-app-wechatpush
 
 # 替换自带watchcat为官方最新版
 rm -rf feeds/packages/utils/watchcat

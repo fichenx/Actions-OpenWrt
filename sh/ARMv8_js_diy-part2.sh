@@ -18,7 +18,7 @@ function git_sparse_clone() {
   #git sparse-checkout set $@
   git checkout $branch -- $@
   rm -rf ../package/custom/$@
-  mv -n $@ ../package/custom2/
+  mv -n $@ ../
   cd ..
   rm -rf $localdir
   }
@@ -130,8 +130,8 @@ sed -i 's|/cgi-bin/luci/admin/system/admin|/cgi-bin/luci/admin/docker/containers
 ##########添加&修改插件#########
 
 ##使用openwrt官方版elfutils
-rm -rf package/libs/elfutils
-git_svn main https://github.com/openwrt/openwrt package/libs/elfutils
+#rm -rf package/libs/elfutils
+#git_svn main https://github.com/openwrt/openwrt package/libs/elfutils
 
 
 ##修复elfutils编译错误
@@ -183,7 +183,7 @@ sed -i 's|CONFIG_PACKAGE_libnetwork=y|# CONFIG_PACKAGE_libnetwork is not set|g' 
 #添加luci-app-wechatpush(js版)
 sed -i 's|CONFIG_PACKAGE_luci-app-serverchan=y|CONFIG_PACKAGE_luci-app-wechatpush=y|g' .config
 rm -rf feeds/luci/applications/luci-app-wechatpush
-git clone -b master https://github.com/tty228/luci-app-wechatpush feeds/luci/applications/luci-app-serverchan
+git clone -b master https://github.com/tty228/luci-app-wechatpush package/custom2/luci-app-wechatpush
 
 #luci-app-bypass(lua版)
 #git_sparse_clone master "https://github.com/kiddin9/openwrt-packages" "kiddin9" luci-app-bypass && mv -n luci-app-bypass package/luci-app-bypass

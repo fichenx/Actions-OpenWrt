@@ -19,7 +19,7 @@ function git_sparse_clone() {
   #git sparse-checkout set $@
   git checkout $branch -- $@
   rm -rf ../package/custom/$@
-  mv -n $@ ../package/custom2/
+  mv -n $@ ../
   cd ..
   rm -rf $localdir
   }

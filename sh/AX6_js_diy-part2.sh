@@ -18,7 +18,7 @@ function git_sparse_clone() {
   #git sparse-checkout set $@
   git checkout $branch -- $@
   rm -rf ../package/custom/$@
-  mv -n $@ ../package/custom2/
+  mv -n $@ ../
   cd ..
   rm -rf $localdir
   }
@@ -94,7 +94,7 @@ sed -i "s/hostname='ImmortalWrt'/hostname='Redmi-AX6'/g" package/base-files/file
 
 #添加luci-theme-design(Js版)
 rm -rf feeds/fichenx/luci-theme-design
-git clone -b js https://github.com/papagaye744/luci-theme-design package/luci-theme-design
+git clone -b js https://github.com/papagaye744/luci-theme-design package/custom2/luci-theme-design
 
 
 #修改默认主题
@@ -163,7 +163,7 @@ sed -i 's|必须是 IPv4 地址|IPv4 地址或域名|g' feeds/luci/applications/
 #添加luci-app-wechatpush
 rm -rf feeds/luci/applications/luci-app-wechatpush
 sed -i 's|CONFIG_PACKAGE_luci-app-serverchan=y|CONFIG_PACKAGE_luci-app-wechatpush=y|g' .config
-git_svn master https://github.com/tty228/luci-app-wechatpush luci-app-wechatpush
+git clone -b master https://github.com/tty228/luci-app-wechatpush package/custom2/luci-app-wechatpush
 
 # 替换自带watchcat为官方最新版
 rm -rf feeds/packages/utils/watchcat
@@ -203,7 +203,7 @@ rm -rf feeds/luci/applications/luci-app-lucky feeds/packages/net/lucky
 git_svn main  https://github.com/gdy666/luci-app-lucky luci-app-lucky lucky
 
 #更换luci-app-ikoolproxy为3.8.5-8(lua版luci)
-git_svn main https://github.com/ilxp/luci-app-ikoolproxy luci-app-ikoolproxy koolproxy
+git clone -b main https://github.com/ilxp/luci-app-ikoolproxy.git package/custom2/luci-app-ikoolproxy
 
 
 ./scripts/feeds update -a

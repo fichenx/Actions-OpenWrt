@@ -18,7 +18,7 @@ function git_sparse_clone() {
   #git sparse-checkout set $@
   git checkout $branch -- $@
   rm -rf ../package/custom/$@
-  mv -n $@ ../package/custom2/
+  mv -n $@ ../
   cd ..
   rm -rf $localdir
   }
@@ -142,7 +142,8 @@ sed -i 's|必须是 IPv4 地址|IPv4 地址或域名|g' feeds/luci/applications/
 
 #luci-app-serverchan
 rm -rf feeds/luci/applications/luci-app-serverchan
-cp -af feeds/fichenx/luci-app-serverchan feeds/luci/applications/luci-app-serverchan
+#cp -af feeds/fichenx/luci-app-serverchan feeds/luci/applications/luci-app-serverchan
+git clone -b openwrt-18.06 https://github.com/tty228/luci-app-wechatpush package/custom2/luci-app-serverchan
 
 
 
@@ -200,7 +201,7 @@ git_svn main https://github.com/chenmozhijin/luci-app-socat luci-app-socat
 git_svn main  https://github.com/gdy666/luci-app-lucky luci-app-lucky lucky
 
 #更换luci-app-ikoolproxy为3.8.5-8
-git_svn ipk https://github.com/ilxp/luci-app-ikoolproxy luci-app-ikoolproxy koolproxy
+git clone -b main https://github.com/ilxp/luci-app-ikoolproxy.git package/custom2/luci-app-ikoolproxy
 
 
 ./scripts/feeds update -a
