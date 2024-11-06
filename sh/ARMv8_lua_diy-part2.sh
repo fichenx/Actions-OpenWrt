@@ -17,8 +17,8 @@ function git_sparse_clone() {
   #git sparse-checkout init --cone
   #git sparse-checkout set $@
   git checkout $branch -- $@
-  rm -rf package/custom/$@
-  mv -n $@ package/custom2/
+  rm -rf ../package/custom/$@
+  mv -n $@ ../package/custom2/
   cd ..
   rm -rf $localdir
   }
@@ -32,8 +32,8 @@ function git_svn() {
   #git sparse-checkout init --cone
   #git sparse-checkout set $@
   git checkout $branch -- $@
-  rm -rf package/custom/$@
-  mv -n $@ package/custom2/
+  rm -rf ../package/custom/$@
+  mv -n $@ ../package/custom2/
   cd ..
   rm -rf tempxx
   }
