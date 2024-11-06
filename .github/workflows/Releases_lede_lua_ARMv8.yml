@@ -4,7 +4,7 @@
 # Cron: min (0 - 59) / hour (0 - 23) / day of month (1 - 31) / month (1 - 12) / day of week (0 - 6)(Sunday - Saturday)
 #========================================================================================================================
 
-name: Releases ARMv8 OpenWrt
+name: Releases_lede_lua_ARMv8
 
 on:
   repository_dispatch:
@@ -24,12 +24,12 @@ env:
   CONFIG_FILE: config/ARMv8.config
   DIY_P1_SH: sh/lede_diy-part1.sh
   DIY_P2_SH: sh/breakings_diy-part2.sh
-  DIY_P3_SH: sh/ARMv8_diy-part2.sh
+  DIY_P3_SH: sh/ARMv8_lua_diy-part2.sh
   UPLOAD_FIRMWARE: false
   UPLOAD_RELEASE: true
   RECENT_LASTEST: 30
   TZ: Asia/Shanghai
-  FILE_NAME: ARMv8
+  FILE_NAME: ARMv8(lede_lua)
   PRODUCT_NAME: ARMv8
 
 jobs:
@@ -74,7 +74,7 @@ jobs:
       if: (!cancelled())
       uses: ophub/flippy-openwrt-actions@main
       env:
-        OPENWRT_ARMVIRT: https://github.com/fichenx/Actions-OpenWrt/releases/download/openwrt_armvirt/openwrt-armvirt-64-generic-rootfs.tar.gz
+        OPENWRT_ARMVIRT: https://github.com/fichenx/Actions-OpenWrt/releases/download/lede_lua_armvirt/openwrt-armvirt-64-generic-rootfs.tar.gz
         PACKAGE_SOC: s905d_s905x3
         WHOAMI: fichenx
         #KERNEL_REPO_URL: https://github.com/breakings/OpenWrt/tree/main/opt
@@ -116,7 +116,7 @@ jobs:
           -  密码：password
           -  固件源码：https://github.com/coolsnowwolf/lede
           -  固件内核：https://github.com/breakings/OpenWrt/releases/tag/kernel_stable
-          -  固件内置插件打包：[内置ipk打包下载](https://github.com/fichenx/Actions-OpenWrt/releases/download/openwrt_armvirt/Packages.tar.gz)
+          -  固件内置插件打包：[内置ipk打包下载](https://github.com/fichenx/Actions-OpenWrt/releases/download/lede_lua_armvirt/Packages.tar.gz)
           -  常见问题及注意事项请参考恩山F大➦[最新帖](https://www.right.com.cn/forum/thread-4076037-1-1.html)
           
           #### 升级脚本用法:
@@ -133,7 +133,7 @@ jobs:
       with:
         token: ${{ secrets.GITHUB_TOKEN }}
         repository: ${{ github.repository }}
-        delete_workflow_pattern: Releases ARMv8 OpenWrt
+        delete_workflow_pattern: Releases_lede_lua_ARMv8
         retain_days: 30
         keep_minimum_runs: 10
 
@@ -143,7 +143,7 @@ jobs:
       with:
         #repo:
         keep_latest: 10
-        delete_tag_pattern: ARMv8
+        delete_tag_pattern: ARMv8(lede_lua)
         delete_tags: true
       env:
         GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}

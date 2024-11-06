@@ -8,7 +8,7 @@
 # Description: Build OpenWrt using GitHub Actions
 #
 
-name: Build OpenWrt armvirt
+name: Build lede(lua版) armvirt
 
 on:
   repository_dispatch:
@@ -34,7 +34,7 @@ env:
   UPLOAD_FIRMWARE: false
   UPLOAD_RELEASE: true
   TZ: Asia/Shanghai
-  FILE_NAME: openwrt_armvirt
+  FILE_NAME: lede_lua_armvirt
   PRODUCT_NAME: armvirt
 
 jobs:
@@ -126,7 +126,7 @@ jobs:
       run: |
         [ -e files ] && mv files openwrt/files
         [ -e $CONFIG_FILE ] && mv $CONFIG_FILE openwrt/.config
-        #chmod +x $DIY_P2_SH
+        chmod +x $DIY_P2_SH
         chmod +x $DIY_P3_SH
         cd openwrt
         $GITHUB_WORKSPACE/$DIY_P2_SH
@@ -200,13 +200,13 @@ jobs:
       id: release
       uses: ncipollo/release-action@main
       with:
-        name: ${{ env.DATE }} OpenWrt for ${{ env.PRODUCT_NAME }}
+        name: ${{ env.DATE }} OpenWrt（lede_lua） for ${{ env.PRODUCT_NAME }}
         allowUpdates: true
         tag: ${{ env.FILE_NAME }}
         commit: main
         token: ${{ secrets.RELEASES_TOKEN }}
         body: |
-          - 此为ARMv8底包，非完整固件，每天自动编译
+          - 此为lede_lua_armvirt底包，非完整固件，每天自动编译
           - 当前使用版本:【编译前的最后一次[➦主源码](https://github.com/coolsnowwolf/lede)更新记录】
           ${{ env.useVersionInfo }}
         artifacts: ${{ env.FIRMWARE }}/*
@@ -216,7 +216,7 @@ jobs:
       with:
         token: ${{ secrets.GITHUB_TOKEN }}
         repository: ${{ github.repository }}
-        delete_workflow_pattern: Build OpenWrt armvirt
+        delete_workflow_pattern: Build lede(lua版) armvirt
         retain_days: 30
         keep_minimum_runs: 30
 
@@ -226,7 +226,7 @@ jobs:
       with:
         #repo:
         keep_latest: 10
-        delete_tag_pattern: openwrt_armvirt
+        delete_tag_pattern: lede_lua_armvirt
         delete_tags: true
       env:
         GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}

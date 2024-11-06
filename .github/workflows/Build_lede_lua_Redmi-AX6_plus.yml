@@ -1,0 +1,245 @@
+#
+# Copyright (c) 2019-2020 P3TERX <https://p3terx.com>
+#
+# This is free software, licensed under the MIT License.
+# See /LICENSE for more information.
+#
+# https://github.com/P3TERX/Actions-OpenWrt
+# Description: Build OpenWrt using GitHub Actions
+#
+
+name: Build lede（lua版） Redmi-AX6 plus
+
+on:
+  repository_dispatch:
+  workflow_dispatch:
+    inputs:
+      ssh:
+        description: 'SSH connection to Actions'
+        required: false
+        default: 'false'
+  #push:
+  #  branches: 
+  #    - master
+
+  schedule:
+    - cron: 12 3 * * 4
+  
+  #watch:
+  #  types: [started]
+
+env:
+  REPO_URL: https://github.com/coolsnowwolf/lede
+  REPO_BRANCH: master
+  FEEDS_CONF: feeds.conf.default
+  CONFIG_FILE: config/AX6_plus.config
+  DIY_P1_SH: sh/lede_diy-part1.sh
+  DIY_P2_SH: sh/breakings_diy-part2.sh
+  DIY_P3_SH: sh/AX6_lua_diy-part2.sh
+  UPLOAD_BIN_DIR: false
+  UPLOAD_FIRMWARE: true
+  UPLOAD_COWTRANSFER: false
+  UPLOAD_WETRANSFER: false
+  UPLOAD_RELEASE: true
+  TZ: Asia/Shanghai
+  FILE_NAME: Redmi-AX6_plus(lede_lua)
+  PRODUCT_NAME: Redmi-AX6-plus
+
+jobs:
+  build:
+    runs-on: ubuntu-22.04
+
+    steps:
+    - name: 检出
+      uses: actions/checkout@main
+
+    - name: 初始化环境
+      env:
+        DEBIAN_FRONTEND: noninteractive
+      run: |
+        sudo rm -rf /usr/share/dotnet /etc/apt/sources.list.d /usr/local/lib/android 2>/dev/null
+        sudo -E apt -y purge azure-cli ghc* zulu* llvm* firefox google* dotnet* powershell openjdk* mongodb* moby* || true
+        [[ -n "${AGENT_TOOLSDIRECTORY}" ]] && sudo rm -rf "${AGENT_TOOLSDIRECTORY}"
+        sudo -E apt update
+        sudo -E apt -y install $(curl -fsSL https://is.gd/depends_ubuntu_2204)
+        sudo -E apt -y autoremove --purge
+        sudo -E systemctl daemon-reload
+        sudo -E apt clean && sudo -E apt autoclean
+        sudo timedatectl set-timezone "$TZ"
+        sudo mkdir -p /mnt/workdir
+        sudo chown $USER:$GROUPS /mnt/workdir
+
+    - name: 克隆源代码
+      working-directory: /mnt/workdir
+      run: |
+        df -hT $PWD
+        git clone $REPO_URL -b $REPO_BRANCH openwrt
+        #git clone --depth 1 $REPO_URL -b $REPO_BRANCH openwrt
+        ln -sf /mnt/workdir/openwrt $GITHUB_WORKSPACE/openwrt
+        cd openwrt
+        #git reset --hard 26f3634631244eedfbdfd61ea6cc3a2d7f5d896f
+        useVersionInfo=$(git show -s --date=short --format="提交人: %an<br/>提交时间: %cd<br/>提交内容: %s<br/>commit hash: %H")
+        echo "useVersionInfo=$useVersionInfo" >> $GITHUB_ENV
+        echo "DATE=$(date "+%Y-%m-%d %H:%M:%S")" >> $GITHUB_ENV
+        echo "DATE1=$(date "+%Y-%m-%d")" >> $GITHUB_ENV
+        echo "DATE2=$(date "+%Y%m%d%H%M")" >> $GITHUB_ENV
+        
+    #- name: Revert ax6
+     # run: cp -rf $GITHUB_WORKSPACE/general/AX6/target/linux/ipq807x/image/generic.mk openwrt/target/linux/ipq807x/image/
+    
+    # - name: Revert mac80211
+      # run: |
+        # #31673339464df901c9c5a70dcc8ba00953149ab1
+        # rm -rf openwrt/package/kernel/ath10k-ct
+        # rm -rf openwrt/package/kernel/mac80211
+        # rm -rf openwrt/package/kernel/mt76
+        # rm -rf openwrt/package/kernel/mwlwifi
+        # cp -rf $GITHUB_WORKSPACE/backup/AX6/mac80211/package/kernel/* openwrt/package/kernel/
+        # #2b5fdd941cc4047374fb3ac03c6fdac2f6baa8f8
+        # rm -rf openwrt/package/network/services/hostapd
+        # rm -rf openwrt/package/network/utils/iw
+        # rm -rf openwrt/package/system/rpcd
+        # cp -rf $GITHUB_WORKSPACE/backup/AX6/mac80211/package/network/services/hostapd openwrt/package/network/services/
+        # cp -rf $GITHUB_WORKSPACE/backup/AX6/mac80211/package/network/utils/iw openwrt/package/network/utils/
+        # cp -rf $GITHUB_WORKSPACE/backup/AX6/mac80211/package/system/rpcd openwrt/package/system/
+        # #679e2ae168931a6cefec53f5c0983bc5cadab198
+        # rm -rf openwrt/package/network/utils/iwinfo
+        # cp -rf $GITHUB_WORKSPACE/backup/AX6/mac80211/package/network/utils/iwinfo openwrt/package/network/utils/
+
+    - name: 加载自定义源
+      run: |
+        [ -e $FEEDS_CONF ] && mv $FEEDS_CONF openwrt/feeds.conf.default
+        chmod +x $DIY_P1_SH
+        cd openwrt
+        $GITHUB_WORKSPACE/$DIY_P1_SH
+        
+    - name: 更新源
+      run: cd openwrt && ./scripts/feeds update -a
+
+    - name: 安装源
+      run: cd openwrt && ./scripts/feeds install -a
+
+    - name: 加载自定义配置
+      run: |
+        [ -e files ] && mv files openwrt/files
+        [ -e $CONFIG_FILE ] && mv $CONFIG_FILE openwrt/.config
+        chmod +x $DIY_P2_SH
+        chmod +x $DIY_P3_SH
+        cd openwrt
+        $GITHUB_WORKSPACE/$DIY_P2_SH
+        $GITHUB_WORKSPACE/$DIY_P3_SH
+
+    - name: SSH连接到Actions
+      uses: P3TERX/ssh2actions@v1.0.0
+      if: (github.event.inputs.ssh == 'true' && github.event.inputs.ssh  != 'false') || contains(github.event.action, 'ssh')
+      env:
+        TELEGRAM_CHAT_ID: ${{ secrets.TELEGRAM_CHAT_ID }}
+        TELEGRAM_BOT_TOKEN: ${{ secrets.TELEGRAM_BOT_TOKEN }}
+
+    - name: 下载软件包
+      id: package
+      run: |
+        cd openwrt
+        make defconfig
+        make download -j8
+        find dl -size -1024c -exec ls -l {} \;
+        find dl -size -1024c -exec rm -f {} \;
+
+    - name: 编译固件
+      id: compile
+      run: |
+        cd openwrt
+        echo -e "$(nproc) thread compile"
+        make -j$(nproc) || make -j1 || make -j1 V=s
+        echo "status=success" >> $GITHUB_OUTPUT
+        grep '^CONFIG_TARGET.*DEVICE.*=y' .config | sed -r 's/.*DEVICE_(.*)=y/\1/' > DEVICE_NAME
+        [ -s DEVICE_NAME ] && echo "DEVICE_NAME=_$(cat DEVICE_NAME)" >> $GITHUB_ENV
+        echo "FILE_DATE=_$(date +"%Y%m%d%H%M")" >> $GITHUB_ENV
+
+    - name: 检查空间使用情况
+      if: (!cancelled())
+      run: df -hT
+
+    - name: 上传bin目录
+      uses: actions/upload-artifact@main
+      if: steps.compile.outputs.status == 'success' && env.UPLOAD_BIN_DIR == 'true'
+      with:
+        name: OpenWrt_bin${{ env.DEVICE_NAME }}${{ env.FILE_DATE }}
+        path: openwrt/bin
+
+    - name: 整理文件
+      id: organize
+      if: env.UPLOAD_FIRMWARE == 'true' && !cancelled()
+      run: |
+        cd $GITHUB_WORKSPACE/openwrt/bin/packages
+        tar -zcvf Packages.tar.gz ./*
+        cp Packages.tar.gz $GITHUB_WORKSPACE/openwrt/bin/targets/*/*
+        cd $GITHUB_WORKSPACE/openwrt/bin/targets/*/*
+        rm -rf packages
+        echo "FIRMWARE=$PWD" >> $GITHUB_ENV
+        echo "status=success" >> ${GITHUB_OUTPUT}
+
+    - name: 上传固件目录
+      uses: actions/upload-artifact@main
+      if: steps.organize.outputs.status == 'success' && !cancelled()
+      with:
+        name: OpenWrt_firmware${{ env.DEVICE_NAME }}${{ env.FILE_DATE }}
+        path: ${{ env.FIRMWARE }}
+
+    - name: 上传固件到奶牛快传
+      id: cowtransfer
+      if: steps.organize.outputs.status == 'success' && env.UPLOAD_COWTRANSFER == 'true' && !cancelled()
+      run: |
+        curl -fsSL git.io/file-transfer | sh
+        ./transfer cow --block 2621440 -s -p 64 --no-progress ${FIRMWARE} 2>&1 | tee cowtransfer.log
+        echo "::warning file=cowtransfer.com::$(cat cowtransfer.log | grep https)"
+        echo "url=$(cat cowtransfer.log | grep https | cut -f3 -d" ")" >> $GITHUB_OUTPUT
+
+    - name: 上传固件到 WeTransfer
+      id: wetransfer
+      if: steps.organize.outputs.status == 'success' && env.UPLOAD_WETRANSFER == 'true' && !cancelled()
+      run: |
+        curl -fsSL git.io/file-transfer | sh
+        ./transfer wet -s -p 16 --no-progress ${FIRMWARE} 2>&1 | tee wetransfer.log
+        echo "::warning file=wetransfer.com::$(cat wetransfer.log | grep https)"
+        echo "url=$(cat wetransfer.log | grep https | cut -f3 -d" ")" >> $GITHUB_OUTPUT
+
+    - name: 创建发布版本
+      id: release
+      uses: ncipollo/release-action@main
+      with:
+        name: ${{ env.DATE }} lede(lede_lua) for ${{ env.PRODUCT_NAME }}
+        allowUpdates: true
+        tag: ${{ env.DATE2 }}_${{ env.FILE_NAME }}
+        commit: main
+        token: ${{ secrets.RELEASES_TOKEN }}
+        body: |
+         #### Redmi-AX6(合并分区) lede（lua版luci） 固件配置：
+            - IP:192.168.123.1
+            - WEB登陆账户：root
+            - 密码：password
+            - 固件源码：https://github.com/coolsnowwolf/lede
+            - 固件内核版本：6.1
+         #### 源码最近提交信息:
+            - ${{ env.useVersionInfo }}
+        artifacts: ${{ env.FIRMWARE }}/*
+
+    - name: 删除旧的工作流和固件
+      uses: Mattraks/delete-workflow-runs@main
+      with:
+        token: ${{ secrets.GITHUB_TOKEN }}
+        repository: ${{ github.repository }}
+        delete_workflow_pattern: Build lede（lua版） Redmi-AX6 plus
+        retain_days: 30
+        keep_minimum_runs: 10
+
+    - name: 删除旧的发布版本
+      uses: codesnas/delete-older-releases@main
+      if: env.UPLOAD_RELEASE == 'true' && !cancelled()
+      with:
+        #repo:
+        keep_latest: 10
+        delete_tag_pattern: Redmi-AX6_plus(lede_lua)
+        delete_tags: true
+      env:
+        GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
