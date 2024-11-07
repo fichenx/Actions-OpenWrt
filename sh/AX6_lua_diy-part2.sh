@@ -125,7 +125,7 @@ sed -i 's/ +libopenssl-legacy//g' feeds/fichenx/shadowsocksr-libev/Makefile
 
 #nps（修改nps源为yisier）
 rm -rf feeds/packages/net/nps
-cp -rf $GITHUB_WORKSPACE/backup/nps feeds/packages/net
+cp -rf $GITHUB_WORKSPACE/backup/nps feeds/packages/net/nps
 #sed -i 's/PKG_SOURCE_URL:=.*/PKG_SOURCE_URL:=https:\/\/codeload.github.com\/yisier\/nps\/tar.gz\/v$(PKG_VERSION)?/g' feeds/packages/net/nps/Makefile
 #sed -i 's/PKG_VERSION:=.*/PKG_VERSION:=0.26.18/g' feeds/packages/net/nps/Makefile
 #sed -i 's/PKG_HASH:=.*/PKG_HASH:=29da044262071a1fa53ce7169c6427ee4f12fc0ada60ef7fb52fabfd165afe91/g' feeds/packages/net/nps/Makefile
@@ -198,11 +198,12 @@ rm -rf feeds/luci/applications/luci-app-socat
 git_svn main https://github.com/chenmozhijin/luci-app-socat luci-app-socat
 
 #添加luci-app-lucky
-git_svn main  https://github.com/gdy666/luci-app-lucky luci-app-lucky lucky
+rm -rf feeds/luci/applications/luci-app-lucky feeds/packages/net/lucky
+git_svn main https://github.com/gdy666/luci-app-lucky luci-app-lucky lucky
 
 #更换luci-app-ikoolproxy为3.8.5-8
 git clone -b main https://github.com/ilxp/luci-app-ikoolproxy.git package/custom2/luci-app-ikoolproxy
 
 
-./scripts/feeds update -a
-./scripts/feeds install -a
+#./scripts/feeds update -a
+#./scripts/feeds install -a

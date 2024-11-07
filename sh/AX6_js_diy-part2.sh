@@ -129,7 +129,7 @@ sed -i 's/ +libopenssl-legacy//g' feeds/fichenx/shadowsocksr-libev/Makefile
 
 #nps（修改nps源为yisier）
 rm -rf feeds/packages/net/nps
-cp -rf $GITHUB_WORKSPACE/backup/nps feeds/packages/net
+cp -rf $GITHUB_WORKSPACE/backup/nps feeds/packages/net/nps
 #sed -i 's/PKG_SOURCE_URL:=.*/PKG_SOURCE_URL:=https:\/\/codeload.github.com\/yisier\/nps\/tar.gz\/v$(PKG_VERSION)?/g' feeds/packages/net/nps/Makefile
 #sed -i 's/PKG_VERSION:=.*/PKG_VERSION:=0.26.18/g' feeds/packages/net/nps/Makefile
 #sed -i 's/PKG_HASH:=.*/PKG_HASH:=29da044262071a1fa53ce7169c6427ee4f12fc0ada60ef7fb52fabfd165afe91/g' feeds/packages/net/nps/Makefile
@@ -160,30 +160,30 @@ sed -i 's|必须是 IPv4 地址|IPv4 地址或域名|g' feeds/luci/applications/
 # [ -e package/lean/default-settings/files/zzz-default-settings ] && echo '' >> package/kernel/linux/modules/other.mk
 # [ -e package/lean/default-settings/files/zzz-default-settings ] && echo '$(eval $(call KernelPackage,qcom-qmi-helpers))' >> package/kernel/linux/modules/other.mk
 
-#添加luci-app-wechatpush
-rm -rf feeds/luci/applications/luci-app-wechatpush
-sed -i 's|CONFIG_PACKAGE_luci-app-serverchan=y|CONFIG_PACKAGE_luci-app-wechatpush=y|g' .config
-git clone -b master https://github.com/tty228/luci-app-wechatpush package/custom2/luci-app-wechatpush
+#为1ede添加luci-app-wechatpush
+[ -e package/lean/default-settings/files/zzz-default-settings ] && rm -rf feeds/luci/applications/luci-app-wechatpush
+[ -e package/lean/default-settings/files/zzz-default-settings ] && sed -i 's|CONFIG_PACKAGE_luci-app-serverchan=y|CONFIG_PACKAGE_luci-app-wechatpush=y|g' .config
+[ -e package/lean/default-settings/files/zzz-default-settings ] && git clone -b master https://github.com/tty228/luci-app-wechatpush package/custom2/luci-app-wechatpush
 
-# 替换自带watchcat为官方最新版
-rm -rf feeds/packages/utils/watchcat
-git_svn master https://github.com/openwrt/packages utils/watchcat
+# 替换lede自带watchcat为官方最新版
+[ -e package/lean/default-settings/files/zzz-default-settings ] && rm -rf feeds/packages/utils/watchcat
+[ -e package/lean/default-settings/files/zzz-default-settings ] && git_svn master https://github.com/openwrt/packages utils/watchcat
 # 替换watchcat为第三方luci(lua版luci)
-git_svn main https://github.com/fichenx/packages luci-app-watchcat-plus
+[ -e package/lean/default-settings/files/zzz-default-settings ] && git_svn main https://github.com/fichenx/packages luci-app-watchcat-plus
 
 #更换msd_lite为最新版（immortalwrt源）
 [ -e package/lean/default-settings/files/zzz-default-settings ] && rm -rf feeds/packages/net/msd_lite
 [ -e package/lean/default-settings/files/zzz-default-settings ] && git_svn master https://github.com/immortalwrt/packages  net/msd_lite
 
 #golang
-rm -rf feeds/packages/lang/golang
-cp -rf $GITHUB_WORKSPACE/general/golang feeds/packages/lang/golang
+[ -e package/lean/default-settings/files/zzz-default-settings ] && rm -rf feeds/packages/lang/golang
+[ -e package/lean/default-settings/files/zzz-default-settings ] && cp -rf $GITHUB_WORKSPACE/general/golang feeds/packages/lang/golang
 
 #为immortalwrt添加turboacc
 [ ! -e package/lean/default-settings/files/zzz-default-settings ] && curl -sSL https://raw.githubusercontent.com/chenmozhijin/turboacc/luci/add_turboacc.sh -o add_turboacc.sh && bash add_turboacc.sh
 
 #为immortalwrt添加luci-app-mwan3helper-chinaroute（MWAN3 分流助手）(lua版luci)
-git clone -b main https://github.com/padavanonly/luci-app-mwan3helper-chinaroute package/luci-app-mwan3helper-chinaroute
+[ ! -e package/lean/default-settings/files/zzz-default-settings ] && git clone -b main https://github.com/padavanonly/luci-app-mwan3helper-chinaroute package/luci-app-mwan3helper-chinaroute
 
 
 #更换旧版lede代码中的ath11k-firmware源（旧源已失效）
@@ -195,16 +195,16 @@ git clone -b main https://github.com/padavanonly/luci-app-mwan3helper-chinaroute
 [ -e package/lean/default-settings/files/zzz-default-settings ] && git_svn master https://github.com/immortalwrt/packages net/miniupnpd
 
 #替换luci-app-socat为https://github.com/chenmozhijin/luci-app-socat(lua版)
-rm -rf feeds/luci/applications/luci-app-socat
-git_svn main https://github.com/chenmozhijin/luci-app-socat luci-app-socat
+[ -e package/lean/default-settings/files/zzz-default-settings ] && rm -rf feeds/luci/applications/luci-app-socat
+[ -e package/lean/default-settings/files/zzz-default-settings ] && git_svn main https://github.com/chenmozhijin/luci-app-socat luci-app-socat
 
 #添加luci-app-lucky(lua版)
-rm -rf feeds/luci/applications/luci-app-lucky feeds/packages/net/lucky
-git_svn main  https://github.com/gdy666/luci-app-lucky luci-app-lucky lucky
+[ -e package/lean/default-settings/files/zzz-default-settings ] && rm -rf feeds/luci/applications/luci-app-lucky feeds/packages/net/lucky
+[ -e package/lean/default-settings/files/zzz-default-settings ] && git_svn main  https://github.com/gdy666/luci-app-lucky luci-app-lucky lucky
 
 #更换luci-app-ikoolproxy为3.8.5-8(lua版luci)
-git clone -b main https://github.com/ilxp/luci-app-ikoolproxy.git package/custom2/luci-app-ikoolproxy
+[ -e package/lean/default-settings/files/zzz-default-settings ] && git clone -b main https://github.com/ilxp/luci-app-ikoolproxy.git package/custom2/luci-app-ikoolproxy
 
 
-./scripts/feeds update -a
-./scripts/feeds install -a
+#./scripts/feeds update -a
+#./scripts/feeds install -a

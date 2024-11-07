@@ -94,7 +94,7 @@ sed -i 's/luci-theme-bootstrap/luci-theme-design/g' feeds/luci/collections/luci-
 ##########添加&修改插件#########
 #nps（修改nps源为yisier）
 rm -rf feeds/packages/net/nps
-cp -rf $GITHUB_WORKSPACE/backup/nps feeds/packages/net
+cp -rf $GITHUB_WORKSPACE/backup/nps feeds/packages/net/nps
 #sed -i 's/PKG_SOURCE_URL:=.*/PKG_SOURCE_URL:=https:\/\/codeload.github.com\/yisier\/nps\/tar.gz\/v$(PKG_VERSION)?/g' feeds/packages/net/nps/Makefile
 #sed -i 's/PKG_VERSION:=.*/PKG_VERSION:=0.26.18/g' feeds/packages/net/nps/Makefile
 #sed -i 's/PKG_HASH:=.*/PKG_HASH:=29da044262071a1fa53ce7169c6427ee4f12fc0ada60ef7fb52fabfd165afe91/g' feeds/packages/net/nps/Makefile

@@ -27,7 +27,7 @@ env:
   FEEDS_CONF: immortalwrt.feeds.conf.default
   CONFIG_FILE: config/AX6_5.15(ImmortalWrt).config
   DIY_P1_SH: sh/imm_diy-part1.sh
-  DIY_P2_SH: sh/AX6_diy-part2.sh
+  DIY_P2_SH: sh/AX6_js_diy-part2.sh
   #DIY_P3_SH: sh/ARMv8_diy-part2.sh
   UPLOAD_BIN_DIR: false
   UPLOAD_FIRMWARE: true

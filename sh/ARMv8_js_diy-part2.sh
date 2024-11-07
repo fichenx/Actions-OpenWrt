@@ -160,7 +160,7 @@ sed -i "s|ARMv8|ARMv8(lede_js)|g" feeds/fichenx/luci-app-amlogic/root/etc/config
 
 #nps（修改nps源为yisier）
 rm -rf feeds/packages/net/nps
-cp -rf $GITHUB_WORKSPACE/backup/nps feeds/packages/net
+cp -rf $GITHUB_WORKSPACE/backup/nps feeds/packages/net/nps
 #sed -i 's/PKG_SOURCE_URL:=.*/PKG_SOURCE_URL:=https:\/\/codeload.github.com\/yisier\/nps\/tar.gz\/v$(PKG_VERSION)?/g' feeds/packages/net/nps/Makefile
 #sed -i 's/PKG_VERSION:=.*/PKG_VERSION:=0.26.18/g' feeds/packages/net/nps/Makefile
 #sed -i 's/PKG_HASH:=.*/PKG_HASH:=29da044262071a1fa53ce7169c6427ee4f12fc0ada60ef7fb52fabfd165afe91/g' feeds/packages/net/nps/Makefile
@@ -242,8 +242,8 @@ git_svn main  https://github.com/gdy666/luci-app-lucky luci-app-lucky lucky
 #sed -i 's/PKG_VERSION:=.*/PKG_VERSION:=0.61.0/g' feeds/packages/net/frp/Makefile
 #sed -i 's/PKG_HASH:=.*/PKG_HASH:=c06a11982ef548372038ec99a6b01cf4f7817a9b88ee5064e41e5132d0ccb7e1/g' feeds/packages/net/frp/Makefile
 #编译错误，恢复frp为lede默认
-rm -rf feeds/packages/net/frp
-git_sparse_clone master https://github.com/coolsnowwolf/packages "coolsnowwolf" net/frp && mv -n frp feeds/packages/net/frp
+#rm -rf feeds/packages/net/frp
+#git_sparse_clone master https://github.com/coolsnowwolf/packages "coolsnowwolf" net/frp && mv -n frp feeds/packages/net/frp
 
 
 
