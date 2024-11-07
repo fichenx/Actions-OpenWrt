@@ -31,7 +31,7 @@ function git_svn() {
   #git sparse-checkout init --cone
   #git sparse-checkout set $@
   git checkout $branch -- $@
-  mv -n $@ package/custom2/
+  mv -n $@ ../package/custom2/
   cd ..
   rm -rf tempxx
   }
