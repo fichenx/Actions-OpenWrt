@@ -185,9 +185,9 @@ git_sparse_clone master https://github.com/immortalwrt/packages immortalwrt net/
 
 
 
-#还原golang版本为1.20
-#rm -rf feeds/packages/lang/golang
-#svn export https://github.com/coolsnowwolf/packages/trunk/lang/golang feeds/packages/lang/golang
+#golang
+rm -rf feeds/packages/lang/golang
+cp -rf $GITHUB_WORKSPACE/general/golang feeds/packages/lang/golang
 
 # 替换自带watchcat为https://github.com/gngpp/luci-app-watchcat-plus
 rm -rf feeds/packages/utils/watchcat
@@ -213,8 +213,8 @@ git_svn main https://github.com/chenmozhijin/luci-app-socat luci-app-socat
 git clone -b main https://github.com/ilxp/luci-app-ikoolproxy.git package/custom2/luci-app-ikoolproxy
 
 #添加luci-app-lucky
-#rm -rf feeds/luci/applications/luci-app-lucky feeds/packages/net/lucky
-#git_svn main https://github.com/gdy666/luci-app-lucky luci-app-lucky lucky
+rm -rf feeds/luci/applications/luci-app-lucky feeds/packages/net/lucky
+git_svn main https://github.com/gdy666/luci-app-lucky luci-app-lucky lucky
 
 # frp
 sed -i 's/PKG_VERSION:=.*/PKG_VERSION:=0.61.0/g' feeds/packages/net/frp/Makefile
