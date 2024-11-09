@@ -198,8 +198,8 @@ rm -rf feeds/luci/applications/luci-app-socat
 git_svn main https://github.com/chenmozhijin/luci-app-socat luci-app-socat
 
 #添加luci-app-lucky
-rm -rf feeds/luci/applications/luci-app-lucky feeds/packages/net/lucky
-git_svn main https://github.com/gdy666/luci-app-lucky luci-app-lucky lucky
+#rm -rf feeds/luci/applications/luci-app-lucky feeds/packages/net/lucky
+#git_svn main https://github.com/gdy666/luci-app-lucky luci-app-lucky lucky
 
 #更换luci-app-ikoolproxy为3.8.5-8
 git clone -b main https://github.com/ilxp/luci-app-ikoolproxy.git package/custom2/luci-app-ikoolproxy

@@ -199,8 +199,10 @@ sed -i 's|必须是 IPv4 地址|IPv4 地址或域名|g' feeds/luci/applications/
 [ -e package/lean/default-settings/files/zzz-default-settings ] && git_svn main https://github.com/chenmozhijin/luci-app-socat luci-app-socat
 
 #添加luci-app-lucky(lua版)
+#[ -e package/lean/default-settings/files/zzz-default-settings ] && rm -rf feeds/luci/applications/luci-app-lucky feeds/packages/net/lucky
+#[ -e package/lean/default-settings/files/zzz-default-settings ] && git_svn main  https://github.com/gdy666/luci-app-lucky luci-app-lucky lucky
 [ -e package/lean/default-settings/files/zzz-default-settings ] && rm -rf feeds/luci/applications/luci-app-lucky feeds/packages/net/lucky
-[ -e package/lean/default-settings/files/zzz-default-settings ] && git_svn main  https://github.com/gdy666/luci-app-lucky luci-app-lucky lucky
+[ -e package/lean/default-settings/files/zzz-default-settings ] && git_svn main  https://github.com/sirpdboy/luci-app-lucky luci-app-lucky lucky
 
 #更换luci-app-ikoolproxy为3.8.5-8(lua版luci)
 [ -e package/lean/default-settings/files/zzz-default-settings ] && git clone -b main https://github.com/ilxp/luci-app-ikoolproxy.git package/custom2/luci-app-ikoolproxy

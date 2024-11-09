@@ -236,7 +236,7 @@ git clone -b main https://github.com/ilxp/luci-app-ikoolproxy.git package/custom
 
 #添加luci-app-lucky(lua版)
 rm -rf feeds/luci/applications/luci-app-lucky feeds/packages/net/lucky
-git_svn main  https://github.com/gdy666/luci-app-lucky luci-app-lucky lucky
+git_svn main  https://github.com/sirpdboy/luci-app-lucky luci-app-lucky lucky
 
 # frp
 sed -i 's/PKG_VERSION:=.*/PKG_VERSION:=0.61.0/g' feeds/packages/net/frp/Makefile
