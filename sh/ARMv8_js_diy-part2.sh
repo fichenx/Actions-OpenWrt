@@ -10,17 +10,17 @@
 # Description: OpenWrt DIY script part 2 (After Update feeds)
 #
 function git_sparse_clone() {
-  branch="$1" rurl="$2" localdir="$3" && shift 3
+  branch="$1" rurl="$2" && shift 2
   #git clone -b $branch --depth 1 --filter=blob:none --sparse $rurl $localdir
-  git clone -b $branch --single-branch --no-tags --depth 1 --filter=blob:none --no-checkout $rurl $localdir
-  cd $localdir
+  git clone -b $branch --single-branch --no-tags --depth 1 --filter=blob:none --no-checkout $rurl temp_sparse
+  cd temp_sparse
   #git sparse-checkout init --cone
   #git sparse-checkout set $@
   git checkout $branch -- $@
   rm -rf ../package/custom/$@
   mv -n $@ ../
   cd ..
-  rm -rf $localdir
+  rm -rf temp_sparse
   }
   
 function git_svn() {
@@ -197,12 +197,12 @@ git_svn master https://github.com/Hyy2001X/AutoBuild-Packages luci-app-npc
 #sed -i 's/PKG_HASH:=.*/PKG_HASH:=4026d93b866db198c8ca1685b0f5d52793f65c6e63cb364163af661fdff0968c/g' feeds/packages/net/samba4/Makefile
 rm -rf feeds/packages/net/samba4
 rm -rf feeds/packages/lang/perl
-git_sparse_clone master https://github.com/openwrt/packages temp net/samba4 && mv -n samba4 feeds/packages/net/samba4
-git_sparse_clone master https://github.com/openwrt/packages temp lang/perl && mv -n perl feeds/packages/lang/perl
+git_sparse_clone master https://github.com/openwrt/packages net/samba4 && mv -n samba4 feeds/packages/net/samba4
+git_sparse_clone master https://github.com/openwrt/packages lang/perl && mv -n perl feeds/packages/lang/perl
 
 #更换msd_lite为最新版（immortalwrt源）
 rm -rf feeds/packages/net/msd_lite
-git_sparse_clone master https://github.com/immortalwrt/packages immortalwrt net/msd_lite && mv -n msd_lite feeds/packages/net/msd_lite
+git_sparse_clone master https://github.com/immortalwrt/packages net/msd_lite && mv -n msd_lite feeds/packages/net/msd_lite
 
 
 
@@ -213,14 +213,14 @@ git_sparse_clone master https://github.com/immortalwrt/packages immortalwrt net/
 # 替换自带watchcat为https://github.com/gngpp/luci-app-watchcat-plus
 rm -rf feeds/packages/utils/watchcat
 #git_svn master https://github.com/openwrt/packages utils/watchcat
-git_sparse_clone master "https://github.com/openwrt/packages" "temp" utils/watchcat && mv -n watchcat feeds/packages/utils/watchcat
+git_sparse_clone master https://github.com/openwrt/packages utils/watchcat && mv -n watchcat feeds/packages/utils/watchcat
 # 替换watchcat为第三方luci(lua版luci)
 git_svn main https://github.com/fichenx/packages luci-app-watchcat-plus
 
 #删除lede自带uwsgi
 rm -rf feeds/packages/net/uwsgi
 #git_svn openwrt-23.05 https://github.com/openwrt/packages net/uwsgi
-git_sparse_clone openwrt-23.05 "https://github.com/openwrt/packages" "22packages" net/uwsgi && mv -n uwsgi feeds/packages/net/uwsgi
+git_sparse_clone openwrt-23.05 https://github.com/openwrt/packages net/uwsgi && mv -n uwsgi feeds/packages/net/uwsgi
 
 #更换miniupnpd为最新版（immortalwrt源）
 [ -e package/lean/default-settings/files/zzz-default-settings ] && rm -rf feeds/packages/net/miniupnpd
@@ -236,14 +236,14 @@ git clone -b main https://github.com/ilxp/luci-app-ikoolproxy.git package/custom
 
 #添加luci-app-lucky(lua版)
 rm -rf feeds/luci/applications/luci-app-lucky feeds/packages/net/lucky
-git_svn main  https://github.com/sirpdboy/luci-app-lucky luci-app-lucky lucky
+git_sparse_clone main  https://github.com/sirpdboy/luci-app-lucky luci-app-lucky lucky && mv -n luci-app-lucky feeds/luci/applications/luci-app-lucky && mv -n lucky feeds/packages/net/lucky
 
 # frp
 sed -i 's/PKG_VERSION:=.*/PKG_VERSION:=0.61.0/g' feeds/packages/net/frp/Makefile
 sed -i 's/PKG_HASH:=.*/PKG_HASH:=c06a11982ef548372038ec99a6b01cf4f7817a9b88ee5064e41e5132d0ccb7e1/g' feeds/packages/net/frp/Makefile
 #编译错误，恢复frp为lede默认
 #rm -rf feeds/packages/net/frp
-#git_sparse_clone master https://github.com/coolsnowwolf/packages "coolsnowwolf" net/frp && mv -n frp feeds/packages/net/frp
+#git_sparse_clone master https://github.com/coolsnowwolf/packages net/frp && mv -n frp feeds/packages/net/frp
 
 
 
