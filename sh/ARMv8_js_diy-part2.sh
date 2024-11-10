@@ -132,16 +132,7 @@ sed -i 's|/cgi-bin/luci/admin/system/admin|/cgi-bin/luci/admin/docker/containers
 
 ##########添加&修改插件#########
 
-##使用openwrt官方版elfutils
-#rm -rf package/libs/elfutils
-#git_svn main https://github.com/openwrt/openwrt package/libs/elfutils
 
-
-##修复elfutils编译错误
-#1、修复lede版elfutils0.188版编译错误
-sed -i "s|TARGET_CFLAGS += -D_GNU_SOURCE -Wno-unused-result -Wno-format-nonliteral|TARGET_CFLAGS += -D_GNU_SOURCE -Wno-unused-result -Wno-format-nonliteral -Wno-error=use-after-free|g" package/libs/elfutils/Makefile
-#2、修复替换后openwrt官方版elfutils0.191版elfutils编译错误
-sed -i "s|CONFIG_GCC_USE_VERSION_11|CONFIG_GCC_USE_VERSION_12|g" package/custom2/elfutils/Makefile
 
 # 晶晨宝盒修改默认配置
 #sed -i "s|https.*/amlogic-s9xxx-openwrt|https://github.com/breakings/OpenWrt|g" package/luci-app-amlogic/root/etc/config/amlogic
@@ -175,12 +166,6 @@ sed -i 's/Must an IPv4 address/IPv4 address or domain name/g' feeds/luci/applica
 sed -i 's/必须是 IPv4 地址/IPv4 地址或域名/g' feeds/luci/applications/luci-app-nps/po/zh-cn/nps.po
 
 
-
-#取消编译libnetwork，防止出现冲突：
-# * check_data_file_clashes: Package libnetwork wants to install file /workdir/openwrt/build_dir/target-aarch64_generic_musl/root-armvirt/usr/bin/docker-proxy
-#         But that file is already provided by package  * dockerd 
-# * opkg_install_cmd: Cannot install package libnetwork.
-sed -i 's|CONFIG_PACKAGE_libnetwork=y|# CONFIG_PACKAGE_libnetwork is not set|g' .config
 
 
 #添加luci-app-wechatpush(js版)
@@ -241,10 +226,42 @@ git_sparse_clone openwrt-23.05 https://github.com/openwrt/packages net/uwsgi && 
 [ -e package/lean/default-settings/files/zzz-default-settings ] && rm -rf feeds/luci/applications/luci-app-lucky feeds/packages/net/lucky
 [ -e package/lean/default-settings/files/zzz-default-settings ] && git_svn main https://github.com/gdy666/luci-app-lucky luci-app-lucky lucky
 
+
+
+#########修复编译错误#########
 # frp
 #编译错误，恢复frp为lede默认
 #rm -rf feeds/packages/net/frp
 #git_sparse_clone master https://github.com/coolsnowwolf/packages net/frp && mv -n frp feeds/packages/net/frp
 
+##使用openwrt官方版elfutils
+#rm -rf package/libs/elfutils
+#git_svn main https://github.com/openwrt/openwrt package/libs/elfutils
 
 
+##修复elfutils编译错误
+#1、修复lede版elfutils0.188版编译错误
+sed -i "s|TARGET_CFLAGS += -D_GNU_SOURCE -Wno-unused-result -Wno-format-nonliteral|TARGET_CFLAGS += -D_GNU_SOURCE -Wno-unused-result -Wno-format-nonliteral -Wno-error=use-after-free|g" package/libs/elfutils/Makefile
+#2、修复替换后openwrt官方版elfutils0.191版elfutils编译错误
+sed -i "s|CONFIG_GCC_USE_VERSION_11|CONFIG_GCC_USE_VERSION_12|g" package/custom2/elfutils/Makefile
+
+
+
+#取消编译libnetwork，防止出现冲突：
+# * check_data_file_clashes: Package libnetwork wants to install file /workdir/openwrt/build_dir/target-aarch64_generic_musl/root-armvirt/usr/bin/docker-proxy
+#         But that file is already provided by package  * dockerd 
+# * opkg_install_cmd: Cannot install package libnetwork.
+sed -i 's|CONFIG_PACKAGE_libnetwork=y|# CONFIG_PACKAGE_libnetwork is not set|g' .config
+
+#修复breakings更新dnsproxy后的编译问题
+#sed -i 's/PKG_VERSION:=.*/PKG_VERSION:=0.73.3/g' feeds/packages/net/dnsproxy/Makefile
+#sed -i 's/PKG_HASH:=.*/PKG_HASH:=9eb2b1e88e74d3a4237b50977aa52cd19ea1bb6c896535e7dd4b2df4d6aa469c/g' feeds/packages/net/dnsproxy/Makefile
+
+rm -rf feeds/packages/net/dnsproxy
+git_sparse_clone master https://github.com/coolsnowwolf/packages net/dnsproxy && mv -n dnsproxy feeds/packages/net/dnsproxy
+
+#修复breakings替换python后的编译问题
+#rm -rf feeds/packages/lang/python
+#cp -rf $GITHUB_WORKSPACE/general/python feeds/packages/lang
+rm -rf feeds/packages/lang/python
+git_sparse_clone master https://github.com/coolsnowwolf/packages lang/python && mv -n python feeds/packages/lang/python

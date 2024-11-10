@@ -119,11 +119,7 @@ sed -i 's/luci-theme-bootstrap/luci-theme-design/g' feeds/luci/collections/luci-
 #sed -i '/exit 0/i sed -i "s/\\[ -d \\/sys\\/kernel\\/debug\\/ecm\\/ecm_nss_ipv4 \\] \\&\\& sysctl -w dev.nss.general.redirect=1/\\#[ -d \\/sys\\/kernel\\/debug\\/ecm\\/ecm_nss_ipv4 \\] \\&\\& sysctl -w dev.nss.general.redirect=1/g" /etc/init.d/qca-nss-ecm'  package/lean/default-settings/files/zzz-default-settings
 #sed -i '/exit 0/i /etc/init.d/qca-nss-ecm disable' package/lean/default-settings/files/zzz-default-settings
 
-#为bypass添加redsocks2依赖。
-#svn co https://github.com/fw876/helloworld/trunk/redsocks2 package/redsocks2
 
-#修复 shadowsocksr-libev libopenssl-legacy 依赖问题
-sed -i 's/ +libopenssl-legacy//g' feeds/fichenx/shadowsocksr-libev/Makefile
 
 
 
@@ -208,6 +204,31 @@ git_svn main https://github.com/gdy666/luci-app-lucky luci-app-lucky lucky
 #更换luci-app-ikoolproxy为3.8.5-8
 git clone -b main https://github.com/ilxp/luci-app-ikoolproxy.git package/custom2/luci-app-ikoolproxy
 
+#########修复编译错误#########
+#为bypass添加redsocks2依赖。
+#svn co https://github.com/fw876/helloworld/trunk/redsocks2 package/redsocks2
+
+#修复 shadowsocksr-libev libopenssl-legacy 依赖问题
+sed -i 's/ +libopenssl-legacy//g' feeds/fichenx/shadowsocksr-libev/Makefile
+
+##修复elfutils编译错误
+#1、修复lede版elfutils0.188版编译错误
+sed -i "s|TARGET_CFLAGS += -D_GNU_SOURCE -Wno-unused-result -Wno-format-nonliteral|TARGET_CFLAGS += -D_GNU_SOURCE -Wno-unused-result -Wno-format-nonliteral -Wno-error=use-after-free|g" package/libs/elfutils/Makefile
+#2、修复替换后openwrt官方版elfutils0.191版elfutils编译错误
+sed -i "s|CONFIG_GCC_USE_VERSION_11|CONFIG_GCC_USE_VERSION_12|g" package/custom2/elfutils/Makefile
+
+#修复breakings更新dnsproxy后的编译问题
+#sed -i 's/PKG_VERSION:=.*/PKG_VERSION:=0.73.3/g' feeds/packages/net/dnsproxy/Makefile
+#sed -i 's/PKG_HASH:=.*/PKG_HASH:=9eb2b1e88e74d3a4237b50977aa52cd19ea1bb6c896535e7dd4b2df4d6aa469c/g' feeds/packages/net/dnsproxy/Makefile
+
+rm -rf feeds/packages/net/dnsproxy
+git_sparse_clone master https://github.com/coolsnowwolf/packages net/dnsproxy && mv -n dnsproxy feeds/packages/net/dnsproxy
+
+#修复breakings替换python后的编译问题
+#rm -rf feeds/packages/lang/python
+#cp -rf $GITHUB_WORKSPACE/general/python feeds/packages/lang
+rm -rf feeds/packages/lang/python
+git_sparse_clone master https://github.com/coolsnowwolf/packages lang/python && mv -n python feeds/packages/lang/python
 
 #./scripts/feeds update -a
 #./scripts/feeds install -a

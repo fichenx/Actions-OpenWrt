@@ -106,22 +106,6 @@ sed -i 's/luci-theme-bootstrap/luci-theme-design/g' feeds/luci/collections/luci-
 
 ##########添加&修改插件#########
 
-rm -rf feeds/packages/utils/cryptsetup
-cp -rf $GITHUB_WORKSPACE/general/cryptsetup feeds/packages/utils
-
-##使用openwrt官方版elfutils
-#rm -rf package/libs/elfutils
-#git_svn main https://github.com/openwrt/openwrt package/libs/elfutils
-
-
-##修复elfutils编译错误
-#1、修复lede版elfutils0.188版编译错误
-sed -i "s|TARGET_CFLAGS += -D_GNU_SOURCE -Wno-unused-result -Wno-format-nonliteral|TARGET_CFLAGS += -D_GNU_SOURCE -Wno-unused-result -Wno-format-nonliteral -Wno-error=use-after-free|g" package/libs/elfutils/Makefile
-#2、修复openwrt官方版elfutils0.191版elfutils编译错误
-sed -i "s|CONFIG_GCC_USE_VERSION_11|CONFIG_GCC_USE_VERSION_12|g" package/custom2/elfutils/Makefile
-
-
-
 # 晶晨宝盒
 #sed -i "s|https.*/amlogic-s9xxx-openwrt|https://github.com/breakings/OpenWrt|g" package/luci-app-amlogic/root/etc/config/amlogic
 #sed -i "s|http.*/library|https://github.com/breakings/OpenWrt/opt/kernel|g" package/luci-app-amlogic/root/etc/config/amlogic
@@ -152,13 +136,6 @@ sed -i 's/Must an IPv4 address/IPv4 address or domain name/g' feeds/luci/applica
 sed -i 's/Must an IPv4 address/IPv4 address or domain name/g' feeds/luci/applications/luci-app-nps/po/zh-cn/nps.po
 sed -i 's/必须是 IPv4 地址/IPv4 地址或域名/g' feeds/luci/applications/luci-app-nps/po/zh-cn/nps.po
 
-
-
-#取消编译libnetwork，防止出现冲突：
-# * check_data_file_clashes: Package libnetwork wants to install file /workdir/openwrt/build_dir/target-aarch64_generic_musl/root-armvirt/usr/bin/docker-proxy
-#         But that file is already provided by package  * dockerd 
-# * opkg_install_cmd: Cannot install package libnetwork.
-sed -i 's|CONFIG_PACKAGE_libnetwork=y|# CONFIG_PACKAGE_libnetwork is not set|g' .config
 
 
 #luci-app-serverchan
@@ -218,12 +195,6 @@ git clone -b main https://github.com/ilxp/luci-app-ikoolproxy.git package/custom
 rm -rf feeds/luci/applications/luci-app-lucky feeds/packages/net/lucky
 git_svn main https://github.com/gdy666/luci-app-lucky luci-app-lucky lucky
 
-# frp
-#编译错误，恢复frp为lede默认
-#rm -rf feeds/packages/net/frp
-#git_sparse_clone master https://github.com/coolsnowwolf/packages "coolsnowwolf" net/frp && mv -n frp feeds/packages/net/frp
-
-
 
 #修改应用位置
 # luci-app-openvpn
@@ -244,3 +215,45 @@ sed -i 's/\[services\]/\[vpn\]/g'  feeds/luci/applications/luci-app-frps/luasrc/
 #luci-app-nps（修改nps显示位置）
 sed -i 's/"services"/"vpn"/g'  feeds/luci/applications/luci-app-nps/luasrc/controller/nps.lua
 sed -i 's/\[services\]/\[vpn\]/g'  feeds/luci/applications/luci-app-nps/luasrc/view/nps/nps_status.htm
+
+
+
+#########修复编译错误#########
+
+#取消编译libnetwork，防止出现冲突：
+# * check_data_file_clashes: Package libnetwork wants to install file /workdir/openwrt/build_dir/target-aarch64_generic_musl/root-armvirt/usr/bin/docker-proxy
+#         But that file is already provided by package  * dockerd 
+# * opkg_install_cmd: Cannot install package libnetwork.
+sed -i 's|CONFIG_PACKAGE_libnetwork=y|# CONFIG_PACKAGE_libnetwork is not set|g' .config
+
+# frp
+#编译错误，恢复frp为lede默认
+#rm -rf feeds/packages/net/frp
+#git_sparse_clone master https://github.com/coolsnowwolf/packages net/frp && mv -n frp feeds/packages/net/frp
+
+rm -rf feeds/packages/utils/cryptsetup
+cp -rf $GITHUB_WORKSPACE/general/cryptsetup feeds/packages/utils
+
+##使用openwrt官方版elfutils
+#rm -rf package/libs/elfutils
+#git_svn main https://github.com/openwrt/openwrt package/libs/elfutils
+
+
+##修复elfutils编译错误
+#1、修复lede版elfutils0.188版编译错误
+sed -i "s|TARGET_CFLAGS += -D_GNU_SOURCE -Wno-unused-result -Wno-format-nonliteral|TARGET_CFLAGS += -D_GNU_SOURCE -Wno-unused-result -Wno-format-nonliteral -Wno-error=use-after-free|g" package/libs/elfutils/Makefile
+#2、修复openwrt官方版elfutils0.191版elfutils编译错误
+sed -i "s|CONFIG_GCC_USE_VERSION_11|CONFIG_GCC_USE_VERSION_12|g" package/custom2/elfutils/Makefile
+
+#修复breakings更新dnsproxy后的编译问题
+#sed -i 's/PKG_VERSION:=.*/PKG_VERSION:=0.73.3/g' feeds/packages/net/dnsproxy/Makefile
+#sed -i 's/PKG_HASH:=.*/PKG_HASH:=9eb2b1e88e74d3a4237b50977aa52cd19ea1bb6c896535e7dd4b2df4d6aa469c/g' feeds/packages/net/dnsproxy/Makefile
+
+rm -rf feeds/packages/net/dnsproxy
+git_sparse_clone master https://github.com/coolsnowwolf/packages net/dnsproxy && mv -n dnsproxy feeds/packages/net/dnsproxy
+
+#修复breakings替换python后的编译问题
+#rm -rf feeds/packages/lang/python
+#cp -rf $GITHUB_WORKSPACE/general/python feeds/packages/lang
+rm -rf feeds/packages/lang/python
+git_sparse_clone master https://github.com/coolsnowwolf/packages lang/python && mv -n python feeds/packages/lang/python
