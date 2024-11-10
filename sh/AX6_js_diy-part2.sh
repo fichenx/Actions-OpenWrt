@@ -10,40 +10,44 @@
 # Description: OpenWrt DIY script part 2 (After Update feeds)
 #
 function git_sparse_clone() {
-  branch="$1" rurl="$2" localdir="$3" && shift 3
-  #git clone -b $branch --depth 1 --filter=blob:none --sparse $rurl $localdir
-  git clone -b $branch --single-branch --no-tags --depth 1 --filter=blob:none --no-checkout $rurl $localdir
-  cd $localdir
-  #git sparse-checkout init --cone
-  #git sparse-checkout set $@
-  git checkout $branch -- $@
-  rm -rf ../package/custom/$@
+  branch="$1" rurl="$2" && shift 2
+  rootdir="$PWD"
+  git clone -b $branch --depth 1 --filter=blob:none --sparse $rurl temp_sparse
+  #git clone -b $branch --single-branch --no-tags --depth 1 --filter=blob:none --no-checkout $rurl temp_sparse
+  cd temp_sparse
+  git sparse-checkout init --cone
+  git sparse-checkout set $@
+  #git checkout $branch -- $@
+  [ -d ../package/custom ] && cd ../package/custom && rm -rf $@ && cd "$rootdir"/temp_sparse
   mv -n $@ ../
   cd ..
-  rm -rf $localdir
+  rm -rf temp_sparse
   }
+  
 function git_svn() {
   #branch="$1" rurl="$2" localdir="$3" && shift 3
   branch="$1" rurl="$2" && shift 2
-  #git clone -b $branch --depth 1 --filter=blob:none --sparse $rurl $localdir
-  git clone -b $branch --single-branch --no-tags --depth 1 --filter=blob:none --no-checkout $rurl tempxx
-  cd tempxx
-  #git sparse-checkout init --cone
-  #git sparse-checkout set $@
-  rm -rf ../package/custom/$@
-  git checkout $branch -- $@
+  rootdir="$PWD"
+  git clone -b $branch --depth 1 --filter=blob:none --sparse $rurl temp_svn
+  #git clone -b $branch --single-branch --no-tags --depth 1 --filter=blob:none --no-checkout $rurl temp_svn
+  cd temp_svn
+  git sparse-checkout init --cone
+  git sparse-checkout set $@
+  #git checkout $branch -- $@
+  [ -d ../package/custom ] && cd ../package/custom && rm -rf $@ && cd "$rootdir"/temp_svn
   mv -n $@ ../package/custom2/
   cd ..
-  rm -rf tempxx
+  rm -rf temp_svn
   }
   
 function merge_package(){
     branch=`echo $1 | rev | cut -d'/' -f 1 | rev`
     repo=`echo $2 | rev | cut -d'/' -f 1 | rev`
     pkg=`echo $3 | rev | cut -d'/' -f 1 | rev`
+	rootdir="$PWD"
     # find package/ -follow -name $pkg -not -path "package/custom/*" | xargs -rt rm -rf
     git clone -b $1 --depth=1 --single-branch $2
-    rm -rf package/custom/$3
+  [ -d package/custom ] && cd package/custom && rm -rf $3 && cd "$rootdir"
     mv $3 package/custom2/
     rm -rf $repo
 }
@@ -199,10 +203,8 @@ sed -i 's|必须是 IPv4 地址|IPv4 地址或域名|g' feeds/luci/applications/
 [ -e package/lean/default-settings/files/zzz-default-settings ] && git_svn main https://github.com/chenmozhijin/luci-app-socat luci-app-socat
 
 #添加luci-app-lucky(lua版)
-#[ -e package/lean/default-settings/files/zzz-default-settings ] && rm -rf feeds/luci/applications/luci-app-lucky feeds/packages/net/lucky
-#[ -e package/lean/default-settings/files/zzz-default-settings ] && git_svn main  https://github.com/gdy666/luci-app-lucky luci-app-lucky lucky
 [ -e package/lean/default-settings/files/zzz-default-settings ] && rm -rf feeds/luci/applications/luci-app-lucky feeds/packages/net/lucky
-[ -e package/lean/default-settings/files/zzz-default-settings ] && git_svn main  https://github.com/sirpdboy/luci-app-lucky luci-app-lucky lucky
+[ -e package/lean/default-settings/files/zzz-default-settings ] && git_svn main  https://github.com/gdy666/luci-app-lucky luci-app-lucky lucky
 
 #更换luci-app-ikoolproxy为3.8.5-8(lua版luci)
 [ -e package/lean/default-settings/files/zzz-default-settings ] && git clone -b main https://github.com/ilxp/luci-app-ikoolproxy.git package/custom2/luci-app-ikoolproxy

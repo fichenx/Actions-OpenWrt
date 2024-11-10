@@ -10,45 +10,47 @@
 # Description: OpenWrt DIY script part 2 (After Update feeds)
 #
 function git_sparse_clone() {
-  branch="$1" rurl="$2" localdir="$3" && shift 3
-  #git clone -b $branch --depth 1 --filter=blob:none --sparse $rurl $localdir
-  git clone -b $branch --single-branch --no-tags --depth 1 --filter=blob:none --no-checkout $rurl $localdir
-  cd $localdir
-  #git sparse-checkout init --cone
-  #git sparse-checkout set $@
-  git checkout $branch -- $@
-  rm -rf ../package/custom/$@
+  branch="$1" rurl="$2" && shift 2
+  rootdir="$PWD"
+  git clone -b $branch --depth 1 --filter=blob:none --sparse $rurl temp_sparse
+  #git clone -b $branch --single-branch --no-tags --depth 1 --filter=blob:none --no-checkout $rurl temp_sparse
+  cd temp_sparse
+  git sparse-checkout init --cone
+  git sparse-checkout set $@
+  #git checkout $branch -- $@
+  [ -d ../package/custom ] && cd ../package/custom && rm -rf $@ && cd "$rootdir"/temp_sparse
   mv -n $@ ../
   cd ..
-  rm -rf $localdir
+  rm -rf temp_sparse
   }
   
 function git_svn() {
   #branch="$1" rurl="$2" localdir="$3" && shift 3
   branch="$1" rurl="$2" && shift 2
-  #git clone -b $branch --depth 1 --filter=blob:none --sparse $rurl $localdir
-  git clone -b $branch --single-branch --no-tags --depth 1 --filter=blob:none --no-checkout $rurl tempxx
-  cd tempxx
-  #git sparse-checkout init --cone
-  #git sparse-checkout set $@
-  git checkout $branch -- $@
-  rm -rf ../package/custom/$@
+  rootdir="$PWD"
+  git clone -b $branch --depth 1 --filter=blob:none --sparse $rurl temp_svn
+  #git clone -b $branch --single-branch --no-tags --depth 1 --filter=blob:none --no-checkout $rurl temp_svn
+  cd temp_svn
+  git sparse-checkout init --cone
+  git sparse-checkout set $@
+  #git checkout $branch -- $@
+  [ -d ../package/custom ] && cd ../package/custom && rm -rf $@ && cd "$rootdir"/temp_svn
   mv -n $@ ../package/custom2/
   cd ..
-  rm -rf tempxx
+  rm -rf temp_svn
   }
   
 function merge_package(){
     branch=`echo $1 | rev | cut -d'/' -f 1 | rev`
     repo=`echo $2 | rev | cut -d'/' -f 1 | rev`
     pkg=`echo $3 | rev | cut -d'/' -f 1 | rev`
+	rootdir="$PWD"
     # find package/ -follow -name $pkg -not -path "package/custom/*" | xargs -rt rm -rf
     git clone -b $1 --depth=1 --single-branch $2
-    rm -rf package/custom/$3
+  [ -d package/custom ] && cd package/custom && rm -rf $3 && cd "$rootdir"
     mv $3 package/custom2/
     rm -rf $repo
 }
-
 rm -rf package/custom2; mkdir package/custom2
 
 
@@ -176,12 +178,12 @@ git_svn master https://github.com/Hyy2001X/AutoBuild-Packages luci-app-npc
 #sed -i 's/PKG_HASH:=.*/PKG_HASH:=4026d93b866db198c8ca1685b0f5d52793f65c6e63cb364163af661fdff0968c/g' feeds/packages/net/samba4/Makefile
 rm -rf feeds/packages/net/samba4
 rm -rf feeds/packages/lang/perl
-git_sparse_clone master https://github.com/openwrt/packages temp net/samba4 && mv -n samba4 feeds/packages/net/samba4
-git_sparse_clone master https://github.com/openwrt/packages temp lang/perl && mv -n perl feeds/packages/lang/perl
+git_sparse_clone master https://github.com/openwrt/packages net/samba4 && mv -n samba4 feeds/packages/net/samba4
+git_sparse_clone master https://github.com/openwrt/packages lang/perl && mv -n perl feeds/packages/lang/perl
 
 #更换msd_lite为最新版（immortalwrt源）
 rm -rf feeds/packages/net/msd_lite
-git_sparse_clone master https://github.com/immortalwrt/packages immortalwrt net/msd_lite && mv -n msd_lite feeds/packages/net/msd_lite
+git_sparse_clone master https://github.com/immortalwrt/packages net/msd_lite && mv -n msd_lite feeds/packages/net/msd_lite
 
 
 
@@ -192,13 +194,13 @@ cp -rf $GITHUB_WORKSPACE/general/golang feeds/packages/lang/golang
 # 替换自带watchcat为https://github.com/gngpp/luci-app-watchcat-plus
 rm -rf feeds/packages/utils/watchcat
 #git_svn master https://github.com/openwrt/packages utils/watchcat
-git_sparse_clone master "https://github.com/openwrt/packages" "temp" utils/watchcat && mv -n watchcat feeds/packages/utils/watchcat
+git_sparse_clone master https://github.com/openwrt/packages utils/watchcat && mv -n watchcat feeds/packages/utils/watchcat
 git_svn main https://github.com/fichenx/packages luci-app-watchcat-plus
 
 #删除lede自带uwsgi
 rm -rf feeds/packages/net/uwsgi
 #git_svn openwrt-23.05 https://github.com/openwrt/packages net/uwsgi
-git_sparse_clone openwrt-23.05 "https://github.com/openwrt/packages" "22packages" net/uwsgi && mv -n uwsgi feeds/packages/net/uwsgi
+git_sparse_clone openwrt-23.05 https://github.com/openwrt/packages net/uwsgi && mv -n uwsgi feeds/packages/net/uwsgi
 
 #更换miniupnpd为最新版（immortalwrt源）
 [ -e package/lean/default-settings/files/zzz-default-settings ] && rm -rf feeds/packages/net/miniupnpd
@@ -213,8 +215,8 @@ git_svn main https://github.com/chenmozhijin/luci-app-socat luci-app-socat
 git clone -b main https://github.com/ilxp/luci-app-ikoolproxy.git package/custom2/luci-app-ikoolproxy
 
 #添加luci-app-lucky
-#rm -rf feeds/luci/applications/luci-app-lucky feeds/packages/net/lucky
-#git_svn main https://github.com/gdy666/luci-app-lucky luci-app-lucky lucky
+rm -rf feeds/luci/applications/luci-app-lucky feeds/packages/net/lucky
+git_svn main https://github.com/gdy666/luci-app-lucky luci-app-lucky lucky
 
 # frp
 sed -i 's/PKG_VERSION:=.*/PKG_VERSION:=0.61.0/g' feeds/packages/net/frp/Makefile
