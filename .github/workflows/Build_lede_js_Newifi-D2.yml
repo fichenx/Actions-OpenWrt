@@ -102,7 +102,7 @@ jobs:
         #chmod +x $DIY_P2_SH
         chmod +x $DIY_P3_SH
         cd openwrt
-        #$GITHUB_WORKSPACE/$DIY_P2_SH
+        $GITHUB_WORKSPACE/$DIY_P2_SH
         $GITHUB_WORKSPACE/$DIY_P3_SH
 
     - name: SSH连接到Actions
