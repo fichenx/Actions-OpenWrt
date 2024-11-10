@@ -33,9 +33,9 @@ env:
   REPO_BRANCH: master
   FEEDS_CONF: js_feeds.conf.default
   CONFIG_FILE: config/Newifi_D2.config
-  DIY_P1_SH: sh/lede_diy-part1.sh
-  DIY_P2_SH: sh/breakings_diy-part2.sh
-  DIY_P3_SH: sh/Newifi-D2_js_diy-part2.sh
+  DIY_feeds_SH: sh/lede_diy-part1.sh
+  DIY_breakings_SH: sh/breakings_diy-part2.sh
+  DIY_my_SH: sh/Newifi-D2_js_diy-part2.sh
   UPLOAD_BIN_DIR: false
   UPLOAD_FIRMWARE: true
   UPLOAD_COWTRANSFER: false
@@ -85,9 +85,9 @@ jobs:
     - name: 加载自定义源
       run: |
         [ -e $FEEDS_CONF ] && mv $FEEDS_CONF openwrt/feeds.conf.default
-        chmod +x $DIY_P1_SH
+        chmod +x $DIY_feeds_SH
         cd openwrt
-        $GITHUB_WORKSPACE/$DIY_P1_SH
+        $GITHUB_WORKSPACE/$DIY_feeds_SH
 
     - name: 更新源
       run: cd openwrt && ./scripts/feeds update -a
@@ -99,11 +99,11 @@ jobs:
       run: |
         [ -e files ] && mv files openwrt/files
         [ -e $CONFIG_FILE ] && mv $CONFIG_FILE openwrt/.config
-        #chmod +x $DIY_P2_SH
-        chmod +x $DIY_P3_SH
+        #chmod +x $DIY_breakings_SH
+        chmod +x $DIY_my_SH
         cd openwrt
-        $GITHUB_WORKSPACE/$DIY_P2_SH
-        $GITHUB_WORKSPACE/$DIY_P3_SH
+        $GITHUB_WORKSPACE/$DIY_breakings_SH
+        $GITHUB_WORKSPACE/$DIY_my_SH
 
     - name: SSH连接到Actions
       uses: P3TERX/ssh2actions@v1.0.0
