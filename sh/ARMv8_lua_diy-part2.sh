@@ -231,6 +231,8 @@ sed -i 's|CONFIG_PACKAGE_libnetwork=y|# CONFIG_PACKAGE_libnetwork is not set|g' 
 #rm -rf feeds/packages/net/frp
 #git_sparse_clone master https://github.com/coolsnowwolf/packages net/frp && mv -n frp feeds/packages/net/frp
 
+
+#cryptsetup
 rm -rf feeds/packages/utils/cryptsetup
 cp -rf $GITHUB_WORKSPACE/general/cryptsetup feeds/packages/utils
 
@@ -241,7 +243,7 @@ cp -rf $GITHUB_WORKSPACE/general/cryptsetup feeds/packages/utils
 
 ##修复elfutils编译错误
 #1、修复lede版elfutils0.188版编译错误
-sed -i "s|TARGET_CFLAGS += -D_GNU_SOURCE -Wno-unused-result -Wno-format-nonliteral|TARGET_CFLAGS += -D_GNU_SOURCE -Wno-unused-result -Wno-format-nonliteral -Wno-error=use-after-free|g" package/libs/elfutils/Makefile
+sed -i "s|TARGET_CFLAGS += -D_GNU_SOURCE -Wno-unused-result -Wno-format-nonliteral|TARGET_CFLAGS += -D_GNU_SOURCE -Wno-unused-result -Wno-format-nonliteral -Wno-error=use-after-free|g" feeds/package/libs/elfutils/Makefile
 #2、修复openwrt官方版elfutils0.191版elfutils编译错误
 sed -i "s|CONFIG_GCC_USE_VERSION_11|CONFIG_GCC_USE_VERSION_12|g" package/custom2/elfutils/Makefile
 
@@ -257,3 +259,7 @@ git_sparse_clone master https://github.com/coolsnowwolf/packages net/dnsproxy &&
 #cp -rf $GITHUB_WORKSPACE/general/python feeds/packages/lang
 rm -rf feeds/packages/lang/python
 git_sparse_clone master https://github.com/coolsnowwolf/packages lang/python && mv -n python feeds/packages/lang/python
+
+#修复breakings替换php8后的编译问题
+rm -rf feeds/packages/lang/php8/Makefile
+git_sparse_clone master https://github.com/coolsnowwolf/packages lang/php8/Makefile && mv -n php8 feeds/packages/lang/php8/Makefile
