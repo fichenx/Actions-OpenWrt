@@ -232,10 +232,6 @@ sed -i 's|CONFIG_PACKAGE_libnetwork=y|# CONFIG_PACKAGE_libnetwork is not set|g' 
 #git_sparse_clone master https://github.com/coolsnowwolf/packages net/frp && mv -n frp feeds/packages/net/frp
 
 
-#cryptsetup
-rm -rf feeds/packages/utils/cryptsetup
-cp -rf $GITHUB_WORKSPACE/general/cryptsetup feeds/packages/utils
-
 ##使用openwrt官方版elfutils
 #rm -rf package/libs/elfutils
 #git_svn main https://github.com/openwrt/openwrt package/libs/elfutils
