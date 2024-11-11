@@ -259,3 +259,7 @@ git_sparse_clone master https://github.com/coolsnowwolf/packages lang/python && 
 #修复breakings替换php8后的编译问题
 rm -rf feeds/packages/lang/php8
 git_sparse_clone master https://github.com/coolsnowwolf/packages lang/php8 && mv -n php8 feeds/packages/lang/php8
+
+#修复breakings替换curl后的编译问题
+rm -rf feeds/packages/net/curl
+git_sparse_clone master https://github.com/coolsnowwolf/packages net/curl && mv -n curl feeds/packages/net/curl
