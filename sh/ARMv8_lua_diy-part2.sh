@@ -263,3 +263,7 @@ git_sparse_clone master https://github.com/coolsnowwolf/packages lang/php8 && mv
 #修复breakings替换curl后的编译问题
 rm -rf feeds/packages/net/curl
 git_sparse_clone master https://github.com/coolsnowwolf/packages net/curl && mv -n curl feeds/packages/net/curl
+
+#修复breakings替换boost后的编译问题
+rm -rf feeds/packages/libs/boost
+git_sparse_clone master https://github.com/coolsnowwolf/packages libs/boost && mv -n boost feeds/packages/libs/boost
