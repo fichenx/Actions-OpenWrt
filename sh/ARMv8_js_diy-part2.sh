@@ -277,3 +277,9 @@ git_sparse_clone master https://github.com/coolsnowwolf/packages net/curl && mv 
 #修复breakings替换boost后的编译问题
 rm -rf feeds/packages/libs/boost
 git_sparse_clone master https://github.com/coolsnowwolf/packages libs/boost && mv -n boost feeds/packages/libs/boost
+
+#修复breakings替换bcoreutils后的编译警示（可编译通过）：
+#make[3] -C feeds/packages/utils/coreutils compile
+#WARNING: Makefile 'package/feeds/luci/luci-ssl-nginx/Makefile' has a dependency on 'nginx-mod-luci-ssl', which does not exist
+rm -rf feeds/packages/utils/coreutils
+git_sparse_clone master https://github.com/coolsnowwolf/packages utils/coreutils && mv -n coreutils feeds/packages/utils/coreutils
