@@ -102,7 +102,7 @@ jobs:
         chmod +x $DIY_breakings_SH
         chmod +x $DIY_my_SH
         cd openwrt
-        #$GITHUB_WORKSPACE/$DIY_breakings_SH
+        $GITHUB_WORKSPACE/$DIY_breakings_SH
         $GITHUB_WORKSPACE/$DIY_my_SH
 
     - name: SSH连接到Actions
