@@ -18,8 +18,9 @@ function git_sparse_clone() {
   cd temp_sparse
   git sparse-checkout init --cone
   git sparse-checkout set $@
+  pkg=`echo $@ | tr ' ' '\n' | rev | cut -d'/' -f 1 | rev | tr '\n' ' ' `
   #git checkout $branch -- $@
-  [ -d ../package/custom ] && cd ../package/custom && rm -rf $@ && cd "$rootdir"/temp_sparse
+  [ -d ../package/custom ] && cd ../package/custom && rm -rf $pkg && cd "$rootdir"/temp_sparse
   mv -n $@ ../
   cd ..
   rm -rf temp_sparse
@@ -34,8 +35,9 @@ function git_svn() {
   cd temp_svn
   git sparse-checkout init --cone
   git sparse-checkout set $@
+  pkg=`echo $@ | tr ' ' '\n' | rev | cut -d'/' -f 1 | rev | tr '\n' ' ' `
   #git checkout $branch -- $@
-  [ -d ../package/custom ] && cd ../package/custom && rm -rf $@ && cd "$rootdir"/temp_svn
+  [ -d ../package/custom ] && cd ../package/custom && rm -rf $pkg && cd "$rootdir"/temp_svn
   mv -n $@ ../package/custom2/
   cd ..
   rm -rf temp_svn
