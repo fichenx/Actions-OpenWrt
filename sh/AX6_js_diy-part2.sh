@@ -174,8 +174,8 @@ sed -i 's|必须是 IPv4 地址|IPv4 地址或域名|g' feeds/luci/applications/
 [ -e package/lean/default-settings/files/zzz-default-settings ] && git_svn main https://github.com/fichenx/packages luci-app-watchcat-plus
 
 #更换msd_lite为最新版（immortalwrt源）
-[ -e package/lean/default-settings/files/zzz-default-settings ] && rm -rf feeds/packages/net/msd_lite
-[ -e package/lean/default-settings/files/zzz-default-settings ] && git_svn master https://github.com/immortalwrt/packages  net/msd_lite
+#[ -e package/lean/default-settings/files/zzz-default-settings ] && rm -rf feeds/packages/net/msd_lite
+#[ -e package/lean/default-settings/files/zzz-default-settings ] && git_svn master https://github.com/immortalwrt/packages  net/msd_lite
 
 #golang
 [ -e package/lean/default-settings/files/zzz-default-settings ] && rm -rf feeds/packages/lang/golang
