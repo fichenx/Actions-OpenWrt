@@ -87,6 +87,10 @@ sed -i "s/hostname='ImmortalWrt'/hostname='Redmi-AX6'/g" package/base-files/file
 #sed -i '/exit 0/i sed -i "s/services/system/g" /usr/lib/lua/luci/controller/cpufreq.lua'  package/lean/default-settings/files/zzz-default-settings
 
 
+#添加6.6内核选项
+sed -i '/KERNEL_PATCHVER:=6.1/a KERNEL_TESTING_PATCHVER:=6.6' target/linux/qualcommax/
+
+
 ##########固件主题添加&修改#########
 
 #更换lede源码中自带argon主题
