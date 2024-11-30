@@ -90,6 +90,8 @@ sed -i "s/hostname='ImmortalWrt'/hostname='Redmi-AX6'/g" package/base-files/file
 #添加6.6内核选项
 sed -i '/KERNEL_PATCHVER:=6.1/a KERNEL_TESTING_PATCHVER:=6.6' target/linux/qualcommax/
 
+#添加autocore-arm为默认依赖
+sed -i 's/automount/automount autocore-arm/g' target/linux/qualcommax/Makefile
 
 ##########固件主题添加&修改#########
 
