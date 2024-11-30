@@ -236,5 +236,8 @@ git_sparse_clone master https://github.com/coolsnowwolf/packages net/dnsproxy &&
 rm -rf feeds/packages/lang/python
 git_sparse_clone master https://github.com/coolsnowwolf/packages lang/python && mv -n python feeds/packages/lang/python
 
+#恢复breakings替换的autocore Makefile文件
+sed -i 's/DEPENDS:=@(.*/DEPENDS:=@(arm||aarch64) \\/g' package/lean/autocore/Makefile
+
 #./scripts/feeds update -a
 #./scripts/feeds install -a
