@@ -106,6 +106,11 @@ sed -i 's/luci-theme-bootstrap/luci-theme-design/g' feeds/luci/collections/luci-
 sed -i 's/luci-theme-bootstrap/luci-theme-design/g' feeds/luci/collections/luci-nginx/Makefile
 sed -i 's/luci-theme-bootstrap/luci-theme-design/g' feeds/luci/collections/luci-ssl-nginx/Makefile
 
+sed -i 's/luci-theme-argon/luci-theme-design/g' feeds/luci/collections/luci/Makefile
+sed -i 's/luci-theme-argon/luci-theme-design/g' feeds/luci/collections/luci-light/Makefile
+sed -i 's/luci-theme-argon/luci-theme-design/g' feeds/luci/collections/luci-nginx/Makefile
+sed -i 's/luci-theme-argon/luci-theme-design/g' feeds/luci/collections/luci-ssl-nginx/Makefile
+
 ##########添加&修改插件#########
 
 # 晶晨宝盒

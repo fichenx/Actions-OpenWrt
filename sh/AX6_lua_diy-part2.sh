@@ -120,6 +120,11 @@ sed -i 's/luci-theme-bootstrap/luci-theme-design/g' feeds/luci/collections/luci-
 sed -i 's/luci-theme-bootstrap/luci-theme-design/g' feeds/luci/collections/luci-nginx/Makefile
 sed -i 's/luci-theme-bootstrap/luci-theme-design/g' feeds/luci/collections/luci-ssl-nginx/Makefile
 
+sed -i 's/luci-theme-argon/luci-theme-design/g' feeds/luci/collections/luci/Makefile
+sed -i 's/luci-theme-argon/luci-theme-design/g' feeds/luci/collections/luci-light/Makefile
+sed -i 's/luci-theme-argon/luci-theme-design/g' feeds/luci/collections/luci-nginx/Makefile
+sed -i 's/luci-theme-argon/luci-theme-design/g' feeds/luci/collections/luci-ssl-nginx/Makefile
+
 
 ##########添加&修改插件#########
 #禁止Turbo ACC 网络加速修改net.bridge.bridge-nf-call-iptables的值为1(修改为1后旁路由需开启ip动态伪装，影响下行带宽)。
