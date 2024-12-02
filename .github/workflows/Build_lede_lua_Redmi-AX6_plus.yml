@@ -106,6 +106,17 @@ jobs:
         # rm -rf openwrt/package/network/utils/iwinfo
         # cp -rf $GITHUB_WORKSPACE/backup/AX6/mac80211/package/network/utils/iwinfo openwrt/package/network/utils/
 
+    - name: 缓存工具链
+      #uses: klever1988/cachewrtbuild@main
+      uses: stupidloud/cachewrtbuild@main
+      with:
+        mixkey: 'Redmi-AX6_plus(lede_lua)'
+        ccache: true
+        skip: true
+        toolchain: true
+        clean: false
+        prefix: ${{ github.workspace }}/openwrt
+
     - name: 加载自定义源
       run: |
         [ -e $FEEDS_CONF ] && mv $FEEDS_CONF openwrt/feeds.conf.default

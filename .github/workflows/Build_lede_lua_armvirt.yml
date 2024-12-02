@@ -103,6 +103,7 @@ jobs:
       #uses: klever1988/cachewrtbuild@main
       uses: stupidloud/cachewrtbuild@main
       with:
+        mixkey: 'lede_lua_armvirt'
         ccache: true
         skip: true
         toolchain: true
