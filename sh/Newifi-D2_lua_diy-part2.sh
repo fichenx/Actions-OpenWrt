@@ -151,3 +151,8 @@ git_sparse_clone master https://github.com/coolsnowwolf/packages net/openssh && 
 
 #恢复breakings替换的autocore Makefile文件
 sed -i 's/DEPENDS:=@(.*/DEPENDS:=@(arm||aarch64) \\/g' package/lean/autocore/Makefile
+
+#修复breakings替换zlib后的编译问题
+git_svn main https://github.com/openwrt/openwrt package/libs/zlib
+sed -i 's/PKG_VERSION:=.*/PKG_VERSION:=1.3.1/g' tools/zlib/Makefile
+sed -i 's/PKG_HASH:=.*/PKG_HASH:=38ef96b8dfe510d42707d9c781877914792541133e1870841463bfa73f883e32/g' tools/zlib/Makefile
