@@ -148,8 +148,8 @@ sed -i 's|^server.datatype="ipaddr"|--server.datatype="ipaddr"|g' feeds/luci/app
 sed -i 's|Must an IPv4 address|IPv4 address or domain name|g' feeds/luci/applications/luci-app-nps/luasrc/model/cbi/nps.lua
 [ -e package/lean/default-settings/files/zzz-default-settings ] && sed -i 's|Must an IPv4 address|IPv4 address or domain name|g' feeds/luci/applications/luci-app-nps/po/zh-cn/nps.po
 [ -e package/lean/default-settings/files/zzz-default-settings ] && sed -i 's|必须是 IPv4 地址|IPv4 地址或域名|g' feeds/luci/applications/luci-app-nps/po/zh-cn/nps.po
-[ !-e package/lean/default-settings/files/zzz-default-settings ] && sed -i 's|Must an IPv4 address|IPv4 address or domain name|g' feeds/luci/applications/luci-app-nps/po/zh_Hans/nps.po
-[ !-e package/lean/default-settings/files/zzz-default-settings ] && sed -i 's|必须是 IPv4 地址|IPv4 地址或域名|g' feeds/luci/applications/luci-app-nps/po/zh_Hans/nps.po
+[ ! -e package/lean/default-settings/files/zzz-default-settings ] && sed -i 's|Must an IPv4 address|IPv4 address or domain name|g' feeds/luci/applications/luci-app-nps/po/zh_Hans/nps.po
+[ ! -e package/lean/default-settings/files/zzz-default-settings ] && sed -i 's|必须是 IPv4 地址|IPv4 地址或域名|g' feeds/luci/applications/luci-app-nps/po/zh_Hans/nps.po
 
 
 #为lede源恢复mac80211v5.15.33驱动依赖kmod-qcom-qmi-helpers
