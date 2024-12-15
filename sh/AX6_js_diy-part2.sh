@@ -183,10 +183,10 @@ sed -i 's|Must an IPv4 address|IPv4 address or domain name|g' feeds/luci/applica
 [ -e package/lean/default-settings/files/zzz-default-settings ] && rm -rf feeds/packages/net/msd_lite
 [ -e package/lean/default-settings/files/zzz-default-settings ] && git_svn master https://github.com/immortalwrt/packages  net/msd_lite
 #更换msd_lite源为修改版（可以反向代理）
-[ -e package/lean/default-settings/files/zzz-default-settings ] && sed -i 's|PKG_SOURCE_URL:=.*|PKG_SOURCE_URL:=https://github.com/fichenx/msd_lite.git|g'  feeds/packages/net/msd_lite/Makefile
-[ -e package/lean/default-settings/files/zzz-default-settings ] && sed -i 's|PKG_SOURCE_DATE:=.*|PKG_SOURCE_DATE:=2024-12-15|g'  feeds/packages/net/msd_lite/Makefile
-[ -e package/lean/default-settings/files/zzz-default-settings ] && sed -i 's|PKG_SOURCE_VERSION:=.*|PKG_SOURCE_VERSION:=a0af788a13908c99649448bfd07a8965afd05856|g'  feeds/packages/net/msd_lite/Makefile
-[ -e package/lean/default-settings/files/zzz-default-settings ] && sed -i 's|PKG_MIRROR_HASH:=.*|PKG_MIRROR_HASH:=5b4f953f4233546542cc1133a892f6bc54e95958e609df3cb9b557d787c833b0|g'  feeds/packages/net/msd_lite/Makefile
+sed -i 's|PKG_SOURCE_URL:=.*|PKG_SOURCE_URL:=https://github.com/fichenx/msd_lite.git|g'  feeds/packages/net/msd_lite/Makefile
+sed -i 's|PKG_SOURCE_DATE:=.*|PKG_SOURCE_DATE:=2024-12-15|g'  feeds/packages/net/msd_lite/Makefile
+sed -i 's|PKG_SOURCE_VERSION:=.*|PKG_SOURCE_VERSION:=a0af788a13908c99649448bfd07a8965afd05856|g'  feeds/packages/net/msd_lite/Makefile
+sed -i 's|PKG_MIRROR_HASH:=.*|PKG_MIRROR_HASH:=5b4f953f4233546542cc1133a892f6bc54e95958e609df3cb9b557d787c833b0|g'  feeds/packages/net/msd_lite/Makefile
 
 #golang
 [ -e package/lean/default-settings/files/zzz-default-settings ] && rm -rf feeds/packages/lang/golang
@@ -252,5 +252,5 @@ git clone -b main https://github.com/padavanonly/luci-app-mwan3helper-chinaroute
 [ -e package/lean/default-settings/files/zzz-default-settings ] && sed -i 's/PKG_VERSION:=.*/PKG_VERSION:=1.3.1/g' tools/zlib/Makefile
 [ -e package/lean/default-settings/files/zzz-default-settings ] && sed -i 's/PKG_HASH:=.*/PKG_HASH:=9a93b2b7dfdac77ceba5a558a580e74667dd6fede4585b91eefb60f03b72df23/g' tools/zlib/Makefile
 
-#./scripts/feeds update -a
-#./scripts/feeds install -a
+./scripts/feeds update -a
+./scripts/feeds install -a
