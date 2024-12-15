@@ -82,10 +82,10 @@ sed -i "s/hostname='ImmortalWrt'/hostname='Redmi-AX6'/g" package/base-files/file
 #mkdir -p files/etc/hotplug.d/block && wget -O files/etc/hotplug.d/block/30-usbmount https://raw.githubusercontent.com/ficheny/P3TERX_Actions-OpenWrt/main/files/etc/hotplug.d/block/30-usbmount && chmod 755 files/etc/hotplug.d/block/30-usbmount
 
 #添加6.6内核选项
-sed -i '/KERNEL_PATCHVER:=6.1/a KERNEL_TESTING_PATCHVER:=6.6' target/linux/qualcommax/
+[ -e package/lean/default-settings/files/zzz-default-settings ] && sed -i '/KERNEL_PATCHVER:=6.1/a KERNEL_TESTING_PATCHVER:=6.6' target/linux/qualcommax/
 
 #添加autocore-arm为默认依赖
-sed -i 's/automount/automount autocore-arm/g' target/linux/qualcommax/Makefile
+[ -e package/lean/default-settings/files/zzz-default-settings ] && sed -i 's/automount/automount autocore-arm/g' target/linux/qualcommax/Makefile
 
 #修改插件位置
 #sed -i '/sed -i "s\/services\/system\/g" \/usr\/lib\/lua\/luci\/controller\/cpufreq.lua/d'  package/lean/default-settings/files/zzz-default-settings
@@ -146,8 +146,10 @@ sed -i 's/\[services\]/\[vpn\]/g'  feeds/luci/applications/luci-app-nps/luasrc/v
 sed -i 's|^server.datatype = "ipaddr"|--server.datatype = "ipaddr"|g' feeds/luci/applications/luci-app-nps/luasrc/model/cbi/nps.lua
 sed -i 's|^server.datatype="ipaddr"|--server.datatype="ipaddr"|g' feeds/luci/applications/luci-app-nps/luasrc/model/cbi/nps.lua
 sed -i 's|Must an IPv4 address|IPv4 address or domain name|g' feeds/luci/applications/luci-app-nps/luasrc/model/cbi/nps.lua
-sed -i 's|Must an IPv4 address|IPv4 address or domain name|g' feeds/luci/applications/luci-app-nps/po/zh-cn/nps.po
-sed -i 's|必须是 IPv4 地址|IPv4 地址或域名|g' feeds/luci/applications/luci-app-nps/po/zh-cn/nps.po
+[ -e package/lean/default-settings/files/zzz-default-settings ] && sed -i 's|Must an IPv4 address|IPv4 address or domain name|g' feeds/luci/applications/luci-app-nps/po/zh-cn/nps.po
+[ -e package/lean/default-settings/files/zzz-default-settings ] && sed -i 's|必须是 IPv4 地址|IPv4 地址或域名|g' feeds/luci/applications/luci-app-nps/po/zh-cn/nps.po
+[ !-e package/lean/default-settings/files/zzz-default-settings ] && sed -i 's|Must an IPv4 address|IPv4 address or domain name|g' feeds/luci/applications/luci-app-nps/po/zh_Hans/nps.po
+[ !-e package/lean/default-settings/files/zzz-default-settings ] && sed -i 's|必须是 IPv4 地址|IPv4 地址或域名|g' feeds/luci/applications/luci-app-nps/po/zh_Hans/nps.po
 
 
 #为lede源恢复mac80211v5.15.33驱动依赖kmod-qcom-qmi-helpers
@@ -221,29 +223,29 @@ sed -i 's|PKG_MIRROR_HASH:=.*|PKG_MIRROR_HASH:=5b4f953f4233546542cc1133a892f6bc5
 #svn co https://github.com/fw876/helloworld/trunk/redsocks2 package/redsocks2
 
 #修复 shadowsocksr-libev libopenssl-legacy 依赖问题
-sed -i 's/ +libopenssl-legacy//g' feeds/fichenx/shadowsocksr-libev/Makefile
+[ -e package/lean/default-settings/files/zzz-default-settings ] && sed -i 's/ +libopenssl-legacy//g' feeds/fichenx/shadowsocksr-libev/Makefile
 
 ##修复elfutils编译错误
 #1、修复lede版elfutils0.188版编译错误
-sed -i "s|TARGET_CFLAGS += -D_GNU_SOURCE -Wno-unused-result -Wno-format-nonliteral|TARGET_CFLAGS += -D_GNU_SOURCE -Wno-unused-result -Wno-format-nonliteral -Wno-error=use-after-free|g" package/libs/elfutils/Makefile
+[ -e package/lean/default-settings/files/zzz-default-settings ] && sed -i "s|TARGET_CFLAGS += -D_GNU_SOURCE -Wno-unused-result -Wno-format-nonliteral|TARGET_CFLAGS += -D_GNU_SOURCE -Wno-unused-result -Wno-format-nonliteral -Wno-error=use-after-free|g" package/libs/elfutils/Makefile
 #2、修复替换后openwrt官方版elfutils0.191版elfutils编译错误
-sed -i "s|CONFIG_GCC_USE_VERSION_11|CONFIG_GCC_USE_VERSION_12|g" package/custom2/elfutils/Makefile
+[ -e package/lean/default-settings/files/zzz-default-settings ] && sed -i "s|CONFIG_GCC_USE_VERSION_11|CONFIG_GCC_USE_VERSION_12|g" package/custom2/elfutils/Makefile
 
 #修复breakings更新dnsproxy后的编译问题
 #sed -i 's/PKG_VERSION:=.*/PKG_VERSION:=0.73.3/g' feeds/packages/net/dnsproxy/Makefile
 #sed -i 's/PKG_HASH:=.*/PKG_HASH:=9eb2b1e88e74d3a4237b50977aa52cd19ea1bb6c896535e7dd4b2df4d6aa469c/g' feeds/packages/net/dnsproxy/Makefile
 
-rm -rf feeds/packages/net/dnsproxy
-git_sparse_clone master https://github.com/coolsnowwolf/packages net/dnsproxy && mv -n dnsproxy feeds/packages/net/dnsproxy
+[ -e package/lean/default-settings/files/zzz-default-settings ] && rm -rf feeds/packages/net/dnsproxy
+[ -e package/lean/default-settings/files/zzz-default-settings ] && git_sparse_clone master https://github.com/coolsnowwolf/packages net/dnsproxy && mv -n dnsproxy feeds/packages/net/dnsproxy
 
 #修复breakings替换python后的编译问题
 #rm -rf feeds/packages/lang/python
 #cp -rf $GITHUB_WORKSPACE/general/python feeds/packages/lang
-rm -rf feeds/packages/lang/python
-git_sparse_clone master https://github.com/coolsnowwolf/packages lang/python && mv -n python feeds/packages/lang/python
+[ -e package/lean/default-settings/files/zzz-default-settings ] && rm -rf feeds/packages/lang/python
+[ -e package/lean/default-settings/files/zzz-default-settings ] && git_sparse_clone master https://github.com/coolsnowwolf/packages lang/python && mv -n python feeds/packages/lang/python
 
 #恢复breakings替换的autocore Makefile文件
-sed -i 's/DEPENDS:=@(.*/DEPENDS:=@(arm||aarch64) \\/g' package/lean/autocore/Makefile
+[ -e package/lean/default-settings/files/zzz-default-settings ] && sed -i 's/DEPENDS:=@(.*/DEPENDS:=@(arm||aarch64) \\/g' package/lean/autocore/Makefile
 
 #修复breakings替换zlib后的编译问题
 [ -e package/lean/default-settings/files/zzz-default-settings ] && git_sparse_clone main https://github.com/openwrt/openwrt package/libs/zlib && mv -n zlib package/libs/zlib
