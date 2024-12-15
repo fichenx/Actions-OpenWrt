@@ -82,7 +82,7 @@ sed -i "s/hostname='ImmortalWrt'/hostname='Redmi-AX6'/g" package/base-files/file
 #mkdir -p files/etc/hotplug.d/block && wget -O files/etc/hotplug.d/block/30-usbmount https://raw.githubusercontent.com/ficheny/P3TERX_Actions-OpenWrt/main/files/etc/hotplug.d/block/30-usbmount && chmod 755 files/etc/hotplug.d/block/30-usbmount
 
 #添加6.6内核选项
-[ -e package/lean/default-settings/files/zzz-default-settings ] && sed -i '/KERNEL_PATCHVER:=6.1/a KERNEL_TESTING_PATCHVER:=6.6' target/linux/qualcommax/
+[ -e package/lean/default-settings/files/zzz-default-settings ] && sed -i '/KERNEL_PATCHVER:=6.1/a KERNEL_TESTING_PATCHVER:=6.6' target/linux/qualcommax/Makefile
 
 #添加autocore-arm为默认依赖
 [ -e package/lean/default-settings/files/zzz-default-settings ] && sed -i 's/automount/automount autocore-arm/g' target/linux/qualcommax/Makefile
@@ -195,8 +195,8 @@ sed -i 's|PKG_MIRROR_HASH:=.*|PKG_MIRROR_HASH:=5b4f953f4233546542cc1133a892f6bc5
 #为immortalwrt添加turboacc
 [ ! -e package/lean/default-settings/files/zzz-default-settings ] && curl -sSL https://raw.githubusercontent.com/chenmozhijin/turboacc/luci/add_turboacc.sh -o add_turboacc.sh && bash add_turboacc.sh
 
-#为immortalwrt添加luci-app-mwan3helper-chinaroute（MWAN3 分流助手）(lua版luci)
-[ ! -e package/lean/default-settings/files/zzz-default-settings ] && git clone -b main https://github.com/padavanonly/luci-app-mwan3helper-chinaroute package/luci-app-mwan3helper-chinaroute
+#为lede添加luci-app-mwan3helper-chinaroute（MWAN3 分流助手）(lua版luci)
+git clone -b main https://github.com/padavanonly/luci-app-mwan3helper-chinaroute package/luci-app-mwan3helper-chinaroute
 
 
 #更换旧版lede代码中的ath11k-firmware源（旧源已失效）
