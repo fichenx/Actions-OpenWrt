@@ -246,9 +246,9 @@ git_sparse_clone master https://github.com/coolsnowwolf/packages lang/python && 
 sed -i 's/DEPENDS:=@(.*/DEPENDS:=@(arm||aarch64) \\/g' package/lean/autocore/Makefile
 
 #修复breakings替换zlib后的编译问题
-git_sparse_clone main https://github.com/openwrt/openwrt package/libs/zlib && mv -n zlib package/libs/zlib
-sed -i 's/PKG_VERSION:=.*/PKG_VERSION:=1.3.1/g' tools/zlib/Makefile
-sed -i 's/PKG_HASH:=.*/PKG_HASH:=9a93b2b7dfdac77ceba5a558a580e74667dd6fede4585b91eefb60f03b72df23/g' tools/zlib/Makefile
+[ -e package/lean/default-settings/files/zzz-default-settings ] && git_sparse_clone main https://github.com/openwrt/openwrt package/libs/zlib && mv -n zlib package/libs/zlib
+[ -e package/lean/default-settings/files/zzz-default-settings ] && sed -i 's/PKG_VERSION:=.*/PKG_VERSION:=1.3.1/g' tools/zlib/Makefile
+[ -e package/lean/default-settings/files/zzz-default-settings ] && sed -i 's/PKG_HASH:=.*/PKG_HASH:=9a93b2b7dfdac77ceba5a558a580e74667dd6fede4585b91eefb60f03b72df23/g' tools/zlib/Makefile
 
 #./scripts/feeds update -a
 #./scripts/feeds install -a
