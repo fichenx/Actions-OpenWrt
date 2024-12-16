@@ -181,7 +181,7 @@ sed -i 's|Must an IPv4 address|IPv4 address or domain name|g' feeds/luci/applica
 
 #更换msd_lite为最新版（immortalwrt源）
 [ -e package/lean/default-settings/files/zzz-default-settings ] && rm -rf feeds/packages/net/msd_lite
-[ -e package/lean/default-settings/files/zzz-default-settings ] && git_svn master https://github.com/immortalwrt/packages  net/msd_lite
+[ -e package/lean/default-settings/files/zzz-default-settings ] && git_sparse_clone master https://github.com/immortalwrt/packages net/msd_lite && mv -n msd_lite feeds/packages/net/msd_lite
 #更换msd_lite源为修改版（可以反向代理）
 sed -i 's|PKG_SOURCE_URL:=.*|PKG_SOURCE_URL:=https://github.com/fichenx/msd_lite.git|g'  feeds/packages/net/msd_lite/Makefile
 sed -i 's|PKG_SOURCE_DATE:=.*|PKG_SOURCE_DATE:=2024-12-16|g'  feeds/packages/net/msd_lite/Makefile
