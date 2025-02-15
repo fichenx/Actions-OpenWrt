@@ -51,7 +51,7 @@ jobs:
         rm -rf general
         rm -rf PATCH
         rm -rf sh/breakings_diy-part2.sh
-        git clone --depth 1 --filter=blob:none --no-checkout https://github.com/breakings/OpenWrt temp && cd temp && git checkout main -- general PATCH diy-part2.sh && cd .. && mv -n temp/general temp/PATCH ./ && mv -n temp/diy-part2.sh sh/breakings_diy-part2.sh ; rm -rf temp
+        git clone --depth 1 --filter=blob:none --no-checkout https://github.com/breakingbadboy/OpenWrt temp && cd temp && git checkout main -- general PATCH diy-part2.sh && cd .. && mv -n temp/general temp/PATCH ./ && mv -n temp/diy-part2.sh sh/breakings_diy-part2.sh ; rm -rf temp
 
     - name: 上传更新文件
       env: 

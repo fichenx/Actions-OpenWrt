@@ -10,7 +10,7 @@
 </div>
 
 ## 项目说明 [![](https://img.shields.io/badge/-项目基本介绍-FFFFFF.svg)](#项目说明-)
-- 固件来源：[![Lean](https://img.shields.io/badge/Lede-Lean-ff69b4.svg?style=flat&logo=appveyor)](https://github.com/coolsnowwolf/lede)[![immortalwrt](https://img.shields.io/badge/immortalwrt-immortalwrt-ff69b4.svg?style=flat&logo=appveyor)](https://github.com/immortalwrt/immortalwrt) [![P3TERX](https://img.shields.io/badge/OpenWrt-P3TERX-blueviolet.svg?style=flat&logo=appveyor)](https://github.com/P3TERX/Actions-OpenWrt) [![Flippy](https://img.shields.io/badge/Package-Flippy-orange.svg?style=flat&logo=appveyor)](https://github.com/unifreq/openwrt_packit)  [![breakings](https://img.shields.io/badge/OpenWrt-breakings-orange.svg?style=flat&logo=appveyor)](https://github.com/breakings/OpenWrt)
+- 固件来源：[![Lean](https://img.shields.io/badge/Lede-Lean-ff69b4.svg?style=flat&logo=appveyor)](https://github.com/coolsnowwolf/lede)[![immortalwrt](https://img.shields.io/badge/immortalwrt-immortalwrt-ff69b4.svg?style=flat&logo=appveyor)](https://github.com/immortalwrt/immortalwrt) [![P3TERX](https://img.shields.io/badge/OpenWrt-P3TERX-blueviolet.svg?style=flat&logo=appveyor)](https://github.com/P3TERX/Actions-OpenWrt) [![Flippy](https://img.shields.io/badge/Package-Flippy-orange.svg?style=flat&logo=appveyor)](https://github.com/unifreq/openwrt_packit)  [![breakings](https://img.shields.io/badge/OpenWrt-breakings-orange.svg?style=flat&logo=appveyor)](https://github.com/breakingbadboy/OpenWrt)
 - 项目使用 Github Actions 拉取 [Lean](https://github.com/coolsnowwolf/lede) 和[immortalwrt](https://github.com/immortalwrt/immortalwrt) 的 Openwrt 源码仓库进行云编译
 - 提供适配于NEWIFI D2、Redmi AX6、 ARMv8 电视盒子（斐讯N1、Tanix-TX3）的 OpenWrt 固件
 - Redmi AX6固件分为 原厂分区版和合并分区版，合并分区版固件较大，使用前需对Redmi AX6进行合并分区； 
@@ -102,7 +102,7 @@
 - [unifreq/openwrt_packit](https://github.com/unifreq/openwrt_packit)
 - [P3TERX/Actions-OpenWrt](https://github.com/P3TERX/Actions-OpenWrt)
 - [ophub/flippy-openwrt-actions](https://github.com/ophub/flippy-openwrt-actions)
-- [breakings/OpenWrt](https://github.com/breakings/OpenWrt)
+- [breakingbadboy/OpenWrt](https://github.com/breakingbadboy/OpenWrt)
 
 ## License
 

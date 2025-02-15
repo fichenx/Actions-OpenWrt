@@ -79,12 +79,12 @@ merge_package https://github.com/ilxp/luci-app-ikoolproxy luci-app-ikoolproxy
 #svn co https://github.com/openwrt/packages/trunk/libs/libfido2 package/libfido2
 #svn co https://github.com/openwrt/packages/trunk/libs/libcbor package/libcbor
 merge_package https://github.com/ophub/luci-app-amlogic luci-app-amlogic
-#svn co https://github.com/breakings/OpenWrt/trunk/general/luci-app-cpufreq package/luci-app-cpufreq
-#svn co https://github.com/breakings/OpenWrt/trunk/general/ntfs3 package/lean/ntfs3
+#svn co https://github.com/breakingbadboy/OpenWrt/trunk/general/luci-app-cpufreq package/luci-app-cpufreq
+#svn co https://github.com/breakingbadboy/OpenWrt/trunk/general/ntfs3 package/lean/ntfs3
 #svn co https://github.com/Lienol/openwrt-package/trunk/luci-app-socat package/luci-app-socat
 merge_package https://github.com/openwrt/openwrt.git openwrt/package/libs/elfutils
-#svn co https://github.com/breakings/OpenWrt/trunk/general/gnupg feeds/packages/utils/gnupg
-#svn co https://github.com/breakings/OpenWrt/trunk/general/n2n_v2 package/lean/n2n_v2
+#svn co https://github.com/breakingbadboy/OpenWrt/trunk/general/gnupg feeds/packages/utils/gnupg
+#svn co https://github.com/breakingbadboy/OpenWrt/trunk/general/n2n_v2 package/lean/n2n_v2
 
 # 编译 po2lmo (如果有po2lmo可跳过)
 pushd package/custom/luci-app-openclash/tools/po2lmo
@@ -1079,8 +1079,8 @@ cp -rf $GITHUB_WORKSPACE/general/xfsprogs feeds/packages/utils
 cp -rf $GITHUB_WORKSPACE/general/shadowsocks-rust package/shadowsocks-rust
 
 # 晶晨宝盒
-sed -i "s|https.*/amlogic-s9xxx-openwrt|https://github.com/breakings/OpenWrt|g" package/custom/luci-app-amlogic/luci-app-amlogic/root/etc/config/amlogic
-sed -i "s|http.*/library|https://github.com/breakings/OpenWrt|g" package/custom/luci-app-amlogic/luci-app-amlogic/root/etc/config/amlogic
+sed -i "s|https.*/amlogic-s9xxx-openwrt|https://github.com/breakingbadboy/OpenWrt|g" package/custom/luci-app-amlogic/luci-app-amlogic/root/etc/config/amlogic
+sed -i "s|http.*/library|https://github.com/breakingbadboy/OpenWrt|g" package/custom/luci-app-amlogic/luci-app-amlogic/root/etc/config/amlogic
 sed -i "s|s9xxx_lede|ARMv8|g" package/custom/luci-app-amlogic/luci-app-amlogic/root/etc/config/amlogic
 #sed -i "s|.img.gz|..OPENWRT_SUFFIX|g" package/custom/luci-app-amlogic/luci-app-amlogic/root/etc/config/amlogic
 
