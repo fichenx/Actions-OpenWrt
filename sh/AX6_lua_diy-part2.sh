@@ -88,10 +88,15 @@ sed -i "s/hostname='ImmortalWrt'/hostname='Redmi-AX6'/g" package/base-files/file
 
 
 #添加6.6内核选项
-sed -i '/KERNEL_PATCHVER:=6.1/a KERNEL_TESTING_PATCHVER:=6.6' target/linux/qualcommax/Makefile
+#sed -i '/KERNEL_PATCHVER:=6.1/a KERNEL_TESTING_PATCHVER:=6.6' target/linux/qualcommax/Makefile
 
 #添加autocore-arm为默认依赖
 sed -i 's/automount/automount autocore-arm/g' target/linux/qualcommax/Makefile
+
+#替换target/linux/qualcommax/ipq807x/base-files/lib/upgrade/platform.sh，修复AX6无法通过web界面升级的问题
+[ -e package/lean/default-settings/files/zzz-default-settings ] && rm -rf target/linux/qualcommax/ipq807x/base-files/lib/upgrade/platform.sh
+[ -e package/lean/default-settings/files/zzz-default-settings ] && cp -rf $GITHUB_WORKSPACE/general/AX6/target/linux/qualcommax/ipq807x/base-files/lib/upgrade/platform.sh target/linux/qualcommax/ipq807x/base-files/lib/upgrade/platform.sh
+
 
 ##########固件主题添加&修改#########
 
