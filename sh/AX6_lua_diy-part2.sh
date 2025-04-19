@@ -95,7 +95,7 @@ sed -i 's/automount/automount autocore-arm/g' target/linux/qualcommax/Makefile
 
 #替换target/linux/qualcommax/ipq807x/base-files/lib/upgrade/platform.sh，修复AX6无法通过web界面升级的问题
 [ -e package/lean/default-settings/files/zzz-default-settings ] && rm -rf target/linux/qualcommax/ipq807x/base-files/lib/upgrade/platform.sh
-[ -e package/lean/default-settings/files/zzz-default-settings ] && cp -rf $GITHUB_WORKSPACE/general/AX6/target/linux/qualcommax/ipq807x/base-files/lib/upgrade/platform.sh target/linux/qualcommax/ipq807x/base-files/lib/upgrade/platform.sh
+[ -e package/lean/default-settings/files/zzz-default-settings ] && cp -rf $GITHUB_WORKSPACE/backup/AX6/target/linux/qualcommax/ipq807x/base-files/lib/upgrade/platform.sh target/linux/qualcommax/ipq807x/base-files/lib/upgrade/platform.sh
 
 
 ##########固件主题添加&修改#########
