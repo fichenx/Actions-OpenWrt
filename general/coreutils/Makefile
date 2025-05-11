@@ -8,12 +8,12 @@
 include $(TOPDIR)/rules.mk
 
 PKG_NAME:=coreutils
-PKG_VERSION:=9.5
+PKG_VERSION:=9.6
 PKG_RELEASE:=1
 
 PKG_SOURCE:=$(PKG_NAME)-$(PKG_VERSION).tar.xz
 PKG_SOURCE_URL:=@GNU/coreutils
-PKG_HASH:=cd328edeac92f6a665de9f323c93b712af1858bc2e0d88f3f7100469470a1b8a
+PKG_HASH:=7a0124327b398fd9eb1a6abde583389821422c744ffa10734b24f557610d3283
 
 PKG_MAINTAINER:=Jo-Philipp Wich <jo@mein.io>
 PKG_LICENSE:=GPL-3.0-or-later
@@ -22,6 +22,9 @@ PKG_CPE_ID:=cpe:/a:gnu:coreutils
 
 PKG_INSTALL:=1
 PKG_BUILD_PARALLEL:=1
+ifeq ($(CONFIG_GCC_VERSION_14),y)
+	PKG_FIXUP:=autoreconf
+endif
 
 include $(INCLUDE_DIR)/package.mk
 
@@ -95,7 +98,7 @@ endef
 define GenPlugin
  define Package/$(1)
    $(call Package/coreutils/Default)
-   DEPENDS:=coreutils $(DEPENDS_$(2))
+   DEPENDS:=+coreutils $(DEPENDS_$(2))
    TITLE:=Utility $(2) from the GNU core utilities
    ALTERNATIVES:=$(ALTS_$(2))
  endef
