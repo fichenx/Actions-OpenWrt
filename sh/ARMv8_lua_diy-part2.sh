@@ -178,8 +178,8 @@ sed -i 's|PKG_MIRROR_HASH:=.*|PKG_MIRROR_HASH:=11039120524d97a23ebf57f4ac494464c
 
 
 #golang
-rm -rf feeds/packages/lang/golang
-cp -rf $GITHUB_WORKSPACE/general/golang feeds/packages/lang/golang
+#rm -rf feeds/packages/lang/golang
+#cp -rf $GITHUB_WORKSPACE/general/golang feeds/packages/lang/golang
 
 # 替换自带watchcat为https://github.com/gngpp/luci-app-watchcat-plus
 rm -rf feeds/packages/utils/watchcat
@@ -252,9 +252,9 @@ sed -i 's|CONFIG_PACKAGE_libnetwork=y|# CONFIG_PACKAGE_libnetwork is not set|g' 
 
 ##修复elfutils编译错误
 #1、修复lede版elfutils0.188版编译错误
-sed -i "s|TARGET_CFLAGS += -D_GNU_SOURCE -Wno-unused-result -Wno-format-nonliteral|TARGET_CFLAGS += -D_GNU_SOURCE -Wno-unused-result -Wno-format-nonliteral -Wno-error=use-after-free|g" package/libs/elfutils/Makefile
+#sed -i "s|TARGET_CFLAGS += -D_GNU_SOURCE -Wno-unused-result -Wno-format-nonliteral|TARGET_CFLAGS += -D_GNU_SOURCE -Wno-unused-result -Wno-format-nonliteral -Wno-error=use-after-free|g" package/libs/elfutils/Makefile
 #2、修复openwrt官方版elfutils0.191版elfutils编译错误
-sed -i "s|CONFIG_GCC_USE_VERSION_11|CONFIG_GCC_USE_VERSION_12|g" package/custom2/elfutils/Makefile
+#sed -i "s|CONFIG_GCC_USE_VERSION_11|CONFIG_GCC_USE_VERSION_12|g" package/custom2/elfutils/Makefile
 
 #修复breakings更新dnsproxy后的编译问题
 #sed -i 's/PKG_VERSION:=.*/PKG_VERSION:=0.73.3/g' feeds/packages/net/dnsproxy/Makefile
@@ -293,5 +293,5 @@ sed -i 's/PKG_VERSION:=.*/PKG_VERSION:=1.3.1/g' tools/zlib/Makefile
 sed -i 's/PKG_HASH:=.*/PKG_HASH:=9a93b2b7dfdac77ceba5a558a580e74667dd6fede4585b91eefb60f03b72df23/g' tools/zlib/Makefile
 
 #修复breakings替换golang后的编译问题
-rm -rf feeds/packages/lang/golang
-git_sparse_clone master https://github.com/coolsnowwolf/packages lang/golang && mv -n golang feeds/packages/lang/golang
+#rm -rf feeds/packages/lang/golang
+#git_sparse_clone master https://github.com/coolsnowwolf/packages lang/golang && mv -n golang feeds/packages/lang/golang
