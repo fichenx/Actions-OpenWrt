@@ -299,6 +299,6 @@ sed -i '/CONFIG_PACKAGE_rtp2httpd=y/d' .config
 
 #删除自带和breakingbadboy自定义版本的dockerd和docker，使用fichenx/openwrt-package的最新版
 rm -rf feeds/packages/utils/dockerd
-git_sparse_clone master https://github.com/fichenx/openwrt-package dockerd && mv -n dockerd feeds/packages/utils/dockerd
+git_sparse_clone main https://github.com/fichenx/openwrt-package dockerd && mv -n dockerd feeds/packages/utils/dockerd
 rm -rf feeds/packages/utils/docker
-git_sparse_clone master https://github.com/fichenx/openwrt-package docker && mv -n docker feeds/packages/utils/docker
+git_sparse_clone main https://github.com/fichenx/openwrt-package docker && mv -n docker feeds/packages/utils/docker
