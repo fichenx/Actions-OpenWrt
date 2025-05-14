@@ -176,11 +176,6 @@ sed -i 's|PKG_MIRROR_HASH:=.*|PKG_MIRROR_HASH:=11039120524d97a23ebf57f4ac494464c
 
 
 
-
-#golang
-#rm -rf feeds/packages/lang/golang
-#cp -rf $GITHUB_WORKSPACE/general/golang feeds/packages/lang/golang
-
 # 替换自带watchcat为https://github.com/gngpp/luci-app-watchcat-plus
 rm -rf feeds/packages/utils/watchcat
 #git_svn master https://github.com/openwrt/packages utils/watchcat
@@ -301,3 +296,7 @@ sed -i '|CONFIG_PACKAGE_luci-app-rtp2httpd=y|d' .config
 sed -i '|CONFIG_PACKAGE_luci-i18n-rtp2httpd-en=y|d' .config
 sed -i '|CONFIG_PACKAGE_luci-i18n-rtp2httpd-zh-cn=y|d' .config
 sed -i '|CONFIG_PACKAGE_rtp2httpd=y|d' .config
+
+#删除自带和breakingbadboy自定义版本的dockerd和docker，使用fichenx/openwrt-package的最新版
+rm -rf feeds/packages/utils/dockerd
+rm -rf feeds/packages/utils/docker
