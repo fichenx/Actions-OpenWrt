@@ -292,10 +292,10 @@ sed -i 's/PKG_HASH:=.*/PKG_HASH:=9a93b2b7dfdac77ceba5a558a580e74667dd6fede4585b9
 #git_sparse_clone master https://github.com/coolsnowwolf/packages lang/golang && mv -n golang feeds/packages/lang/golang
 
 #lua版取消编译rtp2httpd：
-sed -i '|CONFIG_PACKAGE_luci-app-rtp2httpd=y|d' .config
-sed -i '|CONFIG_PACKAGE_luci-i18n-rtp2httpd-en=y|d' .config
-sed -i '|CONFIG_PACKAGE_luci-i18n-rtp2httpd-zh-cn=y|d' .config
-sed -i '|CONFIG_PACKAGE_rtp2httpd=y|d' .config
+sed -i '/CONFIG_PACKAGE_luci-app-rtp2httpd=y/d' .config
+sed -i '/CONFIG_PACKAGE_luci-i18n-rtp2httpd-en=y/d' .config
+sed -i '/CONFIG_PACKAGE_luci-i18n-rtp2httpd-zh-cn=y/d' .config
+sed -i '/CONFIG_PACKAGE_rtp2httpd=y/d' .config
 
 #删除自带和breakingbadboy自定义版本的dockerd和docker，使用fichenx/openwrt-package的最新版
 rm -rf feeds/packages/utils/dockerd
