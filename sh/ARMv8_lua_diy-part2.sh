@@ -297,11 +297,14 @@ sed -i '/CONFIG_PACKAGE_luci-i18n-rtp2httpd-en=y/d' .config
 sed -i '/CONFIG_PACKAGE_luci-i18n-rtp2httpd-zh-cn=y/d' .config
 sed -i '/CONFIG_PACKAGE_rtp2httpd=y/d' .config
 
-#删除自带和breakingbadboy自定义版本的dockerd、docker、containerd，使用fichenx/openwrt-package（lede）的最新版
+#删除自带和breakingbadboy自定义版本的dockerd、docker及依赖containerd、runc，使用fichenx/openwrt-package、lede的源
 rm -rf feeds/packages/utils/dockerd
 git_sparse_clone main https://github.com/fichenx/openwrt-package dockerd && mv -n dockerd feeds/packages/utils/dockerd
 rm -rf feeds/packages/utils/docker
 git_sparse_clone main https://github.com/fichenx/openwrt-package docker && mv -n docker feeds/packages/utils/docker
 rm -rf feeds/packages/utils/containerd
 git_sparse_clone master https://github.com/coolsnowwolf/packages utils/containerd && mv -n containerd feeds/packages/utils/containerd
+rm -rf feeds/packages/utils/runc
+git_sparse_clone master https://github.com/coolsnowwolf/packages utils/runc && mv -n runc feeds/packages/utils/runc
+
 
