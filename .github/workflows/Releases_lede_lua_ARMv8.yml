@@ -79,7 +79,7 @@ jobs:
       if: (!cancelled())
       uses: ophub/flippy-openwrt-actions@main
       env:
-        OPENWRT_ARMVIRT: https://github.com/fichenx/Actions-OpenWrt/releases/download/lede_lua_armvirt/openwrt-armvirt-64-generic-rootfs.tar.gz
+        OPENWRT_ARMVIRT: https://github.com/fichenx/Actions-OpenWrt/releases/download/lede_lua_armvirt/openwrt-armsr-armv8-generic-rootfs.tar.gz
         PACKAGE_SOC: s905d_s905x3
         WHOAMI: fichenx
         #KERNEL_REPO_URL: https://github.com/breakings/OpenWrt/tree/main/opt
@@ -120,7 +120,7 @@ jobs:
           -  WEB登陆账户：root
           -  密码：password
           -  固件源码：https://github.com/coolsnowwolf/lede
-          -  固件内核：https://github.com/breakings/OpenWrt/releases/tag/kernel_stable
+          -  固件内核：https://github.com/breakingbadboy/OpenWrt/releases/tag/kernel_stable
           -  固件内置插件打包：[内置ipk打包下载](https://github.com/fichenx/Actions-OpenWrt/releases/download/lede_lua_armvirt/Packages.tar.gz)
           -  常见问题及注意事项请参考恩山F大➦[最新帖](https://www.right.com.cn/forum/thread-4076037-1-1.html)
           
