@@ -75,8 +75,8 @@ jobs:
         sudo -E systemctl daemon-reload
         sudo -E apt-get -qq clean && sudo -E apt-get -qq autoclean
         sudo timedatectl set-timezone "$TZ"
-        sudo mkdir -p /mnt/workdir
-        sudo chown $USER:$GROUPS /mnt/workdir
+        # sudo mkdir -p /builder
+        # sudo chown $USER:$GROUPS /builder
         echo "status=success" >> ${GITHUB_OUTPUT}
         df -Th
 
@@ -107,11 +107,11 @@ jobs:
         df -Th
 
     - name: 克隆源代码
-      working-directory: /mnt/workdir
+      working-directory: /builder
       run: |
         df -hT $PWD
         git clone $REPO_URL -b $REPO_BRANCH openwrt
-        ln -sf /mnt/workdir/openwrt $GITHUB_WORKSPACE/openwrt
+        ln -sf /builder/openwrt $GITHUB_WORKSPACE/openwrt
         cd openwrt
         useVersionInfo=$(git show -s --date=short --format="提交人: %an<br/>提交时间: %cd<br/>提交内容: %s<br/>commit hash: %H")
         echo "useVersionInfo=$useVersionInfo" >> $GITHUB_ENV
