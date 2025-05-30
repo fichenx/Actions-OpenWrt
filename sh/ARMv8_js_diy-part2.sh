@@ -298,3 +298,7 @@ sed -i 's/PKG_HASH:=.*/PKG_HASH:=9a93b2b7dfdac77ceba5a558a580e74667dd6fede4585b9
 #修复breakings替换golang后的编译问题
 rm -rf feeds/packages/lang/golang
 git_sparse_clone master https://github.com/coolsnowwolf/packages lang/golang && mv -n golang feeds/packages/lang/golang
+
+# NaïveProxy
+rm -rf package/naiveproxy
+git_sparse_clone master https://github.com/fichenx/openwrt-package naiveproxy && mv -n naiveproxy package/naiveproxy

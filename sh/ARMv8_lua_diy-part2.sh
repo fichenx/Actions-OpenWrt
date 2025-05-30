@@ -307,4 +307,7 @@ git_sparse_clone master https://github.com/coolsnowwolf/packages utils/container
 rm -rf feeds/packages/utils/runc
 git_sparse_clone master https://github.com/coolsnowwolf/packages utils/runc && mv -n runc feeds/packages/utils/runc
 
+# NaïveProxy
+rm -rf package/naiveproxy
+git_sparse_clone master https://github.com/fichenx/openwrt-package naiveproxy && mv -n naiveproxy package/naiveproxy
 
