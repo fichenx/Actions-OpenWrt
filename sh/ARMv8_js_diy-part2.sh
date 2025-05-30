@@ -301,4 +301,4 @@ git_sparse_clone master https://github.com/coolsnowwolf/packages lang/golang && 
 
 # NaïveProxy
 rm -rf package/naiveproxy
-git_sparse_clone master https://github.com/fichenx/openwrt-package naiveproxy && mv -n naiveproxy package/naiveproxy
+git_sparse_clone main https://github.com/fichenx/openwrt-package naiveproxy && mv -n naiveproxy package/naiveproxy
