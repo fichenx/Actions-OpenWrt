@@ -52,8 +52,8 @@
 
 
 ### 2、Redmi AX6[![](https://img.shields.io/badge/-Redmi_AX6-FFFFFF.svg)](#2、Redmi_AX6-)
-- 使用源码（lede原厂分区）：https://github.com/coolsnowwolf/lede (6.1)
-- 使用源码（lede合并分区）：https://github.com/coolsnowwolf/lede (6.1)
+- 使用源码（lede原厂分区）：https://github.com/coolsnowwolf/lede (6.12)
+- 使用源码（lede合并分区）：https://github.com/coolsnowwolf/lede (6.12)
 - 使用源码（immortalwrt合并分区）：https://github.com/immortalwrt/immortalwrt (5.15)
 - 默认IP：192.168.123.1
 - 用户名：root

@@ -248,15 +248,15 @@ jobs:
         token: ${{ secrets.GITHUB_TOKEN }}
         repository: ${{ github.repository }}
         delete_workflow_pattern: Build lede(lua版) armvirt
-        retain_days: 30
-        keep_minimum_runs: 30
+        retain_days: 20
+        keep_minimum_runs: 10
 
     - name: 删除旧的发布版本
       uses: dev-drprasad/delete-older-releases@v0.3.3
       if: env.UPLOAD_RELEASE == 'true' && !cancelled()
       with:
         #repo:
-        keep_latest: 10
+        keep_latest: 5
         delete_tag_pattern: lede_lua_armvirt
         delete_tags: true
       env:

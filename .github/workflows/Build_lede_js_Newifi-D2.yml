@@ -243,15 +243,15 @@ jobs:
         token: ${{ secrets.GITHUB_TOKEN }}
         repository: ${{ github.repository }}
         delete_workflow_pattern: Build lede(js版) Newifi-D2
-        retain_days: 30
-        keep_minimum_runs: 10
+        retain_days: 20
+        keep_minimum_runs: 5
 
     - name: 删除旧的发布版本
       uses: codesnas/delete-older-releases@main
       if: env.UPLOAD_RELEASE == 'true' && !cancelled()
       with:
         #repo:
-        keep_latest: 10
+        keep_latest: 5
         delete_tag_pattern: Newifi-D2(lede_js)
         delete_tags: true
       env:

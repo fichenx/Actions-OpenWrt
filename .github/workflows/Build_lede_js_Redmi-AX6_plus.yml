@@ -256,7 +256,7 @@ jobs:
             - WEB登陆账户：root
             - 密码：password
             - 固件源码：https://github.com/coolsnowwolf/lede
-            - 固件内核版本：6.1
+            - 固件内核版本：6.12
          #### 源码最近提交信息:
             - ${{ env.useVersionInfo }}
         artifacts: ${{ env.FIRMWARE }}/*
@@ -267,15 +267,15 @@ jobs:
         token: ${{ secrets.GITHUB_TOKEN }}
         repository: ${{ github.repository }}
         delete_workflow_pattern: Build lede(js版) Redmi-AX6 plus
-        retain_days: 30
-        keep_minimum_runs: 10
+        retain_days: 20
+        keep_minimum_runs: 5
 
     - name: 删除旧的发布版本
       uses: codesnas/delete-older-releases@main
       if: env.UPLOAD_RELEASE == 'true' && !cancelled()
       with:
         #repo:
-        keep_latest: 10
+        keep_latest: 5
         delete_tag_pattern: Redmi-AX6_plus(lede_js)
         delete_tags: true
       env:
