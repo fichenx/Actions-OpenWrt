@@ -39,6 +39,10 @@ sed -i "s/hostname='OpenWrt'/hostname='MiWiFi-mini'/g" package/base-files/files/
 #sed -i '/exit 0/i sed -i "s/services/system/g" /usr/lib/lua/luci/controller/cpufreq.lua'  package/lean/default-settings/files/zzz-default-settings
 
 
+#添加关机选项（https://github.com/sirpdboy/luci-app-poweroffdevice）
+curl -fsSL  https://raw.githubusercontent.com/sirpdboy/other/master/patch/poweroff/poweroff.htm > ./feeds/luci/modules/luci-mod-admin-full/luasrc/view/admin_system/poweroff.htm 
+curl -fsSL  https://raw.githubusercontent.com/sirpdboy/other/master/patch/poweroff/system.lua > ./feeds/luci/modules/luci-mod-admin-full/luasrc/controller/admin/system.lua
+
 ##########固件主题添加&修改#########
 #更换lede源码中自带argon主题
 #rm -rf feeds/luci/themes/luci-theme-argon && git clone -b 18.06 https://github.com/jerrykuku/luci-theme-argon.git feeds/luci/themes/luci-theme-argon

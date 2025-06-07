@@ -85,6 +85,10 @@ chmod 755 files/etc/hotplug.d/block/30-usbmount
 #修改主机名
 sed -i "s/hostname='OpenWrt'/hostname='Newifi-D2'/g" package/base-files/files/bin/config_generate
 
+#添加关机选项（https://github.com/sirpdboy/luci-app-poweroffdevice）
+curl -fsSL  https://raw.githubusercontent.com/sirpdboy/other/master/patch/poweroff/poweroff.htm > ./feeds/luci/modules/luci-mod-admin-full/luasrc/view/admin_system/poweroff.htm 
+curl -fsSL  https://raw.githubusercontent.com/sirpdboy/other/master/patch/poweroff/system.lua > ./feeds/luci/modules/luci-mod-admin-full/luasrc/controller/admin/system.lua
+
 
 ##########固件主题添加&修改#########
 #更换lede源码中自带argon主题
