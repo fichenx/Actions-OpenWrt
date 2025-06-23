@@ -1038,10 +1038,10 @@ rm -rf feeds/packages/libs/libpfring
 #merge_package https://github.com/openwrt/packages packages/libs/libpfring
 cp -rf $GITHUB_WORKSPACE/general/libpfring feeds/packages/libs/libpfring
 
-# alist
-merge_package https://github.com/sbwml/luci-app-alist luci-app-alist/alist
-git clone -b lua https://github.com/sbwml/luci-app-alist package/luci-app-alist
-#sed -i 's/PKG_HASH:=.*/PKG_HASH:=b7d1929d9aef511b263673dba8e5b787f695e1b4fa4555fe562f8060ee0bdea4/g' package/alist/Makefile
+# openlist
+merge_package https://github.com/sbwml/luci-app-openlist luci-app-openlist/openlist
+git clone -b main https://github.com/sbwml/luci-app-openlist package/luci-app-openlist
+#sed -i 's/PKG_HASH:=.*/PKG_HASH:=b7d1929d9aef511b263673dba8e5b787f695e1b4fa4555fe562f8060ee0bdea4/g' package/openlist/Makefile
 
 # luajit2
 merge_package https://github.com/openwrt/packages packages/lang/luajit2
