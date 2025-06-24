@@ -28,7 +28,7 @@ env:
   FEEDS_CONF: imm.feeds.conf.default
   CONFIG_FILE: config/AX6_plus_imm.config
   DIY_feeds_SH: sh/imm_diy-part1.sh
-  DIY_my_SH: sh/AX6_js_diy-part2.sh
+  DIY_my_SH: sh/ax6_imm_diy-part2.sh
   #DIY_my_SH: sh/ARMv8_diy-part2.sh
   UPLOAD_BIN_DIR: false
   UPLOAD_FIRMWARE: true
