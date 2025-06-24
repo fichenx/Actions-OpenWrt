@@ -147,9 +147,9 @@ jobs:
         path: |
           ./action_build/.ccache
           ./action_build/staging_dir
-        key: ${{ runs-on }}-${{ hashFiles('**/repo_flag') }}-${{ env.DATE }}
+        key: ${{ runner.os }}-${{ hashFiles('**/repo_flag') }}-${{ env.DATE }}
         restore-keys: |
-          ${{ runs-on }}-${{ hashFiles('**/repo_flag') }}-
+          ${{ runner.os }}-${{ hashFiles('**/repo_flag') }}-
 
 
     - name: 加载自定义源
