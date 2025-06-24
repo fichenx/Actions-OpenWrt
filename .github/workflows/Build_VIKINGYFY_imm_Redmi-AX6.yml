@@ -8,7 +8,7 @@
 # Description: Build OpenWrt using GitHub Actions
 #
 
-name: Build immortalwrt Redmi-AX6 plus
+name: Build VIKINGYFY_immortalwrt Redmi-AX6 plus
 
 on:
   repository_dispatch:
@@ -22,10 +22,10 @@ on:
     - cron: 37 3 * * 4
 
 env:
-  REPO_URL: https://github.com/immortalwrt/immortalwrt
-  REPO_BRANCH: openwrt-23.05
-  FEEDS_CONF: immortalwrt.feeds.conf.default
-  CONFIG_FILE: config/AX6_5.15(ImmortalWrt).config
+  REPO_URL: https://github.com/VIKINGYFY/immortalwrt.git
+  REPO_BRANCH: main
+  FEEDS_CONF: imm.feeds.conf.default
+  CONFIG_FILE: config/AX6_plus_imm.config
   DIY_feeds_SH: sh/imm_diy-part1.sh
   DIY_my_SH: sh/AX6_js_diy-part2.sh
   #DIY_my_SH: sh/ARMv8_diy-part2.sh
@@ -143,15 +143,15 @@ jobs:
     #   clean: false
     #   prefix: ${{ github.workspace }}/openwrt
 
-    - name: Cache Dependencies
-        uses: actions/cache@v4
-        with:
-          path: |
-            ./action_build/.ccache
-            ./action_build/staging_dir
-          key: ${{ runs-on }}-${{ hashFiles('**/repo_flag') }}-${{ env.DATE }}
-          restore-keys: |
-            ${{ runs-on }}-${{ hashFiles('**/repo_flag') }}-
+    - name: 缓存依赖项
+      uses: actions/cache@v4
+      with:
+        path: |
+          ./action_build/.ccache
+          ./action_build/staging_dir
+        key: ${{ runs-on }}-${{ hashFiles('**/repo_flag') }}-${{ env.DATE }}
+        restore-keys: |
+          ${{ runs-on }}-${{ hashFiles('**/repo_flag') }}-
 
     - name: 加载自定义源
       run: |

@@ -21,7 +21,7 @@ env:
   REPO_URL: https://github.com/coolsnowwolf/lede
   REPO_BRANCH: master
   FEEDS_CONF: feeds.conf.default
-  CONFIG_FILE: config/ARMv8.config
+  CONFIG_FILE: config/ARMv8_lua.config
   DIY_feeds_SH: sh/lede_diy-part1.sh
   DIY_breakings_SH: sh/breakings_diy-part2.sh
   DIY_my_SH: sh/ARMv8_lua_diy-part2.sh
@@ -118,15 +118,15 @@ jobs:
     #   clean: false
     #   prefix: ${{ github.workspace }}/openwrt
 
-    - name: Cache Dependencies
-        uses: actions/cache@v4
-        with:
-          path: |
-            ./action_build/.ccache
-            ./action_build/staging_dir
-          key: ${{ runs-on }}-${{ hashFiles('**/repo_flag') }}-${{ env.DATE }}
-          restore-keys: |
-            ${{ runs-on }}-${{ hashFiles('**/repo_flag') }}-
+    - name: 缓存依赖项
+      uses: actions/cache@v4
+      with:
+        path: |
+          ./action_build/.ccache
+          ./action_build/staging_dir
+        key: ${{ runs-on }}-${{ hashFiles('**/repo_flag') }}-${{ env.DATE }}
+        restore-keys: |
+          ${{ runs-on }}-${{ hashFiles('**/repo_flag') }}-
         
     - name: 将Armvirt打包为OpenWrt
       if: (!cancelled())

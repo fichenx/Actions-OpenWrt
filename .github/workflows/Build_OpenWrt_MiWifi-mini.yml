@@ -25,7 +25,7 @@ env:
   REPO_URL: https://github.com/coolsnowwolf/lede
   REPO_BRANCH: master
   FEEDS_CONF: feeds.conf.default
-  CONFIG_FILE: config/mini.config
+  CONFIG_FILE: config/mini_lua.config
   DIY_feeds_SH: sh/lede_diy-part1.sh
   DIY_my_SH: sh/mini_diy-part2.sh
   UPLOAD_BIN_DIR: false
@@ -139,15 +139,15 @@ jobs:
     #   clean: false
     #   prefix: ${{ github.workspace }}/openwrt
 
-    - name: Cache Dependencies
-        uses: actions/cache@v4
-        with:
-          path: |
-            ./action_build/.ccache
-            ./action_build/staging_dir
-          key: ${{ runs-on }}-${{ hashFiles('**/repo_flag') }}-${{ env.DATE }}
-          restore-keys: |
-            ${{ runs-on }}-${{ hashFiles('**/repo_flag') }}-
+    - name: 缓存依赖项
+      uses: actions/cache@v4
+      with:
+        path: |
+          ./action_build/.ccache
+          ./action_build/staging_dir
+        key: ${{ runs-on }}-${{ hashFiles('**/repo_flag') }}-${{ env.DATE }}
+        restore-keys: |
+          ${{ runs-on }}-${{ hashFiles('**/repo_flag') }}-
 
     - name: L加载自定义源
       run: |
