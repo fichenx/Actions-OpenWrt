@@ -20,7 +20,7 @@ on:
 env:
   REPO_URL: https://github.com/coolsnowwolf/lede
   REPO_BRANCH: master
-  FEEDS_CONF: feeds.conf.default
+  FEEDS_CONF: js_feeds.conf.default
   CONFIG_FILE: config/ARMv8.config
   DIY_feeds_SH: sh/lede_diy-part1.sh
   DIY_breakings_SH: sh/breakings_diy-part2.sh
@@ -106,6 +106,16 @@ jobs:
         echo "DATE=$(date "+%Y-%m-%d %H:%M:%S")" >> $GITHUB_ENV
         echo "DATE1=$(date "+%Y-%m-%d")" >> $GITHUB_ENV
         echo "DATE2=$(date "+%Y%m%d%H%M")" >> $GITHUB_ENV
+
+    - name: Cache Dependencies
+        uses: actions/cache@v4
+        with:
+          path: |
+            ./action_build/.ccache
+            ./action_build/staging_dir
+          key: ${{ runs-on }}-${{ hashFiles('**/repo_flag') }}-${{ env.DATE }}
+          restore-keys: |
+            ${{ runs-on }}-${{ hashFiles('**/repo_flag') }}-
         
     - name: 将Armvirt打包为OpenWrt
       if: (!cancelled())

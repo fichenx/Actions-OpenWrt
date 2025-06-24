@@ -120,6 +120,27 @@ jobs:
         echo "DATE=$(date "+%Y-%m-%d %H:%M:%S")" >> $GITHUB_ENV
         echo "DATE1=$(date "+%Y-%m-%d")" >> $GITHUB_ENV
         echo "DATE2=$(date "+%Y%m%d%H%M")" >> $GITHUB_ENV
+  
+    #- name: 缓存工具链
+    # #uses: klever1988/cachewrtbuild@main
+    # uses: stupidloud/cachewrtbuild@main
+    # with:
+    #   mixkey: 'lede_js_armvirt'
+    #   ccache: true
+    #   skip: true
+    #   toolchain: true
+    #   clean: false
+    #   prefix: ${{ github.workspace }}/openwrt
+
+    - name: Cache Dependencies
+        uses: actions/cache@v4
+        with:
+          path: |
+            ./action_build/.ccache
+            ./action_build/staging_dir
+          key: ${{ runs-on }}-${{ hashFiles('**/repo_flag') }}-${{ env.DATE }}
+          restore-keys: |
+            ${{ runs-on }}-${{ hashFiles('**/repo_flag') }}-
         
     #- name: Revert ax6
      # run: cp -rf $GITHUB_WORKSPACE/general/AX6/target/linux/ipq807x/image/generic.mk openwrt/target/linux/ipq807x/image/

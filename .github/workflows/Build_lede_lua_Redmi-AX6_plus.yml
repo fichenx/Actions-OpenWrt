@@ -143,16 +143,27 @@ jobs:
         # rm -rf openwrt/package/network/utils/iwinfo
         # cp -rf $GITHUB_WORKSPACE/backup/AX6/mac80211/package/network/utils/iwinfo openwrt/package/network/utils/
 
-#    - name: 缓存工具链
-      #uses: klever1988/cachewrtbuild@main
-      #uses: stupidloud/cachewrtbuild@main
-      #with:
-      #  mixkey: 'Redmi-AX6_plus(lede_lua)'
-      #  ccache: true
-      #  skip: true
-      #  toolchain: true
-      #  clean: false
-      #  prefix: ${{ github.workspace }}/openwrt
+  
+    #- name: 缓存工具链
+    # #uses: klever1988/cachewrtbuild@main
+    # uses: stupidloud/cachewrtbuild@main
+    # with:
+    #   mixkey: 'lede_js_armvirt'
+    #   ccache: true
+    #   skip: true
+    #   toolchain: true
+    #   clean: false
+    #   prefix: ${{ github.workspace }}/openwrt
+
+    - name: Cache Dependencies
+        uses: actions/cache@v4
+        with:
+          path: |
+            ./action_build/.ccache
+            ./action_build/staging_dir
+          key: ${{ runs-on }}-${{ hashFiles('**/repo_flag') }}-${{ env.DATE }}
+          restore-keys: |
+            ${{ runs-on }}-${{ hashFiles('**/repo_flag') }}-
 
     - name: 加载自定义源
       run: |
