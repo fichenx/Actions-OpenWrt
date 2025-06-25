@@ -150,6 +150,14 @@ jobs:
         restore-keys: |
           ${{ inputs.runs-on }}-${{ hashFiles('**/repo_flag') }}-
 
+    - name: 刷新缓存
+      run: |
+        if [ -d "./openwrt/staging_dir" ]; then
+          find "./openwrt/staging_dir" -type d -name "stamp" -not -path "*target*" | while read -r dir; do
+              find "$dir" -type f -exec touch {} +
+          done
+        fi
+
     - name: 加载自定义源
       run: |
         [ -e $FEEDS_CONF ] && mv $FEEDS_CONF openwrt/feeds.conf.default

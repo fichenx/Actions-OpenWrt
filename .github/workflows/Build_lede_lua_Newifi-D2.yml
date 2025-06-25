@@ -41,7 +41,7 @@ on:
 env:
   REPO_URL: https://github.com/coolsnowwolf/lede
   REPO_BRANCH: master
-  FEEDS_CONF: feeds.conf.default
+  FEEDS_CONF: lede_feeds.conf.default
   CONFIG_FILE: config/Newifi_D2_lua.config
   DIY_feeds_SH: sh/lede_diy-part1.sh
   DIY_breakings_SH: sh/breakings_diy-part2.sh
@@ -149,6 +149,14 @@ jobs:
         key: ${{ inputs.runs-on }}-${{ hashFiles('**/repo_flag') }}-${{ env.DATE }}
         restore-keys: |
           ${{ inputs.runs-on }}-${{ hashFiles('**/repo_flag') }}-
+
+    - name: 刷新缓存
+      run: |
+        if [ -d "./openwrt/staging_dir" ]; then
+          find "./openwrt/staging_dir" -type d -name "stamp" -not -path "*target*" | while read -r dir; do
+              find "$dir" -type f -exec touch {} +
+          done
+        fi
 
     - name: 加载自定义源
       run: |

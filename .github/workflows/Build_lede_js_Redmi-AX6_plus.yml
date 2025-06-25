@@ -32,8 +32,8 @@ on:
   #  branches: 
   #    - master
 
-  schedule:
-    - cron: 12 3 * * 4
+#  schedule:
+#    - cron: 12 3 * * 4
   
   #watch:
   #  types: [started]
@@ -152,7 +152,15 @@ jobs:
         key: ${{ inputs.runs-on }}-${{ hashFiles('**/repo_flag') }}-${{ env.DATE }}
         restore-keys: |
           ${{ inputs.runs-on }}-${{ hashFiles('**/repo_flag') }}-
-        
+  
+    - name: 刷新缓存
+      run: |
+        if [ -d "./openwrt/staging_dir" ]; then
+          find "./openwrt/staging_dir" -type d -name "stamp" -not -path "*target*" | while read -r dir; do
+              find "$dir" -type f -exec touch {} +
+          done
+        fi
+      
     #- name: Revert ax6
      # run: cp -rf $GITHUB_WORKSPACE/general/AX6/target/linux/ipq807x/image/generic.mk openwrt/target/linux/ipq807x/image/
     

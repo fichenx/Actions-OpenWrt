@@ -126,6 +126,14 @@ jobs:
         key: ${{ inputs.runs-on }}-${{ hashFiles('**/repo_flag') }}-${{ env.DATE }}
         restore-keys: |
           ${{ inputs.runs-on }}-${{ hashFiles('**/repo_flag') }}-
+
+    - name: 刷新缓存
+      run: |
+        if [ -d "./openwrt/staging_dir" ]; then
+          find "./openwrt/staging_dir" -type d -name "stamp" -not -path "*target*" | while read -r dir; do
+              find "$dir" -type f -exec touch {} +
+          done
+        fi
         
     - name: 将Armvirt打包为OpenWrt
       if: (!cancelled())
