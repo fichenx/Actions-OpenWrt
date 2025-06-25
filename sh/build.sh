@@ -3,7 +3,7 @@
 set -e
 
 source /etc/profile
-BASE_PATH=$(cd $(dirname $0) && pwd)
+BASE_PATH=$(cd $(dirname $0)/../ && pwd)
 
 Dev=$1
 Build_Mod=$2

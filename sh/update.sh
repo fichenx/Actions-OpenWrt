@@ -13,7 +13,7 @@ error_handler() {
 trap 'error_handler' ERR
 
 source /etc/profile
-BASE_PATH=$(cd $(dirname $0) && pwd)
+BASE_PATH=$(cd $(dirname $0)/../ && pwd)
 
 REPO_URL=$1
 REPO_BRANCH=$2
