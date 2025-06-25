@@ -18,6 +18,16 @@ on:
         description: 'SSH connection to Actions'
         required: false
         default: 'false'
+
+      runs-on:
+        required: true
+        description: Runs on...
+        type: choice
+        default: ubuntu-22.04
+        options:
+          - ubuntu-20.04
+          - ubuntu-22.04
+
   #push:
   #  branches: 
   #    - master
@@ -47,7 +57,7 @@ env:
 
 jobs:
   build:
-    runs-on: ubuntu-22.04
+    runs-on: ${{ inputs.runs-on }}
 
     steps:
     - name: 检出
@@ -159,11 +169,11 @@ jobs:
       uses: actions/cache@v4
       with:
         path: |
-          ./action_build/.ccache
-          ./action_build/staging_dir
-        key: ${{ runner.os }}-${{ hashFiles('**/repo_flag') }}-${{ env.DATE }}
+          ./openwrt/.ccache
+          ./openwrt/staging_dir
+        key: ${{ inputs.runs-on }}-${{ hashFiles('**/repo_flag') }}-${{ env.DATE }}
         restore-keys: |
-          ${{ runner.os }}-${{ hashFiles('**/repo_flag') }}-
+          ${{ inputs.runs-on }}-${{ hashFiles('**/repo_flag') }}-
 
     - name: 加载自定义源
       run: |
