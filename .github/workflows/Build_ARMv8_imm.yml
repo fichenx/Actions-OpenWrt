@@ -1,5 +1,5 @@
 name: Build ARMv8_imm（immortalwrt） 
-run-name: Release - ${{ inputs.model || 'ARMv8_imm'}}
+run-name: Release - ${{ inputs.model || env.DEFAULT_MODEL}}
 
 on:
   workflow_dispatch:
@@ -37,10 +37,12 @@ on:
 
 env:
   GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+  DEFAULT_MODEL: ARMv8_imm
+  DEFAULT_RUNS_ON: ubuntu-22.04
 
 jobs:
   build:
-    runs-on: ${{ inputs.runs-on || 'ubuntu-22.04'}}
+    runs-on: ${{ inputs.runs-on || env.DEFAULT_RUNS_ON}}
 
     steps:
       - name: Maximize build space
@@ -75,11 +77,11 @@ jobs:
         run: |
           export BUILD_DATE=$(TZ=UTC-8 date +"%y.%m.%d_%H.%M.%S")
           echo "BUILD_DATE=$BUILD_DATE" >> $GITHUB_ENV
-          export BUILD_SRC=$(awk -F"=" '/REPO_URL/ {print $NF}' "./compilecfg/${{ inputs.model }}.ini")
+          export BUILD_SRC=$(awk -F"=" '/REPO_URL/ {print $NF}' "./compilecfg/${{ inputs.model || env.DEFAULT_MODEL }}.ini")
           echo "BUILD_SRC=$BUILD_SRC" >> $GITHUB_ENV
 
       - name: Pre Clone
-        run: ./sh/pre_clone_action.sh ${{ inputs.model }}
+        run: ./sh/pre_clone_action.sh ${{ inputs.model || env.DEFAULT_MODEL }}
 
       - name: Cache Dependencies
         uses: actions/cache@v4
@@ -87,9 +89,9 @@ jobs:
           path: |
             ./action_build/.ccache
             ./action_build/staging_dir
-          key: ${{ inputs.runs-on }}-${{ hashFiles('**/repo_flag') }}-${{ env.BUILD_DATE }}
+          key: ${{ inputs.runs-on || env.DEFAULT_RUNS_ON }}-${{ hashFiles('**/repo_flag') }}-${{ env.BUILD_DATE }}
           restore-keys: |
-            ${{ inputs.runs-on }}-${{ hashFiles('**/repo_flag') }}-
+            ${{ inputs.runs-on || env.DEFAULT_RUNS_ON }}-${{ hashFiles('**/repo_flag') }}-
 
       - name: Refresh the cache
         run: |
@@ -100,7 +102,7 @@ jobs:
           fi
 
       - name: Build Firmware
-        run: ./sh/build.sh ${{ inputs.model }}
+        run: ./sh/build.sh ${{ inputs.model || env.DEFAULT_MODEL }}
 
       - name: Get Kernel Verion
         run: |
@@ -110,7 +112,7 @@ jobs:
       - name: Delete Old Cache
         run: |
           # 获取缓存列表并删除
-          gh cache list --key ${{ inputs.runs-on }}-${{ hashFiles('**/repo_flag') }}- --json key --jq '.[] | .key' | while read -r key; do
+          gh cache list --key ${{ inputs.runs-on || env.DEFAULT_RUNS_ON }}-${{ hashFiles('**/repo_flag') }}- --json key --jq '.[] | .key' | while read -r key; do
             gh cache delete "$key"
           done
           # 输出缓存状态
@@ -127,7 +129,7 @@ jobs:
           echo "=============================================="
 
       - name: Package OpenWrt Firmware
-        if: ${{ inputs.model == 'ARMv8_imm' }}
+        #if: ${{ inputs.model == env.DEFAULT_MODEL }}
         uses: unifreq/openwrt_packit@master
         env:
           OPENWRT_ARMVIRT: firmware/*.tar.gz
@@ -148,6 +150,6 @@ jobs:
       - name: Release Firmware
         uses: softprops/action-gh-release@v2
         with:
-          tag_name: ${{ env.BUILD_DATE }}_${{ inputs.model }}
-          files: ${{ inputs.model == 'ARMv8_imm' && env.PACKAGED_OUTPUTPATH || './firmware' }}/*.*
+          tag_name: ${{ env.BUILD_DATE }}_${{ inputs.model || env.DEFAULT_MODEL }}
+          files: ${{ inputs.model == env.DEFAULT_MODEL && env.PACKAGED_OUTPUTPATH || './firmware' }}/*.*
           body_path: ./release_body.txt
