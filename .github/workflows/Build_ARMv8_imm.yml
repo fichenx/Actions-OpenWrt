@@ -103,7 +103,7 @@ jobs:
           sudo mount /dev/github/runner /builder
           sudo chown -R runner.runner /builder
           df -Th
-          mkdir /builder/action_build
+          sudo mkdir -p /builder/action_build
           ln -sf /builder/action_build $GITHUB_WORKSPACE/action_build
 
 
