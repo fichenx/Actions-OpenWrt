@@ -1,5 +1,5 @@
 name: Build ARMv8_imm（immortalwrt） 
-run-name: Release - ${{ inputs.model }}
+run-name: Release - ${{ inputs.model || 'ARMv8_imm'}}
 
 on:
   workflow_dispatch:
@@ -18,7 +18,7 @@ on:
           #- n1_immwrt
           #- redmi_ax5_immwrt
           - ARMv8_imm
-          - ARMv8_libwrt
+          - ARMv8_lede
           #- redmi_ax6000_immwrt21
           #- zn_m2_immwrt
           #- zn_m2_libwrt
@@ -33,14 +33,14 @@ on:
           - ubuntu-22.04
 
   schedule:
-    - cron: 54 4 * * 4
+    - cron: 15 5 * * 4
 
 env:
   GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
 
 jobs:
   build:
-    runs-on: ${{ inputs.runs-on }}
+    runs-on: ${{ inputs.runs-on || 'ubuntu-22.04'}}
 
     steps:
       - name: Maximize build space
