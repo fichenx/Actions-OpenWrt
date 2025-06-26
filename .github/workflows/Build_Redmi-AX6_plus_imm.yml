@@ -1,5 +1,5 @@
 name: Build Redmi-AX6 plus（immortalwrt） 
-run-name: Release - ${{ inputs.model }}
+run-name: Release - ${{ inputs.model || 'RedMi_AX6_plus_imm'}}
 
 on:
   workflow_dispatch:
@@ -33,14 +33,14 @@ on:
           - ubuntu-22.04
 
   schedule:
-    - cron: 13 3 * * 4
+    - cron: 43 3 * * 4
 
 env:
   GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
 
 jobs:
   build:
-    runs-on: ${{ inputs.runs-on }}
+    runs-on: ${{ inputs.runs-on || 'ubuntu-22.04'}}
 
     steps:
       - name: Maximize build space
