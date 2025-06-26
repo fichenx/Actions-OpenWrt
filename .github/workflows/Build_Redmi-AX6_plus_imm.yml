@@ -75,11 +75,11 @@ jobs:
         run: |
           export BUILD_DATE=$(TZ=UTC-8 date +"%y.%m.%d_%H.%M.%S")
           echo "BUILD_DATE=$BUILD_DATE" >> $GITHUB_ENV
-          export BUILD_SRC=$(awk -F"=" '/REPO_URL/ {print $NF}' "./compilecfg/${{ inputs.model }}.ini")
+          export BUILD_SRC=$(awk -F"=" '/REPO_URL/ {print $NF}' "./compilecfg/${{ inputs.model || 'RedMi_AX6_plus_imm'}}.ini")
           echo "BUILD_SRC=$BUILD_SRC" >> $GITHUB_ENV
 
       - name: Pre Clone
-        run: ./sh/pre_clone_action.sh ${{ inputs.model }}
+        run: ./sh/pre_clone_action.sh ${{ inputs.model || 'RedMi_AX6_plus_imm'}}
 
       - name: Cache Dependencies
         uses: actions/cache@v4
@@ -87,9 +87,9 @@ jobs:
           path: |
             ./action_build/.ccache
             ./action_build/staging_dir
-          key: ${{ inputs.runs-on }}-${{ hashFiles('**/repo_flag') }}-${{ env.BUILD_DATE }}
+          key: ${{ inputs.runs-on || 'ubuntu-22.04'}}-${{ hashFiles('**/repo_flag') }}-${{ env.BUILD_DATE }}
           restore-keys: |
-            ${{ inputs.runs-on }}-${{ hashFiles('**/repo_flag') }}-
+            ${{ inputs.runs-on || 'ubuntu-22.04'}}-${{ hashFiles('**/repo_flag') }}-
 
       - name: Refresh the cache
         run: |
@@ -100,7 +100,7 @@ jobs:
           fi
 
       - name: Build Firmware
-        run: ./sh/build.sh ${{ inputs.model }}
+        run: ./sh/build.sh ${{ inputs.model || 'RedMi_AX6_plus_imm'}}
 
       - name: Get Kernel Verion
         run: |
@@ -110,7 +110,7 @@ jobs:
       - name: Delete Old Cache
         run: |
           # 获取缓存列表并删除
-          gh cache list --key ${{ inputs.runs-on }}-${{ hashFiles('**/repo_flag') }}- --json key --jq '.[] | .key' | while read -r key; do
+          gh cache list --key ${{ inputs.runs-on || 'ubuntu-22.04'}}-${{ hashFiles('**/repo_flag') }}- --json key --jq '.[] | .key' | while read -r key; do
             gh cache delete "$key"
           done
           # 输出缓存状态
@@ -148,6 +148,6 @@ jobs:
       - name: Release Firmware
         uses: softprops/action-gh-release@v2
         with:
-          tag_name: ${{ env.BUILD_DATE }}_${{ inputs.model }}
+          tag_name: ${{ env.BUILD_DATE }}_${{ inputs.model || 'RedMi_AX6_plus_imm'}}
           files: ${{ inputs.model == 'n1_immwrt' && env.PACKAGED_OUTPUTPATH || './firmware' }}/*.*
           body_path: ./release_body.txt

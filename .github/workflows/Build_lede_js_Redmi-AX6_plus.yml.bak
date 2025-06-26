@@ -57,7 +57,7 @@ env:
 
 jobs:
   build:
-    runs-on: ${{ inputs.runs-on }}
+    runs-on: ${{ inputs.runs-on || 'ubuntu-22.04'}}
 
     steps:
     - name: 检出
@@ -149,9 +149,9 @@ jobs:
         path: |
           ./openwrt/.ccache
           ./openwrt/staging_dir
-        key: ${{ inputs.runs-on }}-${{ hashFiles('**/repo_flag') }}-${{ env.DATE }}
+        key: ${{ inputs.runs-on || 'ubuntu-22.04'}}-${{ hashFiles('**/repo_flag') }}-${{ env.DATE }}
         restore-keys: |
-          ${{ inputs.runs-on }}-${{ hashFiles('**/repo_flag') }}-
+          ${{ inputs.runs-on || 'ubuntu-22.04'}}-${{ hashFiles('**/repo_flag') }}-
   
     - name: 刷新缓存
       run: |
