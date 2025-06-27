@@ -37,7 +37,7 @@ if [[ -d $BASE_PATH/action_build ]]; then
     BUILD_DIR="action_build"
 fi
 
-$BASE_PATH/sh/update.sh "$REPO_URL" "$REPO_BRANCH" "$BASE_PATH/$BUILD_DIR" "$COMMIT_HASH"
+$BASE_PATH/sh/update.sh "$REPO_URL" "$REPO_BRANCH" "$BASE_PATH/$BUILD_DIR" "$COMMIT_HASH" "$Dev"
 
 \cp -f "$CONFIG_FILE" "$BASE_PATH/$BUILD_DIR/.config"
 
