@@ -1,5 +1,5 @@
-name: Build ARMv8_imm（immortalwrt） 
-run-name: Release - ${{ inputs.model || 'ARMv8_imm'}}
+name: Release ARMv8_lede 
+run-name: Release - ${{ inputs.model || 'ARMv8_lede_js'}}
 
 on:
   workflow_dispatch:
@@ -8,7 +8,7 @@ on:
         required: true
         description: Device Model
         type: choice
-        default: ARMv8_imm
+        default: ARMv8_lede_js
         options:
           #- aliyun_ap8220_immwrt
           #- cmcc_rax3000m_immwrt
@@ -17,8 +17,8 @@ on:
           #- jdcloud_ipq60xx_libwrt
           #- n1_immwrt
           #- redmi_ax5_immwrt
-          - ARMv8_imm
-          - ARMv8_lede
+          - ARMv8_lede_js
+          - ARMv8_lede_lua
           #- redmi_ax6000_immwrt21
           #- zn_m2_immwrt
           #- zn_m2_libwrt
@@ -75,7 +75,7 @@ jobs:
         run: |
           export BUILD_DATE=$(TZ=UTC-8 date +"%y.%m.%d_%H.%M.%S")
           echo "BUILD_DATE=$BUILD_DATE" >> $GITHUB_ENV
-          export BUILD_SRC=$(awk -F"=" '/REPO_URL/ {print $NF}' "./compilecfg/${{ inputs.model || 'ARMv8_imm'}}.ini")
+          export BUILD_SRC=$(awk -F"=" '/REPO_URL/ {print $NF}' "./compilecfg/${{ inputs.model || 'ARMv8_lede_js'}}.ini")
           echo "BUILD_SRC=$BUILD_SRC" >> $GITHUB_ENV
 
       - name: 创建虚拟内存
@@ -108,7 +108,7 @@ jobs:
 
 
       - name: Pre Clone
-        run: ./sh/pre_clone_action.sh ${{ inputs.model || 'ARMv8_imm'}}
+        run: ./sh/pre_clone_action.sh ${{ inputs.model || 'ARMv8_lede_js'}}
 
       - name: Cache Dependencies
         uses: actions/cache@v4
@@ -129,7 +129,7 @@ jobs:
           fi
 
       - name: Build Firmware
-        run: ./sh/build.sh ${{ inputs.model || 'ARMv8_imm'}}
+        run: ./sh/build.sh ${{ inputs.model || 'ARMv8_lede_js'}}
 
       - name: Get Kernel Verion
         run: |
@@ -156,7 +156,7 @@ jobs:
           echo "=============================================="
 
       - name: Package OpenWrt Firmware
-        #if: ${{ inputs.model == 'ARMv8_imm' }}
+        #if: ${{ inputs.model == 'ARMv8_lede_js' }}
         uses: unifreq/openwrt_packit@master
         env:
           OPENWRT_ARMVIRT: firmware/*.tar.gz
@@ -177,6 +177,6 @@ jobs:
       - name: Release Firmware
         uses: softprops/action-gh-release@v2
         with:
-          tag_name: ${{ env.BUILD_DATE }}_${{ inputs.model || 'ARMv8_imm'}}
-          files: ${{ inputs.model == 'ARMv8_imm' && env.PACKAGED_OUTPUTPATH || './firmware' }}/*.*
+          tag_name: ${{ env.BUILD_DATE }}_${{ inputs.model || 'ARMv8_lede_js'}}
+          files: ${{ inputs.model == 'ARMv8_lede_js' && env.PACKAGED_OUTPUTPATH || './firmware' }}/*.*
           body_path: ./release_body.txt

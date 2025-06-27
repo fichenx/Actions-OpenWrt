@@ -69,6 +69,13 @@ update_feeds() {
 		echo "src-git fichenx https://github.com/fichenx/openwrt-package;js" >>"$BUILD_DIR/$FEEDS_CONF"
     fi
 
+    # 检查编译的是否是lua版
+    if [[ "$BUILD_DIR" == *"lede_lua"* ]]; then
+    # 使用sed删除$FEEDS_CONF文件中的";openwrt-23.05"字符串
+    sed -i 's/;openwrt-23.05//g' "$BUILD_DIR/$FEEDS_CONF"
+    sed -i 's/;js/;lua/g' "$BUILD_DIR/$FEEDS_CONF"
+    fi
+
     # 添加bpf.mk解决更新报错
     if [ ! -f "$BUILD_DIR/include/bpf.mk" ]; then
         touch "$BUILD_DIR/include/bpf.mk"

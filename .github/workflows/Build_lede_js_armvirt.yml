@@ -35,7 +35,7 @@ env:
   REPO_URL: https://github.com/coolsnowwolf/lede
   REPO_BRANCH: master
   FEEDS_CONF: js_feeds.conf.default
-  CONFIG_FILE: config/ARMv8_js.config
+  CONFIG_FILE: config/ARMv8_lede_js.config
   DIY_feeds_SH: sh/lede_diy-part1.sh
   #DIY_feeds_SH: diy-part1.sh
   DIY_breakings_SH: sh/breakings_diy-part2.sh
