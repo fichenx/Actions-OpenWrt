@@ -19,6 +19,7 @@ REPO_URL=$1
 REPO_BRANCH=$2
 BUILD_DIR=$3
 COMMIT_HASH=$4
+BUILD_MODEL=$5
 
 FEEDS_CONF="feeds.conf.default"
 GOLANG_REPO="https://github.com/sbwml/packages_lang_golang"
@@ -70,7 +71,7 @@ update_feeds() {
     fi
 
     # 检查编译的是否是lua版
-    if [[ "$BUILD_DIR" == *"lede_lua"* ]]; then
+    if [[ "$BUILD_MODEL" == *"lede_lua"* ]]; then
     # 使用sed删除$FEEDS_CONF文件中的";openwrt-23.05"字符串
     sed -i 's/;openwrt-23.05//g' "$BUILD_DIR/$FEEDS_CONF"
     sed -i 's/;js/;lua/g' "$BUILD_DIR/$FEEDS_CONF"
