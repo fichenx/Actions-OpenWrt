@@ -8,8 +8,8 @@
 # Description: Build OpenWrt using GitHub Actions
 #
 
-name: Build Newifi-D2 lede
-run-name: Build - ${{ inputs.model || 'Newifi-D2_lede_lua'}}
+name: Release Newifi-D2 lede
+run-name: Release - ${{ inputs.model || 'Newifi-D2_lede_lua'}}
 
 on:
   repository_dispatch:
@@ -291,7 +291,7 @@ jobs:
       with:
         token: ${{ secrets.GITHUB_TOKEN }}
         repository: ${{ github.repository }}
-        delete_workflow_pattern: Build Newifi-D2 lede
+        delete_workflow_pattern: Release Newifi-D2 lede
         retain_days: 20
         keep_minimum_runs: 5
 

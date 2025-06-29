@@ -1,4 +1,4 @@
-name: Build Redmi-AX6 plus（immortalwrt） 
+name: Release Redmi-AX6 plus（immortalwrt） 
 run-name: Release - ${{ inputs.model || 'RedMi-AX6_plus_imm'}}
 
 on:
