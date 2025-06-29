@@ -185,7 +185,7 @@ jobs:
         [ -e $FEEDS_CONF ] && mv $FEEDS_CONF openwrt/feeds.conf.default
         chmod +x $DIY_feeds_SH
         cd openwrt
-        $GITHUB_WORKSPACE/$DIY_feeds_SH
+        $GITHUB_WORKSPACE/$DIY_feeds_SH ${{ inputs.model || 'ARMv8_lede_lua'}}
 
     - name: 更新源
       run: cd openwrt && ./scripts/feeds update -a
