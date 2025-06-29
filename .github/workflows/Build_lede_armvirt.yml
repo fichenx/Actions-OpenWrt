@@ -8,7 +8,8 @@
 # Description: Build OpenWrt using GitHub Actions
 #
 
-name: Build lede(lua版) armvirt
+name: Build lede armvirt
+run-name: Release - ${{ inputs.model || 'ARMv8_lede_lua'}}
 
 on:
   repository_dispatch:
@@ -18,6 +19,15 @@ on:
         description: 'SSH connection to Actions'
         required: false
         default: 'false'
+
+      model:
+        required: true
+        description: Device Model
+        type: choice
+        default: ARMv8_lede_lua
+        options:
+          - ARMv8_lede_lua
+          - ARMv8_lede_js
 
       runs-on:
         required: true
@@ -34,18 +44,18 @@ on:
 env:
   REPO_URL: https://github.com/coolsnowwolf/lede
   REPO_BRANCH: master
-  FEEDS_CONF: lede_feeds.conf.default
-  CONFIG_FILE: config/ARMv8_lede_lua.config
+  FEEDS_CONF: feeds.conf.default
+  CONFIG_FILE: config/${{ inputs.model || 'ARMv8_lede_lua'}}.config
   DIY_feeds_SH: sh/lede_diy-part1.sh
   #DIY_feeds_SH: diy-part1.sh
   DIY_breakings_SH: sh/breakings_diy-part2.sh
-  DIY_my_SH: sh/ARMv8_lua_diy-part2.sh
+  DIY_my_SH: sh/${{ inputs.model || 'ARMv8_lede_lua'}}_diy-part2.sh
   UPLOAD_BIN_DIR: false
   UPLOAD_FIRMWARE: false
   UPLOAD_RELEASE: true
   TZ: Asia/Shanghai
-  FILE_NAME: lede_lua_armvirt
-  PRODUCT_NAME: armvirt
+  FILE_NAME: ${{ inputs.model || 'ARMv8_lede_lua'}}
+  PRODUCT_NAME: ${{ inputs.model || 'ARMv8_lede_lua'}}
 
 jobs:
   build:
@@ -156,16 +166,16 @@ jobs:
       uses: actions/cache@v4
       with:
         path: |
-          ./openwrt/.ccache
-          ./openwrt/staging_dir
+          /builder/openwrt/.ccache
+          /builder/openwrt/staging_dir
         key: ${{ inputs.runs-on || 'ubuntu-22.04'}}-${{ hashFiles('**/repo_flag') }}-${{ env.DATE }}
         restore-keys: |
           ${{ inputs.runs-on || 'ubuntu-22.04'}}-${{ hashFiles('**/repo_flag') }}-
 
     - name: 刷新缓存
       run: |
-        if [ -d "./openwrt/staging_dir" ]; then
-          find "./openwrt/staging_dir" -type d -name "stamp" -not -path "*target*" | while read -r dir; do
+        if [ -d "/builder/openwrt/staging_dir" ]; then
+          find "/builder/openwrt/staging_dir" -type d -name "stamp" -not -path "*target*" | while read -r dir; do
               find "$dir" -type f -exec touch {} +
           done
         fi
@@ -261,13 +271,13 @@ jobs:
       id: release
       uses: ncipollo/release-action@main
       with:
-        name: ${{ env.DATE }} OpenWrt（lede_lua） for ${{ env.PRODUCT_NAME }}
+        name: ${{ env.DATE }} OpenWrt for ${{ env.PRODUCT_NAME }}
         allowUpdates: true
         tag: ${{ env.FILE_NAME }}
         commit: main
         token: ${{ secrets.RELEASES_TOKEN }}
         body: |
-          - 此为lede_lua_armvirt底包，非完整固件，每天自动编译
+          - 此为${{ inputs.model || 'ARMv8_lede_lua'}}底包，非完整固件，每天自动编译
           - 当前使用版本:【编译前的最后一次[➦主源码](https://github.com/coolsnowwolf/lede)更新记录】
           ${{ env.useVersionInfo }}
         artifacts: ${{ env.FIRMWARE }}/*
@@ -277,7 +287,7 @@ jobs:
       with:
         token: ${{ secrets.GITHUB_TOKEN }}
         repository: ${{ github.repository }}
-        delete_workflow_pattern: Build lede(lua版) armvirt
+        delete_workflow_pattern: Build lede armvirt
         retain_days: 20
         keep_minimum_runs: 10
 
@@ -287,7 +297,7 @@ jobs:
       with:
         #repo:
         keep_latest: 5
-        delete_tag_pattern: lede_lua_armvirt
+        delete_tag_pattern: lede_lua_armvirt${{ inputs.model || 'ARMv8_lede_lua'}}
         delete_tags: true
       env:
         GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}

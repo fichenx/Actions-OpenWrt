@@ -1,4 +1,4 @@
-name: Release ARMv8
+name: Release ARMv8 imm
 run-name: Release - ${{ inputs.model || 'ARMv8_imm'}}
 
 on:
