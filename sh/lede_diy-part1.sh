@@ -37,8 +37,8 @@ fi
 # 根据编译的固件选择不同的软件源
 if [[ "$BUILD_MODEL" == *"lede_lua"* ]]; then
 # 使用sed删除$FEEDS_CONF文件中的";openwrt-23.05"字符串
-sed -i 's/;openwrt-23.05//g' "$BUILD_DIR/$FEEDS_CONF"
-sed -i 's/;js/;lua/g' "$BUILD_DIR/$FEEDS_CONF"
+sed -i 's/;openwrt-23.05//g' "feeds.conf.default"
+sed -i 's/;js/;lua/g' "feeds.conf.default"
 fi
 
 
