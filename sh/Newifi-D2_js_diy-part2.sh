@@ -91,7 +91,7 @@ sed -i "s/hostname='OpenWrt'/hostname='Newifi-D2'/g" package/base-files/files/bi
 [ -e package/lean/default-settings/files/zzz-default-settings ] && rm -rf feeds/luci/themes/luci-theme-argon feeds/fichenx/luci-theme-argon && git clone https://github.com/jerrykuku/luci-theme-argon.git feeds/luci/themes/luci-theme-argon
 
 #添加luci-theme-design(Js版)
-rm -rf feeds/fichenx/luci-theme-design
+rm -rf feeds/luci/themes/luci-theme-design
 git clone -b js https://github.com/papagaye744/luci-theme-design package/luci-theme-design
 
 #design主题导航栏设置

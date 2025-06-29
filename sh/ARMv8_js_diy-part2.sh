@@ -107,7 +107,7 @@ sed -i 's/\[services\]/\[vpn\]/g'  feeds/luci/applications/luci-app-nps/luasrc/v
 #[ -e package/lean/default-settings/files/zzz-default-settings ] && rm -rf feeds/luci/applications/luci-app-design-config && git_sparse_clone main "https://github.com/fichenx/packages" "temp" luci-app-design-config && mv -n luci-theme-design feeds/luci/applications/luci-app-design-config
 
 #添加luci-theme-design(Js版)
-rm -rf feeds/fichenx/luci-theme-design
+rm -rf feeds/luci/themes/luci-theme-design
 git clone -b js https://github.com/papagaye744/luci-theme-design package/luci-theme-design
 
 #修改默认主题
