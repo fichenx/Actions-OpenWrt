@@ -4,7 +4,8 @@
 # Cron: min (0 - 59) / hour (0 - 23) / day of month (1 - 31) / month (1 - 12) / day of week (0 - 6)(Sunday - Saturday)
 #========================================================================================================================
 
-name: Releases_lede_lua_ARMv8
+name: Releases_ARMv8_lede
+run-name: Releases - ${{ inputs.model || 'ARMv8_lede_lua'}}
 
 on:
   repository_dispatch:
@@ -14,6 +15,15 @@ on:
         description: 'SSH connection'
         required: false
         default: 'false'
+
+      model:
+        required: true
+        description: Device Model
+        type: choice
+        default: ARMv8_lede_lua
+        options:
+          - ARMv8_lede_lua
+          - ARMv8_lede_js
 
       runs-on:
         required: true
@@ -30,17 +40,17 @@ on:
 env:
   REPO_URL: https://github.com/coolsnowwolf/lede
   REPO_BRANCH: master
-  FEEDS_CONF: lede_feeds.conf.default
-  CONFIG_FILE: config/ARMv8_lua.config
+  FEEDS_CONF: feeds.conf.default
+  CONFIG_FILE: config/${{ inputs.model || 'ARMv8_lede_lua'}}.config
   DIY_feeds_SH: sh/lede_diy-part1.sh
   DIY_breakings_SH: sh/breakings_diy-part2.sh
-  DIY_my_SH: sh/ARMv8_lua_diy-part2.sh
+  DIY_my_SH: sh/${{ inputs.model || 'ARMv8_lede_lua'}}_diy-part2.sh
   UPLOAD_FIRMWARE: false
   UPLOAD_RELEASE: true
   RECENT_LASTEST: 30
   TZ: Asia/Shanghai
-  FILE_NAME: ARMv8(lede_lua)
-  PRODUCT_NAME: ARMv8
+  FILE_NAME: ${{ inputs.model || 'ARMv8_lede_lua'}}
+  PRODUCT_NAME: ${{ inputs.model || 'ARMv8_lede_lua'}}
 
 jobs:
   build:
@@ -132,25 +142,25 @@ jobs:
       uses: actions/cache@v4
       with:
         path: |
-          ./openwrt/.ccache
-          ./openwrt/staging_dir
+          /builder/openwrt/.ccache
+          /builder/openwrt/staging_dir
         key: ${{ inputs.runs-on || 'ubuntu-22.04'}}-${{ hashFiles('**/repo_flag') }}-${{ env.DATE }}
         restore-keys: |
           ${{ inputs.runs-on || 'ubuntu-22.04'}}-${{ hashFiles('**/repo_flag') }}-
 
     - name: 刷新缓存
       run: |
-        if [ -d "./openwrt/staging_dir" ]; then
-          find "./openwrt/staging_dir" -type d -name "stamp" -not -path "*target*" | while read -r dir; do
+        if [ -d "/builder/openwrt/staging_dir" ]; then
+          find "/builder/openwrt/staging_dir" -type d -name "stamp" -not -path "*target*" | while read -r dir; do
               find "$dir" -type f -exec touch {} +
           done
         fi
        
-    - name: 将Armvirt打包为OpenWrt
+    - name: 将${{ inputs.model || 'ARMv8_lede_lua'}}打包为OpenWrt
       if: (!cancelled())
       uses: ophub/flippy-openwrt-actions@main
       env:
-        OPENWRT_ARMVIRT: https://github.com/fichenx/Actions-OpenWrt/releases/download/lede_lua_armvirt/openwrt-armsr-armv8-generic-rootfs.tar.gz
+        OPENWRT_ARMVIRT: https://github.com/fichenx/Actions-OpenWrt/releases/download/${{ inputs.model || 'ARMv8_lede_lua'}}/openwrt-armsr-armv8-generic-rootfs.tar.gz
         PACKAGE_SOC: s905d_s905x3
         WHOAMI: fichenx
         #KERNEL_REPO_URL: https://github.com/breakings/OpenWrt/tree/main/opt
@@ -186,13 +196,13 @@ jobs:
         token: ${{ secrets.RELEASES_TOKEN }}
         artifacts: ${{ env.PACKAGED_OUTPUTPATH }}/*
         body: |
-          #### ARMv8 Openwrt 固件配置：
+          #### ${{ inputs.model || 'ARMv8_lede_lua'}} Openwrt 固件配置：
           -  IP:192.168.123.2
           -  WEB登陆账户：root
           -  密码：password
           -  固件源码：https://github.com/coolsnowwolf/lede
           -  固件内核：https://github.com/breakingbadboy/OpenWrt/releases/tag/kernel_stable
-          -  固件内置插件打包：[内置ipk打包下载](https://github.com/fichenx/Actions-OpenWrt/releases/download/lede_lua_armvirt/Packages.tar.gz)
+          -  固件内置插件打包：[内置ipk打包下载](https://github.com/fichenx/Actions-OpenWrt/releases/download/${{ inputs.model || 'ARMv8_lede_lua'}}/Packages.tar.gz)
           -  常见问题及注意事项请参考恩山F大➦[最新帖](https://www.right.com.cn/forum/thread-4076037-1-1.html)
           
           #### 升级脚本用法:
@@ -209,7 +219,7 @@ jobs:
       with:
         token: ${{ secrets.GITHUB_TOKEN }}
         repository: ${{ github.repository }}
-        delete_workflow_pattern: Releases_lede_lua_ARMv8
+        delete_workflow_pattern: Releases_ARMv8_lede
         retain_days: 20
         keep_minimum_runs: 5
 
@@ -219,7 +229,7 @@ jobs:
       with:
         #repo:
         keep_latest: 5
-        delete_tag_pattern: ARMv8(lede_lua)
+        delete_tag_pattern: ${{ inputs.model || 'ARMv8_lede_lua'}}
         delete_tags: true
       env:
         GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
