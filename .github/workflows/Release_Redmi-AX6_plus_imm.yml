@@ -55,10 +55,10 @@ jobs:
           remove-cached-tools: "true"
           remove-swapfile: "true"
 
-      - name: Checkout
+      - name: 检出代码
         uses: actions/checkout@v4
 
-      - name: Initialization Environment
+      - name: 初始化环境
         env:
           DEBIAN_FRONTEND: noninteractive
         run: |
@@ -71,17 +71,17 @@ jobs:
           sudo -E systemctl daemon-reload
           sudo -E timedatectl set-timezone "Asia/Shanghai"
 
-      - name: Initialization Values
+      - name: 初始化值
         run: |
           export BUILD_DATE=$(TZ=UTC-8 date +"%y.%m.%d_%H.%M.%S")
           echo "BUILD_DATE=$BUILD_DATE" >> $GITHUB_ENV
           export BUILD_SRC=$(awk -F"=" '/REPO_URL/ {print $NF}' "./compilecfg/${{ inputs.model || 'RedMi-AX6_plus_imm'}}.ini")
           echo "BUILD_SRC=$BUILD_SRC" >> $GITHUB_ENV
 
-      - name: Pre Clone
+      - name: 克隆固件代码
         run: ./sh/pre_clone_action.sh ${{ inputs.model || 'RedMi-AX6_plus_imm'}}
 
-      - name: Cache Dependencies
+      - name: 缓存依赖
         uses: actions/cache@v4
         with:
           path: |
@@ -91,7 +91,7 @@ jobs:
           restore-keys: |
             ${{ inputs.runs-on || 'ubuntu-22.04'}}-${{ hashFiles('**/repo_flag') }}-
 
-      - name: Refresh the cache
+      - name: 刷新缓存
         run: |
           if [ -d "./action_build/staging_dir" ]; then
             find "./action_build/staging_dir" -type d -name "stamp" -not -path "*target*" | while read -r dir; do
@@ -99,15 +99,15 @@ jobs:
             done
           fi
 
-      - name: Build Firmware
+      - name: 构建固件
         run: ./sh/build.sh ${{ inputs.model || 'RedMi-AX6_plus_imm'}}
 
-      - name: Get Kernel Verion
+      - name: 获取内核版本
         run: |
           # 获取内核版本
           echo "KVER=$(find ./action_build/dl -maxdepth 1 -name "linux-[4-6]\.*" | sort -r | head -n 1 | grep -oE "[4-6]\.[0-9]{1,3}\.[0-9]{1,3}")" >> $GITHUB_ENV
 
-      - name: Delete Old Cache
+      - name: 删除旧缓存
         run: |
           # 获取缓存列表并删除
           gh cache list --key ${{ inputs.runs-on || 'ubuntu-22.04'}}-${{ hashFiles('**/repo_flag') }}- --json key --jq '.[] | .key' | while read -r key; do
@@ -118,7 +118,7 @@ jobs:
           echo "ccache: $(du -sh ./action_build/.ccache | cut -f 1)"
           echo "staging: $(du -sh ./action_build/staging_dir | cut -f 1)"
 
-      - name: Machine Information
+      - name: 输出虚拟机信息
         run: |
           echo "=============================================="
           lscpu | grep -E "name|Core|Thread"
@@ -126,7 +126,7 @@ jobs:
           df -h
           echo "=============================================="
 
-      - name: Package OpenWrt Firmware
+      - name: 封装OpenWrt固件
         if: ${{ inputs.model == 'n1_immwrt' }}
         uses: unifreq/openwrt_packit@master
         env:
@@ -135,7 +135,7 @@ jobs:
           KERNEL_VERSION_NAME: 6.6.y
           WHOAMI: fichen
 
-      - name: Prepare Release Body
+      - name: 准备发布简介
         run: |
           echo "云编译发布" > release_body.txt
           echo "源码：${{ env.BUILD_SRC }}" >> release_body.txt
@@ -145,7 +145,7 @@ jobs:
           echo "插件：" >> release_body.txt
           echo "$(grep -oP "luci-app(-[a-zA-Z0-9]{1,}){1,}" ./firmware/*.manifest | awk -F":" '{print $NF}')"  >> release_body.txt
 
-      - name: Release Firmware
+      - name: 发布固件
         uses: softprops/action-gh-release@v2
         with:
           tag_name: ${{ env.BUILD_DATE }}_${{ inputs.model || 'RedMi-AX6_plus_imm'}}

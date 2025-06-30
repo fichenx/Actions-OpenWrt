@@ -60,7 +60,7 @@ jobs:
 
     steps:
 
-    - name:设置固件源
+    - name: 设置固件源
       run: |
         if [ "${{ inputs.model }}" = "ARMv8_imm" ]; then
             echo "REPO_URL=https://github.com/immortalwrt/immortalwrt" >> $GITHUB_ENV
