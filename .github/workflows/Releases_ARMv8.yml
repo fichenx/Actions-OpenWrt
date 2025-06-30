@@ -1,22 +1,18 @@
-#
-# Copyright (c) 2019-2020 P3TERX <https://p3terx.com>
-#
-# This is free software, licensed under the MIT License.
-# See /LICENSE for more information.
-#
-# https://github.com/P3TERX/Actions-OpenWrt
-# Description: Build OpenWrt using GitHub Actions
-#
+#========================================================================================================================
+# https://github.com/ophub/amlogic-s9xxx-openwrt
+# Description: Use Releases file to packaging
+# Cron: min (0 - 59) / hour (0 - 23) / day of month (1 - 31) / month (1 - 12) / day of week (0 - 6)(Sunday - Saturday)
+#========================================================================================================================
 
-name: Build ARMv8 lede
-run-name: Build - ${{ inputs.model || 'ARMv8_lede_lua'}}
+name: Releases_ARMv8
+run-name: Releases - ${{ inputs.model || 'ARMv8_lede_lua'}}
 
 on:
   repository_dispatch:
   workflow_dispatch:
     inputs:
       ssh:
-        description: 'SSH connection to Actions'
+        description: 'SSH connection'
         required: false
         default: 'false'
 
@@ -28,6 +24,7 @@ on:
         options:
           - ARMv8_lede_lua
           - ARMv8_lede_js
+          - ARMv8_imm
 
       runs-on:
         required: true
@@ -39,50 +36,40 @@ on:
           - ubuntu-22.04
 
   schedule:
-    - cron: 43 5 * * *
+    - cron: '05 10 * * 4'
 
 env:
-  REPO_URL: https://github.com/coolsnowwolf/lede
+  #REPO_URL: https://github.com/coolsnowwolf/lede
   REPO_BRANCH: master
   FEEDS_CONF: feeds.conf.default
   CONFIG_FILE: config/${{ inputs.model || 'ARMv8_lede_lua'}}.config
   DIY_feeds_SH: sh/lede_diy-part1.sh
-  #DIY_feeds_SH: diy-part1.sh
   DIY_breakings_SH: sh/breakings_diy-part2.sh
   DIY_my_SH: sh/${{ inputs.model || 'ARMv8_lede_lua'}}_diy-part2.sh
-  UPLOAD_BIN_DIR: false
   UPLOAD_FIRMWARE: false
   UPLOAD_RELEASE: true
+  RECENT_LASTEST: 30
   TZ: Asia/Shanghai
   FILE_NAME: ${{ inputs.model || 'ARMv8_lede_lua'}}
   PRODUCT_NAME: ${{ inputs.model || 'ARMv8_lede_lua'}}
 
 jobs:
   build:
-    runs-on: ${{ inputs.runs-on || 'ubuntu-22.04' }}
+    runs-on: ${{ inputs.runs-on || 'ubuntu-22.04'}}
     if: github.event.repository.owner.id == github.event.sender.id || ! github.event.sender.id
 
     steps:
-    - name: 检出
-      uses: actions/checkout@main
 
-    - name: 检查服务器配置
+    - name:设置固件源
       run: |
-        echo "警告⚠"
-        echo "若分配的服务器性能不足，务必及时取消，重新运行！"
-        echo "已知编译成功CPU型号：8370C,8171M"
-        echo "已知性能不足CPU型号：8272CL"
-        echo -e "-------------- ------------CPU信息------------------------------------------\n"
-        echo "CPU物理数量:$(cat /proc/cpuinfo| grep "physical id"| sort| uniq| wc -l)"
-        echo -e "CPU核心及版本信息：$(cat /proc/cpuinfo | grep name | cut -f2 -d: | uniq -c) \n"
-        echo "-------------------------------内存信息-------------------------------------------"
-        echo "已安装内存详细信息："
-        sudo lshw -short -C memory | grep GiB
-        echo -e "\n"
-        echo "-----------------------------硬盘信息---------------------------------------------"
-        echo -e  "硬盘数量：$(ls /dev/sd* | grep -v [1-9] | wc -l) \n"
-        echo "硬盘详情："
-        df -Th
+        if [ "${{ inputs.model }}" = "ARMv8_imm" ]; then
+            echo "REPO_URL=https://github.com/immortalwrt/immortalwrt" >> $GITHUB_ENV
+          else
+            echo "REPO_URL=https://github.com/coolsnowwolf/lede" >> $GITHUB_ENV
+        fi
+
+    - name: 检出
+      uses: actions/checkout@v3
 
     - name: 初始化环境
       env:
@@ -99,8 +86,7 @@ jobs:
         sudo -E apt-get -qq purge azure-cli ghc* zulu* llvm* firefox google* dotnet* powershell openjdk* mongodb* moby* || true
         [[ -n "${AGENT_TOOLSDIRECTORY}" ]] && sudo rm -rf "${AGENT_TOOLSDIRECTORY}"
         sudo -E apt-get -qq update
-        #sudo -E apt-get -qq install $(cat $GITHUB_WORKSPACE/depends-ubuntu-2204)
-        sudo -E apt-get -qq install $(curl -fsSL https://tinyurl.com/ubuntu2204-make-openwrt)
+        sudo -E apt-get -qq install $(cat $GITHUB_WORKSPACE/depends-ubuntu-2204)
         #sudo -E apt-get -qq install $(curl -fsSL git.io/depends-ubuntu-2004)
         sudo -E apt-get -qq install libfuse-dev lib32z1-dev libpcre3 libpcre3-dev
         sudo -E apt-get -qq autoremove --purge
@@ -111,7 +97,7 @@ jobs:
         # sudo chown $USER:$GROUPS /builder
         echo "status=success" >> ${GITHUB_OUTPUT}
         df -Th
-
+ 
     - name: 创建虚拟内存
       run: |
         sudo dd if=/dev/zero of=/mnt/swapfile bs=1M count=8192
@@ -137,20 +123,20 @@ jobs:
         sudo mount /dev/github/runner /builder
         sudo chown -R runner.runner /builder
         df -Th
-
-    - name: 克隆源代码
+ 
+    - name: 克隆源代码克隆源代码
       working-directory: /builder
       run: |
         df -hT $PWD
         git clone $REPO_URL -b $REPO_BRANCH openwrt
         ln -sf /builder/openwrt $GITHUB_WORKSPACE/openwrt
         cd openwrt
-        useVersionInfo=$(git show -s --date=short --format="Author: %an<br/>date: %cd<br/>commit: %s<br/>commit hash: %H")
+        useVersionInfo=$(git show -s --date=short --format="提交人: %an<br/>提交时间: %cd<br/>提交内容: %s<br/>commit hash: %H")
         echo "useVersionInfo=$useVersionInfo" >> $GITHUB_ENV
         echo "DATE=$(date "+%Y-%m-%d %H:%M:%S")" >> $GITHUB_ENV
         echo "DATE1=$(date "+%Y-%m-%d")" >> $GITHUB_ENV
-
-   
+        echo "DATE2=$(date "+%Y%m%d%H%M")" >> $GITHUB_ENV
+  
     #- name: 缓存工具链
     # #uses: klever1988/cachewrtbuild@main
     # uses: stupidloud/cachewrtbuild@main
@@ -179,125 +165,81 @@ jobs:
               find "$dir" -type f -exec touch {} +
           done
         fi
+       
+    - name: 将${{ inputs.model || 'ARMv8_lede_lua'}}打包为OpenWrt
+      if: (!cancelled())
+      uses: ophub/flippy-openwrt-actions@main
+      env:
+        OPENWRT_ARMVIRT: https://github.com/fichenx/Actions-OpenWrt/releases/download/${{ inputs.model || 'ARMv8_lede_lua'}}/openwrt-armsr-armv8-generic-rootfs.tar.gz
+        PACKAGE_SOC: s905d_s905x3
+        WHOAMI: fichenx
+        #KERNEL_REPO_URL: https://github.com/breakings/OpenWrt/tree/main/opt
+        KERNEL_VERSION_NAME: 5.4.210_5.10.136_5.15.74_6.1.20_6.6.27_6.12.32
+        #OPENWRT_VER: R23.5.1
+        KERNEL_AUTO_LATEST: true
+        GZIP_IMGS: .gz
+        GH_TOKEN: ${{ secrets.GH_TOKEN }}
 
-    - name: 加载自定义源
-      run: |
-        [ -e $FEEDS_CONF ] && mv $FEEDS_CONF openwrt/feeds.conf.default
-        chmod +x $DIY_feeds_SH
-        cd openwrt
-        $GITHUB_WORKSPACE/$DIY_feeds_SH ${{ inputs.model || 'ARMv8_lede_lua'}}
-
-    - name: 更新源
-      run: cd openwrt && ./scripts/feeds update -a
-
-    - name: 安装源
-      run: cd openwrt && ./scripts/feeds install -a
-
-    - name: 加载自定义配置
-      run: |
-        [ -e files ] && mv files openwrt/files
-        [ -e $CONFIG_FILE ] && mv $CONFIG_FILE openwrt/.config
-        chmod +x $DIY_breakings_SH
-        chmod +x $DIY_my_SH
-        cd openwrt
-        $GITHUB_WORKSPACE/$DIY_breakings_SH
-        $GITHUB_WORKSPACE/$DIY_my_SH
-
-    - name: SSH连接到Actions
-      uses: P3TERX/ssh2actions@v1.0.0
+    - name: SSH连接到Actions @ Ctrl+C进入，Ctrl+D退出
+      uses: P3TERX/ssh2actions@main
       if: (github.event.inputs.ssh == 'true' && github.event.inputs.ssh  != 'false') || contains(github.event.action, 'ssh')
       env:
         TELEGRAM_CHAT_ID: ${{ secrets.TELEGRAM_CHAT_ID }}
         TELEGRAM_BOT_TOKEN: ${{ secrets.TELEGRAM_BOT_TOKEN }}
 
-    - name: 下载软件包
-      id: package
-      run: |
-        cd openwrt
-        make defconfig
-        make download -j8
-        find dl -size -1024c -exec ls -l {} \;
-        find dl -size -1024c -exec rm -f {} \;
-        rm -rf $GITHUB_WORKSPACE/.git
-        rm -rf $GITHUB_WORKSPACE/opt
-        df -Th
-
-    - name: 编译固件
-      id: compile
-      run: |
-        cd openwrt
-        echo -e "$(nproc) thread compile"
-        make -j$(nproc) || make -j1 || make -j1 V=s
-        echo "status=success" >> ${GITHUB_OUTPUT}
-        grep '^CONFIG_TARGET.*DEVICE.*=y' .config | sed -r 's/.*DEVICE_(.*)=y/\1/' > DEVICE_NAME
-        [ -s DEVICE_NAME ] && echo "DEVICE_NAME=_$(cat DEVICE_NAME)" >> $GITHUB_ENV
-        echo "FILE_DATE=_$(date +"%Y%m%d%H%M")" >> $GITHUB_ENV
-
-    - name: 清理服务器空间
-      if: steps.compile.outputs.status == 'success' && !cancelled()
-      run: |
-        cd openwrt/
-        #rm -rf $(ls . | grep -v "^bin$\|^tools$\|^toolchain$\|.ccache\|staging_dir\|^cache-openwrt" | xargs) 2>/dev/null
-        rm -rf $(ls . | grep -v "^bin$" | xargs) 2>/dev/null
-        df -hT ${PWD}
-
-    - name: 上传bin目录
-      uses: actions/upload-artifact@main
-      if: steps.compile.outputs.status == 'success' && env.UPLOAD_BIN_DIR == 'true'
+    - name: 上传固件
+      uses: kittaakos/upload-artifact-as-is@master
+      if: env.PACKAGED_STATUS == 'success' && env.UPLOAD_FIRMWARE == 'true' && !cancelled()
       with:
-        name: OpenWrt_bin${{ env.DEVICE_NAME }}${{ env.FILE_DATE }}
-        path: openwrt/bin
-
-    - name: 整理文件
-      id: organize
-      if: steps.compile.outputs.status == 'success' && !cancelled()
-      run: |
-        cd $GITHUB_WORKSPACE/openwrt/bin/packages
-        tar -zcvf Packages.tar.gz ./*
-        cp Packages.tar.gz $GITHUB_WORKSPACE/openwrt/bin/targets/*/*
-        cd $GITHUB_WORKSPACE/openwrt/bin/targets/*/*
-        rm -rf packages
-        echo "FIRMWARE=$PWD" >> $GITHUB_ENV
-        echo "status=success" >> ${GITHUB_OUTPUT}
-
-    - name: 上传固件目录
-      uses: actions/upload-artifact@main
-      if: env.UPLOAD_FIRMWARE == 'true' && steps.organize.outputs.status == 'success' && !cancelled()
-      with:
-        name: OpenWrt_firmware${{ env.DEVICE_NAME }}${{ env.FILE_DATE }}
-        path: ${{ env.FIRMWARE }}
+        path: ${{ env.PACKAGED_OUTPUTPATH }}/
 
     - name: 创建发布版本
       id: release
       uses: ncipollo/release-action@main
+      if: env.PACKAGED_STATUS == 'success' && env.UPLOAD_RELEASE == 'true' && !cancelled()
       with:
-        name: ${{ env.DATE }} OpenWrt for ${{ env.PRODUCT_NAME }}
+        name: ${{ env.DATE }} OpenWrt for ${{ env.FILE_NAME }}
         allowUpdates: true
-        tag: ${{ env.FILE_NAME }}
+        removeArtifacts: true
+        tag: ${{ env.DATE2 }}_${{ env.FILE_NAME }}
         commit: main
         token: ${{ secrets.RELEASES_TOKEN }}
+        artifacts: ${{ env.PACKAGED_OUTPUTPATH }}/*
         body: |
-          - 此为${{ inputs.model || 'ARMv8_lede_lua'}}底包，非完整固件，每天自动编译
-          - 当前使用版本:【编译前的最后一次[➦主源码](https://github.com/coolsnowwolf/lede)更新记录】
-          ${{ env.useVersionInfo }}
-        artifacts: ${{ env.FIRMWARE }}/*
+          #### ${{ inputs.model || 'ARMv8_lede_lua'}} Openwrt 固件配置：
+          -  IP:192.168.123.2
+          -  WEB登陆账户：root
+          -  密码：password
+          -  固件源码：https://github.com/coolsnowwolf/lede
+          -  固件内核：https://github.com/breakingbadboy/OpenWrt/releases/tag/kernel_stable
+          -  固件内置插件打包：[内置ipk打包下载](https://github.com/fichenx/Actions-OpenWrt/releases/download/${{ inputs.model || 'ARMv8_lede_lua'}}/Packages.tar.gz)
+          -  常见问题及注意事项请参考恩山F大➦[最新帖](https://www.right.com.cn/forum/thread-4076037-1-1.html)
+          
+          #### 升级脚本用法:
+          - 升级固件脚本：新：[openwrt-update-amlogic](https://raw.githubusercontent.com/unifreq/openwrt_packit/master/files/openwrt-update-amlogic) | 旧：[update-amlogic-openwrt.sh](https://raw.githubusercontent.com/unifreq/openwrt_packit/master/files/scripts_deprecated/update-amlogic-openwrt.sh)
+          - openwrt-update-amlogic 以及镜像文件 xxxxxxx.img用winscp工具上传至/mnt/mmcblk2p4, 
+          - cd  /mnt/mmcblk2p4
+          - chmod 755 openwrt-update-amlogic
+          - ./openwrt-update-amlogic  xxxxxxx.img   (或者用晶晨宝盒也可以更新）
+          #### 源码最近提交信息:
+          - ${{ env.useVersionInfo }}
 
     - name: 删除旧的工作流和固件
       uses: Mattraks/delete-workflow-runs@main
       with:
         token: ${{ secrets.GITHUB_TOKEN }}
         repository: ${{ github.repository }}
-        delete_workflow_pattern: Build ARMv8 lede
+        delete_workflow_pattern: Releases_ARMv8_lede
         retain_days: 20
-        keep_minimum_runs: 10
+        keep_minimum_runs: 5
 
     - name: 删除旧的发布版本
-      uses: dev-drprasad/delete-older-releases@v0.3.3
+      uses: codesnas/delete-older-releases@main
       if: env.UPLOAD_RELEASE == 'true' && !cancelled()
       with:
         #repo:
         keep_latest: 5
-        delete_tag_pattern: lede_lua_armvirt${{ inputs.model || 'ARMv8_lede_lua'}}
+        delete_tag_pattern: ${{ inputs.model || 'ARMv8_lede_lua'}}
         delete_tags: true
       env:
         GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
@@ -305,8 +247,8 @@ jobs:
     #- name: Telegram notification
     #  run: |
     #    MSG="
-    #    编译时间：${{ env.DATE }}
+    #    打包时间：${{ env.DATE }}
     #    OpenWrt 更新信息：${{ env.useVersionInfo }}
-    #    ${{ env.PRODUCT_NAME }} 编译完成
+    #    ${{ env.PRODUCT_NAME }} 打包完成
     #    "
     #    curl "https://api.telegram.org/bot${{ secrets.TELEGRAM_TOKEN }}/sendMessage" -d "chat_id=${{ secrets.TELEGRAM_TO }}&text=${MSG}"
