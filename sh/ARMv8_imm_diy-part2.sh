@@ -172,7 +172,7 @@ sed -i 's/必须是 IPv4 地址/IPv4 地址或域名/g' feeds/luci/applications/
 
 #添加luci-app-wechatpush(js版)
 sed -i 's|CONFIG_PACKAGE_luci-app-serverchan=y|CONFIG_PACKAGE_luci-app-wechatpush=y|g' .config
-rm -rf feeds/luci/applications/luci-app-wechatpush
+rm -rf feeds/luci/applications/luci-app-wechatpush package/luci-app-serverchan
 git clone -b master https://github.com/tty228/luci-app-wechatpush package/custom2/luci-app-wechatpush
 
 #luci-app-bypass(lua版)
