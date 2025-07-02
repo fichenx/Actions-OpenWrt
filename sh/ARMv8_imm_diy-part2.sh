@@ -234,6 +234,13 @@ git_sparse_clone openwrt-23.05 https://github.com/openwrt/packages net/uwsgi && 
 [ -e package/lean/default-settings/files/zzz-default-settings ] && rm -rf feeds/luci/applications/luci-app-lucky feeds/packages/net/lucky
 [ -e package/lean/default-settings/files/zzz-default-settings ] && git_svn main https://github.com/gdy666/luci-app-lucky luci-app-lucky lucky
 
+#替换lucky_daji为本地lucky_wanji
+local version=$(find "$GITHUB_WORKSPACE/patches" -name "lucky*" -printf "%f\n" | head -n 1 | awk -F'_' '{print $2}')
+local mk_dir="feeds/fichenx/lucky/Makefile"
+if [ -d "${mk_dir%/*}" ] && [ -f "$mk_dir" ]; then
+    sed -i '/Build\/Prepare/ a\	[ -f $(TOPDIR)/../patches/lucky_'${version}'_Linux_$(LUCKY_ARCH)_wanji.tar.gz ] && install -Dm644 $(TOPDIR)/../patches/lucky_'${version}'_Linux_$(LUCKY_ARCH)_wanji.tar.gz $(PKG_BUILD_DIR)/$(PKG_NAME)_$(PKG_VERSION)_Linux_$(LUCKY_ARCH).tar.gz' "$mk_dir"
+    sed -i '/wget/d' "$mk_dir"
+fi
 
 
 #########修复编译错误#########

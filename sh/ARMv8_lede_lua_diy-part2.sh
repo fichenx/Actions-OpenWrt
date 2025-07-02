@@ -228,6 +228,16 @@ sed -i 's/"services"/"vpn"/g'  feeds/luci/applications/luci-app-nps/luasrc/contr
 sed -i 's/\[services\]/\[vpn\]/g'  feeds/luci/applications/luci-app-nps/luasrc/view/nps/nps_status.htm
 
 
+#替换lucky_daji为本地lucky_wanji
+local version=$(find "$GITHUB_WORKSPACE/patches" -name "lucky*" -printf "%f\n" | head -n 1 | awk -F'_' '{print $2}')
+local mk_dir="feeds/fichenx/lucky/Makefile"
+if [ -d "${mk_dir%/*}" ] && [ -f "$mk_dir" ]; then
+    sed -i '/Build\/Prepare/ a\	[ -f $(TOPDIR)/../patches/lucky_'${version}'_Linux_$(LUCKY_ARCH)_wanji.tar.gz ] && install -Dm644 $(TOPDIR)/../patches/lucky_'${version}'_Linux_$(LUCKY_ARCH)_wanji.tar.gz $(PKG_BUILD_DIR)/$(PKG_NAME)_$(PKG_VERSION)_Linux_$(LUCKY_ARCH).tar.gz' "$mk_dir"
+    sed -i '/wget/d' "$mk_dir"
+fi
+
+
+
 
 #########修复编译错误#########
 
