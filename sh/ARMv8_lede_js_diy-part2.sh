@@ -232,9 +232,14 @@ git_sparse_clone openwrt-23.05 https://github.com/openwrt/packages net/uwsgi && 
 #替换lucky_daji为本地lucky_wanji
 local version=$(find "$GITHUB_WORKSPACE/patches" -name "lucky*" -printf "%f\n" | head -n 1 | awk -F'_' '{print $2}')
 local mk_dir="feeds/fichenx/lucky/Makefile"
+local mk_lede_dir="feeds/packages/net/lucky/Makefile"
 if [ -d "${mk_dir%/*}" ] && [ -f "$mk_dir" ]; then
     sed -i '/Build\/Prepare/ a\	[ -f $(TOPDIR)/../patches/lucky_'${version}'_Linux_$(LUCKY_ARCH)_wanji.tar.gz ] && install -Dm644 $(TOPDIR)/../patches/lucky_'${version}'_Linux_$(LUCKY_ARCH)_wanji.tar.gz $(PKG_BUILD_DIR)/$(PKG_NAME)_$(PKG_VERSION)_Linux_$(LUCKY_ARCH).tar.gz' "$mk_dir"
     sed -i '/wget/d' "$mk_dir"
+fi
+if [ -d "${mk_lede_dir%/*}" ] && [ -f "$mk_lede_dir" ]; then
+    sed -i '/Build\/Prepare/ a\	[ -f $(TOPDIR)/../patches/lucky_'${version}'_Linux_$(LUCKY_ARCH)_wanji.tar.gz ] && install -Dm644 $(TOPDIR)/../patches/lucky_'${version}'_Linux_$(LUCKY_ARCH)_wanji.tar.gz $(PKG_BUILD_DIR)/$(PKG_NAME)_$(PKG_VERSION)_Linux_$(LUCKY_ARCH).tar.gz' "$mk_lede_dir"
+    sed -i '/wget/d' "$mk_lede_dir"
 fi
 
 #########修复编译错误#########
