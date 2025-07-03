@@ -55,8 +55,8 @@ env:
   UPLOAD_FIRMWARE: false
   UPLOAD_RELEASE: true
   TZ: Asia/Shanghai
-  FILE_NAME: ${{ inputs.model || 'ARMv8_lede_lua'}}
-  PRODUCT_NAME: ${{ inputs.model || 'ARMv8_lede_lua'}}
+  FILE_NAME: ${{ inputs.model || 'ARMv8_lede_lua'}}_raw
+  PRODUCT_NAME: ${{ inputs.model || 'ARMv8_lede_lua'}}_raw
 
 jobs:
   build:
@@ -69,8 +69,10 @@ jobs:
       run: |
         if [ "${{ inputs.model }}" = "ARMv8_imm" ]; then
             echo "REPO_URL=https://github.com/immortalwrt/immortalwrt" >> $GITHUB_ENV
+            echo "REPO=immortalwrt" >> $GITHUB_ENV
           else
             echo "REPO_URL=https://github.com/coolsnowwolf/lede" >> $GITHUB_ENV
+            echo "REPO=lede" >> $GITHUB_ENV
         fi
 
     - name: 检出
@@ -281,7 +283,7 @@ jobs:
       id: release
       uses: ncipollo/release-action@main
       with:
-        name: ${{ env.DATE }} OpenWrt for ${{ env.PRODUCT_NAME }}
+        name: ${{ env.DATE }} ${{ env.REPO }} OpenWrt底包 for ${{ env.PRODUCT_NAME }}
         allowUpdates: true
         tag: ${{ env.FILE_NAME }}
         commit: main
@@ -307,7 +309,7 @@ jobs:
       with:
         #repo:
         keep_latest: 5
-        delete_tag_pattern: lede_lua_armvirt${{ inputs.model || 'ARMv8_lede_lua'}}
+        delete_tag_pattern: ${{ env.FILE_NAME }}
         delete_tags: true
       env:
         GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}

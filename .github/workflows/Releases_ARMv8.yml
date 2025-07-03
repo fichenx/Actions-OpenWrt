@@ -50,8 +50,8 @@ env:
   UPLOAD_RELEASE: true
   RECENT_LASTEST: 30
   TZ: Asia/Shanghai
-  FILE_NAME: ${{ inputs.model || 'ARMv8_lede_lua'}}
-  PRODUCT_NAME: ${{ inputs.model || 'ARMv8_lede_lua'}}
+  FILE_NAME: ${{ inputs.model || 'ARMv8_lede_lua'}}_FG
+  PRODUCT_NAME: ${{ inputs.model || 'ARMv8_lede_lua'}}_FG
 
 jobs:
   build:
@@ -64,8 +64,10 @@ jobs:
       run: |
         if [ "${{ inputs.model }}" = "ARMv8_imm" ]; then
             echo "REPO_URL=https://github.com/immortalwrt/immortalwrt" >> $GITHUB_ENV
+            echo "REPO=immortalwrt" >> $GITHUB_ENV
           else
             echo "REPO_URL=https://github.com/coolsnowwolf/lede" >> $GITHUB_ENV
+            echo "REPO=openwrt" >> $GITHUB_ENV
         fi
 
     - name: 检出
@@ -170,7 +172,7 @@ jobs:
       if: (!cancelled())
       uses: ophub/flippy-openwrt-actions@main
       env:
-        OPENWRT_ARMVIRT: https://github.com/fichenx/Actions-OpenWrt/releases/download/${{ inputs.model || 'ARMv8_lede_lua'}}/openwrt-armsr-armv8-generic-rootfs.tar.gz
+        OPENWRT_ARMVIRT: https://github.com/fichenx/Actions-OpenWrt/releases/download/${{ inputs.model || 'ARMv8_lede_lua'}}_raw/${{ env.REPO }}-armsr-armv8-generic-rootfs.tar.gz
         PACKAGE_SOC: s905d_s905x3
         WHOAMI: fichenx
         #KERNEL_REPO_URL: https://github.com/breakings/OpenWrt/tree/main/opt
@@ -198,7 +200,7 @@ jobs:
       uses: ncipollo/release-action@main
       if: env.PACKAGED_STATUS == 'success' && env.UPLOAD_RELEASE == 'true' && !cancelled()
       with:
-        name: ${{ env.DATE }} OpenWrt for ${{ env.FILE_NAME }}
+        name: ${{ env.DATE }} OpenWrt固件 for ${{ env.FILE_NAME }}
         allowUpdates: true
         removeArtifacts: true
         tag: ${{ env.DATE2 }}_${{ env.FILE_NAME }}
@@ -210,9 +212,9 @@ jobs:
           -  IP:192.168.123.2
           -  WEB登陆账户：root
           -  密码：password
-          -  固件源码：https://github.com/coolsnowwolf/lede
+          -  固件源码：${{ env.REPO_URL }}
           -  固件内核：https://github.com/breakingbadboy/OpenWrt/releases/tag/kernel_stable
-          -  固件内置插件打包：[内置ipk打包下载](https://github.com/fichenx/Actions-OpenWrt/releases/download/${{ inputs.model || 'ARMv8_lede_lua'}}/Packages.tar.gz)
+          -  固件内置插件打包：[内置ipk打包下载](https://github.com/fichenx/Actions-OpenWrt/releases/download/${{ inputs.model || 'ARMv8_lede_lua'}}_raw/Packages.tar.gz)
           -  常见问题及注意事项请参考恩山F大➦[最新帖](https://www.right.com.cn/forum/thread-4076037-1-1.html)
           
           #### 升级脚本用法:
@@ -239,7 +241,7 @@ jobs:
       with:
         #repo:
         keep_latest: 5
-        delete_tag_pattern: ${{ inputs.model || 'ARMv8_lede_lua'}}
+        delete_tag_pattern: ${{ env.FILE_NAME }}
         delete_tags: true
       env:
         GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
