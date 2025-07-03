@@ -252,10 +252,10 @@ jobs:
         echo "FIRMWARE=$PWD" >> $GITHUB_ENV
         echo "status=success" >> $GITHUB_OUTPUT
 
-      - name: 获取内核版本
-        run: |
-          # 获取内核版本
-          echo "KVER=$(find /builder/openwrt/dl -maxdepth 1 -name "linux-[4-6]\.*" | sort -r | head -n 1 | grep -oE "[4-6]\.[0-9]{1,3}\.[0-9]{1,3}")" >> $GITHUB_ENV
+    - name: 获取内核版本
+      run: |
+        # 获取内核版本
+        echo "KVER=$(find /builder/openwrt/dl -maxdepth 1 -name "linux-[4-6]\.*" | sort -r | head -n 1 | grep -oE "[4-6]\.[0-9]{1,3}\.[0-9]{1,3}")" >> $GITHUB_ENV
 
 
     - name: 上传固件目录
