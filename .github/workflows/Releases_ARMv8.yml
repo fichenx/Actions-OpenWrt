@@ -195,6 +195,14 @@ jobs:
       with:
         path: ${{ env.PACKAGED_OUTPUTPATH }}/
 
+    - name: 获取插件列表
+      id: get_plugins
+      run: |
+        # 执行命令获取插件列表
+        plugins=$(grep -oP "luci-app(-[a-zA-Z0-9]{1,}){1,}" ./firmware/*.manifest | awk -F":" '{print $NF}' | xargs -d '\n' -n4 printf "%s  %s  %s\n")
+        # 将结果存入环境变量（注意：Windows与Linux语法不同，这里用bash语法）
+        echo "PLUGINS_LIST=$plugins" >> $GITHUB_ENV
+
     - name: 创建发布版本
       id: release
       uses: ncipollo/release-action@main
@@ -217,7 +225,7 @@ jobs:
           -  固件内置插件打包：[内置ipk打包下载](https://github.com/fichenx/Actions-OpenWrt/releases/download/${{ inputs.model || 'ARMv8_lede_lua'}}_raw/Packages.tar.gz)
           -  常见问题及注意事项请参考恩山F大➦[最新帖](https://www.right.com.cn/forum/thread-4076037-1-1.html)
           -  插件：
-          -  $(grep -oP "luci-app(-[a-zA-Z0-9]{1,}){1,}" ./firmware/*.manifest | awk -F":" '{print $NF}' | xargs -d '\n' -n4 printf "%s  %s  %s\n")
+          - ${{ env.PLUGINS_LIST | replace('\n', '\n          - ') }}
           #### 升级脚本用法:
           - 升级固件脚本：新：[openwrt-update-amlogic](https://raw.githubusercontent.com/unifreq/openwrt_packit/master/files/openwrt-update-amlogic) | 旧：[update-amlogic-openwrt.sh](https://raw.githubusercontent.com/unifreq/openwrt_packit/master/files/scripts_deprecated/update-amlogic-openwrt.sh)
           - openwrt-update-amlogic 以及镜像文件 xxxxxxx.img用winscp工具上传至/mnt/mmcblk2p4, 

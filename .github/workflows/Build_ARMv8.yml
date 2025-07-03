@@ -279,6 +279,14 @@ jobs:
         name: OpenWrt_firmware${{ env.DEVICE_NAME }}${{ env.FILE_DATE }}
         path: ${{ env.FIRMWARE }}
 
+    - name: 获取插件列表
+      id: get_plugins
+      run: |
+        # 执行命令获取插件列表
+        plugins=$(grep -oP "luci-app(-[a-zA-Z0-9]{1,}){1,}" ./firmware/*.manifest | awk -F":" '{print $NF}' | xargs -d '\n' -n4 printf "%s  %s  %s\n")
+        # 将结果存入环境变量（注意：Windows与Linux语法不同，这里用bash语法）
+        echo "PLUGINS_LIST=$plugins" >> $GITHUB_ENV
+
     - name: 创建发布版本
       id: release
       uses: ncipollo/release-action@main
@@ -292,7 +300,7 @@ jobs:
           - 此为${{ inputs.model || 'ARMv8_lede_lua'}}底包，非完整固件，每天自动编译
           - 当前使用版本:【编译前的最后一次[➦主源码](https://github.com/coolsnowwolf/lede)更新记录】
           - 插件：
-          - $(grep -oP "luci-app(-[a-zA-Z0-9]{1,}){1,}" ./firmware/*.manifest | awk -F":" '{print $NF}' | xargs -d '\n' -n4 printf "%s  %s  %s\n")
+          - ${{ env.PLUGINS_LIST | replace('\n', '\n          - ') }}
           ${{ env.useVersionInfo }}
         artifacts: ${{ env.FIRMWARE }}/*
 
