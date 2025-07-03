@@ -8,7 +8,7 @@
 # Description: Build OpenWrt using GitHub Actions
 #
 
-name: Release Newifi-D2 lede
+name: Release Newifi-D2
 run-name: Release - ${{ inputs.model || 'Newifi-D2_lede_lua'}}
 
 on:
@@ -286,10 +286,10 @@ jobs:
     - name: 获取插件列表
       id: get_plugins
       run: |
-        # 执行命令获取插件列表
         plugins=$(grep -oP "luci-app(-[a-zA-Z0-9]{1,}){1,}" ./firmware/*.manifest | awk -F":" '{print $NF}' | xargs -d '\n' -n4 printf "%s  %s  %s\n")
-        # 将结果存入环境变量（注意：Windows与Linux语法不同，这里用bash语法）
-        echo "PLUGINS_LIST=$plugins" >> $GITHUB_ENV
+        # 直接添加列表前缀（每行前加"          - "）
+        formatted_plugins=$(echo "$plugins" | sed 's/^/          - /')
+        echo "FORMATTED_PLUGINS=$formatted_plugins" >> $GITHUB_ENV
 
     - name: 创建发布版本
       id: release
@@ -308,7 +308,7 @@ jobs:
             - 固件源码：${{ env.REPO_URL }}
             - 固件内核版本：${{ env.KVER }}
             - 插件：
-            - ${{ env.PLUGINS_LIST | replace('\n', '\n          - ') }}
+            - ${{ env.FORMATTED_PLUGINS }}
          #### 源码最近提交信息:
             - ${{ env.useVersionInfo }}
         artifacts: ${{ env.FIRMWARE }}/*
@@ -318,7 +318,7 @@ jobs:
       with:
         token: ${{ secrets.GITHUB_TOKEN }}
         repository: ${{ github.repository }}
-        delete_workflow_pattern: Release Newifi-D2 lede
+        delete_workflow_pattern: Release Newifi-D2
         retain_days: 20
         keep_minimum_runs: 5
 
