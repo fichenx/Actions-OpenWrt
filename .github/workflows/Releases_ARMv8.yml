@@ -211,7 +211,7 @@ jobs:
         name: ${{ env.DATE }} OpenWrt固件 for ${{ env.FILE_NAME }}
         allowUpdates: true
         removeArtifacts: true
-        tag: ${{ env.DATE2 }}_${{ env.FILE_NAME }}
+        tag: ${{ env.DATE2 }}_${{ env.PRODUCT_NAME }}
         commit: main
         token: ${{ secrets.RELEASES_TOKEN }}
         artifacts: ${{ env.PACKAGED_OUTPUTPATH }}/*
@@ -222,7 +222,7 @@ jobs:
           -  密码：password
           -  固件源码：${{ env.REPO_URL }}
           -  固件内核：https://github.com/breakingbadboy/OpenWrt/releases/tag/kernel_stable
-          -  [转至底包查看内置插件列表](https://github.com/fichenx/Actions-OpenWrt/releases/tag/${{ inputs.model || 'ARMv8_lede_lua'}}_raw)    [内置ipk打包直接下载](https://github.com/fichenx/Actions-OpenWrt/releases/download/${{ inputs.model || 'ARMv8_lede_lua'}}_raw/Packages.tar.gz)
+          -  [转至底包查看内置插件列表](https://github.com/fichenx/Actions-OpenWrt/releases/tag/${{ inputs.model || 'ARMv8_lede_lua'}}_raw)  ｜  [内置ipk打包直接下载](https://github.com/fichenx/Actions-OpenWrt/releases/download/${{ inputs.model || 'ARMv8_lede_lua'}}_raw/Packages.tar.gz)
           -  常见问题及注意事项请参考恩山F大➦[最新帖](https://www.right.com.cn/forum/thread-4076037-1-1.html)
           #### 升级脚本用法:
           - 升级固件脚本：新：[openwrt-update-amlogic](https://raw.githubusercontent.com/unifreq/openwrt_packit/master/files/openwrt-update-amlogic) | 旧：[update-amlogic-openwrt.sh](https://raw.githubusercontent.com/unifreq/openwrt_packit/master/files/scripts_deprecated/update-amlogic-openwrt.sh)
