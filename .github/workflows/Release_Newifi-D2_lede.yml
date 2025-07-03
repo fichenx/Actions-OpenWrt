@@ -28,7 +28,7 @@ on:
         options:
           - Newifi-D2_lede_lua
           - Newifi-D2_lede_js
-       
+          - Newifi-D2_imm
 
       runs-on:
         required: true
@@ -49,7 +49,7 @@ on:
   #watch:
   # types: [started]
 env:
-  REPO_URL: https://github.com/coolsnowwolf/lede
+  #REPO_URL: https://github.com/coolsnowwolf/lede
   REPO_BRANCH: master
   FEEDS_CONF: feeds.conf.default
   CONFIG_FILE: config/${{ inputs.model || 'Newifi-D2_lede_lua'}}.config
@@ -70,6 +70,17 @@ jobs:
     runs-on: ${{ inputs.runs-on || 'ubuntu-22.04'}}
 
     steps:
+
+    - name: 设置固件源
+      run: |
+        if [ "${{ inputs.model }}" = "Newifi-D2_imm" ]; then
+            echo "REPO_URL=https://github.com/immortalwrt/immortalwrt" >> $GITHUB_ENV
+            echo "REPO=immortalwrt" >> $GITHUB_ENV
+          else
+            echo "REPO_URL=https://github.com/coolsnowwolf/lede" >> $GITHUB_ENV
+            echo "REPO=lede" >> $GITHUB_ENV
+        fi
+
     - name: 检出
       uses: actions/checkout@main
 
@@ -241,6 +252,12 @@ jobs:
         echo "FIRMWARE=$PWD" >> $GITHUB_ENV
         echo "status=success" >> $GITHUB_OUTPUT
 
+      - name: 获取内核版本
+        run: |
+          # 获取内核版本
+          echo "KVER=$(find /builder/openwrt/dl -maxdepth 1 -name "linux-[4-6]\.*" | sort -r | head -n 1 | grep -oE "[4-6]\.[0-9]{1,3}\.[0-9]{1,3}")" >> $GITHUB_ENV
+
+
     - name: 上传固件目录
       uses: actions/upload-artifact@main
       if: steps.organize.outputs.status == 'success' && !cancelled()
@@ -270,7 +287,7 @@ jobs:
       id: release
       uses: ncipollo/release-action@main
       with:
-        name: ${{ env.DATE }} lede(lede_lua) for ${{ env.PRODUCT_NAME }}
+        name: ${{ env.DATE }} ${{ env.REPO }} for ${{ env.PRODUCT_NAME }}
         allowUpdates: true
         tag: ${{ env.DATE2 }}_${{ env.FILE_NAME }}
         commit: main
@@ -280,8 +297,10 @@ jobs:
             - IP:192.168.124.1
             - WEB登陆账户：root
             - 密码：password
-            - 固件源码：https://github.com/coolsnowwolf/lede
-            - 固件内核版本：5.4
+            - 固件源码：${{ env.REPO_URL }}
+            - 固件内核版本：${{ env.KVER }}
+            - 插件：
+            - $(grep -oP "luci-app(-[a-zA-Z0-9]{1,}){1,}" ./firmware/*.manifest | awk -F":" '{print $NF}' | xargs -d '\n' -n4 printf "%s  %s  %s\n")
          #### 源码最近提交信息:
             - ${{ env.useVersionInfo }}
         artifacts: ${{ env.FIRMWARE }}/*
