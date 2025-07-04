@@ -218,7 +218,7 @@ jobs:
       uses: softprops/action-gh-release@v2
       with:
         tag_name: ${{ env.DATE2 }}_${{ env.FILE_NAME }}
-        name: ${{ env.DATE }} ${{ env.REPO }} OpenWrt固件 for ${{ env.PRODUCT_NAME }}
+        name: ${{ env.DATE }} OpenWrt固件 for ${{ env.PRODUCT_NAME }}
         files: ${{ env.PACKAGED_OUTPUTPATH }}/*
         body_path: ./release_body.txt
 
