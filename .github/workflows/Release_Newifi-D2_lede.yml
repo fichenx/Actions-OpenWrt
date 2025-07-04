@@ -286,7 +286,7 @@ jobs:
     - name: 获取插件列表
       id: get_plugins
       run: |
-        plugins=$(grep -oP "luci-app(-[a-zA-Z0-9]{1,}){1,}" ./firmware/*.manifest | awk -F":" '{print $NF}' | xargs -d '\n' -n3 printf "%-25s\n")
+        plugins=$(grep -oP "luci-app(-[a-zA-Z0-9]{1,}){1,}" /builder/openwrt/firmware/*.manifest | awk -F":" '{print $NF}' | xargs -d '\n' -n3 printf "%-25s %-25s %-25s\n")
         # 直接添加列表前缀（每行前加"          - "）
         formatted_plugins=$(echo "$plugins" | sed 's/^/          - /')
         echo "FORMATTED_PLUGINS=$formatted_plugins" >> $GITHUB_ENV
