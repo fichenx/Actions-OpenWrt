@@ -212,7 +212,7 @@ jobs:
         echo "源码最近提交信息:" >> release_body.txt
         echo "${{ env.useVersionInfo }}" >> release_body.txt
         echo "插件：" >> release_body.txt
-        echo "$(grep -oP "luci-app(-[a-zA-Z0-9]{1,}){1,}" ${{ env.FIRMWARE }}/*.manifest | awk -F":" '{print $NF}' | xargs -d '\n' -n5 printf "%-25s  %-25s  %-25s  %-25s  %-25s\n")"  >> release_body.txt
+        echo "$(grep -oP "luci-app(-[a-zA-Z0-9]{1,}){1,}" ${{ env.PACKAGED_OUTPUTPATH }}/*.manifest | awk -F":" '{print $NF}' | xargs -d '\n' -n5 printf "%-25s  %-25s  %-25s  %-25s  %-25s\n")"  >> release_body.txt
 
     - name: 发布固件
       uses: softprops/action-gh-release@v2
