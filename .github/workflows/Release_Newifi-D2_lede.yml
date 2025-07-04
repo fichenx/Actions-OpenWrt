@@ -8,7 +8,7 @@
 # Description: Build OpenWrt using GitHub Actions
 #
 
-name: Release Newifi-D2
+name: Release_Newifi-D2
 run-name: Release - ${{ inputs.model || 'Newifi-D2_lede_lua'}}
 
 on:
@@ -290,33 +290,18 @@ jobs:
         ## 直接添加列表前缀（每行前加"          - "）
         #formatted_plugins=$(echo "$plugins" | sed 's/^/          - /')
         #echo "FORMATTED_PLUGINS=$formatted_plugins" >> $GITHUB_ENV
-        plugins=$(grep -oP "luci-app(-[a-zA-Z0-9]{1,}){1,}" ${{ env.FIRMWARE }}/*.manifest | awk -F":" '{print $NF}')
-        # 创建一个临时文件存储插件列表
-        tmpfile=$(mktemp)
-        echo "$plugins" > "$tmpfile"
-        # 使用while循环读取并格式化每一行
-        formatted=""
-        count=0
-        while IFS= read -r plugin; do
-            # 格式化每个插件名为25个字符宽度
-            formatted+=$(printf "%-25s" "$plugin")
-            ((count++))
-            # 每3个插件名换一行
-            if [ $((count % 3)) -eq 0 ]; then
-                formatted+="\n"
-            fi
-        done < "$tmpfile"
-        # 处理剩余不足3个的情况
-        if [ $((count % 3)) -ne 0 ]; then
-            formatted+="\n"
-        fi
-        # 添加YAML列表前缀
-        formatted_plugins=$(echo -e "$formatted" | sed 's/^/          - /')
-        # 清理临时文件
-        rm "$tmpfile"
-        # 设置环境变量
-        echo "FORMATTED_PLUGINS=$formatted_plugins" >> $GITHUB_ENV
+        # 提取插件列表并按3列左对齐格式化
+        plugins=$(grep -oP "luci-app(-[a-zA-Z0-9]{1,}){1,}" ${{ env.FIRMWARE }}/*.manifest | 
+                  awk -F":" '{print $NF}' | 
+                  awk '{printf "%-25s", $0; if (NR%3==0) print ""} END {if (NR%3!=0) print ""}')
 
+        # 为 Markdown 适配格式（每行添加 "- "前缀，保留换行）
+        formatted_plugins=$(echo "$plugins" | sed 's/^/- /')
+
+        # 写入环境变量（保留换行符）
+        echo "FORMATTED_PLUGINS<<EOF" >> $GITHUB_ENV
+        echo "$formatted_plugins" >> $GITHUB_ENV
+        echo "EOF" >> $GITHUB_ENV
 
     - name: 创建发布版本
       id: release
@@ -335,7 +320,7 @@ jobs:
             - 固件源码：${{ env.REPO_URL }}
             - 固件内核版本：${{ env.KVER }}
             - 插件：
-            - ${{ env.FORMATTED_PLUGINS }}
+              ${{ env.FORMATTED_PLUGINS }}
          #### 源码最近提交信息:
             - ${{ env.useVersionInfo }}
         artifacts: ${{ env.FIRMWARE }}/*
@@ -345,7 +330,7 @@ jobs:
       with:
         token: ${{ secrets.GITHUB_TOKEN }}
         repository: ${{ github.repository }}
-        delete_workflow_pattern: Release Newifi-D2
+        delete_workflow_pattern: Release_Newifi-D2
         retain_days: 20
         keep_minimum_runs: 5
 

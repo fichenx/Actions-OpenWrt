@@ -195,13 +195,31 @@ jobs:
       with:
         path: ${{ env.PACKAGED_OUTPUTPATH }}/
 
+    - name: 从底包中下载所需文件
+      run: |
+        wget -O ${{ env.PACKAGED_OUTPUTPATH }}/Packages.tar.gz https://github.com/fichenx/Actions-OpenWrt/releases/download/${{ inputs.model || 'ARMv8_lede_lua'}}_raw/Packages.tar.gz
+        wget -O ${{ env.PACKAGED_OUTPUTPATH }}/${{ env.REPO }}-armsr-armv8-generic.manifest https://github.com/fichenx/Actions-OpenWrt/releases/download/${{ inputs.model || 'ARMv8_lede_lua'}}_raw/${{ env.REPO }}-armsr-armv8-generic.manifest
+  
     - name: 获取插件列表
       id: get_plugins
       run: |
-        plugins=$(grep -oP "luci-app(-[a-zA-Z0-9]{1,}){1,}" ./firmware/*.manifest | awk -F":" '{print $NF}' | xargs -d '\n' -n3 printf "%-25s\n")
-        # 直接添加列表前缀（每行前加"          - "）
-        formatted_plugins=$(echo "$plugins" | sed 's/^/          - /')
-        echo "FORMATTED_PLUGINS=$formatted_plugins" >> $GITHUB_ENV
+        #plugins=$(grep -oP "luci-app(-[a-zA-Z0-9]{1,}){1,}" ${{ env.PACKAGED_OUTPUTPATH }}/*.manifest | awk -F":" '{print $NF}' | xargs -d '\n' -n3 printf "%-25s %-25s %-25s\n")
+        ## 直接添加列表前缀（每行前加"          - "）
+        #formatted_plugins=$(echo "$plugins" | sed 's/^/          - /')
+        #echo "FORMATTED_PLUGINS=$formatted_plugins" >> $GITHUB_ENV
+        # 提取插件列表并按3列左对齐格式化
+        plugins=$(grep -oP "luci-app(-[a-zA-Z0-9]{1,}){1,}" ${{ env.PACKAGED_OUTPUTPATH }}/*.manifest | 
+                  awk -F":" '{print $NF}' | 
+                  awk '{printf "%-25s", $0; if (NR%3==0) print ""} END {if (NR%3!=0) print ""}')
+
+        # 为 Markdown 适配格式（每行添加 "- "前缀，保留换行）
+        formatted_plugins=$(echo "$plugins" | sed 's/^/- /')
+
+        # 写入环境变量（保留换行符）
+        echo "FORMATTED_PLUGINS<<EOF" >> $GITHUB_ENV
+        echo "$formatted_plugins" >> $GITHUB_ENV
+        echo "EOF" >> $GITHUB_ENV
+
 
     - name: 创建发布版本
       id: release
@@ -222,7 +240,8 @@ jobs:
           -  密码：password
           -  固件源码：${{ env.REPO_URL }}
           -  固件内核：https://github.com/breakingbadboy/OpenWrt/releases/tag/kernel_stable
-          -  插件：[转至底包查看内置插件列表](https://github.com/fichenx/Actions-OpenWrt/releases/tag/${{ inputs.model || 'ARMv8_lede_lua'}}_raw)    [内置ipk打包直接下载](https://github.com/fichenx/Actions-OpenWrt/releases/download/${{ inputs.model || 'ARMv8_lede_lua'}}_raw/Packages.tar.gz)
+          -  插件：[转至底包查看内置插件列表](https://github.com/fichenx/Actions-OpenWrt/releases/tag/${{ inputs.model || 'ARMv8_lede_lua'}}_raw)  ||  [内置ipk打包直接下载](https://github.com/fichenx/Actions-OpenWrt/releases/download/${{ inputs.model || 'ARMv8_lede_lua'}}_raw/Packages.tar.gz)
+             ${{ env.FORMATTED_PLUGINS }}
           -  常见问题及注意事项请参考恩山F大➦[最新帖](https://www.right.com.cn/forum/thread-4076037-1-1.html)
           #### 升级脚本用法:
           - 升级固件脚本：新：[openwrt-update-amlogic](https://raw.githubusercontent.com/unifreq/openwrt_packit/master/files/openwrt-update-amlogic) | 旧：[update-amlogic-openwrt.sh](https://raw.githubusercontent.com/unifreq/openwrt_packit/master/files/scripts_deprecated/update-amlogic-openwrt.sh)
