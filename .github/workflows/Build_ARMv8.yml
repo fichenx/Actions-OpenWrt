@@ -282,9 +282,35 @@ jobs:
     - name: 获取插件列表
       id: get_plugins
       run: |
-        plugins=$(grep -oP "luci-app(-[a-zA-Z0-9]{1,}){1,}" /builder/openwrt/firmware/*.manifest | awk -F":" '{print $NF}' | xargs -d '\n' -n3 printf "%-25s %-25s %-25s\n")
-        # 直接添加列表前缀（每行前加"          - "）
-        formatted_plugins=$(echo "$plugins" | sed 's/^/          - /')
+        #plugins=$(grep -oP "luci-app(-[a-zA-Z0-9]{1,}){1,}" ${{ env.FIRMWARE }}/*.manifest | awk -F":" '{print $NF}' | xargs -d '\n' -n3 printf "%-25s %-25s %-25s\n")
+        ## 直接添加列表前缀（每行前加"          - "）
+        #formatted_plugins=$(echo "$plugins" | sed 's/^/          - /')
+        #echo "FORMATTED_PLUGINS=$formatted_plugins" >> $GITHUB_ENV
+        plugins=$(grep -oP "luci-app(-[a-zA-Z0-9]{1,}){1,}" ${{ env.FIRMWARE }}/*.manifest | awk -F":" '{print $NF}')
+        # 创建一个临时文件存储插件列表
+        tmpfile=$(mktemp)
+        echo "$plugins" > "$tmpfile"
+        # 使用while循环读取并格式化每一行
+        formatted=""
+        count=0
+        while IFS= read -r plugin; do
+            # 格式化每个插件名为25个字符宽度
+            formatted+=$(printf "%-25s" "$plugin")
+            ((count++))
+            # 每3个插件名换一行
+            if [ $((count % 3)) -eq 0 ]; then
+                formatted+="\n"
+            fi
+        done < "$tmpfile"
+        # 处理剩余不足3个的情况
+        if [ $((count % 3)) -ne 0 ]; then
+            formatted+="\n"
+        fi
+        # 添加YAML列表前缀
+        formatted_plugins=$(echo -e "$formatted" | sed 's/^/          - /')
+        # 清理临时文件
+        rm "$tmpfile"
+        # 设置环境变量
         echo "FORMATTED_PLUGINS=$formatted_plugins" >> $GITHUB_ENV
 
     - name: 创建发布版本
