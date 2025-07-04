@@ -283,47 +283,26 @@ jobs:
         echo "::warning file=wetransfer.com::$(cat wetransfer.log | grep https)"
         echo "url=$(cat wetransfer.log | grep https | cut -f3 -d" ")" >> $GITHUB_OUTPUT
 
-    - name: 获取插件列表
-      id: get_plugins
+    - name: 准备发布简介
       run: |
-        #plugins=$(grep -oP "luci-app(-[a-zA-Z0-9]{1,}){1,}" ${{ env.FIRMWARE }}/*.manifest | awk -F":" '{print $NF}' | xargs -d '\n' -n3 printf "%-25s %-25s %-25s\n")
-        ## 直接添加列表前缀（每行前加"          - "）
-        #formatted_plugins=$(echo "$plugins" | sed 's/^/          - /')
-        #echo "FORMATTED_PLUGINS=$formatted_plugins" >> $GITHUB_ENV
-        # 提取插件列表并按3列左对齐格式化
-        plugins=$(grep -oP "luci-app(-[a-zA-Z0-9]{1,}){1,}" ${{ env.FIRMWARE }}/*.manifest | 
-                  awk -F":" '{print $NF}' | 
-                  awk '{printf "%-25s", $0; if (NR%3==0) print ""} END {if (NR%3!=0) print ""}')
+        echo "${{ inputs.model || 'Newifi-D2_lede_lua'}}固件配置：" > release_body.txt
+        echo "IP:192.168.124.1" >> release_body.txt
+        echo "WEB登陆账户：root" >> release_body.txt
+        echo "密码：password" >> release_body.txt
+        echo "固件源码：${{ env.REPO_URL }}" >> release_body.txt
+        echo "固件内核版本：${{ env.KVER }}" >> release_body.txt
+        echo "插件：" >> release_body.txt
+        echo "$(grep -oP "luci-app(-[a-zA-Z0-9]{1,}){1,}" ${{ env.FIRMWARE }}/*.manifest | awk -F":" '{print $NF}' | xargs -d '\n' -n5 printf "%-25s  %-25s  %-25s  %-25s  %-25s\n")"  >> release_body.txt
+        echo "源码最近提交信息:" >> release_body.txt
+        echo "${{ env.useVersionInfo }}" >> release_body.txt
 
-        # 为 Markdown 适配格式（每行添加 "- "前缀，保留换行）
-        formatted_plugins=$(echo "$plugins" | sed 's/^/- /')
-
-        # 写入环境变量（保留换行符）
-        echo "FORMATTED_PLUGINS<<EOF" >> $GITHUB_ENV
-        echo "$formatted_plugins" >> $GITHUB_ENV
-        echo "EOF" >> $GITHUB_ENV
-
-    - name: 创建发布版本
-      id: release
-      uses: ncipollo/release-action@main
+    - name: 发布固件
+      uses: softprops/action-gh-release@v2
       with:
+        tag_name: ${{ env.DATE2 }}_${{ env.FILE_NAME }}
         name: ${{ env.DATE }} ${{ env.REPO }} for ${{ env.PRODUCT_NAME }}
-        allowUpdates: true
-        tag: ${{ env.DATE2 }}_${{ env.FILE_NAME }}
-        commit: main
-        token: ${{ secrets.RELEASES_TOKEN }}
-        body: |
-         #### ${{ inputs.model || 'Newifi-D2_lede_lua'}}固件配置：
-            - IP:192.168.124.1
-            - WEB登陆账户：root
-            - 密码：password
-            - 固件源码：${{ env.REPO_URL }}
-            - 固件内核版本：${{ env.KVER }}
-            - 插件：
-              ${{ env.FORMATTED_PLUGINS }}
-         #### 源码最近提交信息:
-            - ${{ env.useVersionInfo }}
-        artifacts: ${{ env.FIRMWARE }}/*
+        files: ${{ env.FIRMWARE }}/*
+        body_path: ./release_body.txt
 
     - name: 删除旧的工作流和固件
       uses: Mattraks/delete-workflow-runs@main
