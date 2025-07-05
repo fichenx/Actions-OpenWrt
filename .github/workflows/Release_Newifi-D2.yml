@@ -199,7 +199,7 @@ jobs:
         [ -n "${DIY_breakings_SH:-}" ] && [ -e $DIY_breakings_SH ] && chmod +x $DIY_breakings_SH
         chmod +x $DIY_my_SH
         cd openwrt
-        [ -e $GITHUB_WORKSPACE/$DIY_breakings_SH ] && $GITHUB_WORKSPACE/$DIY_breakings_SH
+        [ -n "${DIY_breakings_SH:-}" ] && [ -e $GITHUB_WORKSPACE/$DIY_breakings_SH ] && $GITHUB_WORKSPACE/$DIY_breakings_SH
         $GITHUB_WORKSPACE/$DIY_my_SH
 
     - name: SSH连接到Actions
