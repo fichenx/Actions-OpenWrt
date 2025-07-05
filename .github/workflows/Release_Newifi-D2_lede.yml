@@ -196,7 +196,7 @@ jobs:
       run: |
         [ -e files ] && mv files openwrt/files
         [ -e $CONFIG_FILE ] && mv $CONFIG_FILE openwrt/.config
-        [ -e $DIY_breakings_SH ] && chmod +x $DIY_breakings_SH
+        [ -n "${DIY_breakings_SH:-}" ] && [ -e $DIY_breakings_SH ] && chmod +x $DIY_breakings_SH
         chmod +x $DIY_my_SH
         cd openwrt
         [ -e $GITHUB_WORKSPACE/$DIY_breakings_SH ] && $GITHUB_WORKSPACE/$DIY_breakings_SH
