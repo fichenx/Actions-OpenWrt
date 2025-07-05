@@ -54,7 +54,6 @@ env:
   FEEDS_CONF: feeds.conf.default
   CONFIG_FILE: config/${{ inputs.model || 'Newifi-D2_lede_lua'}}.config
   DIY_feeds_SH: sh/lede_diy-part1.sh
-  DIY_breakings_SH: sh/breakings_diy-part2.sh
   DIY_my_SH: sh/${{ inputs.model || 'Newifi-D2_lede_lua'}}_diy-part2.sh
   UPLOAD_BIN_DIR: false
   UPLOAD_FIRMWARE: true
@@ -79,6 +78,7 @@ jobs:
           else
             echo "REPO_URL=https://github.com/coolsnowwolf/lede" >> $GITHUB_ENV
             echo "REPO=lede" >> $GITHUB_ENV
+            echo "DIY_breakings_SH=sh/breakings_diy-part2.sh" >> $GITHUB_ENV
         fi
 
     - name: 检出
@@ -196,10 +196,10 @@ jobs:
       run: |
         [ -e files ] && mv files openwrt/files
         [ -e $CONFIG_FILE ] && mv $CONFIG_FILE openwrt/.config
-        chmod +x $DIY_breakings_SH
+        [ -e $DIY_breakings_SH ] && chmod +x $DIY_breakings_SH
         chmod +x $DIY_my_SH
         cd openwrt
-        $GITHUB_WORKSPACE/$DIY_breakings_SH
+        [ -e $GITHUB_WORKSPACE/$DIY_breakings_SH ] && $GITHUB_WORKSPACE/$DIY_breakings_SH
         $GITHUB_WORKSPACE/$DIY_my_SH
 
     - name: SSH连接到Actions
