@@ -85,6 +85,8 @@ sed -i 's/192\.168\.[0-9]*\.[0-9]*/192.168.124.1/g' package/base-files/files/bin
 #修改主机名
 sed -i "s/hostname='ImmortalWrt'/hostname='Newifi-D2'/g" package/base-files/files/bin/config_generate
 
+#添加turboacc
+curl -sSL https://raw.githubusercontent.com/chenmozhijin/turboacc/luci/add_turboacc.sh -o add_turboacc.sh && bash add_turboacc.sh
 
 ##########固件主题添加&修改#########
 #更换lede源码中自带argon主题
