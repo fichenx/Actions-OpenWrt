@@ -23,14 +23,7 @@ on:
           #- zn_m2_immwrt
           #- zn_m2_libwrt
           #- x64_immwrt
-      runs-on:
-        required: true
-        description: Runs on...
-        type: choice
-        default: ubuntu-22.04
-        options:
-          - ubuntu-20.04
-          - ubuntu-22.04
+
 
   schedule:
     - cron: 43 3 * * 4
@@ -40,27 +33,16 @@ env:
 
 jobs:
   build:
-    runs-on: ${{ inputs.runs-on || 'ubuntu-22.04'}}
+    strategy:
+      matrix:
+        os: [ubuntu-24.04]
+    runs-on: ${{ matrix.os }}
 
     steps:
-      - name: Maximize build space
-        uses: AdityaGarg8/remove-unwanted-software@v5
-        with:
-          remove-dotnet: "true"
-          remove-android: "true"
-          remove-haskell: "true"
-          remove-codeql: "true"
-          remove-docker-images: "true"
-          remove-large-packages: "true"
-          remove-cached-tools: "true"
-          remove-swapfile: "true"
+      - name: 可用磁盘空间
+        uses: sbwml/actions@free-disk
 
-      - name: 检出代码
-        uses: actions/checkout@v4
-
-      - name: 初始化环境
-        env:
-          DEBIAN_FRONTEND: noninteractive
+      - name: 构建系统设置
         run: |
           sudo bash -c 'bash <(curl -sL https://build-scripts.immortalwrt.org/init_build_environment.sh)'
           sudo -E apt -yqq install dos2unix
@@ -69,10 +51,13 @@ jobs:
           sudo -E apt -yqq autoclean
           sudo -E apt -yqq clean
           sudo -E systemctl daemon-reload
-          sudo -E timedatectl set-timezone "Asia/Shanghai"
 
-      - name: 初始化值
+      - name: 检出
+        uses: actions/checkout@v4
+
+      - name: 设置构建日期和时区
         run: |
+          sudo -E timedatectl set-timezone "Asia/Shanghai"
           export BUILD_DATE=$(TZ=UTC-8 date +"%y.%m.%d_%H.%M.%S")
           echo "BUILD_DATE=$BUILD_DATE" >> $GITHUB_ENV
           export BUILD_SRC=$(awk -F"=" '/REPO_URL/ {print $NF}' "./compilecfg/${{ inputs.model || 'RedMi-AX6_plus_imm'}}.ini")
@@ -87,9 +72,9 @@ jobs:
           path: |
             ./action_build/.ccache
             ./action_build/staging_dir
-          key: ${{ inputs.runs-on || 'ubuntu-22.04'}}-${{ hashFiles('**/repo_flag') }}-${{ env.BUILD_DATE }}
+          key: ${{ matrix.os }}-${{ hashFiles('**/repo_flag') }}-${{ env.BUILD_DATE }}
           restore-keys: |
-            ${{ inputs.runs-on || 'ubuntu-22.04'}}-${{ hashFiles('**/repo_flag') }}-
+            ${{ matrix.os }}-${{ hashFiles('**/repo_flag') }}-
 
       - name: 刷新缓存
         run: |
@@ -107,6 +92,7 @@ jobs:
         run: |
           # 获取内核版本
           echo "KVER=$(find ./action_build/dl -maxdepth 1 -name "linux-[4-6]\.*" | sort -r | head -n 1 | grep -oE "[4-6]\.[0-9]{1,3}\.[0-9]{1,3}")" >> $GITHUB_ENV
+          #获取最近更新内容
           cd action_build
           useVersionInfo=$(git show -s --date=short --format="Author: %an<br/>date: %cd<br/>commit: %s<br/>commit hash: %H")
           echo "useVersionInfo=$useVersionInfo" >> $GITHUB_ENV
@@ -115,7 +101,7 @@ jobs:
       - name: 删除旧缓存
         run: |
           # 获取缓存列表并删除
-          gh cache list --key ${{ inputs.runs-on || 'ubuntu-22.04'}}-${{ hashFiles('**/repo_flag') }}- --json key --jq '.[] | .key' | while read -r key; do
+          gh cache list --key ${{ matrix.os }}-${{ hashFiles('**/repo_flag') }}- --json key --jq '.[] | .key' | while read -r key; do
             gh cache delete "$key"
           done
           # 输出缓存状态
