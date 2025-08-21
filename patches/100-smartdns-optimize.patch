@@ -1,0 +1,21 @@
+--- a/package/openwrt/custom.conf
++++ b/package/openwrt/custom.conf
+@@ -1,2 +1,7 @@
+ # Add custom settings here.
+ # please read https://pymumu.github.io/smartdns/config/basic-config/
++serve-expired-ttl 7200
++serve-expired-reply-ttl 5
++max-reply-ip-num 3
++dualstack-ip-selection-threshold 15
++server 223.5.5.5 -bootstrap-dns
+--- a/package/openwrt/files/etc/init.d/smartdns
++++ b/package/openwrt/files/etc/init.d/smartdns
+@@ -6,7 +6,7 @@
+ # Distributed without any warranty; see the license for details.
+ # Full license: http://www.gnu.org/licenses/
+ 
+-START=19
++START=94
+ STOP=82
+ NAME=smartdns
+ USE_PROCD=1
