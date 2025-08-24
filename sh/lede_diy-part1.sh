@@ -36,6 +36,7 @@ fi
 
 # 根据编译的固件选择不同的软件源
 if [[ "$BUILD_MODEL" == *"lede_lua"* ]]; then
+sed -i '/fw876\/helloworld\.git/ s/^/#/' feeds.conf.default
 sed -i 's/\(luci\.git\).*/\1/' feeds.conf.default
 sed -i 's/;js/;lua/g' "feeds.conf.default"
 fi
