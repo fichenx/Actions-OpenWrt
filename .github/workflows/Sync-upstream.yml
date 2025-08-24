@@ -48,10 +48,43 @@ jobs:
         cd ${{matrix.target}}
         #git rm -r --cache * >/dev/null 2>&1 &
         #rm -rf `find ./* -maxdepth 0 -type d ! -name "diy"` >/dev/null 2>&1
-        rm -rf general
-        rm -rf PATCH
-        rm -rf sh/breakings_diy-part2.sh
+        rm -rf general PATCH sh/breakings_diy-part2.sh patches sh/pre_clone_action.sh sh/update.sh sh/build.sh
         git clone --depth 1 --filter=blob:none --no-checkout https://github.com/breakingbadboy/OpenWrt temp && cd temp && git checkout main -- general PATCH diy-part2.sh && cd .. && mv -n temp/general temp/PATCH ./ && mv -n temp/diy-part2.sh sh/breakings_diy-part2.sh ; rm -rf temp
+        git clone --depth 1 --filter=blob:none --no-checkout https://github.com/ZqinKing/wrt_release temp && cd temp && git checkout main -- patches pre_clone_action.sh update.sh build.sh && mv -n pre_clone_action.sh update.sh build.sh ../sh/  && cd .. && mv -n temp/patches ./ ; rm -rf temp
+
+    - name: 处理克隆的文件
+      run: |
+        cd sh
+        #处理build.sh 
+        sed -i -e 's|BASE_PATH=$(cd $(dirname $0) \&\& pwd)|BASE_PATH=$(cd $(dirname $0)/../ \&\& pwd)|' \
+               -e 's|CONFIG_FILE="$BASE_PATH/deconfig/$Dev.config"|CONFIG_FILE="$BASE_PATH/config/$Dev.config"|' \
+               -e 's|cat "$BASE_PATH/deconfig/nss.config"|cat "$BASE_PATH/config/nss.config"|' \
+               -e 's|cat "$BASE_PATH/deconfig/proxy.config"|#cat "$BASE_PATH/deconfig/proxy.config"|' \
+               -e 's|$BASE_PATH/update.sh|$BASE_PATH/sh/update.sh|' \
+               -e 's|*rootfs.tar.gz|*.tar.gz|' \
+               build.sh
+        sed -i '/make -j$(($(nproc) + 1)) || make -j1 V=s/a \
+ \
+cd $BASE_PATH/$BUILD_DIR/bin/packages \
+tar -zcvf Packages.tar.gz ./* \
+cp Packages.tar.gz $BASE_PATH/$BUILD_DIR/bin/targets/ \
+cd "$BASE_PATH/$BUILD_DIR"' build.sh
+
+        #处理pre_clone_action.sh
+        sed -i -e 's|BASE_PATH=$(cd $(dirname $0) \&\& pwd)|BASE_PATH=$(cd $(dirname $0)/../ \&\& pwd)|' \
+               -e 's|CONFIG_FILE="$BASE_PATH/deconfig/$Dev.config"|CONFIG_FILE="$BASE_PATH/config/$Dev.config"|' \
+               pre_clone_action.sh
+
+        #处理update.sh
+        sed -i -e 's|BASE_PATH=$(cd $(dirname $0) \&\& pwd)|BASE_PATH=$(cd $(dirname $0)/../ \&\& pwd)|' \
+               -e 's|192.168.1.1|192.168.123.1|' \
+               -e 's|kenzok8/small-package|fichenx/openwrt-package\;js|' \
+               -e 's|small-package|fichenx/openwrt-package|' \
+               -e 's|small8|fichenx|' \
+               -e 's|build by ZqinKing|build by FICHEN(\$(TZ=UTC-8 date +%Y.%m.%d))|' \
+               -e 's|^\(    \./scripts/feeds install -p fichenx -f \)|\1luci-app-argon-config luci-theme-design luci-app-design-config luci-app-watchcat-plus luci-app-wol \\\n        |' \
+               update.sh
+
 
     - name: 上传更新文件
       env: 
