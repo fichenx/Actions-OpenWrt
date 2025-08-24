@@ -2,11 +2,11 @@
 
 set -e
 
-BASE_PATH=$(cd $(dirname $0) && pwd)
+BASE_PATH=$(cd $(dirname $0)/../ && pwd)
 
 Dev=$1
 
-CONFIG_FILE="$BASE_PATH/deconfig/$Dev.config"
+CONFIG_FILE="$BASE_PATH/config/$Dev.config"
 INI_FILE="$BASE_PATH/compilecfg/$Dev.ini"
 
 if [[ ! -f $CONFIG_FILE ]]; then
