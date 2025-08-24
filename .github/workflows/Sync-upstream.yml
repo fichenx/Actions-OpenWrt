@@ -63,12 +63,7 @@ jobs:
                -e 's|$BASE_PATH/update.sh|$BASE_PATH/sh/update.sh|' \
                -e 's|*rootfs.tar.gz|*.tar.gz|' \
                build.sh
-        sed -i '/make -j$(($(nproc) + 1)) || make -j1 V=s/a \
- \
-cd $BASE_PATH/$BUILD_DIR/bin/packages \
-tar -zcvf Packages.tar.gz ./* \
-cp Packages.tar.gz $BASE_PATH/$BUILD_DIR/bin/targets/ \
-cd "$BASE_PATH/$BUILD_DIR"' build.sh
+        sed -i '/make -j$(($(nproc) + 1)) || make -j1 V=s/a \\ncd $BASE_PATH/$BUILD_DIR/bin/packages\ntar -zcvf Packages.tar.gz ./*\ncp Packages.tar.gz $BASE_PATH/$BUILD_DIR/bin/targets/\ncd "$BASE_PATH/$BUILD_DIR"' build.sh
 
         #处理pre_clone_action.sh
         sed -i -e 's|BASE_PATH=$(cd $(dirname $0) \&\& pwd)|BASE_PATH=$(cd $(dirname $0)/../ \&\& pwd)|' \
