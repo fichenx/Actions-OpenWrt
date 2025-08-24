@@ -54,7 +54,7 @@ jobs:
 
     - name: 处理克隆的文件
       run: |
-        cd sh
+        cd $GITHUB_WORKSPACE/${{matrix.target}}/sh
         #处理build.sh 
         sed -i -e 's|BASE_PATH=$(cd $(dirname $0) \&\& pwd)|BASE_PATH=$(cd $(dirname $0)/../ \&\& pwd)|' \
                -e 's|CONFIG_FILE="$BASE_PATH/deconfig/$Dev.config"|CONFIG_FILE="$BASE_PATH/config/$Dev.config"|' \
