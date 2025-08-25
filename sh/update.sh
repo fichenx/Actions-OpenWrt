@@ -27,8 +27,11 @@ LAN_ADDR="192.168.123.1"
 
 clone_repo() {
     if [[ ! -d $BUILD_DIR ]]; then
-        echo $REPO_URL $REPO_BRANCH
-        git clone --depth 1 -b $REPO_BRANCH $REPO_URL $BUILD_DIR
+        echo "克隆仓库: $REPO_URL 分支: $REPO_BRANCH"
+        if ! git clone --depth 1 -b $REPO_BRANCH $REPO_URL $BUILD_DIR; then
+            echo "错误：克隆仓库 $REPO_URL 失败" >&2
+            exit 1
+        fi
     fi
 }
 
@@ -150,8 +153,12 @@ remove_unwanted_packages() {
 
 update_golang() {
     if [[ -d ./feeds/packages/lang/golang ]]; then
+        echo "正在更新 golang 软件包..."
         \rm -rf ./feeds/packages/lang/golang
-        git clone --depth 1 $GOLANG_REPO -b $GOLANG_BRANCH ./feeds/packages/lang/golang
+        if ! git clone --depth 1 -b $GOLANG_BRANCH $GOLANG_REPO ./feeds/packages/lang/golang; then
+            echo "错误：克隆 golang 仓库 $GOLANG_REPO 失败" >&2
+            exit 1
+        fi
     fi
 }
 
@@ -310,11 +317,19 @@ apply_hash_fixes() {
 update_ath11k_fw() {
     local makefile="$BUILD_DIR/package/firmware/ath11k-firmware/Makefile"
     local new_mk="$BASE_PATH/patches/ath11k_fw.mk"
+    local url="https://raw.githubusercontent.com/VIKINGYFY/immortalwrt/refs/heads/main/package/firmware/ath11k-firmware/Makefile"
 
-    if [ -d "$(dirname "$makefile")" ] && [ -f "$makefile" ]; then
-        [ -f "$new_mk" ] && \rm -f "$new_mk"
-        curl -L -o "$new_mk" https://raw.githubusercontent.com/VIKINGYFY/immortalwrt/refs/heads/main/package/firmware/ath11k-firmware/Makefile
-        \mv -f "$new_mk" "$makefile"
+    if [ -d "$(dirname "$makefile")" ]; then
+        echo "正在更新 ath11k-firmware Makefile..."
+        if ! curl -fsSL -o "$new_mk" "$url"; then
+            echo "错误：从 $url 下载 ath11k-firmware Makefile 失败" >&2
+            exit 1
+        fi
+        if [ ! -s "$new_mk" ]; then
+            echo "错误：下载的 ath11k-firmware Makefile 为空文件" >&2
+            exit 1
+        fi
+        mv -f "$new_mk" "$makefile"
     fi
 }
 
@@ -342,15 +357,23 @@ fix_mkpkg_format_invalid() {
 
 add_ax6600_led() {
     local athena_led_dir="$BUILD_DIR/package/emortal/luci-app-athena-led"
+    local repo_url="https://github.com/NONGFAH/luci-app-athena-led.git"
 
-    # 删除旧的目录（如果存在）
+    echo "正在添加 luci-app-athena-led..."
     rm -rf "$athena_led_dir" 2>/dev/null
 
-    # 克隆最新的仓库
-    git clone --depth=1 https://github.com/NONGFAH/luci-app-athena-led.git "$athena_led_dir"
-    # 设置执行权限
-    chmod +x "$athena_led_dir/root/usr/sbin/athena-led"
-    chmod +x "$athena_led_dir/root/etc/init.d/athena_led"
+    if ! git clone --depth=1 "$repo_url" "$athena_led_dir"; then
+        echo "错误：从 $repo_url 克隆 luci-app-athena-led 仓库失败" >&2
+        exit 1
+    fi
+
+    if [ -d "$athena_led_dir" ]; then
+        chmod +x "$athena_led_dir/root/usr/sbin/athena-led"
+        chmod +x "$athena_led_dir/root/etc/init.d/athena_led"
+    else
+        echo "错误：克隆操作后未找到目录 $athena_led_dir" >&2
+        exit 1
+    fi
 }
 
 change_cpuusage() {
@@ -377,10 +400,14 @@ change_cpuusage() {
 
 update_tcping() {
     local tcping_path="$BUILD_DIR/feeds/fichenx/tcping/Makefile"
+    local url="https://raw.githubusercontent.com/xiaorouji/openwrt-passwall-packages/refs/heads/main/tcping/Makefile"
 
-    if [ -d "$(dirname "$tcping_path")" ] && [ -f "$tcping_path" ]; then
-        \rm -f "$tcping_path"
-        curl -L -o "$tcping_path" https://raw.githubusercontent.com/xiaorouji/openwrt-passwall-packages/refs/heads/main/tcping/Makefile
+    if [ -d "$(dirname "$tcping_path")" ]; then
+        echo "正在更新 tcping Makefile..."
+        if ! curl -fsSL -o "$tcping_path" "$url"; then
+            echo "错误：从 $url 下载 tcping Makefile 失败" >&2
+            exit 1
+        fi
     fi
 }
 
@@ -425,10 +452,11 @@ apply_passwall_tweaks() {
         > "$chnlist_path"
     fi
 
-    # 调整 Xray 最大 RTT
+    # 调整 Xray 最大 RTT 和 保留记录数量
     local xray_util_path="$BUILD_DIR/feeds/fichenx/luci-app-passwall/luasrc/passwall/util_xray.lua"
     if [ -f "$xray_util_path" ]; then
         sed -i 's/maxRTT = "1s"/maxRTT = "2s"/g' "$xray_util_path"
+        sed -i 's/sampling = 3/sampling = 5/g' "$xray_util_path"
     fi
 }
 
@@ -502,8 +530,12 @@ update_homeproxy() {
     local target_dir="$BUILD_DIR/feeds/fichenx/luci-app-homeproxy"
 
     if [ -d "$target_dir" ]; then
+        echo "正在更新 homeproxy..."
         rm -rf "$target_dir"
-        git clone --depth 1 "$repo_url" "$target_dir"
+        if ! git clone --depth 1 "$repo_url" "$target_dir"; then
+            echo "错误：从 $repo_url 克隆 homeproxy 仓库失败" >&2
+            exit 1
+        fi
     fi
 }
 
@@ -516,39 +548,48 @@ update_dnsmasq_conf() {
 
 # 更新版本
 update_package() {
-    local dir=$(find "$BUILD_DIR/package" \( -type d -o -type l \) -name $1)
+    local dir=$(find "$BUILD_DIR/package" \( -type d -o -type l \) -name "$1")
     if [ -z "$dir" ]; then
         return 0
     fi
-    local branch=$2
+    local branch="$2"
     if [ -z "$branch" ]; then
         branch="releases"
     fi
     local mk_path="$dir/Makefile"
     if [ -f "$mk_path" ]; then
         # 提取repo
-        local PKG_REPO=$(grep -oE "^PKG_GIT_URL.*github.com(/[-_a-zA-Z0-9]{1,}){2}" $mk_path | awk -F"/" '{print $(NF - 1) "/" $NF}')
+        local PKG_REPO=$(grep -oE "^PKG_GIT_URL.*github.com(/[-_a-zA-Z0-9]{1,}){2}" "$mk_path" | awk -F"/" '{print $(NF - 1) "/" $NF}')
         if [ -z "$PKG_REPO" ]; then
-            PKG_REPO=$(grep -oE "^PKG_SOURCE_URL.*github.com(/[-_a-zA-Z0-9]{1,}){2}" $mk_path | awk -F"/" '{print $(NF - 1) "/" $NF}')
+            PKG_REPO=$(grep -oE "^PKG_SOURCE_URL.*github.com(/[-_a-zA-Z0-9]{1,}){2}" "$mk_path" | awk -F"/" '{print $(NF - 1) "/" $NF}')
             if [ -z "$PKG_REPO" ]; then
-                return 0
+                echo "错误：无法从 $mk_path 提取 PKG_REPO" >&2
+                return 1
             fi
         fi
-        local PKG_VER=$(curl -sL "https://api.github.com/repos/$PKG_REPO/$branch" | jq -r '.[0] | .tag_name // .name')
+        local PKG_VER
+        if ! PKG_VER=$(curl -fsSL "https://api.github.com/repos/$PKG_REPO/$branch" | jq -r '.[0] | .tag_name // .name'); then
+            echo "错误：从 https://api.github.com/repos/$PKG_REPO/$branch 获取版本信息失败" >&2
+            return 1
+        fi
         if [ -n "$3" ]; then
-            PKG_VER=$3
+            PKG_VER="$3"
         fi
-        local COMMIT_SHA=$(curl -sL "https://api.github.com/repos/$PKG_REPO/tags" | jq -r '.[] | select(.name=="'$PKG_VER'") | .commit.sha' | cut -c1-7)
+        local COMMIT_SHA
+        if ! COMMIT_SHA=$(curl -fsSL "https://api.github.com/repos/$PKG_REPO/tags" | jq -r '.[] | select(.name=="'$PKG_VER'") | .commit.sha' | cut -c1-7); then
+            echo "错误：从 https://api.github.com/repos/$PKG_REPO/tags 获取提交哈希失败" >&2
+            return 1
+        fi
         if [ -n "$COMMIT_SHA" ]; then
-            sed -i 's/^PKG_GIT_SHORT_COMMIT:=.*/PKG_GIT_SHORT_COMMIT:='$COMMIT_SHA'/g' $mk_path
+            sed -i 's/^PKG_GIT_SHORT_COMMIT:=.*/PKG_GIT_SHORT_COMMIT:='$COMMIT_SHA'/g' "$mk_path"
         fi
-        PKG_VER=$(echo $PKG_VER | grep -oE "[\.0-9]{1,}")
+        PKG_VER=$(echo "$PKG_VER" | grep -oE "[\.0-9]{1,}")
 
-        local PKG_NAME=$(awk -F"=" '/PKG_NAME:=/ {print $NF}' $mk_path | grep -oE "[-_:/\$\(\)\?\.a-zA-Z0-9]{1,}")
-        local PKG_SOURCE=$(awk -F"=" '/PKG_SOURCE:=/ {print $NF}' $mk_path | grep -oE "[-_:/\$\(\)\?\.a-zA-Z0-9]{1,}")
-        local PKG_SOURCE_URL=$(awk -F"=" '/PKG_SOURCE_URL:=/ {print $NF}' $mk_path | grep -oE "[-_:/\$\(\)\{\}\?\.a-zA-Z0-9]{1,}")
-        local PKG_GIT_URL=$(awk -F"=" '/PKG_GIT_URL:=/ {print $NF}' $mk_path)
-        local PKG_GIT_REF=$(awk -F"=" '/PKG_GIT_REF:=/ {print $NF}' $mk_path)
+        local PKG_NAME=$(awk -F"=" '/PKG_NAME:=/ {print $NF}' "$mk_path" | grep -oE "[-_:/\$\(\)\?\.a-zA-Z0-9]{1,}")
+        local PKG_SOURCE=$(awk -F"=" '/PKG_SOURCE:=/ {print $NF}' "$mk_path" | grep -oE "[-_:/\$\(\)\?\.a-zA-Z0-9]{1,}")
+        local PKG_SOURCE_URL=$(awk -F"=" '/PKG_SOURCE_URL:=/ {print $NF}' "$mk_path" | grep -oE "[-_:/\$\(\)\{\}\?\.a-zA-Z0-9]{1,}")
+        local PKG_GIT_URL=$(awk -F"=" '/PKG_GIT_URL:=/ {print $NF}' "$mk_path")
+        local PKG_GIT_REF=$(awk -F"=" '/PKG_GIT_REF:=/ {print $NF}' "$mk_path")
 
         PKG_SOURCE_URL=${PKG_SOURCE_URL//\$\(PKG_GIT_URL\)/$PKG_GIT_URL}
         PKG_SOURCE_URL=${PKG_SOURCE_URL//\$\(PKG_GIT_REF\)/$PKG_GIT_REF}
@@ -557,12 +598,16 @@ update_package() {
         PKG_SOURCE=${PKG_SOURCE//\$\(PKG_NAME\)/$PKG_NAME}
         PKG_SOURCE=${PKG_SOURCE//\$\(PKG_VERSION\)/$PKG_VER}
 
-        local PKG_HASH=$(curl -sL "$PKG_SOURCE_URL""$PKG_SOURCE" | sha256sum | cut -b -64)
+        local PKG_HASH
+        if ! PKG_HASH=$(curl -fsSL "$PKG_SOURCE_URL""$PKG_SOURCE" | sha256sum | cut -b -64); then
+            echo "错误：从 $PKG_SOURCE_URL$PKG_SOURCE 获取软件包哈希失败" >&2
+            return 1
+        fi
 
-        sed -i 's/^PKG_VERSION:=.*/PKG_VERSION:='$PKG_VER'/g' $mk_path
-        sed -i 's/^PKG_HASH:=.*/PKG_HASH:='$PKG_HASH'/g' $mk_path
+        sed -i 's/^PKG_VERSION:=.*/PKG_VERSION:='$PKG_VER'/g' "$mk_path"
+        sed -i 's/^PKG_HASH:=.*/PKG_HASH:='$PKG_HASH'/g' "$mk_path"
 
-        echo "Update Package $1 to $PKG_VER $PKG_HASH"
+        echo "更新软件包 $1 到 $PKG_VER $PKG_HASH"
     fi
 }
 
@@ -610,11 +655,14 @@ update_mosdns_deconfig() {
 
 fix_quickstart() {
     local file_path="$BUILD_DIR/feeds/fichenx/luci-app-quickstart/luasrc/controller/istore_backend.lua"
+    local url="https://gist.githubusercontent.com/puteulanus/1c180fae6bccd25e57eb6d30b7aa28aa/raw/istore_backend.lua"
     # 下载新的istore_backend.lua文件并覆盖
     if [ -f "$file_path" ]; then
-        \rm -f "$file_path"
-        curl -L https://gist.githubusercontent.com/puteulanus/1c180fae6bccd25e57eb6d30b7aa28aa/raw/istore_backend.lua \
-            -o "$file_path"
+        echo "正在修复 quickstart..."
+        if ! curl -fsSL -o "$file_path" "$url"; then
+            echo "错误：从 $url 下载 istore_backend.lua 失败" >&2
+            exit 1
+        fi
     fi
 }
 
@@ -659,16 +707,26 @@ support_fw4_adg() {
 
 add_timecontrol() {
     local timecontrol_dir="$BUILD_DIR/package/luci-app-timecontrol"
+    local repo_url="https://github.com/sirpdboy/luci-app-timecontrol.git"
     # 删除旧的目录（如果存在）
     rm -rf "$timecontrol_dir" 2>/dev/null
-    git clone --depth 1 https://github.com/sirpdboy/luci-app-timecontrol.git "$timecontrol_dir"
+    echo "正在添加 luci-app-timecontrol..."
+    if ! git clone --depth 1 "$repo_url" "$timecontrol_dir"; then
+        echo "错误：从 $repo_url 克隆 luci-app-timecontrol 仓库失败" >&2
+        exit 1
+    fi
 }
 
 add_gecoosac() {
     local gecoosac_dir="$BUILD_DIR/package/openwrt-gecoosac"
+    local repo_url="https://github.com/lwb1978/openwrt-gecoosac.git"
     # 删除旧的目录（如果存在）
     rm -rf "$gecoosac_dir" 2>/dev/null
-    git clone --depth 1 https://github.com/lwb1978/openwrt-gecoosac.git "$gecoosac_dir"
+    echo "正在添加 openwrt-gecoosac..."
+    if ! git clone --depth 1 "$repo_url" "$gecoosac_dir"; then
+        echo "错误：从 $repo_url 克隆 openwrt-gecoosac 仓库失败" >&2
+        exit 1
+    fi
 }
 
 fix_easytier() {
@@ -685,8 +743,16 @@ update_geoip() {
         if [ -n "$GEOIP_VER" ]; then
             local base_url="https://github.com/v2fly/geoip/releases/download/${GEOIP_VER}"
             # 下载旧的geoip.dat和新的geoip-only-cn-private.dat文件的校验和
-            local old_SHA256=$(wget -qO- "$base_url/geoip.dat.sha256sum" | awk '{print $1}')
-            local new_SHA256=$(wget -qO- "$base_url/geoip-only-cn-private.dat.sha256sum" | awk '{print $1}')
+            local old_SHA256
+            if ! old_SHA256=$(wget -qO- "$base_url/geoip.dat.sha256sum" | awk '{print $1}'); then
+                echo "错误：从 $base_url/geoip.dat.sha256sum 获取旧的 geoip.dat 校验和失败" >&2
+                return 1
+            fi
+            local new_SHA256
+            if ! new_SHA256=$(wget -qO- "$base_url/geoip-only-cn-private.dat.sha256sum" | awk '{print $1}'); then
+                echo "错误：从 $base_url/geoip-only-cn-private.dat.sha256sum 获取新的 geoip-only-cn-private.dat 校验和失败" >&2
+                return 1
+            fi
             # 更新Makefile中的文件名和校验和
             if [ -n "$old_SHA256" ] && [ -n "$new_SHA256" ]; then
                 if grep -q "$old_SHA256" "$geodata_path"; then
@@ -744,23 +810,34 @@ update_smartdns() {
 
     echo "正在更新 smartdns..."
     rm -rf "$SMARTDNS_DIR"
-    git clone --depth=1 "$SMARTDNS_REPO" "$SMARTDNS_DIR"
+    if ! git clone --depth=1 "$SMARTDNS_REPO" "$SMARTDNS_DIR"; then
+        echo "错误：从 $SMARTDNS_REPO 克隆 smartdns 仓库失败" >&2
+        exit 1
+    fi
 
     install -Dm644 "$BASE_PATH/patches/100-smartdns-optimize.patch" "$SMARTDNS_DIR/patches/100-smartdns-optimize.patch"
     sed -i '/define Build\/Compile\/smartdns-ui/,/endef/s/CC=\$(TARGET_CC)/CC="\$(TARGET_CC_NOCACHE)"/' "$SMARTDNS_DIR/Makefile"
 
     echo "正在更新 luci-app-smartdns..."
     rm -rf "$LUCI_APP_SMARTDNS_DIR"
-    git clone --depth=1 "$LUCI_APP_SMARTDNS_REPO" "$LUCI_APP_SMARTDNS_DIR"
+    if ! git clone --depth=1 "$LUCI_APP_SMARTDNS_REPO" "$LUCI_APP_SMARTDNS_DIR"; then
+        echo "错误：从 $LUCI_APP_SMARTDNS_REPO 克隆 luci-app-smartdns 仓库失败" >&2
+        exit 1
+    fi
 }
 
 update_diskman() {
     local path="$BUILD_DIR/feeds/luci/applications/luci-app-diskman"
+    local repo_url="https://github.com/lisaac/luci-app-diskman.git"
     if [ -d "$path" ]; then
+        echo "正在更新 diskman..."
         cd "$BUILD_DIR/feeds/luci/applications" || return # 显式路径避免歧义
         \rm -rf "luci-app-diskman"                        # 直接删除目标目录
 
-        git clone --filter=blob:none --no-checkout https://github.com/lisaac/luci-app-diskman.git diskman || return
+        if ! git clone --filter=blob:none --no-checkout "$repo_url" diskman; then
+            echo "错误：从 $repo_url 克隆 diskman 仓库失败" >&2
+            exit 1
+        fi
         cd diskman || return
 
         git sparse-checkout init --cone
@@ -784,7 +861,11 @@ add_quickfile() {
     if [ -d "$target_dir" ]; then
         rm -rf "$target_dir"
     fi
-    git clone --depth 1 "$repo_url" "$target_dir"
+    echo "正在添加 luci-app-quickfile..."
+    if ! git clone --depth 1 "$repo_url" "$target_dir"; then
+        echo "错误：从 $repo_url 克隆 luci-app-quickfile 仓库失败" >&2
+        exit 1
+    fi
 
     local makefile_path="$target_dir/quickfile/Makefile"
     if [ -f "$makefile_path" ]; then
@@ -869,18 +950,22 @@ remove_tweaked_packages() {
 update_argon() {
     local repo_url="https://github.com/ZqinKing/luci-theme-argon.git"
     local dst_theme_path="$BUILD_DIR/feeds/luci/themes/luci-theme-argon"
-    local tmp_dir=$(mktemp -d)
+    local tmp_dir
+    tmp_dir=$(mktemp -d)
 
     echo "正在更新 argon 主题..."
 
-    git clone --depth 1 "$repo_url" "$tmp_dir"
+    if ! git clone --depth 1 "$repo_url" "$tmp_dir"; then
+        echo "错误：从 $repo_url 克隆 argon 主题仓库失败" >&2
+        rm -rf "$tmp_dir"
+        exit 1
+    fi
 
     rm -rf "$dst_theme_path"
     rm -rf "$tmp_dir/.git"
     mv "$tmp_dir" "$dst_theme_path"
 
     echo "luci-theme-argon 更新完成"
-    echo "Argon 更新完毕。"
 }
 
 main() {
