@@ -322,6 +322,7 @@ fix_hash_value() {
 
 # 应用所有哈希值修正
 apply_hash_fixes() {
+    echo "apply_hash_fixes"
     #fix_hash_value \
     #    "$BUILD_DIR/package/feeds/packages/smartdns/Makefile" \
     #    "a7edb052fea61418c91c7a052f7eb1478fe6d844aec5e3eda0f2fcf82de29a10" \
@@ -715,17 +716,6 @@ EOF
     fi
 }
 
-support_fw4_adg() {
-    local src_path="$BASE_PATH/patches/AdGuardHome"
-    local dst_path="$BUILD_DIR/package/feeds/fichenx/luci-app-adguardhome/root/etc/init.d/AdGuardHome"
-    # 验证源路径是否文件存在且是文件，目标路径目录存在且脚本路径合法
-    if [ -f "$src_path" ] && [ -d "${dst_path%/*}" ] && [ -f "$dst_path" ]; then
-        # 使用 install 命令替代 cp 以确保权限和备份处理
-        install -Dm 755 "$src_path" "$dst_path"
-        echo "已更新AdGuardHome启动脚本"
-    fi
-}
-
 add_timecontrol() {
     local timecontrol_dir="$BUILD_DIR/package/luci-app-timecontrol"
     local repo_url="https://github.com/sirpdboy/luci-app-timecontrol.git"
@@ -746,6 +736,19 @@ add_gecoosac() {
     echo "正在添加 openwrt-gecoosac..."
     if ! git clone --depth 1 "$repo_url" "$gecoosac_dir"; then
         echo "错误：从 $repo_url 克隆 openwrt-gecoosac 仓库失败" >&2
+        exit 1
+    fi
+}
+
+update_adguardhome() {
+    local adguardhome_dir="$BUILD_DIR/package/feeds/fichenx/luci-app-adguardhome"
+    local repo_url="https://github.com/ZqinKing/luci-app-adguardhome.git"
+
+    echo "正在更新 luci-app-adguardhome..."
+    rm -rf "$adguardhome_dir" 2>/dev/null
+
+    if ! git clone --depth 1 "$repo_url" "$adguardhome_dir"; then
+        echo "错误：从 $repo_url 克隆 luci-app-adguardhome 仓库失败" >&2
         exit 1
     fi
 }
@@ -1035,7 +1038,7 @@ main() {
     update_uwsgi_limit_as
     update_argon
     install_feeds
-    support_fw4_adg
+    update_adguardhome
     update_script_priority
     fix_easytier
     update_geoip
