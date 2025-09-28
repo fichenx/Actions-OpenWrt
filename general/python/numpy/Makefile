@@ -6,11 +6,11 @@
 include $(TOPDIR)/rules.mk
 
 PKG_NAME:=numpy
-PKG_VERSION:=2.2.3
+PKG_VERSION:=2.3.3
 PKG_RELEASE:=1
 
 PYPI_NAME:=$(PKG_NAME)
-PKG_HASH:=dbdc15f0c81611925f382dfa97b3bd0bc2c1ce19d4fe50482cb0ddc12ba30020
+PKG_HASH:=ddc7c39727ba62b80dfdbedf400d1c10ddfa8eefbd7ec8dcb118be8b56d31029
 
 PKG_MAINTAINER:=Alexandru Ardelean <ardeleanalex@gmail.com>
 
@@ -37,6 +37,10 @@ include $(INCLUDE_DIR)/meson.mk
 MESON_ARGS+= \
 	-Ddisable-optimization=true \
 	-Dcpu-baseline=min
+
+# FIXME: remove asap; added in 2.2.5
+TARGET_CFLAGS += \
+	-Wno-error=incompatible-pointer-types
 
 # Override 'Meson', to use numpy's vendored meson
 define Meson
