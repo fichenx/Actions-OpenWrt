@@ -341,8 +341,8 @@ sed -i 's/PKG_SOURCE_VERSION:=.*/PKG_SOURCE_VERSION:=7cb363254b69e10320360b63fb7
 #sed -i '12d' feeds/packages/utils/runc/Makefile
 
 # bsdtar
-sed -i 's/PKG_VERSION:=.*/PKG_VERSION:=3.7.4/g' feeds/packages/libs/libarchive/Makefile
-sed -i 's/PKG_HASH:=.*/PKG_HASH:=f887755c434a736a609cbd28d87ddbfbe9d6a3bb5b703c22c02f6af80a802735/g' feeds/packages/libs/libarchive/Makefile
+sed -i 's/PKG_VERSION:=.*/PKG_VERSION:=3.8.1/g' feeds/packages/libs/libarchive/Makefile
+sed -i 's/PKG_HASH:=.*/PKG_HASH:=19f917d42d530f98815ac824d90c7eaf648e9d9a50e4f309c812457ffa5496b5/g' feeds/packages/libs/libarchive/Makefile
 sed -i 's/PKG_RELEASE:=.*/PKG_RELEASE:=1/g' feeds/packages/libs/libarchive/Makefile
 
 # pcre
@@ -429,8 +429,8 @@ sed -i 's/PKG_SOURCE_VERSION:=.*/PKG_SOURCE_VERSION:=4b2e1858f7a46ee678d5d1f3fa1
 sed -i 's/PKG_MIRROR_HASH:=.*/PKG_MIRROR_HASH:=ea014c295766e2efc7b890dc6a6940176ba9c5bdcf85a029090f2bb850e59708/g' feeds/packages/net/transmission-web-control/Makefile
 
 # htop
-sed -i 's/PKG_VERSION:=.*/PKG_VERSION:=3.4.0/g' feeds/packages/admin/htop/Makefile
-sed -i 's/PKG_HASH:=.*/PKG_HASH:=7a45cd93b393eaa5804a7e490d58d0940b1c74bb24ecff2ae7b5c49e7a3c1198/g' feeds/packages/admin/htop/Makefile
+sed -i 's/PKG_VERSION:=.*/PKG_VERSION:=3.4.1/g' feeds/packages/admin/htop/Makefile
+sed -i 's/PKG_HASH:=.*/PKG_HASH:=af9ec878f831b7c27d33e775c668ec79d569aa781861c995a0fbadc1bdb666cf/g' feeds/packages/admin/htop/Makefile
 
 # python3
 #sed -i 's/PYTHON3_VERSION_MICRO:=.*/PYTHON3_VERSION_MICRO:=9/g' feeds/packages/lang/python/python3-version.mk
@@ -672,8 +672,8 @@ rm -rf feeds/packages/utils/nano
 cp -rf $GITHUB_WORKSPACE/general/nano feeds/packages/utils
 
 # dnsproxy
-sed -i 's/PKG_VERSION:=.*/PKG_VERSION:=0.75.3/g' feeds/packages/net/dnsproxy/Makefile
-sed -i 's/PKG_HASH:=.*/PKG_HASH:=e2069a69cfd35f1512ad2a9e894522285e9001f7d823affb1e91eafe15964526/g' feeds/packages/net/dnsproxy/Makefile
+sed -i 's/PKG_VERSION:=.*/PKG_VERSION:=0.76.1/g' feeds/packages/net/dnsproxy/Makefile
+sed -i 's/PKG_HASH:=.*/PKG_HASH:=e11c0b67aa8784a9d1e8baf2724fe438dfe06a12f928eba8f1530b7aeb47f7db/g' feeds/packages/net/dnsproxy/Makefile
 
 # libnl-tiny
 #sed -i 's/PKG_RELEASE:=.*/PKG_RELEASE:=1/g' package/libs/libnl-tiny/Makefile
@@ -877,9 +877,9 @@ rm -f feeds/packages/net/openconnect/patches/001-Use-OpenSSL_version-not-depreca
 #sed -i 's/PKG_HASH:=.*/PKG_HASH:=2e09ac129a14f5e9c23b115ebcdfff4aa84e2aeba1268dbdf39b2d752bd71e19/g' feeds/packages/net/xtables-addons/Makefile
 
 # libssh2
-sed -i 's/PKG_VERSION:=.*/PKG_VERSION:=1.11.0/g' feeds/packages/libs/libssh2/Makefile
+sed -i 's/PKG_VERSION:=.*/PKG_VERSION:=1.11.1/g' feeds/packages/libs/libssh2/Makefile
 sed -i 's/PKG_RELEASE:=.*/PKG_RELEASE:=1/g' feeds/packages/libs/libssh2/Makefile
-sed -i 's/PKG_HASH:=.*/PKG_HASH:=3736161e41e2693324deb38c26cfdc3efe6209d634ba4258db1cecff6a5ad461/g' feeds/packages/libs/libssh2/Makefile
+sed -i 's/PKG_HASH:=.*/PKG_HASH:=d9ec76cbe34db98eec3539fe2c899d26b0c837cb3eb466a56b0f109cabf658f7/g' feeds/packages/libs/libssh2/Makefile
 
 # gnutls
 #sed -i 's/PKG_VERSION:=.*/PKG_VERSION:=3.7.8/g' feeds/packages/libs/gnutls/Makefile
@@ -912,19 +912,20 @@ cp -f $GITHUB_WORKSPACE/general/zoneinfo/Makefile feeds/packages/utils/zoneinfo
 #sed -i 's/PKG_HASH:=.*/PKG_HASH:=5282d58b1a8d52f02af4ab7a5d6089aba6f7d20929bd49fd844c930110262dcb/g' feeds/packages/net/adguardhome/Makefile
 
 # iperf3
-sed -i 's/PKG_VERSION:=.*/PKG_VERSION:=3.17.1/g' feeds/packages/net/iperf3/Makefile
-sed -i 's/PKG_HASH:=.*/PKG_HASH:=84404ca8431b595e86c473d8f23d8bb102810001f15feaf610effd3b318788aa/g' feeds/packages/net/iperf3/Makefile
+sed -i 's/PKG_VERSION:=.*/PKG_VERSION:=3.19.1/g' feeds/packages/net/iperf3/Makefile
+sed -i 's/PKG_HASH:=.*/PKG_HASH:=dc63f89ec581ea99f8b558d8eb35109de06383010db5a1906c208a562ba0c270/g' feeds/packages/net/iperf3/Makefile
 
 # verysync
 #rm -rf feeds/packages/net/verysync
 #svn co https://github.com/immortalwrt/packages/trunk/net/verysync feeds/packages/net/verysync
 
 # haproxy
-sed -i 's/PKG_VERSION:=.*/PKG_VERSION:=3.0.10/g' feeds/packages/net/haproxy/Makefile
-sed -i 's/PKG_RELEASE:=.*/PKG_RELEASE:=1/g' feeds/packages/net/haproxy/Makefile
-sed -i 's/PKG_HASH:=.*/PKG_HASH:=d1508670b6fd5839c669a0a916842f0d3d3d0b578bb351a2a74a1de3d929ce26/g' feeds/packages/net/haproxy/Makefile
-sed -i 's/BASE_TAG:=.*/BASE_TAG=v3.0.10/g' feeds/packages/net/haproxy/get-latest-patches.sh
-#sed -i 's|PKG_SOURCE_URL:=.*|PKG_SOURCE_URL:=https://www.haproxy.org/download/2.8/src|g' feeds/packages/net/haproxy/Makefile
+#sed -i 's/PKG_VERSION:=.*/PKG_VERSION:=3.0.10/g' feeds/packages/net/haproxy/Makefile
+#sed -i 's/PKG_RELEASE:=.*/PKG_RELEASE:=1/g' feeds/packages/net/haproxy/Makefile
+#sed -i 's/PKG_HASH:=.*/PKG_HASH:=d1508670b6fd5839c669a0a916842f0d3d3d0b578bb351a2a74a1de3d929ce26/g' feeds/packages/net/haproxy/Makefile
+#sed -i 's/BASE_TAG:=.*/BASE_TAG=v3.0.10/g' feeds/packages/net/haproxy/get-latest-patches.sh
+rm -rf feeds/packages/net/haproxy
+cp -rf $GITHUB_WORKSPACE/general/haproxy packages/net/haproxy
 
 # perl
 rm -rf feeds/packages/lang/perl
@@ -970,8 +971,8 @@ cp -rf $GITHUB_WORKSPACE/general/lsof feeds/packages/utils
 #cp -rf $GITHUB_WORKSPACE/general/iptables package/network/utils
 
 # nghttp2
-sed -i 's/PKG_VERSION:=.*/PKG_VERSION:=1.62.1/g' feeds/packages/libs/nghttp2/Makefile
-sed -i 's/PKG_HASH:=.*/PKG_HASH:=2345d4dc136fda28ce243e0bb21f2e7e8ef6293d62c799abbf6f633a6887af72/g' feeds/packages/libs/nghttp2/Makefile
+sed -i 's/PKG_VERSION:=.*/PKG_VERSION:=1.66.0/g' feeds/packages/libs/nghttp2/Makefile
+sed -i 's/PKG_HASH:=.*/PKG_HASH:=00ba1bdf0ba2c74b2a4fe6c8b1069dc9d82f82608af24442d430df97c6f9e631/g' feeds/packages/libs/nghttp2/Makefile
 
 # libiconv-full
 #sed -i 's/PKG_VERSION:=.*/PKG_VERSION:=1.17/g' package/libs/libiconv-full/Makefile
@@ -991,10 +992,11 @@ sed -i 's/PKG_HASH:=.*/PKG_HASH:=2a499607df669e40258e53d0ade8035ba4ec0175244869d
 #sed -i 's/PKG_HASH:=.*/PKG_HASH:=47ac6e60271aa0196e65472d02d019556dc7c6d09df3b65df2c1ab6866348e3b/g' feeds/packages/net/lighttpd/Makefile
 
 # xz
-sed -i 's/PKG_VERSION:=.*/PKG_VERSION:=5.6.2/g' feeds/packages/utils/xz/Makefile
-sed -i 's/PKG_RELEASE:=.*/PKG_RELEASE:=1/g' feeds/packages/utils/xz/Makefile
-#sed -i 's|PKG_SOURCE_URL:=.*|PKG_SOURCE_URL:=https://github.com/tukaani-project/xz/releases/download/v$(PKG_VERSION)|g' feeds/packages/utils/xz/Makefile
-sed -i 's/PKG_HASH:=.*/PKG_HASH:=e12aa03cbd200597bd4ce11d97be2d09a6e6d39a9311ce72c91ac7deacde3171/g' feeds/packages/utils/xz/Makefile
+#sed -i 's/PKG_VERSION:=.*/PKG_VERSION:=5.6.2/g' feeds/packages/utils/xz/Makefile
+#sed -i 's/PKG_RELEASE:=.*/PKG_RELEASE:=1/g' feeds/packages/utils/xz/Makefile
+#sed -i 's/PKG_HASH:=.*/PKG_HASH:=e12aa03cbd200597bd4ce11d97be2d09a6e6d39a9311ce72c91ac7deacde3171/g' feeds/packages/utils/xz/Makefile
+rm -rf feeds/packages/utils/xz
+merge_package https://github.com/openwrt/packages packages/utils/xz
 
 # vim
 rm -rf feeds/packages/utils/vim
@@ -1130,6 +1132,9 @@ cp -fv $GITHUB_WORKSPACE/PATCH/001-elf.h-add-typedefs-for-Elf-_Relr.patch toolch
 rm -rf feeds/packages/lang/python
 cp -rf $GITHUB_WORKSPACE/general/python feeds/packages/lang
 
+# lua5.4
+cp -rf $GITHUB_WORKSPACE/general/lua5.4 feeds/packages/lang
+
 rm -rf  feeds/packages/net/uugamebooster
 cp -rf $GITHUB_WORKSPACE/general/uugamebooster feeds/packages/net
 
@@ -1140,6 +1145,9 @@ rm -rf feeds/packages/net/wget
 cp -rf $GITHUB_WORKSPACE/general/wget feeds/packages/net/wget
 
 cp -rf $GITHUB_WORKSPACE/general/geoview feeds/packages/net
+
+rm -rf feeds/packages/net/nmap
+cp -rf $GITHUB_WORKSPACE/general/nmap feeds/packages/net/nmap
 
 # liburcu
 #sed -i 's/PKG_VERSION:=.*/PKG_VERSION:=0.14.0/g' feeds/packages/libs/liburcu/Makefile

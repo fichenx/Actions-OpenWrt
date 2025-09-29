@@ -322,18 +322,17 @@ fix_hash_value() {
 
 # 应用所有哈希值修正
 apply_hash_fixes() {
-    echo "apply_hash_fixes"
-    #fix_hash_value \
-    #    "$BUILD_DIR/package/feeds/packages/smartdns/Makefile" \
-    #    "a7edb052fea61418c91c7a052f7eb1478fe6d844aec5e3eda0f2fcf82de29a10" \
-    #    "b11e175970e08115fe3b0d7a543fa8d3a6239d3c24eeecfd8cfd2fef3f52c6c9" \
-    #    "smartdns"
+    fix_hash_value \
+        "$BUILD_DIR/package/feeds/packages/smartdns/Makefile" \
+        "deb3ba1a8ca88fb7294acfb46c5d8881dfe36e816f4746f4760245907ebd0b98" \
+        "04d1ca0990a840a6e5fd05fe8c59b6c71e661a07d6e131e863441f3a9925b9c8" \
+        "smartdns"
 
-    #fix_hash_value \
-    #    "$BUILD_DIR/package/feeds/packages/smartdns/Makefile" \
-    #    "a1c084dcc4fb7f87641d706b70168fc3c159f60f37d4b7eac6089ae68f0a18a1" \
-    #    "ab7d303a538871ae4a70ead2e90d35e24fcc36bc20f5b6c5d963a3e283ea43b1" \
-    #    "smartdns"    
+    fix_hash_value \
+        "$BUILD_DIR/package/feeds/packages/smartdns/Makefile" \
+        "29970b932d9abdb2a53085d71b4f4964ec3291d8d7c49794a04f2c35fbc6b665" \
+        "f56db9077acb7750d0d5b3016ac7d5b9c758898c4d42a7a0956cea204448a182" \
+        "smartdns"    
 }
 
 update_ath11k_fw() {
@@ -1046,7 +1045,7 @@ main() {
     update_package "containerd" "releases" "v1.7.27"
     update_package "docker" "tags" "v28.2.2"
     update_package "dockerd" "releases" "v28.2.2"
-    # apply_hash_fixes # 调用哈希修正函数
+    apply_hash_fixes # 调用哈希修正函数
 }
 
 main "$@"
