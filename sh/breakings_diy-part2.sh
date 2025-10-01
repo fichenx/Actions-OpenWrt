@@ -920,20 +920,20 @@ sed -i 's/PKG_HASH:=.*/PKG_HASH:=dc63f89ec581ea99f8b558d8eb35109de06383010db5a19
 #svn co https://github.com/immortalwrt/packages/trunk/net/verysync feeds/packages/net/verysync
 
 # haproxy
-#sed -i 's/PKG_VERSION:=.*/PKG_VERSION:=3.0.10/g' feeds/packages/net/haproxy/Makefile
-#sed -i 's/PKG_RELEASE:=.*/PKG_RELEASE:=1/g' feeds/packages/net/haproxy/Makefile
-#sed -i 's/PKG_HASH:=.*/PKG_HASH:=d1508670b6fd5839c669a0a916842f0d3d3d0b578bb351a2a74a1de3d929ce26/g' feeds/packages/net/haproxy/Makefile
-#sed -i 's/BASE_TAG:=.*/BASE_TAG=v3.0.10/g' feeds/packages/net/haproxy/get-latest-patches.sh
-rm -rf feeds/packages/net/haproxy
-cp -rf $GITHUB_WORKSPACE/general/haproxy packages/net/haproxy
+sed -i 's/PKG_VERSION:=.*/PKG_VERSION:=3.0.11/g' feeds/packages/net/haproxy/Makefile
+sed -i 's/PKG_RELEASE:=.*/PKG_RELEASE:=1/g' feeds/packages/net/haproxy/Makefile
+sed -i 's/PKG_HASH:=.*/PKG_HASH:=a133e2d550c5fd9a849b5c7ab17bb945bcdad209ca140d41f45ebf31943ae783/g' feeds/packages/net/haproxy/Makefile
+sed -i 's/BASE_TAG:=.*/BASE_TAG=v3.0.11/g' feeds/packages/net/haproxy/get-latest-patches.sh
+#rm -rf feeds/packages/net/haproxy
+#cp -rf $GITHUB_WORKSPACE/general/haproxy packages/net/haproxy
 
 # perl
 rm -rf feeds/packages/lang/perl
 cp -rf $GITHUB_WORKSPACE/general/perl feeds/packages/lang
 
 # zlib
-rm -rf package/libs/zlib
-merge_package https://github.com/openwrt/openwrt openwrt/package/libs/zlib
+#rm -rf package/libs/zlib
+#merge_package https://github.com/openwrt/openwrt openwrt/package/libs/zlib
 #sed -i 's/PKG_VERSION:=.*/PKG_VERSION:=1.3/g' tools/zlib/Makefile
 #sed -i 's/PKG_HASH:=.*/PKG_HASH:=8a9ba2898e1d0d774eca6ba5b4627a11e5588ba85c8851336eb38de4683050a7/g' tools/zlib/Makefile
 
