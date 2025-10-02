@@ -768,8 +768,8 @@ cp -f $GITHUB_WORKSPACE/general/smartdns/Makefile feeds/packages/net/smartdns/Ma
 #sed -i 's/PKG_HASH:=.*/PKG_HASH:=ed285f4accaf05344f90975757b3dbfe772ba41d1c401c2648b7fa45b711bdd4/g' package/libs/libpcap/Makefile
 
 # xray-core
-#sed -i 's/PKG_VERSION:=.*/PKG_VERSION:=1.5.5/g' package/xray-core/Makefile
-#sed -i 's/PKG_HASH:=.*/PKG_HASH:=3f8d04fef82a922c83bab43cac6c86a76386cf195eb510ccf1cc175982693893/g' package/xray-core/Makefile
+sed -i 's/PKG_VERSION:=.*/PKG_VERSION:=25.9.11/g' feeds/packages/net/xray-core/Makefile
+sed -i 's/PKG_HASH:=.*/PKG_HASH:=9bccd2681183698bf860b1af5407f97b4b60090324aa3ef1546e446612d44e1f/g' feeds/packages/net/xray-core/Makefile
 
 # xray-plugin
 #sed -i 's/PKG_VERSION:=.*/PKG_VERSION:=1.5.5/g' package/xray-plugin/Makefile
@@ -924,6 +924,7 @@ sed -i 's/PKG_VERSION:=.*/PKG_VERSION:=3.0.11/g' feeds/packages/net/haproxy/Make
 sed -i 's/PKG_RELEASE:=.*/PKG_RELEASE:=1/g' feeds/packages/net/haproxy/Makefile
 sed -i 's/PKG_HASH:=.*/PKG_HASH:=a133e2d550c5fd9a849b5c7ab17bb945bcdad209ca140d41f45ebf31943ae783/g' feeds/packages/net/haproxy/Makefile
 sed -i 's/BASE_TAG:=.*/BASE_TAG=v3.0.11/g' feeds/packages/net/haproxy/get-latest-patches.sh
+sed -i 's|PKG_SOURCE_URL:=.*|PKG_SOURCE_URL:=https://www.haproxy.org/download/3.0/src|g' feeds/packages/net/haproxy/Makefile
 #rm -rf feeds/packages/net/haproxy
 #cp -rf $GITHUB_WORKSPACE/general/haproxy packages/net/haproxy
 
