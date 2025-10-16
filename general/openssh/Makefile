@@ -8,14 +8,14 @@
 include $(TOPDIR)/rules.mk
 
 PKG_NAME:=openssh
-PKG_REALVERSION:=10.0p1
-PKG_VERSION:=10.0_p1
+PKG_REALVERSION:=10.1p1
+PKG_VERSION:=10.1_p1
 PKG_RELEASE:=1
 
 PKG_SOURCE:=$(PKG_NAME)-$(PKG_REALVERSION).tar.gz
 PKG_SOURCE_URL:=https://cdn.openbsd.org/pub/OpenBSD/OpenSSH/portable/ \
 		https://ftp.openbsd.org/pub/OpenBSD/OpenSSH/portable/
-PKG_HASH:=021a2e709a0edf4250b1256bd5a9e500411a90dddabea830ed59cef90eb9d85c
+PKG_HASH:=b9fc7a2b82579467a6f2f43e4a81c8e1dfda614ddb4f9b255aafd7020bbf0758
 PKG_BUILD_DIR:=$(BUILD_DIR)/$(if $(BUILD_VARIANT),$(PKG_NAME)-$(BUILD_VARIANT)/)$(PKG_NAME)-$(PKG_REALVERSION)
 
 PKG_LICENSE:=BSD ISC
@@ -88,7 +88,7 @@ endef
 
 define Package/openssh-server
 	$(call Package/openssh/Default)
-	DEPENDS+= +libopenssl +zlib +openssh-keygen
+	DEPENDS+= +USE_GLIBC:libcrypt-compat +libopenssl +zlib +openssh-keygen
 	TITLE+= server
 	USERID:=sshd=22:sshd=22
 	VARIANT:=without-pam
@@ -110,7 +110,7 @@ endef
 
 define Package/openssh-server-pam
 	$(call Package/openssh/Default)
-	DEPENDS+= +libopenssl +zlib +libpthread +openssh-keygen +libpam
+	DEPENDS+= +USE_GLIBC:libcrypt-compat +libopenssl +zlib +libpthread +openssh-keygen +libpam
 	TITLE+= server (with PAM support)
 	VARIANT:=with-pam
 	USERID:=sshd=22:sshd=22
@@ -211,12 +211,12 @@ define Build/Compile
 endef
 
 define Package/openssh-moduli/install
-	install -d -m0700 $(1)/etc/ssh
+	install -d -m0755 $(1)/etc/ssh
 	$(INSTALL_DATA) $(PKG_INSTALL_DIR)/etc/ssh/moduli $(1)/etc/ssh/
 endef
 
 define Package/openssh-client/install
-	install -d -m0700 $(1)/etc/ssh
+	install -d -m0755 $(1)/etc/ssh
 	$(CP) $(PKG_INSTALL_DIR)/etc/ssh/ssh_config $(1)/etc/ssh/
 	$(INSTALL_DIR) $(1)/usr/libexec
 	$(INSTALL_BIN) $(PKG_INSTALL_DIR)/usr/bin/ssh $(1)/usr/libexec/ssh-openssh
@@ -239,7 +239,7 @@ define Package/openssh-sk-helper/install
 endef
 
 define Package/openssh-server/install
-	install -d -m0700 $(1)/etc/ssh $(1)/etc/ssh/sshd_config.d
+	install -d -m0755 $(1)/etc/ssh $(1)/etc/ssh/sshd_config.d
 	$(INSTALL_DATA) $(PKG_INSTALL_DIR)/etc/ssh/sshd_config $(1)/etc/ssh/
 	sed -r -i 's,^#(HostKey /etc/ssh/ssh_host_(rsa|ed25519)_key)$$$$,\1,' $(1)/etc/ssh/sshd_config
 	$(INSTALL_DIR) $(1)/etc/init.d

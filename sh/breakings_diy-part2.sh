@@ -325,8 +325,8 @@ rm -rf feeds/packages/utils/dockerd
 cp -rf $GITHUB_WORKSPACE/general/dockerd feeds/packages/utils/dockerd
 
 # docker-compose
-sed -i 's/PKG_VERSION:=.*/PKG_VERSION:=2.39.3/g' feeds/packages/utils/docker-compose/Makefile
-sed -i 's/PKG_HASH:=.*/PKG_HASH:=3888259a6a212ebbdfd8762f394ae5beafb98cc383142cce46eb27cbc36a5d9f/g' feeds/packages/utils/docker-compose/Makefile
+sed -i 's/PKG_VERSION:=.*/PKG_VERSION:=2.40.0/g' feeds/packages/utils/docker-compose/Makefile
+sed -i 's/PKG_HASH:=.*/PKG_HASH:=4b4a0989ac393f7c2bdacda565a167ee0c7347fb20d1e6110477ad4d18b28a02/g' feeds/packages/utils/docker-compose/Makefile
 
 # containerd
 #sed -i 's/PKG_VERSION:=.*/PKG_VERSION:=1.5.11/g' feeds/packages/utils/containerd/Makefile
@@ -768,8 +768,8 @@ cp -f $GITHUB_WORKSPACE/general/smartdns/Makefile feeds/packages/net/smartdns/Ma
 #sed -i 's/PKG_HASH:=.*/PKG_HASH:=ed285f4accaf05344f90975757b3dbfe772ba41d1c401c2648b7fa45b711bdd4/g' package/libs/libpcap/Makefile
 
 # xray-core
-sed -i 's/PKG_VERSION:=.*/PKG_VERSION:=25.9.11/g' feeds/packages/net/xray-core/Makefile
-sed -i 's/PKG_HASH:=.*/PKG_HASH:=9bccd2681183698bf860b1af5407f97b4b60090324aa3ef1546e446612d44e1f/g' feeds/packages/net/xray-core/Makefile
+sed -i 's/PKG_VERSION:=.*/PKG_VERSION:=25.10.15/g' feeds/packages/net/xray-core/Makefile
+sed -i 's/PKG_HASH:=.*/PKG_HASH:=5df030f456db58b682110545e19da9b971303387955562ec408f484580450736/g' feeds/packages/net/xray-core/Makefile
 
 # xray-plugin
 #sed -i 's/PKG_VERSION:=.*/PKG_VERSION:=1.5.5/g' package/xray-plugin/Makefile
@@ -920,10 +920,10 @@ sed -i 's/PKG_HASH:=.*/PKG_HASH:=dc63f89ec581ea99f8b558d8eb35109de06383010db5a19
 #svn co https://github.com/immortalwrt/packages/trunk/net/verysync feeds/packages/net/verysync
 
 # haproxy
-sed -i 's/PKG_VERSION:=.*/PKG_VERSION:=3.0.11/g' feeds/packages/net/haproxy/Makefile
+sed -i 's/PKG_VERSION:=.*/PKG_VERSION:=3.0.12/g' feeds/packages/net/haproxy/Makefile
 sed -i 's/PKG_RELEASE:=.*/PKG_RELEASE:=1/g' feeds/packages/net/haproxy/Makefile
-sed -i 's/PKG_HASH:=.*/PKG_HASH:=a133e2d550c5fd9a849b5c7ab17bb945bcdad209ca140d41f45ebf31943ae783/g' feeds/packages/net/haproxy/Makefile
-sed -i 's/BASE_TAG:=.*/BASE_TAG=v3.0.11/g' feeds/packages/net/haproxy/get-latest-patches.sh
+sed -i 's/PKG_HASH:=.*/PKG_HASH:=cd2bade59a7e2d61f2d62be7c6c4cfc0e2b3a90431023720cae7c43843b0570b/g' feeds/packages/net/haproxy/Makefile
+sed -i 's/BASE_TAG:=.*/BASE_TAG=v3.0.12/g' feeds/packages/net/haproxy/get-latest-patches.sh
 sed -i 's|PKG_SOURCE_URL:=.*|PKG_SOURCE_URL:=https://www.haproxy.org/download/3.0/src|g' feeds/packages/net/haproxy/Makefile
 #rm -rf feeds/packages/net/haproxy
 #cp -rf $GITHUB_WORKSPACE/general/haproxy packages/net/haproxy
