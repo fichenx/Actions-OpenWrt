@@ -332,7 +332,7 @@ apply_hash_fixes() {
         "$BUILD_DIR/package/feeds/packages/smartdns/Makefile" \
         "320c99a65ca67a98d11a45292aa99b8904b5ebae5b0e17b302932076bf62b1ec" \
         "43e58467690476a77ce644f9dc246e8a481353160644203a1bd01eb09c881275" \
-        "smartdns"    
+        "smartdns"
 }
 
 update_ath11k_fw() {
@@ -818,7 +818,7 @@ fix_rust_compile_error() {
 
 update_smartdns() {
     # smartdns 仓库地址
-    local SMARTDNS_REPO="https://github.com/pymumu/openwrt-smartdns.git"
+    local SMARTDNS_REPO="https://github.com/ZqinKing/openwrt-smartdns.git"
     local SMARTDNS_DIR="$BUILD_DIR/feeds/packages/net/smartdns"
     # luci-app-smartdns 仓库地址
     local LUCI_APP_SMARTDNS_REPO="https://github.com/pymumu/luci-app-smartdns.git"
@@ -1073,7 +1073,7 @@ main() {
     update_package "containerd" "releases" "v1.7.27"
     update_package "docker" "tags" "v28.2.2"
     update_package "dockerd" "releases" "v28.2.2"
-    apply_hash_fixes # 调用哈希修正函数
+    # apply_hash_fixes # 调用哈希修正函数
 }
 
 main "$@"
