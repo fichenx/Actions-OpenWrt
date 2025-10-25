@@ -325,8 +325,8 @@ rm -rf feeds/packages/utils/dockerd
 cp -rf $GITHUB_WORKSPACE/general/dockerd feeds/packages/utils/dockerd
 
 # docker-compose
-sed -i 's/PKG_VERSION:=.*/PKG_VERSION:=2.40.0/g' feeds/packages/utils/docker-compose/Makefile
-sed -i 's/PKG_HASH:=.*/PKG_HASH:=4b4a0989ac393f7c2bdacda565a167ee0c7347fb20d1e6110477ad4d18b28a02/g' feeds/packages/utils/docker-compose/Makefile
+sed -i 's/PKG_VERSION:=.*/PKG_VERSION:=2.40.1/g' feeds/packages/utils/docker-compose/Makefile
+sed -i 's/PKG_HASH:=.*/PKG_HASH:=1f6a066533f25ae61fac7b196c030d10693b8669f21f3798e738d70cea158853/g' feeds/packages/utils/docker-compose/Makefile
 
 # containerd
 #sed -i 's/PKG_VERSION:=.*/PKG_VERSION:=1.5.11/g' feeds/packages/utils/containerd/Makefile
@@ -672,8 +672,8 @@ rm -rf feeds/packages/utils/nano
 cp -rf $GITHUB_WORKSPACE/general/nano feeds/packages/utils
 
 # dnsproxy
-sed -i 's/PKG_VERSION:=.*/PKG_VERSION:=0.76.1/g' feeds/packages/net/dnsproxy/Makefile
-sed -i 's/PKG_HASH:=.*/PKG_HASH:=e11c0b67aa8784a9d1e8baf2724fe438dfe06a12f928eba8f1530b7aeb47f7db/g' feeds/packages/net/dnsproxy/Makefile
+sed -i 's/PKG_VERSION:=.*/PKG_VERSION:=0.77.0/g' feeds/packages/net/dnsproxy/Makefile
+sed -i 's/PKG_HASH:=.*/PKG_HASH:=00108ce5a8c91633577ae08a93922be65eb265e61aef681edef38e8055b81562/g' feeds/packages/net/dnsproxy/Makefile
 
 # libnl-tiny
 #sed -i 's/PKG_RELEASE:=.*/PKG_RELEASE:=1/g' package/libs/libnl-tiny/Makefile
