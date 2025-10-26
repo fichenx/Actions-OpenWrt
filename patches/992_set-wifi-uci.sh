@@ -64,6 +64,13 @@ redmi_ax6_wifi_cfg() {
     configure_wifi 1 1 HE20 21 'Redmi_AX6' '12345678'
 }
 
+gemtek_w1701k_wifi_cfg() {
+    configure_wifi 0 1 EHT20 24 'Gemtek_W1701K' '12345678'
+    configure_wifi 1 149 EHT80 23 'Gemtek_W1701K_5G' '12345678'
+    configure_wifi 2 36 EHT80 23 'Gemtek_W1701K_6G' '12345678'
+    uci set wireless.radio2.disabled='1'
+}
+
 case "${board_name}" in
 jdcloud,ax1800-pro | \
     jdcloud,re-ss-01)
@@ -86,6 +93,9 @@ cmcc,rax3000m)
 redmi,ax6 | \
     redmi,ax6-stock)
     redmi_ax6_wifi_cfg
+    ;;
+gemtek,w1701k)
+    gemtek_w1701k_wifi_cfg
     ;;
 *)
     exit 0
