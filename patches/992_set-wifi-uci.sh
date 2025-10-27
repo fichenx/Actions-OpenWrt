@@ -64,11 +64,15 @@ redmi_ax6_wifi_cfg() {
     configure_wifi 1 1 HE20 21 'Redmi_AX6' '12345678'
 }
 
-gemtek_w1701k_wifi_cfg() {
-    configure_wifi 0 1 EHT20 24 'Gemtek_W1701K' '12345678'
-    configure_wifi 1 149 EHT80 23 'Gemtek_W1701K_5G' '12345678'
-    configure_wifi 2 36 EHT80 23 'Gemtek_W1701K_6G' '12345678'
-    uci set wireless.radio2.disabled='1'
+qihoo_360v6_wifi_cfg() {
+    configure_wifi 0 1 HE80 20 'Qihoo_360V6' '12345678'
+    configure_wifi 1 149 HE20 20 'Qihoo_360V6_5G' '12345678'
+}
+
+linksys_mx4x00_wifi_cfg() {
+    configure_wifi 0 1 EHT20 22 'Linksys_MX4X00' '12345678'
+    configure_wifi 1 149 EHT80 21 'Linksys_MX4X00_5G1' '12345678'
+    configure_wifi 2 44 EHT80 21 'Linksys_MX4X00_5G2' '12345678'
 }
 
 case "${board_name}" in
@@ -94,8 +98,13 @@ redmi,ax6 | \
     redmi,ax6-stock)
     redmi_ax6_wifi_cfg
     ;;
-gemtek,w1701k)
-    gemtek_w1701k_wifi_cfg
+qihoo,360v6)
+    qihoo_360v6_wifi_cfg
+    ;;
+linksys,mx4200v1 | \
+    linksys,mx4200v2 | \
+    linksys,mx4300)
+    linksys_mx4x00_wifi_cfg
     ;;
 *)
     exit 0
