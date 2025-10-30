@@ -75,6 +75,13 @@ linksys_mx4x00_wifi_cfg() {
     configure_wifi 2 44 EHT80 21 'Linksys_MX4X00_5G2' '12345678'
 }
 
+gemtek_w1701k_wifi_cfg() {
+    configure_wifi 0 1 EHT20 22 'Gemtek_W1701K' '12345678'
+    configure_wifi 1 44 EHT160 21 'Gemtek_W1701K_5G' '12345678'
+    # configure_wifi 2 36 EHT80 23 'Gemtek_W1701K_6G' '12345678'
+    uci set wireless.radio2.disabled='1'
+}
+
 case "${board_name}" in
 jdcloud,ax1800-pro | \
     jdcloud,re-ss-01)
@@ -105,6 +112,9 @@ linksys,mx4200v1 | \
     linksys,mx4200v2 | \
     linksys,mx4300)
     linksys_mx4x00_wifi_cfg
+    ;;
+gemtek,w1701k)
+    gemtek_w1701k_wifi_cfg
     ;;
 *)
     exit 0
