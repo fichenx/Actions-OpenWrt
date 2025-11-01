@@ -79,7 +79,8 @@ linksys_mx4x00_wifi_cfg() {
 gemtek_w1701k_wifi_cfg() {
 	configure_wifi 0 1 EHT20 23 'Gemtek_W1701K' '12345678'
 	configure_wifi 1 44 EHT160 23 'Gemtek_W1701K_5G' '12345678'
-	configure_wifi 2 1 EHT320 15 'Gemtek_W1701K_6G' '12345678' 'sae'
+	configure_wifi 2 1 EHT320 23 'Gemtek_W1701K_6G' '12345678' 'sae'
+    uci set wireless.radio2.disabled='1'
 }
 
 case "${board_name}" in
