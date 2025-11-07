@@ -76,13 +76,18 @@ reset_feeds_conf() {
 
 update_feeds() {
     # 删除注释行
-    sed -i '/^#/d' "$BUILD_DIR/$FEEDS_CONF"
+    local FEEDS_PATH="$BUILD_DIR/$FEEDS_CONF"
+    if [[ -f "$BUILD_DIR/feeds.conf" ]]; then
+        FEEDS_PATH="$BUILD_DIR/feeds.conf"
+    fi
+    sed -i '/^#/d' "$FEEDS_PATH"
+    sed -i '/packages_ext/d' "$FEEDS_PATH"
 
     # 检查并添加 fichenx/openwrt-package 源
-    if ! grep -q "fichenx/openwrt-package" "$BUILD_DIR/$FEEDS_CONF"; then
+    if ! grep -q "fichenx/openwrt-package" "$FEEDS_PATH"; then
         # 确保文件以换行符结尾
-        [ -z "$(tail -c 1 "$BUILD_DIR/$FEEDS_CONF")" ] || echo "" >>"$BUILD_DIR/$FEEDS_CONF"
-        echo "src-git fichenx https://github.com/fichenx/openwrt-package;js" >>"$BUILD_DIR/$FEEDS_CONF"
+        [ -z "$(tail -c 1 "$FEEDS_PATH")" ] || echo "" >>"$FEEDS_PATH"
+        echo "src-git fichenx https://github.com/fichenx/openwrt-package;js" >>"$FEEDS_PATH"
     fi
 
     # 添加bpf.mk解决更新报错
@@ -121,7 +126,7 @@ remove_unwanted_packages() {
     )
     local fichenx_packages=(
         "ppp" "firewall" "dae" "daed" "daed-next" "libnftnl" "nftables" "dnsmasq" "luci-app-alist"
-        "alist" "opkg" "smartdns" "luci-app-smartdns"
+        "alist" "opkg" "smartdns" "luci-app-smartdns" "easytier"
     )
 
     for pkg in "${luci_packages[@]}"; do
@@ -800,13 +805,13 @@ update_lucky() {
     version=$(find "$BASE_PATH/patches" -name "lucky_*.tar.gz" -printf "%f\n" | head -n 1 | sed -n 's/^lucky_\(.*\)_Linux.*$/\1/p')
     if [ -z "$version" ]; then
         echo "Warning: 未找到 lucky 补丁文件，跳过更新。" >&2
-        return 1
+        return 0
     fi
 
     local makefile_path="$BUILD_DIR/feeds/fichenx/lucky/Makefile"
     if [ ! -f "$makefile_path" ]; then
         echo "Warning: lucky Makefile not found. Skipping." >&2
-        return 1
+        return 0
     fi
 
     echo "正在更新 lucky Makefile..."
@@ -1015,6 +1020,13 @@ fix_easytier_lua() {
     fi
 }
 
+fix_easytier_mk() {
+	local mk_path="$BUILD_DIR/feeds/fichenx/luci-app-easytier/easytier/Makefile"
+    if [ -f "$mk_path" ]; then
+        sed -i 's/!@(mips||mipsel)/!TARGET_mips \&\& !TARGET_mipsel/g' "$mk_path"
+    fi
+}
+
 # 更新 nginx-mod-ubus 模块
 update_nginx_ubus_module() {
     local makefile_path="$BUILD_DIR/feeds/packages/net/nginx/Makefile"
@@ -1078,6 +1090,7 @@ main() {
     update_nginx_ubus_module # 更新 nginx-mod-ubus 模块
     check_default_settings
     install_opkg_distfeeds
+    fix_easytier_mk
     install_feeds
     fix_easytier_lua
     update_adguardhome
