@@ -325,8 +325,8 @@ rm -rf feeds/packages/utils/dockerd
 cp -rf $GITHUB_WORKSPACE/general/dockerd feeds/packages/utils/dockerd
 
 # docker-compose
-sed -i 's/PKG_VERSION:=.*/PKG_VERSION:=2.40.1/g' feeds/packages/utils/docker-compose/Makefile
-sed -i 's/PKG_HASH:=.*/PKG_HASH:=1f6a066533f25ae61fac7b196c030d10693b8669f21f3798e738d70cea158853/g' feeds/packages/utils/docker-compose/Makefile
+sed -i 's/PKG_VERSION:=.*/PKG_VERSION:=2.40.3/g' feeds/packages/utils/docker-compose/Makefile
+sed -i 's/PKG_HASH:=.*/PKG_HASH:=5ee988a7d9e00ffa2d166a50f4cda0e13622f2220f1ffa6aff353f33cf40e37e/g' feeds/packages/utils/docker-compose/Makefile
 
 # containerd
 #sed -i 's/PKG_VERSION:=.*/PKG_VERSION:=1.5.11/g' feeds/packages/utils/containerd/Makefile
@@ -782,7 +782,8 @@ merge_package https://github.com/openwrt/packages packages/libs/icu
 #sed -i 's/PKG_HASH:=.*/PKG_HASH:=a2d2d38217092a7ed56635e34467f92f976b370e20182ad325edea6681a71d68/g' feeds/packages/libs/icu/Makefile
 
 # ucode
-#cp -rf $GITHUB_WORKSPACE/general/ucode package/utils
+rm -rf package/utils/ucode
+cp -rf $GITHUB_WORKSPACE/general/ucode package/utils
 
 # readd cpufreq for aarch64
 sed -i 's/LUCI_DEPENDS.*/LUCI_DEPENDS:=\@\(arm\|\|aarch64\)/g' feeds/luci/applications/luci-app-cpufreq/Makefile
@@ -1155,9 +1156,10 @@ cp -rf $GITHUB_WORKSPACE/general/nmap feeds/packages/net/nmap
 #sed -i 's/PKG_HASH:=.*/PKG_HASH:=ca43bf261d4d392cff20dfae440836603bf009fce24fdc9b2697d837a2239d4f/g' feeds/packages/libs/liburcu/Makefile
 
 # afalg_engine
-sed -i 's/PKG_VERSION:=.*/PKG_VERSION:=1.2.1/g' feeds/packages/libs/afalg_engine/Makefile
+sed -i 's/PKG_VERSION:=.*/PKG_VERSION:=1.2.2/g' feeds/packages/libs/afalg_engine/Makefile
 sed -i 's/PKG_RELEASE:=.*/PKG_RELEASE:=1/g' feeds/packages/libs/afalg_engine/Makefile
-sed -i 's/PKG_HASH:=.*/PKG_HASH:=3f0f6ee9ea7a5ea9c668ec16f8c492aa024a82dca78d0fbe30fd256f9da95d65/g' feeds/packages/libs/afalg_engine/Makefile
+sed -i 's/PKG_HASH:=.*/PKG_HASH:=6fe451cf37b0c9911445e46bfe96926aad5dc486c9cb81ecf7b87bb3ffff1c1a/g' feeds/packages/libs/afalg_engine/Makefile
+sed -i '30i\TARGET_CFLAGS += -Wno-deprecated-declarations\' feeds/packages/libs/afalg_engine/Makefile
 
 ./scripts/feeds update -a
 ./scripts/feeds install -a
