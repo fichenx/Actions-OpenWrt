@@ -309,11 +309,11 @@ git_sparse_clone master https://github.com/coolsnowwolf/packages lang/golang && 
 rm -rf package/naiveproxy
 git_sparse_clone main https://github.com/fichenx/openwrt-package naiveproxy && mv -n naiveproxy package/naiveproxy
 
-#20251107:ucode、udebug使用旧版本，修复编译错误
-sed -i 's/PKG_SOURCE_DATE:=.*/PKG_SOURCE_DATE:=2025-03-24/g' package/utils/ucode/Makefile
-sed -i 's/PKG_SOURCE_VERSION:=.*/PKG_SOURCE_VERSION:=b27d70c977ab4381f4094a0b1208e2a13fc5123f/g' package/utils/ucode/Makefile
-sed -i 's/PKG_MIRROR_HASH:=.*/PKG_MIRROR_HASH:=c2285ab8e473a12a1795864323af15779ef42a72dfe8a77c740cf99c316a2ac7/g' package/utils/ucode/Makefile
+#20251108:ucode、udebug使用最新版本，修复编译错误
+sed -i 's/PKG_SOURCE_DATE:=.*/PKG_SOURCE_DATE:=2025-11-07/g' package/utils/ucode/Makefile
+sed -i 's/PKG_SOURCE_VERSION:=.*/PKG_SOURCE_VERSION:=ea579046a619e5325b994780bf2ce1ffde448794/g' package/utils/ucode/Makefile
+sed -i 's/PKG_MIRROR_HASH:=.*/PKG_MIRROR_HASH:=eb6049d2d4925318257cfa2fa3e5199f47170663d00a5b05eea8b131d62c4bc9/g' package/utils/ucode/Makefile
 
-sed -i 's/PKG_SOURCE_DATE:=.*/PKG_SOURCE_DATE:=2023-12-06/g' package/libs/udebug/Makefile
-sed -i 's/PKG_SOURCE_VERSION:=.*/PKG_SOURCE_VERSION:=6d3f51f9fda706f0cf4732c762e4dbe8c21e12cf/g' package/libs/udebug/Makefile
-sed -i 's/PKG_MIRROR_HASH:=.*/PKG_MIRROR_HASH:=553a58a14b59dc7b22755557acbc74f0655a431442a4faca56d28cdb1ef14fb4/g' package/libs/udebug/Makefile
+sed -i 's/PKG_SOURCE_DATE:=.*/PKG_SOURCE_DATE:=2025-10-21/g' package/libs/udebug/Makefile
+sed -i 's/PKG_SOURCE_VERSION:=.*/PKG_SOURCE_VERSION:=75f39cd4a8067a6f0503c2f1c83c6b1af733a6f2/g' package/libs/udebug/Makefile
+sed -i 's/PKG_MIRROR_HASH:=.*/PKG_MIRROR_HASH:=9546c51155e06d1ee49b1121ee834aad0dbe9490f67fe05d265ec74cb2fd0506/g' package/libs/udebug/Makefile
