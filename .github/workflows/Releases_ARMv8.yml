@@ -30,10 +30,11 @@ on:
         required: true
         description: Runs on...
         type: choice
-        default: ubuntu-22.04
+        default: ubuntu-24.04
         options:
           - ubuntu-20.04
           - ubuntu-22.04
+          - ubuntu-24.04
 
   schedule:
     - cron: '05 10 * * 4'
