@@ -331,10 +331,10 @@ rm -rf package/naiveproxy
 git_sparse_clone main https://github.com/fichenx/openwrt-package naiveproxy && mv -n naiveproxy package/naiveproxy
 
 #20251108:ucode、udebug使用最新版本，修复编译错误
-sed -i 's/PKG_SOURCE_DATE:=.*/PKG_SOURCE_DATE:=2025-11-07/g' package/utils/ucode/Makefile
-sed -i 's/PKG_SOURCE_VERSION:=.*/PKG_SOURCE_VERSION:=ea579046a619e5325b994780bf2ce1ffde448794/g' package/utils/ucode/Makefile
-sed -i 's/PKG_MIRROR_HASH:=.*/PKG_MIRROR_HASH:=eb6049d2d4925318257cfa2fa3e5199f47170663d00a5b05eea8b131d62c4bc9/g' package/utils/ucode/Makefile
-
-sed -i 's/PKG_SOURCE_DATE:=.*/PKG_SOURCE_DATE:=2025-10-21/g' package/libs/udebug/Makefile
-sed -i 's/PKG_SOURCE_VERSION:=.*/PKG_SOURCE_VERSION:=75f39cd4a8067a6f0503c2f1c83c6b1af733a6f2/g' package/libs/udebug/Makefile
-sed -i 's/PKG_MIRROR_HASH:=.*/PKG_MIRROR_HASH:=9546c51155e06d1ee49b1121ee834aad0dbe9490f67fe05d265ec74cb2fd0506/g' package/libs/udebug/Makefile
+#sed -i 's/PKG_SOURCE_DATE:=.*/PKG_SOURCE_DATE:=2025-11-07/g' package/utils/ucode/Makefile
+#sed -i 's/PKG_SOURCE_VERSION:=.*/PKG_SOURCE_VERSION:=ea579046a619e5325b994780bf2ce1ffde448794/g' package/utils/ucode/Makefile
+#sed -i 's/PKG_MIRROR_HASH:=.*/PKG_MIRROR_HASH:=eb6049d2d4925318257cfa2fa3e5199f47170663d00a5b05eea8b131d62c4bc9/g' package/utils/ucode/Makefile
+#
+#sed -i 's/PKG_SOURCE_DATE:=.*/PKG_SOURCE_DATE:=2025-10-21/g' package/libs/udebug/Makefile
+#sed -i 's/PKG_SOURCE_VERSION:=.*/PKG_SOURCE_VERSION:=75f39cd4a8067a6f0503c2f1c83c6b1af733a6f2/g' package/libs/udebug/Makefile
+#sed -i 's/PKG_MIRROR_HASH:=.*/PKG_MIRROR_HASH:=9546c51155e06d1ee49b1121ee834aad0dbe9490f67fe05d265ec74cb2fd0506/g' package/libs/udebug/Makefile
