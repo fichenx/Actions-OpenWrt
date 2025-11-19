@@ -52,16 +52,19 @@ clone_repo() {
 
 clean_up() {
     cd $BUILD_DIR
-    if [[ -f $BUILD_DIR/.config ]]; then
-        \rm -f $BUILD_DIR/.config
+    if [[ -f "$BUILD_DIR/.config" ]]; then
+        \rm -f "$BUILD_DIR/.config"
     fi
-    if [[ -d $BUILD_DIR/tmp ]]; then
-        \rm -rf $BUILD_DIR/tmp
+    if [[ -d "$BUILD_DIR/tmp" ]]; then
+        \rm -rf "$BUILD_DIR/tmp"
     fi
-    if [[ -d $BUILD_DIR/logs ]]; then
-        \rm -rf $BUILD_DIR/logs/*
+    if [[ -d "$BUILD_DIR/logs" ]]; then
+        \rm -rf "$BUILD_DIR/logs/*"
     fi
-    mkdir -p $BUILD_DIR/tmp
+    if [[ -d "$BUILD_DIR/feeds" ]]; then
+        ./scripts/feeds clean
+    fi
+    mkdir -p "$BUILD_DIR/tmp"
     echo "1" >$BUILD_DIR/tmp/.build
 }
 
@@ -103,7 +106,6 @@ update_feeds() {
     # fi
 
     # 更新 feeds
-    ./scripts/feeds clean
     ./scripts/feeds update -a
 }
 
@@ -206,8 +208,8 @@ install_fullconenat() {
 
 check_default_settings() {
     local settings_dir="$BUILD_DIR/package/emortal/default-settings"
-    if [ ! -d "$settings_dir" ]; then
-        echo "目录 $settings_dir 不存在，正在从 immortalwrt 仓库克隆..."
+    if [ -z "$(find "$BUILD_DIR/package" -type d -name "default-settings" -print -quit 2>/dev/null)" ]; then
+        echo "在 $BUILD_DIR/package 中未找到 default-settings 目录，正在从 immortalwrt 仓库克隆..."
         local tmp_dir
         tmp_dir=$(mktemp -d)
         if git clone --depth 1 --filter=blob:none --sparse https://github.com/immortalwrt/immortalwrt.git "$tmp_dir"; then
@@ -232,7 +234,7 @@ install_feeds() {
     ./scripts/feeds update -i
     for dir in $BUILD_DIR/feeds/*; do
         # 检查是否为目录并且不以 .tmp 结尾，并且不是软链接
-        if [ -d "$dir" ] && [[ ! "$dir" == *.tmp ]] && [ ! -L "$dir" ]; then
+        if [ -d "$dir" ] && [[ ! "$dir" == *.tmp ]] && [[ ! "$dir" == *.index ]] && [[ ! "$dir" == *.targetindex ]]; then
             if [[ $(basename "$dir") == "fichenx" ]]; then
                 install_fichenx
                 install_fullconenat
@@ -434,8 +436,12 @@ change_cpuusage() {
     fi
 
     # Install platform-specific cpuusage scripts
-    install -Dm755 "$BASE_PATH/patches/cpuusage" "$qualcommax_sbin_dir/cpuusage"
-    install -Dm755 "$BASE_PATH/patches/hnatusage" "$filogic_sbin_dir/cpuusage"
+    if [ -d "$BUILD_DIR/target/linux/qualcommax" ]; then
+        install -Dm755 "$BASE_PATH/patches/cpuusage" "$qualcommax_sbin_dir/cpuusage"
+    fi
+    if [ -d "$BUILD_DIR/target/linux/mediatek" ]; then
+        install -Dm755 "$BASE_PATH/patches/hnatusage" "$filogic_sbin_dir/cpuusage"
+    fi
 }
 
 update_tcping() {
@@ -800,6 +806,52 @@ update_geoip() {
 }
 
 update_lucky() {
+    local lucky_repo_url="https://github.com/gdy666/luci-app-lucky.git"
+    local target_fichenx_dir="$BUILD_DIR/feeds/small8"
+    local lucky_dir="$target_fichenx_dir/lucky"
+    local luci_app_lucky_dir="$target_fichenx_dir/luci-app-lucky"
+
+    # 提前检查目标目录是否存在
+    if [ ! -d "$lucky_dir" ] || [ ! -d "$luci_app_lucky_dir" ]; then
+        echo "Warning: $lucky_dir 或 $luci_app_lucky_dir 不存在，跳过 lucky 源代码更新。" >&2
+    else
+        local tmp_dir
+        tmp_dir=$(mktemp -d)
+
+        echo "正在从 $lucky_repo_url 稀疏检出 luci-app-lucky 和 lucky..."
+
+        if ! git clone --depth 1 --filter=blob:none --no-checkout "$lucky_repo_url" "$tmp_dir"; then
+            echo "错误：从 $lucky_repo_url 克隆仓库失败" >&2
+            rm -rf "$tmp_dir"
+            return 0
+        fi
+
+        pushd "$tmp_dir" > /dev/null
+        git sparse-checkout init --cone
+        git sparse-checkout set luci-app-lucky lucky || {
+            echo "错误：稀疏检出 luci-app-lucky 或 lucky 失败" >&2
+            popd > /dev/null
+            rm -rf "$tmp_dir"
+            return 0
+        }
+        git checkout --quiet
+
+        # 覆盖到目标目录
+        \cp -rf "$tmp_dir/luci-app-lucky/." "$luci_app_lucky_dir/"
+        \cp -rf "$tmp_dir/lucky/." "$lucky_dir/"
+
+        popd > /dev/null
+        rm -rf "$tmp_dir"
+        echo "luci-app-lucky 和 lucky 源代码更新完成。"
+    fi
+
+    # 默认关闭lucky
+    local lucky_conf="$BUILD_DIR/feeds/fichenx/lucky/files/luckyuci"
+    if [ -f "$lucky_conf" ]; then
+        sed -i "s/option enabled '1'/option enabled '0'/g" "$lucky_conf"
+        sed -i "s/option logger '1'/option logger '0'/g" "$lucky_conf"
+    fi
+
     # 从补丁文件名中提取版本号
     local version
     version=$(find "$BASE_PATH/patches" -name "lucky_*.tar.gz" -printf "%f\n" | head -n 1 | sed -n 's/^lucky_\(.*\)_Linux.*$/\1/p')
