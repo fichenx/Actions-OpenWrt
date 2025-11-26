@@ -100,8 +100,8 @@ jobs:
         sudo -E apt-get -qq purge azure-cli ghc* zulu* llvm* firefox google* dotnet* powershell openjdk* mongodb* moby* || true
         [[ -n "${AGENT_TOOLSDIRECTORY}" ]] && sudo rm -rf "${AGENT_TOOLSDIRECTORY}"
         sudo -E apt-get -qq update
-        sudo -E apt-get -qq install $(cat $GITHUB_WORKSPACE/depends-ubuntu-2204)
-        #sudo -E apt-get -qq install $(curl -fsSL git.io/depends-ubuntu-2004)
+        #sudo -E apt-get -qq install $(cat $GITHUB_WORKSPACE/depends-ubuntu-2204)
+        sudo -E apt-get -qq install $(curl -fsSL https://tinyurl.com/ubuntu2404-make-openwrt)
         sudo -E apt-get -qq install libfuse-dev lib32z1-dev libpcre3 libpcre3-dev
         sudo -E apt-get -qq autoremove --purge
         sudo -E systemctl daemon-reload
