@@ -9,6 +9,10 @@
 # File name: diy-part2.sh
 # Description: OpenWrt DIY script part 2 (After Update feeds)
 #
+
+echo "开始 自定义（fichen） 配置……"
+echo "========================="
+
 function git_sparse_clone() {
   branch="$1" rurl="$2" && shift 2
   rootdir="$PWD"
@@ -228,9 +232,9 @@ git_sparse_clone openwrt-23.05 https://github.com/openwrt/packages net/uwsgi && 
 [ -e package/lean/default-settings/files/zzz-default-settings ] && git_svn main https://github.com/gdy666/luci-app-lucky luci-app-lucky lucky
 
 #替换lucky_daji为本地lucky_wanji
-local version=$(find "$GITHUB_WORKSPACE/patches" -name "lucky*" -printf "%f\n" | head -n 1 | awk -F'_' '{print $2}')
-local mk_dir="feeds/fichenx/lucky/Makefile"
-local mk_lede_dir="feeds/packages/net/lucky/Makefile"
+version=$(find "$GITHUB_WORKSPACE/patches" -name "lucky*" -printf "%f\n" | head -n 1 | awk -F'_' '{print $2}')
+mk_dir="feeds/fichenx/lucky/Makefile"
+mk_lede_dir="feeds/packages/net/lucky/Makefile"
 if [ -d "${mk_dir%/*}" ] && [ -f "$mk_dir" ]; then
     sed -i '/Build\/Prepare/ a\	[ -f $(TOPDIR)/../patches/lucky_'${version}'_Linux_$(LUCKY_ARCH)_wanji.tar.gz ] && install -Dm644 $(TOPDIR)/../patches/lucky_'${version}'_Linux_$(LUCKY_ARCH)_wanji.tar.gz $(PKG_BUILD_DIR)/$(PKG_NAME)_$(PKG_VERSION)_Linux_$(LUCKY_ARCH).tar.gz' "$mk_dir"
     sed -i '/wget/d' "$mk_dir"
@@ -323,3 +327,6 @@ git_sparse_clone master https://github.com/immortalwrt/immortalwrt package/libs/
 #sed -i 's/PKG_SOURCE_DATE:=.*/PKG_SOURCE_DATE:=2025-10-21/g' package/libs/udebug/Makefile
 #sed -i 's/PKG_SOURCE_VERSION:=.*/PKG_SOURCE_VERSION:=75f39cd4a8067a6f0503c2f1c83c6b1af733a6f2/g' package/libs/udebug/Makefile
 #sed -i 's/PKG_MIRROR_HASH:=.*/PKG_MIRROR_HASH:=9546c51155e06d1ee49b1121ee834aad0dbe9490f67fe05d265ec74cb2fd0506/g' package/libs/udebug/Makefile
+
+echo "========================="
+echo " 自定义(fichen) 配置完成……"
