@@ -309,7 +309,13 @@ git_sparse_clone master https://github.com/coolsnowwolf/packages lang/golang && 
 rm -rf package/naiveproxy
 git_sparse_clone main https://github.com/fichenx/openwrt-package naiveproxy && mv -n naiveproxy package/naiveproxy
 
-#20251108:ucode、udebug使用最新版本，修复编译错误
+#20251126:修复ucode编译错误
+#sed -i '/^TARGET_CFLAGS\s*+=/ s/$/ -Wno-format-overflow/' package/utils/ucode/Makefile || \
+#sed -i '1i TARGET_CFLAGS += -Wno-format-overflow' package/utils/ucode/Makefile
+rm -rf package/utils/ucode
+git_sparse_clone master https://github.com/immortalwrt/immortalwrt package/utils/ucode && mv -n ucode package/utils/ucode
+rm -rf package/libs/udebug
+git_sparse_clone master https://github.com/immortalwrt/immortalwrt package/libs/udebug && mv -n ucode package/libs/udebug
 #sed -i 's/PKG_SOURCE_DATE:=.*/PKG_SOURCE_DATE:=2025-11-07/g' package/utils/ucode/Makefile
 #sed -i 's/PKG_SOURCE_VERSION:=.*/PKG_SOURCE_VERSION:=ea579046a619e5325b994780bf2ce1ffde448794/g' package/utils/ucode/Makefile
 #sed -i 's/PKG_MIRROR_HASH:=.*/PKG_MIRROR_HASH:=eb6049d2d4925318257cfa2fa3e5199f47170663d00a5b05eea8b131d62c4bc9/g' package/utils/ucode/Makefile
