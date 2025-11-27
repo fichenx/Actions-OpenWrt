@@ -22,9 +22,10 @@ function git_sparse_clone() {
   cd temp_sparse
   git sparse-checkout init --cone
   git sparse-checkout set $@
-  pkg=`echo $@ | tr ' ' '\n' | rev | cut -d'/' -f 1 | rev | tr '\n' ' ' `
+  #pkg=`echo $@ | tr ' ' '\n' | rev | cut -d'/' -f 1 | rev | tr '\n' ' ' `
   #git checkout $branch -- $@
-  [ -d ../package/custom ] && cd ../package/custom && rm -rf $pkg && cd "$rootdir"/temp_sparse
+  #[ -d ../package/custom ] && cd ../package/custom && rm -rf $pkg && cd "$rootdir"/temp_sparse
+  cp -af $@ ../package/custom/
   mv -n $@ ../
   cd ..
   rm -rf temp_sparse
@@ -39,10 +40,10 @@ function git_svn() {
   cd temp_svn
   git sparse-checkout init --cone
   git sparse-checkout set $@
-  pkg=`echo $@ | tr ' ' '\n' | rev | cut -d'/' -f 1 | rev | tr '\n' ' ' `
+  #pkg=`echo $@ | tr ' ' '\n' | rev | cut -d'/' -f 1 | rev | tr '\n' ' ' `
   #git checkout $branch -- $@
-  [ -d ../package/custom ] && cd ../package/custom && rm -rf $pkg && cd "$rootdir"/temp_svn
-  mv -n $@ ../package/custom2/
+  #[ -d ../package/custom ] && cd ../package/custom && rm -rf $pkg && cd "$rootdir"/temp_svn
+  mv $@ ../package/custom/
   cd ..
   rm -rf temp_svn
   }
@@ -54,8 +55,8 @@ function merge_package(){
 	rootdir="$PWD"
     # find package/ -follow -name $pkg -not -path "package/custom/*" | xargs -rt rm -rf
     git clone -b $1 --depth=1 --single-branch $2
-  [ -d package/custom ] && cd package/custom && rm -rf $3 && cd "$rootdir"
-    mv $3 package/custom2/
+    #[ -d package/custom ] && cd package/custom && rm -rf $3 && cd "$rootdir"
+    mv $3 package/custom/
     rm -rf $repo
 }
 rm -rf package/custom2; mkdir package/custom2
