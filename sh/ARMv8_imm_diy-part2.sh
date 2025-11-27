@@ -10,7 +10,7 @@
 # Description: OpenWrt DIY script part 2 (After Update feeds)
 #
 
-echo "开始 自定义（fichen） 配置……"
+echo "开始 自定义（ARMv8_imm_diy-part2） 配置……"
 echo "========================="
 
 
@@ -183,24 +183,7 @@ sed -i 's|CONFIG_PACKAGE_luci-app-serverchan=y|CONFIG_PACKAGE_luci-app-wechatpus
 rm -rf feeds/luci/applications/luci-app-wechatpush package/luci-app-serverchan
 git clone -b master https://github.com/tty228/luci-app-wechatpush package/custom2/luci-app-wechatpush
 
-#luci-app-bypass(lua版)
-#git_sparse_clone master "https://github.com/kiddin9/openwrt-packages" "kiddin9" luci-app-bypass && mv -n luci-app-bypass package/luci-app-bypass
-git_svn main https://github.com/fichenx/packages luci-app-bypass
 
-#添加luci-app-npc(lua版)
-git_svn master https://github.com/Hyy2001X/AutoBuild-Packages luci-app-npc
-
-#使用官方最新samba4
-#sed -i 's/PKG_VERSION:=.*/PKG_VERSION:=4.19.4/g' feeds/packages/net/samba4/Makefile
-#sed -i 's/PKG_HASH:=.*/PKG_HASH:=4026d93b866db198c8ca1685b0f5d52793f65c6e63cb364163af661fdff0968c/g' feeds/packages/net/samba4/Makefile
-rm -rf feeds/packages/net/samba4
-rm -rf feeds/packages/lang/perl
-git_sparse_clone master https://github.com/openwrt/packages net/samba4 && mv -n samba4 feeds/packages/net/samba4
-git_sparse_clone master https://github.com/openwrt/packages lang/perl && mv -n perl feeds/packages/lang/perl
-
-#更换msd_lite为最新版（immortalwrt源）
-[ -e package/lean/default-settings/files/zzz-default-settings ] && rm -rf feeds/packages/net/msd_lite
-[ -e package/lean/default-settings/files/zzz-default-settings ] && git_sparse_clone master https://github.com/immortalwrt/packages net/msd_lite && mv -n msd_lite feeds/packages/net/msd_lite
 #更换msd_lite源为修改版（可以反向代理）
 sed -i 's|PKG_SOURCE_URL:=.*|PKG_SOURCE_URL:=https://github.com/fichenx/msd_lite.git|g'  feeds/packages/net/msd_lite/Makefile
 sed -i 's|PKG_SOURCE_DATE:=.*|PKG_SOURCE_DATE:=2024-12-16|g'  feeds/packages/net/msd_lite/Makefile
@@ -208,37 +191,6 @@ sed -i 's|PKG_SOURCE_VERSION:=.*|PKG_SOURCE_VERSION:=983f5c07527b0c87a6494db49ea
 sed -i 's|PKG_MIRROR_HASH:=.*|PKG_MIRROR_HASH:=11039120524d97a23ebf57f4ac494464cff6dd07a843c0b968ef818920361965|g'  feeds/packages/net/msd_lite/Makefile
 
 
-#还原golang版本为1.20
-#rm -rf feeds/packages/lang/golang
-#svn export https://github.com/coolsnowwolf/packages/trunk/lang/golang feeds/packages/lang/golang
-
-# 替换自带watchcat为https://github.com/gngpp/luci-app-watchcat-plus
-rm -rf feeds/packages/utils/watchcat
-#git_svn master https://github.com/openwrt/packages utils/watchcat
-git_sparse_clone master https://github.com/openwrt/packages utils/watchcat && mv -n watchcat feeds/packages/utils/watchcat
-# 替换watchcat为第三方luci(lua版luci)
-git_svn main https://github.com/fichenx/packages luci-app-watchcat-plus
-
-#删除lede自带uwsgi
-rm -rf feeds/packages/net/uwsgi
-#git_svn openwrt-23.05 https://github.com/openwrt/packages net/uwsgi
-git_sparse_clone openwrt-23.05 https://github.com/openwrt/packages net/uwsgi && mv -n uwsgi feeds/packages/net/uwsgi
-
-#更换miniupnpd为最新版（immortalwrt源）
-[ -e package/lean/default-settings/files/zzz-default-settings ] && rm -rf feeds/packages/net/miniupnpd
-[ -e package/lean/default-settings/files/zzz-default-settings ] && git_svn master https://github.com/immortalwrt/packages net/miniupnpd
-
-#替换luci-app-socat为https://github.com/chenmozhijin/luci-app-socat(lua版)
-[ -e package/lean/default-settings/files/zzz-default-settings ] && rm -rf feeds/luci/applications/luci-app-socat
-[ -e package/lean/default-settings/files/zzz-default-settings ] && git_svn main https://github.com/chenmozhijin/luci-app-socat luci-app-socat
-
-#更换luci-app-ikoolproxy为3.8.5-8(lua版luci)
-#git_svn main https://github.com/ilxp/luci-app-ikoolproxy luci-app-ikoolproxy koolproxy
-[ -e package/lean/default-settings/files/zzz-default-settings ] && git clone -b main https://github.com/ilxp/luci-app-ikoolproxy.git package/custom2/luci-app-ikoolproxy
-
-#添加luci-app-lucky(lua版)
-[ -e package/lean/default-settings/files/zzz-default-settings ] && rm -rf feeds/luci/applications/luci-app-lucky feeds/packages/net/lucky
-[ -e package/lean/default-settings/files/zzz-default-settings ] && git_svn main https://github.com/gdy666/luci-app-lucky luci-app-lucky lucky
 
 #替换lucky_daji为本地lucky_wanji
 version=$(find "$GITHUB_WORKSPACE/patches" -name "lucky*" -printf "%f\n" | head -n 1 | awk -F'_' '{print $2}')
@@ -255,21 +207,12 @@ fi
 
 
 #########修复编译错误#########
-# frp
-#编译错误，恢复frp为lede默认
-#rm -rf feeds/packages/net/frp
-#git_sparse_clone master https://github.com/coolsnowwolf/packages net/frp && mv -n frp feeds/packages/net/frp
-
-##使用openwrt官方版elfutils
-#rm -rf package/libs/elfutils
-#git_svn main https://github.com/openwrt/openwrt package/libs/elfutils
-
 
 ##修复elfutils编译错误
 #1、修复lede版elfutils0.188版编译错误
-sed -i "s|TARGET_CFLAGS += -D_GNU_SOURCE -Wno-unused-result -Wno-format-nonliteral|TARGET_CFLAGS += -D_GNU_SOURCE -Wno-unused-result -Wno-format-nonliteral -Wno-error=use-after-free|g" package/libs/elfutils/Makefile
-#2、修复替换后openwrt官方版elfutils0.191版elfutils编译错误
-sed -i "s|CONFIG_GCC_USE_VERSION_11|CONFIG_GCC_USE_VERSION_12|g" package/custom2/elfutils/Makefile
+#sed -i "s|TARGET_CFLAGS += -D_GNU_SOURCE -Wno-unused-result -Wno-format-nonliteral|TARGET_CFLAGS += -D_GNU_SOURCE -Wno-unused-result -Wno-format-nonliteral -Wno-error=use-after-free|g" package/libs/elfutils/Makefile
+##2、修复替换后openwrt官方版elfutils0.191版elfutils编译错误
+#sed -i "s|CONFIG_GCC_USE_VERSION_11|CONFIG_GCC_USE_VERSION_12|g" package/custom2/elfutils/Makefile
 
 
 
@@ -279,60 +222,10 @@ sed -i "s|CONFIG_GCC_USE_VERSION_11|CONFIG_GCC_USE_VERSION_12|g" package/custom2
 # * opkg_install_cmd: Cannot install package libnetwork.
 sed -i 's|CONFIG_PACKAGE_libnetwork=y|# CONFIG_PACKAGE_libnetwork is not set|g' .config
 
-#修复breakings更新dnsproxy后的编译问题
-#sed -i 's/PKG_VERSION:=.*/PKG_VERSION:=0.73.3/g' feeds/packages/net/dnsproxy/Makefile
-#sed -i 's/PKG_HASH:=.*/PKG_HASH:=9eb2b1e88e74d3a4237b50977aa52cd19ea1bb6c896535e7dd4b2df4d6aa469c/g' feeds/packages/net/dnsproxy/Makefile
-
-rm -rf feeds/packages/net/dnsproxy
-git_sparse_clone master https://github.com/coolsnowwolf/packages net/dnsproxy && mv -n dnsproxy feeds/packages/net/dnsproxy
-
-#修复breakings替换python后的编译问题
-#rm -rf feeds/packages/lang/python
-#cp -rf $GITHUB_WORKSPACE/general/python feeds/packages/lang
-rm -rf feeds/packages/lang/python
-git_sparse_clone master https://github.com/coolsnowwolf/packages lang/python && mv -n python feeds/packages/lang/python
-
-#修复breakings替换php8后的编译问题
-rm -rf feeds/packages/lang/php8
-git_sparse_clone master https://github.com/coolsnowwolf/packages lang/php8 && mv -n php8 feeds/packages/lang/php8
-
-#修复breakings替换curl后的编译问题
-rm -rf feeds/packages/net/curl
-git_sparse_clone master https://github.com/coolsnowwolf/packages net/curl && mv -n curl feeds/packages/net/curl
-
-#修复breakings替换boost后的编译问题
-rm -rf feeds/packages/libs/boost
-git_sparse_clone master https://github.com/coolsnowwolf/packages libs/boost && mv -n boost feeds/packages/libs/boost
-
-#修复breakings替换bcoreutils后的编译警示（可编译通过）：
-#make[3] -C feeds/packages/utils/coreutils compile
-#WARNING: Makefile 'package/feeds/luci/luci-ssl-nginx/Makefile' has a dependency on 'nginx-mod-luci-ssl', which does not exist
-rm -rf feeds/packages/utils/coreutils
-git_sparse_clone master https://github.com/coolsnowwolf/packages utils/coreutils && mv -n coreutils feeds/packages/utils/coreutils
-
-#修复breakings替换zlib后的编译问题
-git_sparse_clone main https://github.com/openwrt/openwrt package/libs/zlib && mv -n zlib package/libs/zlib
-sed -i 's/PKG_VERSION:=.*/PKG_VERSION:=1.3.1/g' tools/zlib/Makefile
-sed -i 's/PKG_HASH:=.*/PKG_HASH:=9a93b2b7dfdac77ceba5a558a580e74667dd6fede4585b91eefb60f03b72df23/g' tools/zlib/Makefile
-
-#修复breakings替换golang后的编译问题
-rm -rf feeds/packages/lang/golang
-git_sparse_clone master https://github.com/coolsnowwolf/packages lang/golang && mv -n golang feeds/packages/lang/golang
 
 # NaïveProxy
-rm -rf package/naiveproxy
-git_sparse_clone main https://github.com/fichenx/openwrt-package naiveproxy && mv -n naiveproxy package/naiveproxy
-
-#20251126:修复ucode编译错误
-#sed -i '/^TARGET_CFLAGS\s*+=/ s/$/ -Wno-format-overflow/' package/utils/ucode/Makefile || \
-#sed -i '1i TARGET_CFLAGS += -Wno-format-overflow' package/utils/ucode/Makefile
-#sed -i 's/PKG_SOURCE_DATE:=.*/PKG_SOURCE_DATE:=2025-11-07/g' package/utils/ucode/Makefile
-#sed -i 's/PKG_SOURCE_VERSION:=.*/PKG_SOURCE_VERSION:=ea579046a619e5325b994780bf2ce1ffde448794/g' package/utils/ucode/Makefile
-#sed -i 's/PKG_MIRROR_HASH:=.*/PKG_MIRROR_HASH:=4c152c337963eda588650f439f7633fc1ead20864d8939e45fd95563ea2b0b4f/g' package/utils/ucode/Makefile
-#
-#sed -i 's/PKG_SOURCE_DATE:=.*/PKG_SOURCE_DATE:=2025-10-21/g' package/libs/udebug/Makefile
-#sed -i 's/PKG_SOURCE_VERSION:=.*/PKG_SOURCE_VERSION:=75f39cd4a8067a6f0503c2f1c83c6b1af733a6f2/g' package/libs/udebug/Makefile
-#sed -i 's/PKG_MIRROR_HASH:=.*/PKG_MIRROR_HASH:=9546c51155e06d1ee49b1121ee834aad0dbe9490f67fe05d265ec74cb2fd0506/g' package/libs/udebug/Makefile
+#rm -rf package/naiveproxy
+#git_sparse_clone main https://github.com/fichenx/openwrt-package naiveproxy && mv -n naiveproxy package/naiveproxy
 
 echo "========================="
-echo " 自定义(fichen) 配置完成……"
+echo " 自定义(ARMv8_imm_diy-part2) 配置完成……"
