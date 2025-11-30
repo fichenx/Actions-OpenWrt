@@ -262,7 +262,15 @@ sed -i "s|TARGET_CFLAGS += -D_GNU_SOURCE -Wno-unused-result -Wno-format-nonliter
 #2、修复替换后openwrt官方版elfutils0.191版elfutils编译错误
 sed -i "s|CONFIG_GCC_USE_VERSION_11|CONFIG_GCC_USE_VERSION_12|g" package/custom2/elfutils/Makefile
 
-
+#删除自带和breakingbadboy自定义版本的dockerd、docker及依赖containerd、runc，使用fichenx/openwrt-package、lede的源
+rm -rf feeds/packages/utils/dockerd
+git_sparse_clone main https://github.com/fichenx/openwrt-package dockerd && mv -n dockerd feeds/packages/utils/dockerd
+rm -rf feeds/packages/utils/docker
+git_sparse_clone main https://github.com/fichenx/openwrt-package docker && mv -n docker feeds/packages/utils/docker
+rm -rf feeds/packages/utils/containerd
+git_sparse_clone master https://github.com/coolsnowwolf/packages utils/containerd && mv -n containerd feeds/packages/utils/containerd
+rm -rf feeds/packages/utils/runc
+git_sparse_clone master https://github.com/coolsnowwolf/packages utils/runc && mv -n runc feeds/packages/utils/runc
 
 #取消编译libnetwork，防止出现冲突：
 # * check_data_file_clashes: Package libnetwork wants to install file /workdir/openwrt/build_dir/target-aarch64_generic_musl/root-armvirt/usr/bin/docker-proxy
@@ -328,6 +336,11 @@ git_sparse_clone master https://github.com/immortalwrt/immortalwrt package/libs/
 #sed -i 's/PKG_SOURCE_DATE:=.*/PKG_SOURCE_DATE:=2025-10-21/g' package/libs/udebug/Makefile
 #sed -i 's/PKG_SOURCE_VERSION:=.*/PKG_SOURCE_VERSION:=75f39cd4a8067a6f0503c2f1c83c6b1af733a6f2/g' package/libs/udebug/Makefile
 #sed -i 's/PKG_MIRROR_HASH:=.*/PKG_MIRROR_HASH:=9546c51155e06d1ee49b1121ee834aad0dbe9490f67fe05d265ec74cb2fd0506/g' package/libs/udebug/Makefile
+
+#20251130:修复rp-pppoe编译错误，删除自带3.15版本，使用immortalwrt的4.0版本
+rm -rf feeds/packages/net/rp-pppoe
+git_sparse_clone master https://github.com/immortalwrt/packages net/rp-pppoe && mv -n rp-pppoe feeds/packages/net/rp-pppoe
+
 
 echo "========================="
 echo " 自定义(fichen) 配置完成……"

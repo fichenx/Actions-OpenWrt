@@ -352,5 +352,9 @@ git_sparse_clone master https://github.com/immortalwrt/immortalwrt package/libs/
 #sed -i 's/PKG_SOURCE_VERSION:=.*/PKG_SOURCE_VERSION:=75f39cd4a8067a6f0503c2f1c83c6b1af733a6f2/g' package/libs/udebug/Makefile
 #sed -i 's/PKG_MIRROR_HASH:=.*/PKG_MIRROR_HASH:=9546c51155e06d1ee49b1121ee834aad0dbe9490f67fe05d265ec74cb2fd0506/g' package/libs/udebug/Makefile
 
+#20251130:修复rp-pppoe编译错误，删除自带3.15版本，使用immortalwrt的4.0版本
+rm -rf feeds/packages/net/rp-pppoe
+git_sparse_clone master https://github.com/immortalwrt/packages net/rp-pppoe && mv -n rp-pppoe feeds/packages/net/rp-pppoe
+
 echo "========================="
 echo " 自定义(fichen) 配置完成……"
