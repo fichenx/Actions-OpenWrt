@@ -329,8 +329,12 @@ rm -rf feeds/packages/utils/docker
 git_sparse_clone main https://github.com/fichenx/openwrt-package docker && mv -n docker feeds/packages/utils/docker
 rm -rf feeds/packages/utils/containerd
 git_sparse_clone master https://github.com/coolsnowwolf/packages utils/containerd && mv -n containerd feeds/packages/utils/containerd
+sed -i 's/PKG_VERSION:=.*/PKG_VERSION:=2.2.0/g' feeds/packages/utils/containerd
+sed -i 's/PKG_HASH:=.*/PKG_HASH:=86e7a268fc73f5332522baef86082c1d6c17986e2957a9ad842ead35d1080fca/g' feeds/packages/utils/containerd
 rm -rf feeds/packages/utils/runc
 git_sparse_clone master https://github.com/coolsnowwolf/packages utils/runc && mv -n runc feeds/packages/utils/runc
+sed -i 's/PKG_VERSION:=.*/PKG_VERSION:=1.4.0/g' feeds/packages/utils/runc
+sed -i 's/PKG_HASH:=.*/PKG_HASH:=94d566d8b017d6cdffc684560a4f069bb87f86534976c41d768711c85e194884/g' feeds/packages/utils/runc
 
 # NaïveProxy
 rm -rf package/naiveproxy
