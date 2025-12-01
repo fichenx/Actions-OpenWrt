@@ -25,8 +25,9 @@ function git_sparse_clone() {
   #git checkout $branch -- $@
   #[ -d ../package/custom ] && cd ../package/custom && rm -rf $pkg && cd "$rootdir"/temp_sparse
   cp -af $@ ../package/custom/
-  mv -n $@ ../
-  cd ..
+  cd ../package/custom
+  mv -n $@ ../../
+  cd ../../
   rm -rf temp_sparse
   }
   
