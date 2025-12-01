@@ -807,7 +807,7 @@ update_geoip() {
 
 update_lucky() {
     local lucky_repo_url="https://github.com/gdy666/luci-app-lucky.git"
-    local target_fichenx_dir="$BUILD_DIR/feeds/small8"
+    local target_fichenx_dir="$BUILD_DIR/feeds/fichenx"
     local lucky_dir="$target_fichenx_dir/lucky"
     local luci_app_lucky_dir="$target_fichenx_dir/luci-app-lucky"
 
