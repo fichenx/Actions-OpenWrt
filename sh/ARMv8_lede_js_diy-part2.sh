@@ -270,7 +270,7 @@ rm -rf feeds/packages/utils/dockerd
 git_sparse_clone master https://github.com/coolsnowwolf/packages utils/dockerd && mv -n dockerd feeds/packages/utils/dockerd
 rm -rf feeds/packages/utils/docker
 #git_sparse_clone main https://github.com/fichenx/openwrt-package docker && mv -n docker feeds/packages/utils/docker
-git_sparse_clone master https://github.com/coolsnowwolf/packages utils/docker && mv -n dockerd feeds/packages/utils/docker
+git_sparse_clone master https://github.com/coolsnowwolf/packages utils/docker && mv -n docker feeds/packages/utils/docker
 rm -rf feeds/packages/utils/containerd
 git_sparse_clone master https://github.com/coolsnowwolf/packages utils/containerd && mv -n containerd feeds/packages/utils/containerd
 #sed -i 's/PKG_VERSION:=.*/PKG_VERSION:=2.2.0/g' feeds/packages/utils/containerd/Makefile
