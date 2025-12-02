@@ -22,13 +22,11 @@ function git_sparse_clone() {
   cd temp_sparse
   git sparse-checkout init --cone
   git sparse-checkout set $@
-  #pkg=`echo $@ | tr ' ' '\n' | rev | cut -d'/' -f 1 | rev | tr '\n' ' ' `
+  pkg=`echo $@ | tr ' ' '\n' | rev | cut -d'/' -f 1 | rev | tr '\n' ' ' `
   #git checkout $branch -- $@
-  #[ -d ../package/custom ] && cd ../package/custom && rm -rf $pkg && cd "$rootdir"/temp_sparse
-  cp -af $@ ../package/custom/
-  cd ../package/custom
-  mv -n $@ ../../
-  cd ../../
+  [ -d ../package/custom ] && cd ../package/custom && rm -rf $pkg && cd "$rootdir"/temp_sparse
+  mv $@ ../
+  cd ../
   rm -rf temp_sparse
   }
   
@@ -210,18 +208,18 @@ fi
 
 #删除自带和breakingbadboy自定义版本的dockerd、docker及依赖containerd、runc，使用自定义docker版本
 rm -rf feeds/fichenx/dockerd feeds/fichenx/docker
-rm -rf feeds/packages/utils/dockerd
+#rm -rf feeds/packages/utils/dockerd
 #git_sparse_clone main https://github.com/fichenx/openwrt-package dockerd && mv -n dockerd feeds/packages/utils/dockerd
-git_sparse_clone master https://github.com/coolsnowwolf/packages utils/dockerd && mv -n dockerd feeds/packages/utils/dockerd
-rm -rf feeds/packages/utils/docker
+#git_sparse_clone master https://github.com/coolsnowwolf/packages utils/dockerd && mv -n dockerd feeds/packages/utils/dockerd
+#rm -rf feeds/packages/utils/docker
 #git_sparse_clone main https://github.com/fichenx/openwrt-package docker && mv -n docker feeds/packages/utils/docker
-git_sparse_clone master https://github.com/coolsnowwolf/packages utils/docker && mv -n docker feeds/packages/utils/docker
-rm -rf feeds/packages/utils/containerd
-git_sparse_clone master https://github.com/coolsnowwolf/packages utils/containerd && mv -n containerd feeds/packages/utils/containerd
+#git_sparse_clone master https://github.com/coolsnowwolf/packages utils/docker && mv -n docker feeds/packages/utils/docker
+#rm -rf feeds/packages/utils/containerd
+#git_sparse_clone master https://github.com/coolsnowwolf/packages utils/containerd && mv -n containerd feeds/packages/utils/containerd
 #sed -i 's/PKG_VERSION:=.*/PKG_VERSION:=2.2.0/g' feeds/packages/utils/containerd/Makefile
 #sed -i 's/PKG_HASH:=.*/PKG_HASH:=86e7a268fc73f5332522baef86082c1d6c17986e2957a9ad842ead35d1080fca/g' feeds/packages/utils/containerd/Makefile
-rm -rf feeds/packages/utils/runc
-git_sparse_clone master https://github.com/coolsnowwolf/packages utils/runc && mv -n runc feeds/packages/utils/runc
+#rm -rf feeds/packages/utils/runc
+#git_sparse_clone master https://github.com/coolsnowwolf/packages utils/runc && mv -n runc feeds/packages/utils/runc
 #sed -i 's/PKG_VERSION:=.*/PKG_VERSION:=1.4.0/g' feeds/packages/utils/runc/Makefile
 #sed -i 's/PKG_HASH:=.*/PKG_HASH:=94d566d8b017d6cdffc684560a4f069bb87f86534976c41d768711c85e194884/g' feeds/packages/utils/runc/Makefile
 

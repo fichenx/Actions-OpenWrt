@@ -346,10 +346,10 @@ git_sparse_clone main https://github.com/fichenx/openwrt-package naiveproxy && m
 #sed -i '/^TARGET_CFLAGS\s*+=/ s/$/ -Wno-format-overflow/' package/utils/ucode/Makefile || \
 #sed -i '1i TARGET_CFLAGS += -Wno-format-overflow' package/utils/ucode/Makefile
 rm -rf package/utils/ucode
-#git_sparse_clone master https://github.com/immortalwrt/immortalwrt package/utils/ucode && mv -n ucode package/utils/ucode
-git_sparse_clone master https://github.com/coolsnowwolf/lede package/utils/ucode && mv -n ucode package/utils/ucode
-#rm -rf package/libs/udebug
-#git_sparse_clone master https://github.com/immortalwrt/immortalwrt package/libs/udebug && mv -n ucode package/libs/udebug
+git_sparse_clone master https://github.com/immortalwrt/immortalwrt package/utils/ucode && mv -n ucode package/utils/ucode
+#git_sparse_clone master https://github.com/coolsnowwolf/lede package/utils/ucode && mv -n ucode package/utils/ucode
+rm -rf package/libs/udebug
+git_sparse_clone master https://github.com/immortalwrt/immortalwrt package/libs/udebug && mv -n udebug package/libs/udebug
 
 #sed -i 's/PKG_SOURCE_DATE:=.*/PKG_SOURCE_DATE:=2025-11-07/g' package/utils/ucode/Makefile
 #sed -i 's/PKG_SOURCE_VERSION:=.*/PKG_SOURCE_VERSION:=ea579046a619e5325b994780bf2ce1ffde448794/g' package/utils/ucode/Makefile
