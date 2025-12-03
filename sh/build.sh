@@ -81,7 +81,7 @@ if [[ -d $BASE_PATH/action_build ]]; then
 fi
 
 $BASE_PATH/sh/update.sh "$REPO_URL" "$REPO_BRANCH" "$BASE_PATH/$BUILD_DIR" "$COMMIT_HASH"
-chmod +x $BASE_PATH/sh/ax6_imm_diy-part2.sh && $BASE_PATH/sh/ax6_imm_diy-part2.sh
+
 apply_config
 remove_uhttpd_dependency
 

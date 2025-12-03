@@ -30,6 +30,7 @@ on:
 
 env:
   GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+  DIY_my_SH: sh/ax6_imm_diy-part2.sh
 
 jobs:
   build:
@@ -85,7 +86,10 @@ jobs:
           fi
 
       - name: 构建固件
-        run: ./sh/build.sh ${{ inputs.model || 'RedMi-AX6_plus_imm'}}
+        run: |
+          chmod +x $DIY_my_SH
+          sed -i "/\$BASE_PATH\/sh\/update\.sh/a $GITHUB_WORKSPACE/$DIY_my_SH" sh/build.sh
+          ./sh/build.sh ${{ inputs.model || 'RedMi-AX6_plus_imm'}}
 
 
       - name: 获取内核版本
