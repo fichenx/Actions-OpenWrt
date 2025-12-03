@@ -208,9 +208,19 @@ git_svn main https://github.com/chenmozhijin/luci-app-socat luci-app-socat
 #git_svn ipk https://github.com/ilxp/luci-app-ikoolproxy luci-app-ikoolproxy koolproxy
 git clone -b main https://github.com/ilxp/luci-app-ikoolproxy.git package/custom2/luci-app-ikoolproxy
 
-#添加luci-app-lucky
+#添加luci-app-lucky、lucky
+mk_dir="feeds/fichenx/lucky/Makefile"
+mk_lede_dir="feeds/packages/net/lucky/Makefile"
 rm -rf feeds/luci/applications/luci-app-lucky feeds/packages/net/lucky
-git_svn main https://github.com/gdy666/luci-app-lucky luci-app-lucky lucky
+#git_svn main https://github.com/gdy666/luci-app-lucky luci-app-lucky lucky
+git_sparse_clone main https://github.com/gdy666/luci-app-lucky luci-app-lucky && mv -n luci-app-lucky feeds/luci/applications/luci-app-lucky
+git_sparse_clone main https://github.com/gdy666/luci-app-lucky lucky && mv -n lucky feeds/packages/net/lucky
+if [ -d "${mk_dir%/*}" ] && [ -f "$mk_dir" ]; then
+    sed -i 's|Linux_$(LUCKY_ARCH)|Linux_$(LUCKY_ARCH)_wanji|g' "$mk_dir"
+fi
+if [ -d "${mk_lede_dir%/*}" ] && [ -f "$mk_lede_dir" ]; then
+    sed -i 's|Linux_$(LUCKY_ARCH)|Linux_$(LUCKY_ARCH)_wanji|g' "$mk_lede_dir"
+fi
 
 
 #修改应用位置
@@ -232,21 +242,6 @@ sed -i 's/\[services\]/\[vpn\]/g'  feeds/luci/applications/luci-app-frps/luasrc/
 #luci-app-nps（修改nps显示位置）
 sed -i 's/"services"/"vpn"/g'  feeds/luci/applications/luci-app-nps/luasrc/controller/nps.lua
 sed -i 's/\[services\]/\[vpn\]/g'  feeds/luci/applications/luci-app-nps/luasrc/view/nps/nps_status.htm
-
-
-#替换lucky_daji为本地lucky_wanji
-version=$(find "$GITHUB_WORKSPACE/patches" -name "lucky*" -printf "%f\n" | head -n 1 | awk -F'_' '{print $2}')
-mk_dir="feeds/fichenx/lucky/Makefile"
-mk_lede_dir="feeds/packages/net/lucky/Makefile"
-if [ -d "${mk_dir%/*}" ] && [ -f "$mk_dir" ]; then
-    sed -i '/Build\/Prepare/ a\	[ -f $(TOPDIR)/../patches/lucky_'${version}'_Linux_$(LUCKY_ARCH)_wanji.tar.gz ] && install -Dm644 $(TOPDIR)/../patches/lucky_'${version}'_Linux_$(LUCKY_ARCH)_wanji.tar.gz $(PKG_BUILD_DIR)/$(PKG_NAME)_$(PKG_VERSION)_Linux_$(LUCKY_ARCH).tar.gz' "$mk_dir"
-    sed -i '/wget/d' "$mk_dir"
-fi
-if [ -d "${mk_lede_dir%/*}" ] && [ -f "$mk_lede_dir" ]; then
-    sed -i '/Build\/Prepare/ a\	[ -f $(TOPDIR)/../patches/lucky_'${version}'_Linux_$(LUCKY_ARCH)_wanji.tar.gz ] && install -Dm644 $(TOPDIR)/../patches/lucky_'${version}'_Linux_$(LUCKY_ARCH)_wanji.tar.gz $(PKG_BUILD_DIR)/$(PKG_NAME)_$(PKG_VERSION)_Linux_$(LUCKY_ARCH).tar.gz' "$mk_lede_dir"
-    sed -i '/wget/d' "$mk_lede_dir"
-fi
-
 
 
 

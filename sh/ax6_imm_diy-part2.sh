@@ -12,8 +12,8 @@
 
 echo "开始 自定义（fichen） 配置……"
 echo "========================="
-
-cp -rf $GITHUB_WORKSPACE/backup/001-fix-cmake-compatibility.patch feeds/packages/net/n2n/patches/
+BASE_PATH=$(cd $(dirname $0)/../ && pwd)
+cp -rf $GITHUB_WORKSPACE/backup/001-fix-cmake-compatibility.patch $BASE_PATH/action_build/feeds/packages/net/n2n/patches/
 
 echo "========================="
 echo " 自定义(fichen) 配置完成……"

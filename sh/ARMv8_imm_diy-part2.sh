@@ -191,19 +191,18 @@ sed -i 's|PKG_SOURCE_DATE:=.*|PKG_SOURCE_DATE:=2024-12-16|g'  feeds/packages/net
 sed -i 's|PKG_SOURCE_VERSION:=.*|PKG_SOURCE_VERSION:=983f5c07527b0c87a6494db49eade57da3c516bf|g'  feeds/packages/net/msd_lite/Makefile
 sed -i 's|PKG_MIRROR_HASH:=.*|PKG_MIRROR_HASH:=11039120524d97a23ebf57f4ac494464cff6dd07a843c0b968ef818920361965|g'  feeds/packages/net/msd_lite/Makefile
 
-
-
-#替换lucky_daji为本地lucky_wanji
-version=$(find "$GITHUB_WORKSPACE/patches" -name "lucky*" -printf "%f\n" | head -n 1 | awk -F'_' '{print $2}')
+#添加luci-app-lucky、lucky
 mk_dir="feeds/fichenx/lucky/Makefile"
 mk_lede_dir="feeds/packages/net/lucky/Makefile"
+rm -rf feeds/luci/applications/luci-app-lucky feeds/packages/net/lucky
+#git_svn main https://github.com/gdy666/luci-app-lucky luci-app-lucky lucky
+git_sparse_clone main https://github.com/gdy666/luci-app-lucky luci-app-lucky && mv -n luci-app-lucky feeds/luci/applications/luci-app-lucky
+git_sparse_clone main https://github.com/gdy666/luci-app-lucky lucky && mv -n lucky feeds/packages/net/lucky
 if [ -d "${mk_dir%/*}" ] && [ -f "$mk_dir" ]; then
-    sed -i '/Build\/Prepare/ a\	[ -f $(TOPDIR)/../patches/lucky_'${version}'_Linux_$(LUCKY_ARCH)_wanji.tar.gz ] && install -Dm644 $(TOPDIR)/../patches/lucky_'${version}'_Linux_$(LUCKY_ARCH)_wanji.tar.gz $(PKG_BUILD_DIR)/$(PKG_NAME)_$(PKG_VERSION)_Linux_$(LUCKY_ARCH).tar.gz' "$mk_dir"
-    sed -i '/wget/d' "$mk_dir"
+    sed -i 's|Linux_$(LUCKY_ARCH)|Linux_$(LUCKY_ARCH)_wanji|g' "$mk_dir"
 fi
 if [ -d "${mk_lede_dir%/*}" ] && [ -f "$mk_lede_dir" ]; then
-    sed -i '/Build\/Prepare/ a\	[ -f $(TOPDIR)/../patches/lucky_'${version}'_Linux_$(LUCKY_ARCH)_wanji.tar.gz ] && install -Dm644 $(TOPDIR)/../patches/lucky_'${version}'_Linux_$(LUCKY_ARCH)_wanji.tar.gz $(PKG_BUILD_DIR)/$(PKG_NAME)_$(PKG_VERSION)_Linux_$(LUCKY_ARCH).tar.gz' "$mk_lede_dir"
-    sed -i '/wget/d' "$mk_lede_dir"
+    sed -i 's|Linux_$(LUCKY_ARCH)|Linux_$(LUCKY_ARCH)_wanji|g' "$mk_lede_dir"
 fi
 
 #删除自带和breakingbadboy自定义版本的dockerd、docker及依赖containerd、runc，使用自定义docker版本
