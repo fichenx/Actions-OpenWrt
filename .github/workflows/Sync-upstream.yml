@@ -18,6 +18,9 @@ on:
         required: false
         default: 'false'
 
+env:
+  DIY_my_SH: sh/ax6_imm_diy-part2.sh
+
 jobs:
   build:
     if: github.event.repository.owner.id == github.event.sender.id || ! github.event.sender.id
@@ -64,7 +67,7 @@ jobs:
                -e 's|*rootfs.tar.gz|*.tar.gz|' \
                build.sh
         sed -i '/make -j$(($(nproc) + 1)) || make -j1 V=s/a \\ncd $BASE_PATH/$BUILD_DIR/bin/packages\ntar -zcvf Packages.tar.gz ./*\ncp Packages.tar.gz $BASE_PATH/$BUILD_DIR/bin/targets/\ncd "$BASE_PATH/$BUILD_DIR"' build.sh
-
+        sed -i '/\$BASE_PATH\/sh\/update\.sh/a chmod +x $DIY_my_SH && $GITHUB_WORKSPACE/$DIY_my_SH' Build.sh
         #处理pre_clone_action.sh
         sed -i -e 's|BASE_PATH=$(cd $(dirname $0) \&\& pwd)|BASE_PATH=$(cd $(dirname $0)/../ \&\& pwd)|' \
                -e 's|CONFIG_FILE="$BASE_PATH/deconfig/$Dev.config"|CONFIG_FILE="$BASE_PATH/config/$Dev.config"|' \
