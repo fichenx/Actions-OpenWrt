@@ -18,13 +18,11 @@ function git_sparse_clone() {
   cd temp_sparse
   git sparse-checkout init --cone
   git sparse-checkout set $@
-  #pkg=`echo $@ | tr ' ' '\n' | rev | cut -d'/' -f 1 | rev | tr '\n' ' ' `
+  pkg=`echo $@ | tr ' ' '\n' | rev | cut -d'/' -f 1 | rev | tr '\n' ' ' `
   #git checkout $branch -- $@
-  #[ -d ../package/custom ] && cd ../package/custom && rm -rf $pkg && cd "$rootdir"/temp_sparse
-  cp -af $@ ../package/custom/
-  cd ../package/custom
-  mv -n $@ ../../
-  cd ../../
+  [ -d ../package/custom ] && cd ../package/custom && rm -rf $pkg && cd "$rootdir"/temp_sparse
+  mv -n $@ ../
+  cd ../
   rm -rf temp_sparse
   }
   
@@ -121,6 +119,9 @@ sed -i 's/Must an IPv4 address/IPv4 address or domain name/g' feeds/luci/applica
 sed -i 's/Must an IPv4 address/IPv4 address or domain name/g' feeds/luci/applications/luci-app-nps/po/zh_Hans/nps.po
 sed -i 's/必须是 IPv4 地址/IPv4 地址或域名/g' feeds/luci/applications/luci-app-nps/po/zh_Hans/nps.po
 
+#给n2n添加补丁文件，修正前两行语法顺序颠倒的错误
+BASE_PATH=$(cd $(dirname $0)/../ && pwd)
+cp -rf $GITHUB_WORKSPACE/backup/001-fix-cmake-compatibility.patch $BASE_PATH/action_build/feeds/packages/net/n2n/patches/
 
 #添加luci-app-wechatpush
 #rm -rf feeds/luci/applications/luci-app-wechatpush

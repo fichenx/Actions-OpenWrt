@@ -12,6 +12,7 @@
 
 echo "开始 自定义（fichen） 配置……"
 echo "========================="
+#给n2n添加补丁文件，修正前两行语法顺序颠倒的错误
 BASE_PATH=$(cd $(dirname $0)/../ && pwd)
 cp -rf $GITHUB_WORKSPACE/backup/001-fix-cmake-compatibility.patch $BASE_PATH/action_build/feeds/packages/net/n2n/patches/
 
