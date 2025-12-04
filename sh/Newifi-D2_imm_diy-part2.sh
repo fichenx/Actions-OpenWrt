@@ -138,3 +138,4 @@ sed -i \
   -e 's/PKG_VERSION:=.*/PKG_VERSION:=0.194/' \
   -e 's/PKG_HASH:=.*/PKG_HASH:=09e2ff033d39baa8b388a2d7fbc5390bfde99ae3b7c67c7daaf7433fbcf0f01e/' \
   tools/elfutils/Makefile
+rm -rf tools/elfutils/patches/012-backport-mips-support-readelf.patch
