@@ -257,8 +257,8 @@ sed -i 's/PKG_HASH:=.*/PKG_HASH:=86e7a268fc73f5332522baef86082c1d6c17986e2957a9a
 sed -i 's/containerd-shim,containerd-shim-runc-v1,//g' feeds/packages/utils/containerd/Makefile
 #rm -rf feeds/packages/utils/runc
 #git_sparse_clone master https://github.com/coolsnowwolf/packages utils/runc && mv -n runc feeds/packages/utils/runc
-sed -i 's/PKG_VERSION:=.*/PKG_VERSION:=1.4.0/g' feeds/packages/utils/runc/Makefile
-sed -i 's/PKG_HASH:=.*/PKG_HASH:=94d566d8b017d6cdffc684560a4f069bb87f86534976c41d768711c85e194884/g' feeds/packages/utils/runc/Makefile
+sed -i 's/PKG_VERSION:=.*/PKG_VERSION:=1.3.4/g' feeds/packages/utils/runc/Makefile
+sed -i 's/PKG_HASH:=.*/PKG_HASH:=a9f9646c4c8990239f6462b408b22d9aa40ba0473a9fc642b9d6576126495eee/g' feeds/packages/utils/runc/Makefile
 
 #########修复编译错误#########
 # frp
