@@ -120,8 +120,7 @@ sed -i 's/Must an IPv4 address/IPv4 address or domain name/g' feeds/luci/applica
 sed -i 's/必须是 IPv4 地址/IPv4 地址或域名/g' feeds/luci/applications/luci-app-nps/po/zh_Hans/nps.po
 
 #给n2n添加补丁文件，修正前两行语法顺序颠倒的错误
-BASE_PATH=$(cd $(dirname $0)/../ && pwd)
-cp -rf $GITHUB_WORKSPACE/backup/001-fix-cmake-compatibility.patch $BASE_PATH/action_build/feeds/packages/net/n2n/patches/
+cp -rf $GITHUB_WORKSPACE/backup/001-fix-cmake-compatibility.patch $GITHUB_WORKSPACE/openwrt/feeds/packages/net/n2n/patches/
 
 #添加luci-app-wechatpush
 #rm -rf feeds/luci/applications/luci-app-wechatpush

@@ -245,5 +245,8 @@ sed -i 's|CONFIG_PACKAGE_libnetwork=y|# CONFIG_PACKAGE_libnetwork is not set|g' 
 #rm -rf package/naiveproxy
 #git_sparse_clone main https://github.com/fichenx/openwrt-package naiveproxy && mv -n naiveproxy package/naiveproxy
 
+#给n2n添加补丁文件，修正前两行语法顺序颠倒的错误
+cp -rf $GITHUB_WORKSPACE/backup/001-fix-cmake-compatibility.patch $GITHUB_WORKSPACE/openwrt/feeds/packages/net/n2n/patches/
+
 echo "========================="
 echo " 自定义(ARMv8_imm_diy-part2) 配置完成……"
