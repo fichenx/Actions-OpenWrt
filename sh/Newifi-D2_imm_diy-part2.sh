@@ -132,10 +132,5 @@ cp -rf $GITHUB_WORKSPACE/backup/001-fix-cmake-compatibility.patch $GITHUB_WORKSP
 #sed -i "s|TARGET_CFLAGS += -D_GNU_SOURCE -Wno-unused-result -Wno-format-nonliteral|TARGET_CFLAGS += -D_GNU_SOURCE -Wno-unused-result -Wno-format-nonliteral -Wno-error=use-after-free|g" package/libs/elfutils/Makefile
 ##2、修复替换后openwrt官方版elfutils0.191版elfutils编译错误
 #sed -i "s|CONFIG_GCC_USE_VERSION_11|CONFIG_GCC_USE_VERSION_12|g" package/custom2/elfutils/Makefile
-#sed -i 's/PKG_VERSION:=.*/PKG_VERSION:=0.194/g' package/libs/elfutils/Makefile
-#sed -i 's/PKG_HASH:=.*/PKG_HASH:=09e2ff033d39baa8b388a2d7fbc5390bfde99ae3b7c67c7daaf7433fbcf0f01e/g' package/libs/elfutils/Makefile
-#sed -i \
-#  -e 's/PKG_VERSION:=.*/PKG_VERSION:=0.194/' \
-#  -e 's/PKG_HASH:=.*/PKG_HASH:=09e2ff033d39baa8b388a2d7fbc5390bfde99ae3b7c67c7daaf7433fbcf0f01e/' \
-#  tools/elfutils/Makefile
-#rm -rf tools/elfutils/patches/012-backport-mips-support-readelf.patch
+rm -rf tools/elfutils
+git_sparse_clone master https://github.com/coolsnowwolf/lede tools/elfutils && mv -n elfutils tools/elfutils
