@@ -233,6 +233,8 @@ sed -i 's/PKG_HASH:=.*/PKG_HASH:=a9f9646c4c8990239f6462b408b22d9aa40ba0473a9fc64
 #sed -i "s|CONFIG_GCC_USE_VERSION_11|CONFIG_GCC_USE_VERSION_12|g" package/custom2/elfutils/Makefile
 #rm -rf package/libs/elfutils
 #git_sparse_clone master https://github.com/coolsnowwolf/lede package/libs/elfutils && mv -n elfutils package/libs/elfutils
+rm -rf package/libs/elfutils
+git_sparse_clone master https://github.com/coolsnowwolf/lede package/libs/elfutils && mv -n elfutils package/libs/elfutils
 rm -rf tools/elfutils
 git_sparse_clone master https://github.com/coolsnowwolf/lede tools/elfutils && mv -n elfutils tools/elfutils
 

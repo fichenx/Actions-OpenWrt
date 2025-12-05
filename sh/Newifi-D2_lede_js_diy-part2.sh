@@ -149,7 +149,8 @@ git_svn main https://github.com/chenmozhijin/luci-app-socat luci-app-socat
 ###################修复编译错误##########################
 
 #修复breakings升级elfutils后的编译问题：恢复官方默认版本
-#git_svn master https://github.com/coolsnowwolf/lede package/libs/elfutils
+rm -rf package/libs/elfutils
+git_sparse_clone master https://github.com/coolsnowwolf/lede package/libs/elfutils && mv -n elfutils package/libs/elfutils
 
 #修复breakings替换openssh后的编译问题：恢复官方默认版本
 rm -rf feeds/packages/net/openssh
