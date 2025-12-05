@@ -9,6 +9,8 @@
 # File name: diy-part2.sh
 # Description: OpenWrt DIY script part 2 (After Update feeds)
 #
+echo "开始 自定义（Newifi-D2_imm_diy-part2） 配置……"
+echo "========================="
 
 function git_sparse_clone() {
   branch="$1" rurl="$2" && shift 2
@@ -136,3 +138,11 @@ rm -rf package/libs/elfutils
 git_sparse_clone master https://github.com/coolsnowwolf/lede package/libs/elfutils && mv -n elfutils package/libs/elfutils
 rm -rf tools/elfutils
 git_sparse_clone master https://github.com/coolsnowwolf/lede tools/elfutils && mv -n elfutils tools/elfutils
+
+
+#修复gettext-full编译错误
+rm -rf package/libs/gettext-full
+git_sparse_clone master https://github.com/coolsnowwolf/ledepackage/libs/gettext-full && mv -n gettext-full package/libs/gettext-full
+
+echo "========================="
+echo " 自定义(Newifi-D2_imm_diy-part2) 配置完成……"
