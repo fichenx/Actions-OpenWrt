@@ -171,17 +171,45 @@ jobs:
         fi
         
 
-    - name: 将${{ inputs.model || 'ARMv8_lede_lua'}}打包为OpenWrt
+#    - name: 将${{ inputs.model || 'ARMv8_lede_lua'}}打包为OpenWrt
+#      if: (!cancelled())
+#      uses: ophub/flippy-openwrt-actions@0.1.0
+#      env:
+#        OPENWRT_ARMVIRT: https://github.com/fichenx/Actions-OpenWrt/releases/download/${{ inputs.model || 'ARMv8_lede_lua'}}_raw/${{ env.REPO }}-armsr-armv8-generic-rootfs.tar.gz
+#        PACKAGE_SOC: s905d_s905x3
+#        WHOAMI: fichenx
+#        #KERNEL_REPO_URL: https://github.com/breakings/OpenWrt/tree/main/opt
+#        KERNEL_VERSION_NAME: 5.4.210_5.10.136_5.15.74_6.1.20_6.6.27_6.12.32
+#        #OPENWRT_VER: R23.5.1
+#        KERNEL_AUTO_LATEST: true
+#        GZIP_IMGS: .gz
+#        GH_TOKEN: ${{ secrets.GH_TOKEN }}
+
+    - name: 将${{ inputs.model || 'ARMv8_lede_lua'}}打包为OpenWrt（ophub 版本）
+      id: pack_ophub
       if: (!cancelled())
-      uses: ophub/flippy-openwrt-actions@0.1.0
+      continue-on-error: true
+      uses: ophub/flippy-openwrt-actions@main
       env:
         OPENWRT_ARMVIRT: https://github.com/fichenx/Actions-OpenWrt/releases/download/${{ inputs.model || 'ARMv8_lede_lua'}}_raw/${{ env.REPO }}-armsr-armv8-generic-rootfs.tar.gz
         PACKAGE_SOC: s905d_s905x3
         WHOAMI: fichenx
-        #KERNEL_REPO_URL: https://github.com/breakings/OpenWrt/tree/main/opt
         KERNEL_VERSION_NAME: 5.4.210_5.10.136_5.15.74_6.1.20_6.6.27_6.12.32
-        #OPENWRT_VER: R23.5.1
         KERNEL_AUTO_LATEST: true
+        GZIP_IMGS: .gz
+        OPENWRT_IP: 192.168.123.1
+        GH_TOKEN: ${{ secrets.GH_TOKEN }}
+    
+    - name: 备用打包（fichenx 版本，仅 ophub 失败时执行）
+      if: (!cancelled()) && steps.pack_ophub.outcome == 'failure'
+      uses: fichenx/flippy-openwrt-actions@main
+      env:
+        OPENWRT_ARMVIRT: https://github.com/fichenx/Actions-OpenWrt/releases/download/${{ inputs.model || 'ARMv8_lede_lua'}}_raw/${{ env.REPO }}-armsr-armv8-generic-rootfs.tar.gz
+        PACKAGE_SOC: s905d_s905x3
+        WHOAMI: fichenx
+        KERNEL_VERSION_NAME: 5.4.210_5.10.136_5.15.74_6.1.20_6.6.27_6.12.32
+        KERNEL_AUTO_LATEST: true
+        OPENWRT_IP: 192.168.123.1 
         GZIP_IMGS: .gz
         GH_TOKEN: ${{ secrets.GH_TOKEN }}
 
@@ -255,3 +283,13 @@ jobs:
     #    ${{ env.PRODUCT_NAME }} 打包完成
     #    "
     #    curl "https://api.telegram.org/bot${{ secrets.TELEGRAM_TOKEN }}/sendMessage" -d "chat_id=${{ secrets.TELEGRAM_TO }}&text=${MSG}"
+    - name: 检查打包是否成功
+      if: (!cancelled())
+      run: |
+        if [[ "${{ steps.pack_ophub.outcome }}" == "success" || "${{ steps.pack_fichenx.outcome }}" == "success" ]]; then
+          echo "打包成功（ophub/fichenx 任一版本执行成功）"
+          exit 0
+        else
+          echo "所有打包版本均失败"
+          exit 1
+        fi
