@@ -169,10 +169,11 @@ jobs:
               find "$dir" -type f -exec touch {} +
           done
         fi
-       
+        
+
     - name: 将${{ inputs.model || 'ARMv8_lede_lua'}}打包为OpenWrt
       if: (!cancelled())
-      uses: ophub/flippy-openwrt-actions@main
+      uses: ophub/flippy-openwrt-actions@0.1.0
       env:
         OPENWRT_ARMVIRT: https://github.com/fichenx/Actions-OpenWrt/releases/download/${{ inputs.model || 'ARMv8_lede_lua'}}_raw/${{ env.REPO }}-armsr-armv8-generic-rootfs.tar.gz
         PACKAGE_SOC: s905d_s905x3
