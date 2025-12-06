@@ -142,7 +142,7 @@ git_sparse_clone master https://github.com/coolsnowwolf/lede tools/elfutils && m
 
 #修复gettext-full编译错误
 rm -rf package/libs/gettext-full
-git_sparse_clone master https://github.com/coolsnowwolf/ledepackage/libs/gettext-full && mv -n gettext-full package/libs/gettext-full
+git_sparse_clone master https://github.com/coolsnowwolf/lede package/libs/gettext-full && mv -n gettext-full package/libs/gettext-full
 
 echo "========================="
 echo " 自定义(Newifi-D2_imm_diy-part2) 配置完成……"

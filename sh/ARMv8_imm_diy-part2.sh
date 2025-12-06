@@ -248,7 +248,7 @@ git_sparse_clone master https://github.com/coolsnowwolf/lede tools/elfutils && m
 
 #修复gettext-full编译错误
 rm -rf package/libs/gettext-full
-git_sparse_clone master https://github.com/coolsnowwolf/ledepackage/libs/gettext-full && mv -n gettext-full package/libs/gettext-full
+git_sparse_clone master https://github.com/coolsnowwolf/lede package/libs/gettext-full && mv -n gettext-full package/libs/gettext-full
 
 #取消编译libnetwork，防止出现冲突：
 # * check_data_file_clashes: Package libnetwork wants to install file /workdir/openwrt/build_dir/target-aarch64_generic_musl/root-armvirt/usr/bin/docker-proxy
