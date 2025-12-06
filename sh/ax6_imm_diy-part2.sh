@@ -64,7 +64,7 @@ cp -rf $GITHUB_WORKSPACE/backup/001-fix-cmake-compatibility.patch $BASE_PATH/act
 
 ##更换luci-theme-design
 rm -rf feeds/luci/themes/luci-theme-design
-git_sparse_clone dev https://github.com/fichenx/packages luci-theme-design && mv -n luci-theme-design feeds/luci/themes/luci-theme-design
+git_sparse_clone dev https://github.com/fichenx/packages luci-theme-design && mv -n luci-theme-design $BASE_PATH/action_build/feeds/luci/themes/luci-theme-design
 
 echo "========================="
 echo " 自定义(fichen) 配置完成……"
