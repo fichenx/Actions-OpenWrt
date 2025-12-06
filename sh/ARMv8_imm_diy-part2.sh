@@ -234,9 +234,7 @@ sed -i 's/PKG_HASH:=.*/PKG_HASH:=a9f9646c4c8990239f6462b408b22d9aa40ba0473a9fc64
 #rm -rf package/libs/elfutils
 #git_sparse_clone master https://github.com/coolsnowwolf/lede package/libs/elfutils && mv -n elfutils package/libs/elfutils
 rm -rf package/libs/elfutils
-git_sparse_clone master https://github.com/coolsnowwolf/lede package/libs/elfutils && mv -n elfutils package/libs/elfutils
-rm -rf tools/elfutils
-git_sparse_clone master https://github.com/coolsnowwolf/lede tools/elfutils && mv -n elfutils tools/elfutils
+git_sparse_clone master https://github.com/openwrt/openwrt package/libs/elfutils && mv -n elfutils package/libs/elfutils
 
 #sed -i 's/PKG_VERSION:=.*/PKG_VERSION:=0.194/g' package/libs/elfutils/Makefile
 #sed -i 's/PKG_HASH:=.*/PKG_HASH:=09e2ff033d39baa8b388a2d7fbc5390bfde99ae3b7c67c7daaf7433fbcf0f01e/g' package/libs/elfutils/Makefile
@@ -246,9 +244,6 @@ git_sparse_clone master https://github.com/coolsnowwolf/lede tools/elfutils && m
 #  tools/elfutils/Makefile
 #rm -rf tools/elfutils/patches/012-backport-mips-support-readelf.patch
 
-#修复gettext-full编译错误
-rm -rf package/libs/gettext-full
-git_sparse_clone master https://github.com/coolsnowwolf/lede package/libs/gettext-full && mv -n gettext-full package/libs/gettext-full
 
 #取消编译libnetwork，防止出现冲突：
 # * check_data_file_clashes: Package libnetwork wants to install file /workdir/openwrt/build_dir/target-aarch64_generic_musl/root-armvirt/usr/bin/docker-proxy

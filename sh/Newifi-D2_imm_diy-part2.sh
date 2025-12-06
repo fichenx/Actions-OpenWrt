@@ -135,14 +135,7 @@ cp -rf $GITHUB_WORKSPACE/backup/001-fix-cmake-compatibility.patch $GITHUB_WORKSP
 ##2、修复替换后openwrt官方版elfutils0.191版elfutils编译错误
 #sed -i "s|CONFIG_GCC_USE_VERSION_11|CONFIG_GCC_USE_VERSION_12|g" package/custom2/elfutils/Makefile
 rm -rf package/libs/elfutils
-git_sparse_clone master https://github.com/coolsnowwolf/lede package/libs/elfutils && mv -n elfutils package/libs/elfutils
-rm -rf tools/elfutils
-git_sparse_clone master https://github.com/coolsnowwolf/lede tools/elfutils && mv -n elfutils tools/elfutils
-
-
-#修复gettext-full编译错误
-rm -rf package/libs/gettext-full
-git_sparse_clone master https://github.com/coolsnowwolf/lede package/libs/gettext-full && mv -n gettext-full package/libs/gettext-full
+git_sparse_clone master https://github.com/openwrt/openwrt package/libs/elfutils && mv -n elfutils package/libs/elfutils
 
 echo "========================="
 echo " 自定义(Newifi-D2_imm_diy-part2) 配置完成……"
