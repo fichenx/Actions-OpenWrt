@@ -63,7 +63,7 @@ BASE_PATH=$(cd $(dirname $0)/../ && pwd)
 cp -rf $GITHUB_WORKSPACE/backup/001-fix-cmake-compatibility.patch $BASE_PATH/action_build/feeds/packages/net/n2n/patches/
 
 ##更换luci-theme-design
-rm -rf feeds/luci/themes/luci-theme-design
+rm -rf feeds/luci/themes/luci-theme-design feeds/fichenx/luci-theme-design
 git_sparse_clone dev https://github.com/fichenx/packages luci-theme-design && mv -n luci-theme-design $BASE_PATH/action_build/feeds/luci/themes/luci-theme-design
 
 echo "========================="
