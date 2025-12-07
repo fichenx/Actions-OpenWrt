@@ -63,8 +63,8 @@ BASE_PATH=$(cd $(dirname $0)/../ && pwd)
 cp -rf $GITHUB_WORKSPACE/backup/001-fix-cmake-compatibility.patch $BASE_PATH/action_build/feeds/packages/net/n2n/patches/
 
 ##更换luci-theme-design
-rm -rf $BASE_PATH/action_build/feeds/luci/themes/luci-theme-design $BASE_PATH/action_build/feeds/fichenx/luci-theme-design
-git_sparse_clone dev https://github.com/fichenx/packages luci-theme-design && mv -n luci-theme-design $BASE_PATH/action_build/feeds/luci/themes/luci-theme-design
-
+#rm -rf $BASE_PATH/action_build/feeds/luci/themes/luci-theme-design $BASE_PATH/action_build/feeds/fichenx/luci-theme-design
+#git_sparse_clone dev https://github.com/fichenx/packages luci-theme-design && cp -af luci-theme-design $BASE_PATH/action_build/feeds/luci/themes/luci-theme-design
+#mv -n luci-theme-design $BASE_PATH/action_build/feeds/fichenx/luci-theme-design
 echo "========================="
 echo " 自定义(fichen) 配置完成……"
