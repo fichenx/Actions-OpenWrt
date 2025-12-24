@@ -1158,10 +1158,10 @@ main() {
     update_adguardhome
     update_script_priority
     update_geoip
-    update_package "runc" "releases" "v1.3.3"
-    update_package "containerd" "releases" "v1.7.29"
-    update_package "docker" "tags" "v28.5.2"
-    update_package "dockerd" "releases" "v28.5.2"
+    update_package "runc" "releases" "v1.2.6"
+    update_package "containerd" "releases" "v1.7.27"
+    update_package "docker" "tags" "v28.2.2"
+    update_package "dockerd" "releases" "v28.2.2"
     # apply_hash_fixes # 调用哈希修正函数
 }
 
