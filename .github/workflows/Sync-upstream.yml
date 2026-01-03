@@ -90,7 +90,7 @@ jobs:
         [ -e $GITHUB_WORKSPACE/README.md ] && cp $GITHUB_WORKSPACE/README.md $GITHUB_WORKSPACE/${{matrix.target}}
         cd $GITHUB_WORKSPACE/${{matrix.target}}
         git add .
-        git commit -am "update $(date +%Y-%m-%d" "%H:%M:%S)"
+        git commit -am "update $(date +%Y-%m-%d" "%H:%M:%S)" || true
         git push --quiet "https://${{ secrets.ACCESS_TOKEN }}@github.com/fichenx/Actions-OpenWrt.git" HEAD:${{matrix.target}}
                
     - name: 删除工作流
