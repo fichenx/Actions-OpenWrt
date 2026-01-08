@@ -1105,6 +1105,15 @@ remove_attendedsysupgrade() {
     done
 }
 
+fix_openssl_ktls() {
+    local config_in="$BUILD_DIR/package/libs/openssl/Config.in"
+    if [ -f "$config_in" ]; then
+        echo "正在更新 OpenSSL kTLS 配置..."
+        sed -i 's/select PACKAGE_kmod-tls/depends on PACKAGE_kmod-tls/g' "$config_in"
+        sed -i '/depends on PACKAGE_kmod-tls/a\\tdefault y if PACKAGE_kmod-tls' "$config_in"
+    fi
+}
+
 main() {
     clone_repo
     clean_up
@@ -1158,6 +1167,7 @@ main() {
     update_adguardhome
     update_script_priority
     update_geoip
+    fix_openssl_ktls
     update_package "runc" "releases" "v1.2.6"
     update_package "containerd" "releases" "v1.7.27"
     update_package "docker" "tags" "v28.2.2"
