@@ -1114,6 +1114,14 @@ fix_openssl_ktls() {
     fi
 }
 
+fix_opkg_check() {
+    local patch_file="$BASE_PATH/patches/001-fix-provides-version-parsing.patch"
+    local opkg_dir="$BUILD_DIR/package/system/opkg"
+    if [ -f "$patch_file" ]; then
+        install -Dm644 "$patch_file" "$opkg_dir/patches/001-fix-provides-version-parsing.patch"
+    fi
+}
+
 main() {
     clone_repo
     clean_up
@@ -1168,6 +1176,7 @@ main() {
     update_script_priority
     update_geoip
     fix_openssl_ktls
+    fix_opkg_check
     update_package "runc" "releases" "v1.2.6"
     update_package "containerd" "releases" "v1.7.27"
     update_package "docker" "tags" "v28.2.2"
