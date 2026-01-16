@@ -28,7 +28,7 @@ function git_sparse_clone() {
   mv $@ ../
   cd ../
   rm -rf temp_sparse
-  }
+}
   
 function git_svn() {
   #branch="$1" rurl="$2" localdir="$3" && shift 3
@@ -45,7 +45,7 @@ function git_svn() {
   mv $@ ../package/custom/
   cd ..
   rm -rf temp_svn
-  }
+}
   
 function merge_package(){
     branch=`echo $1 | rev | cut -d'/' -f 1 | rev`
@@ -223,17 +223,7 @@ if [ -d "${mk_lede_dir%/*}" ] && [ -f "$mk_lede_dir" ]; then
 fi
 ##使用本地lucky万吉版本
 update_lucky() {
-    local lucky_repo_url="https://github.com/gdy666/luci-app-lucky.git"
-    local target_fichenx_dir="feeds/fichenx"
     local lucky_dir="feeds/packages/net/lucky"
-    local luci_app_lucky_dir="$target_fichenx_dir/luci-app-lucky"
-
-    # 提前检查目标目录是否存在
-    if [ ! -d "$lucky_dir" ] || [ ! -d "$luci_app_lucky_dir" ]; then
-        echo "Warning: $lucky_dir 或 $luci_app_lucky_dir 不存在，跳过 lucky 源代码更新。" >&2
-    else
-        local tmp_dir
-        tmp_dir=$(mktemp -d)
 
     # 默认关闭lucky
     local lucky_conf="feeds/packages/net/lucky/files/luckyuci"
