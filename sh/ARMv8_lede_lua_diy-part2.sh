@@ -221,7 +221,56 @@ fi
 if [ -d "${mk_lede_dir%/*}" ] && [ -f "$mk_lede_dir" ]; then
     sed -i 's|Linux_$(LUCKY_ARCH)|Linux_$(LUCKY_ARCH)_wanji|g' "$mk_lede_dir"
 fi
+##使用本地lucky万吉版本
+update_lucky() {
+    local lucky_repo_url="https://github.com/gdy666/luci-app-lucky.git"
+    local target_fichenx_dir="feeds/fichenx"
+    local lucky_dir="feeds/packages/net/lucky"
+    local luci_app_lucky_dir="$target_fichenx_dir/luci-app-lucky"
 
+    # 提前检查目标目录是否存在
+    if [ ! -d "$lucky_dir" ] || [ ! -d "$luci_app_lucky_dir" ]; then
+        echo "Warning: $lucky_dir 或 $luci_app_lucky_dir 不存在，跳过 lucky 源代码更新。" >&2
+    else
+        local tmp_dir
+        tmp_dir=$(mktemp -d)
+
+    # 默认关闭lucky
+    local lucky_conf="feeds/packages/net/lucky/files/luckyuci"
+    if [ -f "$lucky_conf" ]; then
+        sed -i "s/option enabled '1'/option enabled '0'/g" "$lucky_conf"
+        sed -i "s/option logger '1'/option logger '0'/g" "$lucky_conf"
+    fi
+
+    # 从补丁文件名中提取版本号
+    local version
+    version=$(find "$GITHUB_WORKSPACE/patches" -name "lucky_*.tar.gz" -printf "%f\n" | head -n 1 | sed -n 's/^lucky_\(.*\)_Linux.*$/\1/p')
+    if [ -z "$version" ]; then
+        echo "Warning: 未找到 lucky 补丁文件，跳过更新。" >&2
+        return 0
+    fi
+
+    local makefile_path="feeds/packages/net/lucky/Makefile"
+    if [ ! -f "$makefile_path" ]; then
+        echo "Warning: lucky Makefile not found. Skipping." >&2
+        return 0
+    fi
+
+    echo "正在更新 lucky Makefile..."
+    # 使用本地补丁文件，而不是下载
+    local patch_line="\\t[ -f \$(TOPDIR)/../patches/lucky_${version}_Linux_\$(LUCKY_ARCH)_wanji.tar.gz ] && install -Dm644 \$(TOPDIR)/../patches/lucky_${version}_Linux_\$(LUCKY_ARCH)_wanji.tar.gz \$(PKG_BUILD_DIR)/\$(PKG_NAME)_\$(PKG_VERSION)_Linux_\$(LUCKY_ARCH).tar.gz"
+
+    # 确保 Build/Prepare 部分存在，然后在其后添加我们的行
+    if grep -q "Build/Prepare" "$makefile_path"; then
+        sed -i "/Build\\/Prepare/a\\$patch_line" "$makefile_path"
+        # 删除任何现有的 wget 命令
+        sed -i '/wget/d' "$makefile_path"
+        echo "lucky Makefile 更新完成。"
+    else
+        echo "Warning: lucky Makefile 中未找到 'Build/Prepare'。跳过。" >&2
+    fi
+}
+update_lucky
 
 #修改应用位置
 # luci-app-openvpn
