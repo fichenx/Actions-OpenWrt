@@ -248,7 +248,7 @@ update_lucky() {
 
     echo "正在更新 lucky Makefile..."
     # 使用本地补丁文件，而不是下载
-    local patch_line="\\t[ -f \${GITHUB_WORKSPACE}/patches/lucky_${version}_Linux_\$(LUCKY_ARCH)_wanji.tar.gz ] && install -Dm644 \${GITHUB_WORKSPACE}/patches/lucky_${version}_Linux_\$(LUCKY_ARCH)_wanji.tar.gz \$(PKG_BUILD_DIR)/\$(PKG_NAME)_\$(PKG_VERSION)_Linux_\$(LUCKY_ARCH).tar.gz"
+    local patch_line="\\t[ -f \${GITHUB_WORKSPACE}/backup/lucky_${version}_Linux_\$(LUCKY_ARCH)_wanji.tar.gz ] && install -Dm644 \${GITHUB_WORKSPACE}/backup/lucky_${version}_Linux_\$(LUCKY_ARCH)_wanji.tar.gz \$(PKG_BUILD_DIR)/\$(PKG_NAME)_\$(PKG_VERSION)_Linux_\$(LUCKY_ARCH).tar.gz"
 
     # 确保 Build/Prepare 部分存在，然后在其后添加我们的行
     if grep -q "Build/Prepare" "$makefile_path"; then
