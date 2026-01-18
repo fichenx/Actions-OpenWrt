@@ -217,7 +217,7 @@ update_lucky() {
 
     # 从补丁文件名中提取版本号
     local version
-    version=$(find "$GITHUB_WORKSPACE/patches" -name "lucky_*.tar.gz" -printf "%f\n" | head -n 1 | sed -n 's/^lucky_\(.*\)_Linux.*$/\1/p')
+    version=$(find "$GITHUB_WORKSPACE/backup" -name "lucky_*.tar.gz" -printf "%f\n" | head -n 1 | sed -n 's/^lucky_\(.*\)_Linux.*$/\1/p')
     if [ -z "$version" ]; then
         echo "Warning: 未找到 lucky 补丁文件，跳过更新。" >&2
         return 0
