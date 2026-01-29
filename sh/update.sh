@@ -284,6 +284,15 @@ fix_mk_def_depends() {
     fi
 }
 
+# 修复 Kconfig 递归依赖问题（package-metadata.pl 生成非法 "<" 条件）
+fix_kconfig_recursive_dependency() {
+    local file="$BUILD_DIR/scripts/package-metadata.pl"
+    if [ -f "$file" ]; then
+        sed -i 's/<PACKAGE_\$pkgname/!=y/g' "$file"
+        echo "已修复 package-metadata.pl 的 Kconfig 递归依赖生成逻辑。"
+    fi
+}
+
 update_default_lan_addr() {
     local CFG_PATH="$BUILD_DIR/package/base-files/files/bin/config_generate"
     if [ -f $CFG_PATH ]; then
@@ -1170,6 +1179,7 @@ main() {
     install_opkg_distfeeds
     fix_easytier_mk
     remove_attendedsysupgrade
+    fix_kconfig_recursive_dependency
     install_feeds
     fix_easytier_lua
     update_adguardhome
