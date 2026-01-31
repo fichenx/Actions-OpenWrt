@@ -93,6 +93,12 @@ update_feeds() {
         echo "src-git fichenx https://github.com/fichenx/openwrt-package;js" >>"$FEEDS_PATH"
     fi
 
+    # 检查并添加 passwall 官方源
+    if ! grep -q "openwrt-passwall" "$FEEDS_PATH"; then
+        [ -z "$(tail -c 1 "$FEEDS_PATH")" ] || echo "" >>"$FEEDS_PATH"
+        echo "src-git passwall https://github.com/Openwrt-Passwall/openwrt-passwall;main" >>"$FEEDS_PATH"
+    fi
+
     # 添加bpf.mk解决更新报错
     if [ ! -f "$BUILD_DIR/include/bpf.mk" ]; then
         touch "$BUILD_DIR/include/bpf.mk"
@@ -189,12 +195,17 @@ install_fichenx() {
         xray-core xray-plugin dns2tcp dns2socks haproxy hysteria \
         naiveproxy shadowsocks-rust sing-box v2ray-core v2ray-geodata geoview v2ray-plugin \
         tuic-client chinadns-ng ipt2socks tcping trojan-plus simple-obfs shadowsocksr-libev \
-        luci-app-passwall v2dat mosdns luci-app-mosdns adguardhome luci-app-adguardhome ddns-go \
+        v2dat mosdns luci-app-mosdns adguardhome luci-app-adguardhome ddns-go \
         luci-app-ddns-go taskd luci-lib-xterm luci-lib-taskd luci-app-store quickstart \
         luci-app-quickstart luci-app-istorex luci-app-cloudflarespeedtest netdata luci-app-netdata \
         lucky luci-app-lucky luci-app-openclash luci-app-homeproxy luci-app-amlogic nikki luci-app-nikki \
         tailscale luci-app-tailscale oaf open-app-filter luci-app-oaf easytier luci-app-easytier \
         msd_lite luci-app-msd_lite cups luci-app-cupsd
+}
+
+install_passwall() {
+    echo "正在从官方仓库安装 luci-app-passwall..."
+    ./scripts/feeds install -p passwall -f luci-app-passwall
 }
 
 install_fullconenat() {
@@ -238,6 +249,8 @@ install_feeds() {
             if [[ $(basename "$dir") == "fichenx" ]]; then
                 install_fichenx
                 install_fullconenat
+            elif [[ $(basename "$dir") == "passwall" ]]; then
+                install_passwall
             else
                 ./scripts/feeds install -f -ap $(basename "$dir")
             fi
@@ -502,13 +515,13 @@ EOF
 # 应用 Passwall 相关调整
 apply_passwall_tweaks() {
     # 清理 Passwall 的 chnlist 规则文件
-    local chnlist_path="$BUILD_DIR/feeds/fichenx/luci-app-passwall/root/usr/share/passwall/rules/chnlist"
+    local chnlist_path="$BUILD_DIR/feeds/passwall/luci-app-passwall/root/usr/share/passwall/rules/chnlist"
     if [ -f "$chnlist_path" ]; then
         > "$chnlist_path"
     fi
 
     # 调整 Xray 最大 RTT 和 保留记录数量
-    local xray_util_path="$BUILD_DIR/feeds/fichenx/luci-app-passwall/luasrc/passwall/util_xray.lua"
+    local xray_util_path="$BUILD_DIR/feeds/passwall/luci-app-passwall/luasrc/passwall/util_xray.lua"
     if [ -f "$xray_util_path" ]; then
         sed -i 's/maxRTT = "1s"/maxRTT = "2s"/g' "$xray_util_path"
         sed -i 's/sampling = 3/sampling = 5/g' "$xray_util_path"
@@ -630,13 +643,45 @@ update_package() {
         if [ -n "$3" ]; then
             PKG_VER="$3"
         fi
-        local COMMIT_SHA
-        if ! COMMIT_SHA=$(curl -fsSL "https://api.github.com/repos/$PKG_REPO/tags" | jq -r '.[] | select(.name=="'$PKG_VER'") | .commit.sha' | cut -c1-7); then
-            echo "错误：从 https://api.github.com/repos/$PKG_REPO/tags 获取提交哈希失败" >&2
-            return 1
-        fi
-        if [ -n "$COMMIT_SHA" ]; then
-            sed -i 's/^PKG_GIT_SHORT_COMMIT:=.*/PKG_GIT_SHORT_COMMIT:='$COMMIT_SHA'/g' "$mk_path"
+        local PKG_VER_CLEAN
+        PKG_VER_CLEAN=$(echo "$PKG_VER" | sed 's/^v//')
+        if grep -q "^PKG_GIT_SHORT_COMMIT:=" "$mk_path"; then
+            local PKG_GIT_URL_RAW
+            PKG_GIT_URL_RAW=$(awk -F"=" '/^PKG_GIT_URL:=/ {print $NF}' "$mk_path")
+            local PKG_GIT_REF_RAW
+            PKG_GIT_REF_RAW=$(awk -F"=" '/^PKG_GIT_REF:=/ {print $NF}' "$mk_path")
+
+            if [ -z "$PKG_GIT_URL_RAW" ] || [ -z "$PKG_GIT_REF_RAW" ]; then
+                echo "错误：$mk_path 缺少 PKG_GIT_URL 或 PKG_GIT_REF，无法更新 PKG_GIT_SHORT_COMMIT" >&2
+                return 1
+            fi
+
+            local PKG_GIT_REF_RESOLVED
+            PKG_GIT_REF_RESOLVED=$(echo "$PKG_GIT_REF_RAW" | sed "s/\$(PKG_VERSION)/$PKG_VER_CLEAN/g; s/\${PKG_VERSION}/$PKG_VER_CLEAN/g")
+
+            local PKG_GIT_REF_TAG="${PKG_GIT_REF_RESOLVED#refs/tags/}"
+
+            local COMMIT_SHA
+            local LS_REMOTE_OUTPUT
+            LS_REMOTE_OUTPUT=$(git ls-remote "https://$PKG_GIT_URL_RAW" "refs/tags/${PKG_GIT_REF_TAG}" "refs/tags/${PKG_GIT_REF_TAG}^{}" 2>/dev/null)
+            COMMIT_SHA=$(echo "$LS_REMOTE_OUTPUT" | awk '/\^\{\}$/ {print $1; exit}')
+            if [ -z "$COMMIT_SHA" ]; then
+                COMMIT_SHA=$(echo "$LS_REMOTE_OUTPUT" | awk 'NR==1{print $1}')
+            fi
+            if [ -z "$COMMIT_SHA" ]; then
+                COMMIT_SHA=$(git ls-remote "https://$PKG_GIT_URL_RAW" "${PKG_GIT_REF_RESOLVED}^{}" 2>/dev/null | awk 'NR==1{print $1}')
+            fi
+            if [ -z "$COMMIT_SHA" ]; then
+                COMMIT_SHA=$(git ls-remote "https://$PKG_GIT_URL_RAW" "$PKG_GIT_REF_RESOLVED" 2>/dev/null | awk 'NR==1{print $1}')
+            fi
+            if [ -z "$COMMIT_SHA" ]; then
+                echo "错误：无法从 https://$PKG_GIT_URL_RAW 获取 $PKG_GIT_REF_RESOLVED 的提交哈希" >&2
+                return 1
+            fi
+
+            local SHORT_COMMIT
+            SHORT_COMMIT=$(echo "$COMMIT_SHA" | cut -c1-7)
+            sed -i "s/^PKG_GIT_SHORT_COMMIT:=.*/PKG_GIT_SHORT_COMMIT:=$SHORT_COMMIT/g" "$mk_path"
         fi
         PKG_VER=$(echo "$PKG_VER" | grep -oE "[\.0-9]{1,}")
 
@@ -1187,10 +1232,10 @@ main() {
     update_geoip
     fix_openssl_ktls
     fix_opkg_check
-    #update_package "runc" "releases" "v1.2.6"
-    #update_package "containerd" "releases" "v1.7.27"
-    #update_package "docker" "tags" "v28.2.2"
-    #update_package "dockerd" "releases" "v28.2.2"
+    update_package "runc" "releases" "v1.3.3"
+    update_package "containerd" "releases" "v1.7.28"
+    update_package "docker" "tags" "v28.5.2"
+    update_package "dockerd" "releases" "v28.5.2"
     # apply_hash_fixes # 调用哈希修正函数
 }
 
