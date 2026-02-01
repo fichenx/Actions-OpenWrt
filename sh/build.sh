@@ -65,6 +65,12 @@ apply_config() {
         cat "$BASE_PATH/config/nss.config" >> "$BASE_PATH/$BUILD_DIR/.config"
     fi
 
+    # 追加基础配置
+    cat "$BASE_PATH/deconfig/compile_base.config" >> "$BASE_PATH/$BUILD_DIR/.config"
+
+    # 追加 docker 依赖
+    cat "$BASE_PATH/deconfig/docker_deps.config" >> "$BASE_PATH/$BUILD_DIR/.config"
+
     # 追加代理配置
     #cat "$BASE_PATH/deconfig/proxy.config" >> "$BASE_PATH/$BUILD_DIR/.config"
 }

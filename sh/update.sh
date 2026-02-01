@@ -1176,6 +1176,67 @@ fix_opkg_check() {
     fi
 }
 
+install_pbr_cmcc() {
+    local pbr_dir="$BUILD_DIR/package/feeds/packages/pbr/files/usr/share/pbr"
+    local pbr_conf="$BUILD_DIR/package/feeds/packages/pbr/files/etc/config/pbr"
+
+    if [ -d "$pbr_dir" ]; then
+        echo "正在安装 PBR CMCC 配置文件..."
+        install -Dm544 "$BASE_PATH/patches/pbr.user.cmcc" "$pbr_dir/pbr.user.cmcc"
+        install -Dm544 "$BASE_PATH/patches/pbr.user.cmcc6" "$pbr_dir/pbr.user.cmcc6"
+    fi
+
+    # 在 PBR 默认配置文件中添加 CMCC include 条目（在 netflix 配置之后）
+    if [ -f "$pbr_conf" ]; then
+        # 检查是否已存在 cmcc 配置
+        if ! grep -q "pbr.user.cmcc" "$pbr_conf"; then
+            echo "正在添加 PBR CMCC 配置条目..."
+            # 在包含 netflix 的 enabled 行后插入 cmcc 和 cmcc6 配置
+            sed -i "/pbr.user.netflix/{n;n;a\\
+\\nconfig include\\
+\\toption path '/usr/share/pbr/pbr.user.cmcc'\\
+\\toption enabled '0'\\
+\\nconfig include\\
+\\toption path '/usr/share/pbr/pbr.user.cmcc6'\\
+\\toption enabled '0'
+}" "$pbr_conf"
+        fi
+    fi
+}
+
+fix_quectel_cm() {
+    local makefile_path="$BUILD_DIR/package/feeds/packages/quectel-cm/Makefile"
+    local cmake_patch_path="$BUILD_DIR/package/feeds/packages/quectel-cm/patches/020-cmake.patch"
+
+    if [ -f "$makefile_path" ]; then
+        echo "正在修复 quectel-cm Makefile..."
+
+        # 删除旧的下载相关行
+        sed -i '/^PKG_SOURCE:=/d' "$makefile_path"
+        sed -i '/^PKG_SOURCE_URL:=@IMMORTALWRT/d' "$makefile_path"
+        sed -i '/^PKG_HASH:=/d' "$makefile_path"
+
+        # 在 PKG_RELEASE 行后添加新的 git 下载配置
+        sed -i '/^PKG_RELEASE:=/a\
+\
+PKG_SOURCE_PROTO:=git\
+PKG_SOURCE_URL:=https://github.com/Carton32/quectel-CM.git\
+PKG_SOURCE_VERSION:=$(PKG_VERSION)\
+PKG_MIRROR_HASH:=skip' "$makefile_path"
+
+        # 更新 PKG_RELEASE 版本号
+        sed -i 's/^PKG_RELEASE:=2$/PKG_RELEASE:=3/' "$makefile_path"
+
+        echo "quectel-cm Makefile 修复完成。"
+    fi
+
+    if [ -f "$cmake_patch_path" ]; then
+        # 为补丁文件中的两行末尾添加空格，以适配 git 下载的源码
+        sed -i 's/-cmake_minimum_required(VERSION 2\.4)$/-cmake_minimum_required(VERSION 2.4) /' "$cmake_patch_path"
+        sed -i 's/project(quectel-CM)$/project(quectel-CM) /' "$cmake_patch_path"
+    fi
+}
+
 main() {
     clone_repo
     clean_up
@@ -1232,6 +1293,8 @@ main() {
     update_geoip
     fix_openssl_ktls
     fix_opkg_check
+    fix_quectel_cm
+    install_pbr_cmcc
     update_package "runc" "releases" "v1.3.3"
     update_package "containerd" "releases" "v1.7.28"
     update_package "docker" "tags" "v28.5.2"
