@@ -61,6 +61,8 @@ jobs:
                -e 's|CONFIG_FILE="$BASE_PATH/deconfig/$Dev.config"|CONFIG_FILE="$BASE_PATH/config/$Dev.config"|' \
                -e 's|cat "$BASE_PATH/deconfig/nss.config"|cat "$BASE_PATH/config/nss.config"|' \
                -e 's|cat "$BASE_PATH/deconfig/proxy.config"|#cat "$BASE_PATH/deconfig/proxy.config"|' \
+               -e 's|cat "$BASE_PATH/deconfig/compile_base.config"|#cat "$BASE_PATH/config/compile_base.config"|' \
+               -e 's|cat "$BASE_PATH/deconfig/docker_deps.config"|#cat "$BASE_PATH/config/docker_deps.config"|' \
                -e 's|$BASE_PATH/update.sh|$BASE_PATH/sh/update.sh|' \
                -e 's|*rootfs.tar.gz|*.tar.gz|' \
                build.sh
