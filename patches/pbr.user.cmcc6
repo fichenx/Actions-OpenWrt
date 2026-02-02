@@ -1,0 +1,29 @@
+#!/bin/sh
+# China Mobile (CMCC) IPv6 addresses for PBR
+# Data source: https://ispip.clang.cn/cmcc_ipv6.txt
+# shellcheck disable=SC2015,SC3003,SC3060
+TARGET_URL='https://ispip.clang.cn/cmcc_ipv6.txt'
+TARGET_DL_FILE='/var/pbr_tmp_cmcc_ipv6.txt'
+TARGET_TABLE='inet fw4'
+TARGET_INTERFACE='wan_cmcc'
+
+_ret=1
+
+# Check if IPv6 is enabled
+[ "$(uci get pbr.config.ipv6_enabled)" = "1" ] || return 0
+
+mkdir -p "${TARGET_DL_FILE%/*}"
+
+[ -s "$TARGET_DL_FILE" ] || \
+	uclient-fetch --no-check-certificate -qO- "$TARGET_URL" > "$TARGET_DL_FILE"
+
+[ -s "$TARGET_DL_FILE" ] || return 1
+
+# Read IPv6 CIDR addresses (one per line)
+params=$(cat "$TARGET_DL_FILE" | grep -E '^[0-9a-fA-F:]+/[0-9]+$')
+[ -n "$params" ] || return 1
+
+nftset="pbr_${TARGET_INTERFACE}_6_dst_ip_user"
+nft "add element $TARGET_TABLE $nftset { ${params//$'\n'/, } }" && _ret=0
+
+return $_ret

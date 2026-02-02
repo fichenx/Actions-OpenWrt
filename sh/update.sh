@@ -93,6 +93,12 @@ update_feeds() {
         echo "src-git fichenx https://github.com/fichenx/openwrt-package;js" >>"$FEEDS_PATH"
     fi
 
+    # 检查并添加 passwall 官方源
+    if ! grep -q "openwrt-passwall" "$FEEDS_PATH"; then
+        [ -z "$(tail -c 1 "$FEEDS_PATH")" ] || echo "" >>"$FEEDS_PATH"
+        echo "src-git passwall https://github.com/Openwrt-Passwall/openwrt-passwall;main" >>"$FEEDS_PATH"
+    fi
+
     # 添加bpf.mk解决更新报错
     if [ ! -f "$BUILD_DIR/include/bpf.mk" ]; then
         touch "$BUILD_DIR/include/bpf.mk"
@@ -114,7 +120,7 @@ remove_unwanted_packages() {
         "luci-app-passwall" "luci-app-ddns-go" "luci-app-rclone" "luci-app-ssr-plus"
         "luci-app-vssr" "luci-app-daed" "luci-app-dae" "luci-app-alist" "luci-app-homeproxy"
         "luci-app-haproxy-tcp" "luci-app-openclash" "luci-app-mihomo" "luci-app-appfilter"
-        "luci-app-msd_lite"
+        "luci-app-msd_lite" "luci-app-unblockneteasemusic"
     )
     local packages_net=(
         "haproxy" "xray-core" "xray-plugin" "dns2socks" "alist" "hysteria"
@@ -189,12 +195,17 @@ install_fichenx() {
         xray-core xray-plugin dns2tcp dns2socks haproxy hysteria \
         naiveproxy shadowsocks-rust sing-box v2ray-core v2ray-geodata geoview v2ray-plugin \
         tuic-client chinadns-ng ipt2socks tcping trojan-plus simple-obfs shadowsocksr-libev \
-        luci-app-passwall v2dat mosdns luci-app-mosdns adguardhome luci-app-adguardhome ddns-go \
+        v2dat mosdns luci-app-mosdns adguardhome luci-app-adguardhome ddns-go \
         luci-app-ddns-go taskd luci-lib-xterm luci-lib-taskd luci-app-store quickstart \
         luci-app-quickstart luci-app-istorex luci-app-cloudflarespeedtest netdata luci-app-netdata \
         lucky luci-app-lucky luci-app-openclash luci-app-homeproxy luci-app-amlogic nikki luci-app-nikki \
         tailscale luci-app-tailscale oaf open-app-filter luci-app-oaf easytier luci-app-easytier \
         msd_lite luci-app-msd_lite cups luci-app-cupsd
+}
+
+install_passwall() {
+    echo "正在从官方仓库安装 luci-app-passwall..."
+    ./scripts/feeds install -p passwall -f luci-app-passwall
 }
 
 install_fullconenat() {
@@ -238,6 +249,8 @@ install_feeds() {
             if [[ $(basename "$dir") == "fichenx" ]]; then
                 install_fichenx
                 install_fullconenat
+            elif [[ $(basename "$dir") == "passwall" ]]; then
+                install_passwall
             else
                 ./scripts/feeds install -f -ap $(basename "$dir")
             fi
@@ -281,6 +294,15 @@ fix_mk_def_depends() {
     sed -i 's/libustream-mbedtls/libustream-openssl/g' $BUILD_DIR/include/target.mk 2>/dev/null
     if [ -f $BUILD_DIR/target/linux/qualcommax/Makefile ]; then
         sed -i 's/wpad-openssl/wpad-mesh-openssl/g' $BUILD_DIR/target/linux/qualcommax/Makefile
+    fi
+}
+
+# 修复 Kconfig 递归依赖问题（package-metadata.pl 生成非法 "<" 条件）
+fix_kconfig_recursive_dependency() {
+    local file="$BUILD_DIR/scripts/package-metadata.pl"
+    if [ -f "$file" ]; then
+        sed -i 's/<PACKAGE_\$pkgname/!=y/g' "$file"
+        echo "已修复 package-metadata.pl 的 Kconfig 递归依赖生成逻辑。"
     fi
 }
 
@@ -446,7 +468,7 @@ change_cpuusage() {
 
 update_tcping() {
     local tcping_path="$BUILD_DIR/feeds/fichenx/tcping/Makefile"
-    local url="https://raw.githubusercontent.com/xiaorouji/openwrt-passwall-packages/refs/heads/main/tcping/Makefile"
+    local url="https://raw.githubusercontent.com/Openwrt-Passwall/openwrt-passwall-packages/refs/heads/main/tcping/Makefile"
 
     if [ -d "$(dirname "$tcping_path")" ]; then
         echo "正在更新 tcping Makefile..."
@@ -493,13 +515,13 @@ EOF
 # 应用 Passwall 相关调整
 apply_passwall_tweaks() {
     # 清理 Passwall 的 chnlist 规则文件
-    local chnlist_path="$BUILD_DIR/feeds/fichenx/luci-app-passwall/root/usr/share/passwall/rules/chnlist"
+    local chnlist_path="$BUILD_DIR/feeds/passwall/luci-app-passwall/root/usr/share/passwall/rules/chnlist"
     if [ -f "$chnlist_path" ]; then
         > "$chnlist_path"
     fi
 
     # 调整 Xray 最大 RTT 和 保留记录数量
-    local xray_util_path="$BUILD_DIR/feeds/fichenx/luci-app-passwall/luasrc/passwall/util_xray.lua"
+    local xray_util_path="$BUILD_DIR/feeds/passwall/luci-app-passwall/luasrc/passwall/util_xray.lua"
     if [ -f "$xray_util_path" ]; then
         sed -i 's/maxRTT = "1s"/maxRTT = "2s"/g' "$xray_util_path"
         sed -i 's/sampling = 3/sampling = 5/g' "$xray_util_path"
@@ -621,13 +643,45 @@ update_package() {
         if [ -n "$3" ]; then
             PKG_VER="$3"
         fi
-        local COMMIT_SHA
-        if ! COMMIT_SHA=$(curl -fsSL "https://api.github.com/repos/$PKG_REPO/tags" | jq -r '.[] | select(.name=="'$PKG_VER'") | .commit.sha' | cut -c1-7); then
-            echo "错误：从 https://api.github.com/repos/$PKG_REPO/tags 获取提交哈希失败" >&2
-            return 1
-        fi
-        if [ -n "$COMMIT_SHA" ]; then
-            sed -i 's/^PKG_GIT_SHORT_COMMIT:=.*/PKG_GIT_SHORT_COMMIT:='$COMMIT_SHA'/g' "$mk_path"
+        local PKG_VER_CLEAN
+        PKG_VER_CLEAN=$(echo "$PKG_VER" | sed 's/^v//')
+        if grep -q "^PKG_GIT_SHORT_COMMIT:=" "$mk_path"; then
+            local PKG_GIT_URL_RAW
+            PKG_GIT_URL_RAW=$(awk -F"=" '/^PKG_GIT_URL:=/ {print $NF}' "$mk_path")
+            local PKG_GIT_REF_RAW
+            PKG_GIT_REF_RAW=$(awk -F"=" '/^PKG_GIT_REF:=/ {print $NF}' "$mk_path")
+
+            if [ -z "$PKG_GIT_URL_RAW" ] || [ -z "$PKG_GIT_REF_RAW" ]; then
+                echo "错误：$mk_path 缺少 PKG_GIT_URL 或 PKG_GIT_REF，无法更新 PKG_GIT_SHORT_COMMIT" >&2
+                return 1
+            fi
+
+            local PKG_GIT_REF_RESOLVED
+            PKG_GIT_REF_RESOLVED=$(echo "$PKG_GIT_REF_RAW" | sed "s/\$(PKG_VERSION)/$PKG_VER_CLEAN/g; s/\${PKG_VERSION}/$PKG_VER_CLEAN/g")
+
+            local PKG_GIT_REF_TAG="${PKG_GIT_REF_RESOLVED#refs/tags/}"
+
+            local COMMIT_SHA
+            local LS_REMOTE_OUTPUT
+            LS_REMOTE_OUTPUT=$(git ls-remote "https://$PKG_GIT_URL_RAW" "refs/tags/${PKG_GIT_REF_TAG}" "refs/tags/${PKG_GIT_REF_TAG}^{}" 2>/dev/null)
+            COMMIT_SHA=$(echo "$LS_REMOTE_OUTPUT" | awk '/\^\{\}$/ {print $1; exit}')
+            if [ -z "$COMMIT_SHA" ]; then
+                COMMIT_SHA=$(echo "$LS_REMOTE_OUTPUT" | awk 'NR==1{print $1}')
+            fi
+            if [ -z "$COMMIT_SHA" ]; then
+                COMMIT_SHA=$(git ls-remote "https://$PKG_GIT_URL_RAW" "${PKG_GIT_REF_RESOLVED}^{}" 2>/dev/null | awk 'NR==1{print $1}')
+            fi
+            if [ -z "$COMMIT_SHA" ]; then
+                COMMIT_SHA=$(git ls-remote "https://$PKG_GIT_URL_RAW" "$PKG_GIT_REF_RESOLVED" 2>/dev/null | awk 'NR==1{print $1}')
+            fi
+            if [ -z "$COMMIT_SHA" ]; then
+                echo "错误：无法从 https://$PKG_GIT_URL_RAW 获取 $PKG_GIT_REF_RESOLVED 的提交哈希" >&2
+                return 1
+            fi
+
+            local SHORT_COMMIT
+            SHORT_COMMIT=$(echo "$COMMIT_SHA" | cut -c1-7)
+            sed -i "s/^PKG_GIT_SHORT_COMMIT:=.*/PKG_GIT_SHORT_COMMIT:=$SHORT_COMMIT/g" "$mk_path"
         fi
         PKG_VER=$(echo "$PKG_VER" | grep -oE "[\.0-9]{1,}")
 
@@ -1122,6 +1176,67 @@ fix_opkg_check() {
     fi
 }
 
+install_pbr_cmcc() {
+    local pbr_dir="$BUILD_DIR/package/feeds/packages/pbr/files/usr/share/pbr"
+    local pbr_conf="$BUILD_DIR/package/feeds/packages/pbr/files/etc/config/pbr"
+
+    if [ -d "$pbr_dir" ]; then
+        echo "正在安装 PBR CMCC 配置文件..."
+        install -Dm544 "$BASE_PATH/patches/pbr.user.cmcc" "$pbr_dir/pbr.user.cmcc"
+        install -Dm544 "$BASE_PATH/patches/pbr.user.cmcc6" "$pbr_dir/pbr.user.cmcc6"
+    fi
+
+    # 在 PBR 默认配置文件中添加 CMCC include 条目（在 netflix 配置之后）
+    if [ -f "$pbr_conf" ]; then
+        # 检查是否已存在 cmcc 配置
+        if ! grep -q "pbr.user.cmcc" "$pbr_conf"; then
+            echo "正在添加 PBR CMCC 配置条目..."
+            # 在包含 netflix 的 enabled 行后插入 cmcc 和 cmcc6 配置
+            sed -i "/pbr.user.netflix/{n;n;a\\
+\\nconfig include\\
+\\toption path '/usr/share/pbr/pbr.user.cmcc'\\
+\\toption enabled '0'\\
+\\nconfig include\\
+\\toption path '/usr/share/pbr/pbr.user.cmcc6'\\
+\\toption enabled '0'
+}" "$pbr_conf"
+        fi
+    fi
+}
+
+fix_quectel_cm() {
+    local makefile_path="$BUILD_DIR/package/feeds/packages/quectel-cm/Makefile"
+    local cmake_patch_path="$BUILD_DIR/package/feeds/packages/quectel-cm/patches/020-cmake.patch"
+
+    if [ -f "$makefile_path" ]; then
+        echo "正在修复 quectel-cm Makefile..."
+
+        # 删除旧的下载相关行
+        sed -i '/^PKG_SOURCE:=/d' "$makefile_path"
+        sed -i '/^PKG_SOURCE_URL:=@IMMORTALWRT/d' "$makefile_path"
+        sed -i '/^PKG_HASH:=/d' "$makefile_path"
+
+        # 在 PKG_RELEASE 行后添加新的 git 下载配置
+        sed -i '/^PKG_RELEASE:=/a\
+\
+PKG_SOURCE_PROTO:=git\
+PKG_SOURCE_URL:=https://github.com/Carton32/quectel-CM.git\
+PKG_SOURCE_VERSION:=$(PKG_VERSION)\
+PKG_MIRROR_HASH:=skip' "$makefile_path"
+
+        # 更新 PKG_RELEASE 版本号
+        sed -i 's/^PKG_RELEASE:=2$/PKG_RELEASE:=3/' "$makefile_path"
+
+        echo "quectel-cm Makefile 修复完成。"
+    fi
+
+    if [ -f "$cmake_patch_path" ]; then
+        # 为补丁文件中的两行末尾添加空格，以适配 git 下载的源码
+        sed -i 's/-cmake_minimum_required(VERSION 2\.4)$/-cmake_minimum_required(VERSION 2.4) /' "$cmake_patch_path"
+        sed -i 's/project(quectel-CM)$/project(quectel-CM) /' "$cmake_patch_path"
+    fi
+}
+
 main() {
     clone_repo
     clean_up
@@ -1170,6 +1285,7 @@ main() {
     install_opkg_distfeeds
     fix_easytier_mk
     remove_attendedsysupgrade
+    fix_kconfig_recursive_dependency
     install_feeds
     fix_easytier_lua
     update_adguardhome
@@ -1177,10 +1293,12 @@ main() {
     update_geoip
     fix_openssl_ktls
     fix_opkg_check
-    update_package "runc" "releases" "v1.2.6"
-    update_package "containerd" "releases" "v1.7.27"
-    update_package "docker" "tags" "v28.2.2"
-    update_package "dockerd" "releases" "v28.2.2"
+    fix_quectel_cm
+    install_pbr_cmcc
+    update_package "runc" "releases" "v1.3.3"
+    update_package "containerd" "releases" "v1.7.28"
+    update_package "docker" "tags" "v28.5.2"
+    update_package "dockerd" "releases" "v28.5.2"
     # apply_hash_fixes # 调用哈希修正函数
 }
 

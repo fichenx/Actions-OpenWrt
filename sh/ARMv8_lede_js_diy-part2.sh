@@ -234,12 +234,13 @@ rm -rf feeds/luci/applications/luci-app-lucky feeds/packages/net/lucky
 #git_svn main https://github.com/gdy666/luci-app-lucky luci-app-lucky lucky
 git_sparse_clone main https://github.com/gdy666/luci-app-lucky luci-app-lucky && mv -n luci-app-lucky feeds/luci/applications/luci-app-lucky
 git_sparse_clone main https://github.com/gdy666/luci-app-lucky lucky && mv -n lucky feeds/packages/net/lucky
-if [ -d "${mk_dir%/*}" ] && [ -f "$mk_dir" ]; then
-    sed -i 's|Linux_$(LUCKY_ARCH)|Linux_$(LUCKY_ARCH)_wanji|g' "$mk_dir"
-fi
-if [ -d "${mk_lede_dir%/*}" ] && [ -f "$mk_lede_dir" ]; then
-    sed -i 's|Linux_$(LUCKY_ARCH)|Linux_$(LUCKY_ARCH)_wanji|g' "$mk_lede_dir"
-fi
+##使用在线lucky万吉版本
+#if [ -d "${mk_dir%/*}" ] && [ -f "$mk_dir" ]; then
+#    sed -i 's|Linux_$(LUCKY_ARCH)|Linux_$(LUCKY_ARCH)_wanji|g' "$mk_dir"
+#fi
+#if [ -d "${mk_lede_dir%/*}" ] && [ -f "$mk_lede_dir" ]; then
+#    sed -i 's|Linux_$(LUCKY_ARCH)|Linux_$(LUCKY_ARCH)_wanji|g' "$mk_lede_dir"
+#fi
 ##使用本地lucky万吉版本
 update_lucky() {
     local lucky_dir="feeds/packages/net/lucky"
