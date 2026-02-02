@@ -78,7 +78,7 @@ jobs:
                -e 's|small-package|fichenx/openwrt-package|g' \
                -e 's|small8|fichenx|g' \
                -e 's|build by ZqinKing|build by FICHEN(\$(TZ=UTC-8 date +%Y.%m.%d))|' \
-               -e 's|^\(    \./scripts/feeds install -p fichenx -f \)|\1luci-app-argon-config luci-theme-design luci-app-design-config luci-app-watchcat-plus luci-app-wol \\\n        |' \
+               -e 's|^\(    \./scripts/feeds install -p fichenx -f \)|\1luci-app-argon-config luci-theme-design luci-app-design-config luci-app-watchcat-plus luci-app-wol luci-app-timecontrol \\\n        |' \
                update.sh
 
 
