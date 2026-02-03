@@ -99,6 +99,20 @@ update_feeds() {
         echo "src-git passwall https://github.com/Openwrt-Passwall/openwrt-passwall;main" >>"$FEEDS_PATH"
     fi
 
+    # 检查并添加 openwrt-bandix 源
+    if ! grep -q "openwrt_bandix" "$BUILD_DIR/$FEEDS_CONF"; then
+        # 确保文件以换行符结尾
+        [ -z "$(tail -c 1 "$BUILD_DIR/$FEEDS_CONF")" ] || echo "" >>"$BUILD_DIR/$FEEDS_CONF"
+        echo 'src-git openwrt_bandix https://github.com/timsaya/openwrt-bandix.git;main' >>"$BUILD_DIR/$FEEDS_CONF"
+    fi
+
+    # 检查并添加 luci-app-bandix 源
+    if ! grep -q "luci_app_bandix" "$BUILD_DIR/$FEEDS_CONF"; then
+        # 确保文件以换行符结尾
+        [ -z "$(tail -c 1 "$BUILD_DIR/$FEEDS_CONF")" ] || echo "" >>"$BUILD_DIR/$FEEDS_CONF"
+        echo 'src-git luci_app_bandix https://github.com/timsaya/luci-app-bandix.git;main' >>"$BUILD_DIR/$FEEDS_CONF"
+    fi
+
     # 添加bpf.mk解决更新报错
     if [ ! -f "$BUILD_DIR/include/bpf.mk" ]; then
         touch "$BUILD_DIR/include/bpf.mk"
@@ -126,7 +140,7 @@ remove_unwanted_packages() {
         "haproxy" "xray-core" "xray-plugin" "dns2socks" "alist" "hysteria"
         "mosdns" "adguardhome" "ddns-go" "naiveproxy" "shadowsocks-rust"
         "sing-box" "v2ray-core" "v2ray-geodata" "v2ray-plugin" "tuic-client"
-        "chinadns-ng" "ipt2socks" "tcping" "trojan-plus" "simple-obfs" "shadowsocksr-libev" 
+        "chinadns-ng" "ipt2socks" "tcping" "trojan-plus" "simple-obfs" "shadowsocksr-libev"
         "dae" "daed" "mihomo" "geoview" "tailscale" "open-app-filter" "msd_lite"
     )
     local packages_utils=(
@@ -191,7 +205,7 @@ update_golang() {
 }
 
 install_fichenx() {
-    ./scripts/feeds install -p fichenx -f luci-app-argon-config luci-theme-design luci-app-design-config luci-app-watchcat-plus luci-app-wol \
+    ./scripts/feeds install -p fichenx -f luci-app-argon-config luci-theme-design luci-app-design-config luci-app-watchcat-plus luci-app-wol luci-app-timecontrol \
         xray-core xray-plugin dns2tcp dns2socks haproxy hysteria \
         naiveproxy shadowsocks-rust sing-box v2ray-core v2ray-geodata geoview v2ray-plugin \
         tuic-client chinadns-ng ipt2socks tcping trojan-plus simple-obfs shadowsocksr-libev \
@@ -224,13 +238,13 @@ check_default_settings() {
         local tmp_dir
         tmp_dir=$(mktemp -d)
         if git clone --depth 1 --filter=blob:none --sparse https://github.com/immortalwrt/immortalwrt.git "$tmp_dir"; then
-            pushd "$tmp_dir" > /dev/null
+            pushd "$tmp_dir" >/dev/null
             git sparse-checkout set package/emortal/default-settings
             # 确保目标父目录存在
             mkdir -p "$(dirname "$settings_dir")"
             # 移动 default-settings 目录
             mv package/emortal/default-settings "$settings_dir"
-            popd > /dev/null
+            popd >/dev/null
             rm -rf "$tmp_dir"
             echo "default-settings 克隆并移动成功。"
         else
@@ -517,7 +531,7 @@ apply_passwall_tweaks() {
     # 清理 Passwall 的 chnlist 规则文件
     local chnlist_path="$BUILD_DIR/feeds/passwall/luci-app-passwall/root/usr/share/passwall/rules/chnlist"
     if [ -f "$chnlist_path" ]; then
-        > "$chnlist_path"
+        >"$chnlist_path"
     fi
 
     # 调整 Xray 最大 RTT 和 保留记录数量
@@ -880,11 +894,11 @@ update_lucky() {
             return 0
         fi
 
-        pushd "$tmp_dir" > /dev/null
+        pushd "$tmp_dir" >/dev/null
         git sparse-checkout init --cone
         git sparse-checkout set luci-app-lucky lucky || {
             echo "错误：稀疏检出 luci-app-lucky 或 lucky 失败" >&2
-            popd > /dev/null
+            popd >/dev/null
             rm -rf "$tmp_dir"
             return 0
         }
@@ -894,7 +908,7 @@ update_lucky() {
         \cp -rf "$tmp_dir/luci-app-lucky/." "$luci_app_lucky_dir/"
         \cp -rf "$tmp_dir/lucky/." "$lucky_dir/"
 
-        popd > /dev/null
+        popd >/dev/null
         rm -rf "$tmp_dir"
         echo "luci-app-lucky 和 lucky 源代码更新完成。"
     fi
@@ -1024,7 +1038,7 @@ set_nginx_default_config() {
     local nginx_config_path="$BUILD_DIR/feeds/packages/net/nginx-util/files/nginx.config"
     if [ -f "$nginx_config_path" ]; then
         # 使用 cat 和 heredoc 覆盖写入 nginx.config 文件
-        cat > "$nginx_config_path" <<EOF
+        cat >"$nginx_config_path" <<EOF
 config main 'global'
         option uci_enable 'true'
 
@@ -1127,7 +1141,7 @@ fix_easytier_lua() {
 }
 
 fix_easytier_mk() {
-	local mk_path="$BUILD_DIR/feeds/fichenx/luci-app-easytier/easytier/Makefile"
+    local mk_path="$BUILD_DIR/feeds/fichenx/luci-app-easytier/easytier/Makefile"
     if [ -f "$mk_path" ]; then
         sed -i 's/!@(mips||mipsel)/!TARGET_mips \&\& !TARGET_mipsel/g' "$mk_path"
     fi
