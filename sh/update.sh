@@ -1191,29 +1191,43 @@ fix_opkg_check() {
 }
 
 install_pbr_cmcc() {
-    local pbr_dir="$BUILD_DIR/package/feeds/packages/pbr/files/usr/share/pbr"
-    local pbr_conf="$BUILD_DIR/package/feeds/packages/pbr/files/etc/config/pbr"
+    local pbr_pkg_dir="$BUILD_DIR/package/feeds/packages/pbr"
+    local pbr_dir="$pbr_pkg_dir/files/usr/share/pbr"
+    local pbr_conf="$pbr_pkg_dir/files/etc/config/pbr"
+    local pbr_makefile="$pbr_pkg_dir/Makefile"
 
-    if [ -d "$pbr_dir" ]; then
+    # 检查 pbr 包目录是否存在
+    if [ -d "$pbr_pkg_dir" ]; then
         echo "正在安装 PBR CMCC 配置文件..."
-        install -Dm544 "$BASE_PATH/patches/pbr.user.cmcc" "$pbr_dir/pbr.user.cmcc"
-        install -Dm544 "$BASE_PATH/patches/pbr.user.cmcc6" "$pbr_dir/pbr.user.cmcc6"
+        install -Dm644 "$BASE_PATH/patches/pbr.user.cmcc" "$pbr_dir/pbr.user.cmcc"
+        install -Dm644 "$BASE_PATH/patches/pbr.user.cmcc6" "$pbr_dir/pbr.user.cmcc6"
+
+        # 在 Makefile 中添加安装规则（在 netflix 行后添加）
+        if [ -f "$pbr_makefile" ]; then
+            if ! grep -q "pbr.user.cmcc" "$pbr_makefile"; then
+                echo "正在修改 PBR Makefile 添加安装规则..."
+                sed -i '/pbr.user.netflix.*\$(1)/a\
+	$(INSTALL_DATA) ./files/usr/share/pbr/pbr.user.cmcc $(1)/usr/share/pbr/pbr.user.cmcc\
+	$(INSTALL_DATA) ./files/usr/share/pbr/pbr.user.cmcc6 $(1)/usr/share/pbr/pbr.user.cmcc6' "$pbr_makefile"
+            fi
+        fi
     fi
 
-    # 在 PBR 默认配置文件中添加 CMCC include 条目（在 netflix 配置之后）
+    # 在 PBR 默认配置文件中添加 CMCC include 条目
     if [ -f "$pbr_conf" ]; then
-        # 检查是否已存在 cmcc 配置
         if ! grep -q "pbr.user.cmcc" "$pbr_conf"; then
             echo "正在添加 PBR CMCC 配置条目..."
-            # 在包含 netflix 的 enabled 行后插入 cmcc 和 cmcc6 配置
-            sed -i "/pbr.user.netflix/{n;n;a\\
-\\nconfig include\\
-\\toption path '/usr/share/pbr/pbr.user.cmcc'\\
-\\toption enabled '0'\\
-\\nconfig include\\
-\\toption path '/usr/share/pbr/pbr.user.cmcc6'\\
-\\toption enabled '0'
-}" "$pbr_conf"
+            sed -i "/option path '\/usr\/share\/pbr\/pbr.user.netflix'/,/option enabled '0'/{
+                /option enabled '0'/a\\
+\\
+config include\\
+	option path '/usr/share/pbr/pbr.user.cmcc'\\
+	option enabled '0'\\
+\\
+config include\\
+	option path '/usr/share/pbr/pbr.user.cmcc6'\\
+	option enabled '0'
+            }" "$pbr_conf"
         fi
     fi
 }
