@@ -263,6 +263,11 @@ update_lucky() {
 }
 update_lucky
 
+#替换luci-app-timecontrol为gaobin89/luci-app-timecontrol
+rm -rf feeds/luci/applications/luci-app-timecontrol
+git clone --depth 1 -b lua https://github.com/gaobin89/luci-app-timecontrol feeds/luci/applications/luci-app-timecontrol
+
+
 #修改应用位置
 # luci-app-openvpn
 sed -i 's/services/vpn/g'  feeds/luci/applications/luci-app-openvpn/luasrc/controller/openvpn.lua
@@ -300,6 +305,8 @@ rm -rf feeds/packages/utils/runc
 git_sparse_clone main https://github.com/fichenx/openwrt-package runc && mv -n runc feeds/packages/utils/runc
 #sed -i 's/PKG_VERSION:=.*/PKG_VERSION:=1.3.4/g' feeds/packages/utils/runc/Makefile
 #sed -i 's/PKG_HASH:=.*/PKG_HASH:=a9f9646c4c8990239f6462b408b22d9aa40ba0473a9fc642b9d6576126495eee/g' feeds/packages/utils/runc/Makefile
+
+
 
 #########修复编译错误#########
 

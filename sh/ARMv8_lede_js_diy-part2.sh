@@ -112,7 +112,7 @@ sed -i 's/\[services\]/\[vpn\]/g'  feeds/luci/applications/luci-app-nps/luasrc/v
 
 #添加luci-theme-design(Js版)
 rm -rf feeds/luci/themes/luci-theme-design
-git clone -b js https://github.com/papagaye744/luci-theme-design package/luci-theme-design
+git clone -b js https://github.com/papagaye744/luci-theme-design feeds/luci/themes/luci-theme-design
 
 #修改默认主题
 #sed -i 's|set luci.main.mediaurlbase|#set luci.main.mediaurlbase|g' feeds/luci/themes/luci-theme-argon/root/etc/uci-defaults/30_luci-theme-argon
@@ -298,6 +298,10 @@ rm -rf feeds/packages/utils/runc
 git_sparse_clone main https://github.com/fichenx/openwrt-package runc && mv -n runc feeds/packages/utils/runc
 #sed -i 's/PKG_VERSION:=.*/PKG_VERSION:=1.3.4/g' feeds/packages/utils/runc/Makefile
 #sed -i 's/PKG_HASH:=.*/PKG_HASH:=a9f9646c4c8990239f6462b408b22d9aa40ba0473a9fc642b9d6576126495eee/g' feeds/packages/utils/runc/Makefile
+
+#替换luci-app-timecontrol为gaobin89/luci-app-timecontrol
+rm -rf feeds/luci/applications/luci-app-timecontrol
+git_sparse_clone js https://github.com/gaobin89/luci-app-timecontrol luci-app-timecontrol && mv -n luci-app-timecontrol feeds/luci/applications/luci-app-timecontrol
 
 #########修复编译错误#########
 # frp
