@@ -282,20 +282,22 @@ update_lucky() {
 update_lucky
 
 #删除自带和breakingbadboy自定义版本的dockerd、docker及依赖containerd、runc，使用自定义docker版本
-#rm -rf feeds/fichenx/dockerd feeds/fichenx/docker
+rm -rf feeds/fichenx/dockerd feeds/fichenx/docker feeds/fichenx/containerd feeds/fichenx/runc
 rm -rf feeds/packages/utils/dockerd
-git_sparse_clone main https://github.com/fichenx/openwrt-package dockerd && mv -n dockerd feeds/packages/utils/dockerd
-#git_sparse_clone master https://github.com/coolsnowwolf/packages utils/dockerd && mv -n dockerd feeds/packages/utils/dockerd
+#git_sparse_clone main https://github.com/fichenx/openwrt-package dockerd && mv -n dockerd feeds/packages/utils/dockerd
+git_sparse_clone master https://github.com/coolsnowwolf/packages utils/dockerd && mv -n dockerd feeds/packages/utils/dockerd
 rm -rf feeds/packages/utils/docker
-git_sparse_clone main https://github.com/fichenx/openwrt-package docker && mv -n docker feeds/packages/utils/docker
-#git_sparse_clone master https://github.com/coolsnowwolf/packages utils/docker && mv -n docker feeds/packages/utils/docker
+#git_sparse_clone main https://github.com/fichenx/openwrt-package docker && mv -n docker feeds/packages/utils/docker
+git_sparse_clone master https://github.com/coolsnowwolf/packages utils/docker && mv -n docker feeds/packages/utils/docker
 rm -rf feeds/packages/utils/containerd
-git_sparse_clone main https://github.com/fichenx/openwrt-package containerd && mv -n containerd feeds/packages/utils/containerd
+#git_sparse_clone main https://github.com/fichenx/openwrt-package containerd && mv -n containerd feeds/packages/utils/containerd
+git_sparse_clone master https://github.com/coolsnowwolf/packages utils/containerd && mv -n containerd feeds/packages/utils/containerd
 #sed -i 's/PKG_VERSION:=.*/PKG_VERSION:=2.2.0/g' feeds/packages/utils/containerd/Makefile
 #sed -i 's/PKG_HASH:=.*/PKG_HASH:=86e7a268fc73f5332522baef86082c1d6c17986e2957a9ad842ead35d1080fca/g' feeds/packages/utils/containerd/Makefile
 #sed -i 's/containerd-shim,containerd-shim-runc-v1,//g' feeds/packages/utils/containerd/Makefile
 rm -rf feeds/packages/utils/runc
-git_sparse_clone main https://github.com/fichenx/openwrt-package runc && mv -n runc feeds/packages/utils/runc
+#git_sparse_clone main https://github.com/fichenx/openwrt-package runc && mv -n runc feeds/packages/utils/runc
+git_sparse_clone  master https://github.com/coolsnowwolf/packages utils/runc && mv -n runc feeds/packages/utils/runc
 #sed -i 's/PKG_VERSION:=.*/PKG_VERSION:=1.3.4/g' feeds/packages/utils/runc/Makefile
 #sed -i 's/PKG_HASH:=.*/PKG_HASH:=a9f9646c4c8990239f6462b408b22d9aa40ba0473a9fc642b9d6576126495eee/g' feeds/packages/utils/runc/Makefile
 
