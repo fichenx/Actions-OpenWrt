@@ -368,9 +368,9 @@ git_sparse_clone main https://github.com/openwrt/openwrt package/libs/zlib && mv
 sed -i 's/PKG_VERSION:=.*/PKG_VERSION:=1.3.1/g' tools/zlib/Makefile
 sed -i 's/PKG_HASH:=.*/PKG_HASH:=9a93b2b7dfdac77ceba5a558a580e74667dd6fede4585b91eefb60f03b72df23/g' tools/zlib/Makefile
 
-#修复breakings替换golang后的编译问题
-#rm -rf feeds/packages/lang/golang
-#git_sparse_clone master https://github.com/coolsnowwolf/packages lang/golang && mv -n golang feeds/packages/lang/golang
+#20260227:修复breakings替换golang后的编译问题(v2ray-plugin编译错误)，使用coolsnowwolf的golang版本
+rm -rf feeds/packages/lang/golang
+git_sparse_clone master https://github.com/coolsnowwolf/packages lang/golang && mv -n golang feeds/packages/lang/golang
 
 #lua版取消编译rtp2httpd：
 sed -i '/CONFIG_PACKAGE_luci-app-rtp2httpd=y/d' .config
