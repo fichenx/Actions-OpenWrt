@@ -52,9 +52,17 @@ jobs:
         #git rm -r --cache * >/dev/null 2>&1 &
         #rm -rf `find ./* -maxdepth 0 -type d ! -name "diy"` >/dev/null 2>&1
         rm -rf patch/breakings_PATCH res/breakings_general sh/build.sh sh/breakings_diy-part2.sh wrt_core
-        git clone --depth 1 --filter=blob:none --no-checkout https://github.com/breakingbadboy/OpenWrt temp && cd temp && git checkout main -- general PATCH diy-part2.sh && cd .. && mv -n temp/{general,PATCH,diy-part2.sh} {res/breakings_general,patch/breakings_PATCH,sh/breakings_diy-part2.sh} && rm -rf temp
-        git clone --depth 1 --filter=blob:none --no-checkout https://github.com/ZqinKing/wrt_release temp && cd temp && git checkout main -- wrt_core build.sh && cd .. && mv -n temp/{build.sh,wrt_core} {sh/,.} && cp -rf config/{compilecfg,*.config} {wrt_core/,wrt_core/deconfig/} && rm -rf temp
-
+        git clone --depth 1 --filter=blob:none --no-checkout https://github.com/breakingbadboy/OpenWrt temp && cd temp && git checkout main -- general PATCH diy-part2.sh && cd .. &&\
+        mv -n temp/general res/breakings_general && \
+        mv -n temp/PATCH patch/breakings_PATCH && \
+        mv -n temp/diy-part2.sh sh/breakings_diy-part2.sh && \
+        rm -rf temp
+        git clone --depth 1 --filter=blob:none --no-checkout https://github.com/ZqinKing/wrt_release temp && cd temp && git checkout main -- wrt_core build.sh && cd .. &&\
+        mv -n temp/build.sh sh/ && \
+        mv -n temp/wrt_core ./ && \
+        cp -rf config/compilecfg wrt_core/ && \
+        cp -rf config/*.config wrt_core/deconfig/ && \
+        rm -rf temp
     - name: 处理克隆的文件
       run: |
         cd $GITHUB_WORKSPACE/${{matrix.target}}
