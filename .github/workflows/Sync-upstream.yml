@@ -81,8 +81,8 @@ jobs:
                wrt_core/update.sh
         #处理modules/*.sh
         sed -i -e 's|kenzok8/small-package|fichenx/openwrt-package\;js|' \
-               -e 's|small-packages|fichenx/openwrt-package|g' \
-               -e 's|small8_packages|fichenx_openwrt-package|g' \
+               -e 's|small-package|fichenx/openwrt-package|g' \
+               -e 's|small8_packages|fichenx_package|g' \
                -e 's|small8|fichenx|g' \
                -e 's|build by ZqinKing|build by FICHEN(\$(TZ=UTC-8 date +%Y.%m.%d))|' \
                -e 's|^\(    \./scripts/feeds install -p fichenx -f \)|\1luci-app-argon-config luci-theme-design luci-app-design-config luci-app-watchcat-plus luci-app-wol luci-app-timecontrol \\\n        |' \
