@@ -8,7 +8,7 @@ update_feeds() {
     sed -i '/^#/d' "$FEEDS_PATH"
     sed -i '/packages_ext/d' "$FEEDS_PATH"
 
-    if ! grep -q "small-package" "$FEEDS_PATH"; then
+    if ! grep -q "fichenx/openwrt-package" "$FEEDS_PATH"; then
         [ -z "$(tail -c 1 "$FEEDS_PATH")" ] || echo "" >>"$FEEDS_PATH"
         echo "src-git fichenx https://github.com/fichenx/openwrt-package;js" >>"$FEEDS_PATH"
     fi

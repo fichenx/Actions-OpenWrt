@@ -17,7 +17,7 @@ remove_unwanted_packages() {
     local packages_utils=(
         "cups"
     )
-    local fichenx_openwrt-package=(
+    local fichenx_package=(
         "ppp" "firewall" "dae" "daed" "daed-next" "libnftnl" "nftables" "dnsmasq" "luci-app-alist"
         "alist" "opkg" "smartdns" "luci-app-smartdns" "easytier"
     )
@@ -43,7 +43,7 @@ remove_unwanted_packages() {
         fi
     done
 
-    for pkg in "${fichenx_openwrt-package[@]}"; do
+    for pkg in "${fichenx_package[@]}"; do
         if [[ -d ./feeds/fichenx/$pkg ]]; then
             \rm -rf ./feeds/fichenx/$pkg
         fi
