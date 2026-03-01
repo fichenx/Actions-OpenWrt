@@ -74,6 +74,7 @@ if [[ -d action_build ]]; then
 fi
 
 "$BASE_PATH/update.sh" "$REPO_URL" "$REPO_BRANCH" "$BUILD_DIR" "$COMMIT_HASH"
+/home/runner/work/Actions-OpenWrt/Actions-OpenWrt/sh/ax6_imm_diy-part2.sh
 
 apply_config
 remove_uhttpd_dependency
