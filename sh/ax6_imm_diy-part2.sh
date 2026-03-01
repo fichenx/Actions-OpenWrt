@@ -72,5 +72,9 @@ git_sparse_clone js https://github.com/gaobin89/luci-app-timecontrol luci-app-ti
 #rm -rf $BASE_PATH/action_build/feeds/luci/themes/luci-theme-design $BASE_PATH/action_build/feeds/fichenx/luci-theme-design
 #git_sparse_clone dev https://github.com/fichenx/packages luci-theme-design && cp -af luci-theme-design $BASE_PATH/action_build/feeds/luci/themes/luci-theme-design
 #mv -n luci-theme-design $BASE_PATH/action_build/feeds/fichenx/luci-theme-design
+
+#给libubox加补丁，禁止非字面格式字符串的警告
+mkdir -p $BASE_PATH/action_build/package/libs/libubox/patches && \
+cp -f $GITHUB_WORKSPACE/patch/100-remove-format-nonliteral.patch $BASE_PATH/action_build/package/libs/libubox/patches/
 echo "========================="
 echo " 自定义(fichen) 配置完成……"
