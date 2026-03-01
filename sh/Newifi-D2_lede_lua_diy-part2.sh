@@ -79,7 +79,7 @@ sed -i 's/192.168.1.1/192.168.124.1/g' package/base-files/files/bin/config_gener
 #添加自动挂载磁盘脚本
 #mkdir -p files/etc/hotplug.d/block && wget -O files/etc/hotplug.d/block/30-usbmount https://raw.githubusercontent.com/fichenx/P3TERX_Actions-OpenWrt/main/files/etc/hotplug.d/block/30-usbmount && chmod 755 files/etc/hotplug.d/block/30-usbmount
 mkdir -p files/etc/hotplug.d/block/
-cp -rf $GITHUB_WORKSPACE/backup/newifi3/files/etc/hotplug.d/block/30-usbmount files/etc/hotplug.d/block/
+cp -rf $GITHUB_WORKSPACE/res/newifi3/files/etc/hotplug.d/block/30-usbmount files/etc/hotplug.d/block/
 chmod 755 files/etc/hotplug.d/block/30-usbmount
 
 #修改主机名
@@ -121,7 +121,7 @@ sed -i 's/luci-theme-argon/luci-theme-design/g' feeds/luci/collections/luci-ssl-
 #nps（修改nps源为yisier）
 rm -rf feeds/packages/net/nps
 git_sparse_clone master https://github.com/immortalwrt/packages net/nps && mv -n nps feeds/packages/net/nps
-#cp -rf $GITHUB_WORKSPACE/backup/nps feeds/packages/net/nps
+#cp -rf $GITHUB_WORKSPACE/res/nps feeds/packages/net/nps
 #sed -i 's/PKG_SOURCE_URL:=.*/PKG_SOURCE_URL:=https:\/\/codeload.github.com\/yisier\/nps\/tar.gz\/v$(PKG_VERSION)?/g' feeds/packages/net/nps/Makefile
 #sed -i 's/PKG_VERSION:=.*/PKG_VERSION:=0.26.18/g' feeds/packages/net/nps/Makefile
 #sed -i 's/PKG_HASH:=.*/PKG_HASH:=29da044262071a1fa53ce7169c6427ee4f12fc0ada60ef7fb52fabfd165afe91/g' feeds/packages/net/nps/Makefile

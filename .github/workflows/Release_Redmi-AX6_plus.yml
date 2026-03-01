@@ -65,7 +65,7 @@ jobs:
           echo "BUILD_SRC=$BUILD_SRC" >> $GITHUB_ENV
 
       - name: 克隆固件代码
-        run: ./sh/pre_clone_action.sh ${{ inputs.model || 'RedMi-AX6_plus_imm'}}
+        run: ./wrt_core/pre_clone_action.sh ${{ inputs.model || 'RedMi-AX6_plus_imm'}}
 
       - name: 缓存依赖
         uses: actions/cache@v4
@@ -87,9 +87,7 @@ jobs:
 
       - name: 构建固件
         run: |
-          sed -i 's/^[[:space:]]*update_lucky[[:space:]]*$/#&/' sh/update.sh
           chmod +x $DIY_my_SH
-          sed -i "/\$BASE_PATH\/sh\/update\.sh/a $GITHUB_WORKSPACE/$DIY_my_SH" sh/build.sh
           ./sh/build.sh ${{ inputs.model || 'RedMi-AX6_plus_imm'}}
 
 

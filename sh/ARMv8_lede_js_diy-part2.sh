@@ -161,7 +161,7 @@ sed -i "s|ARMv8|ARMv8(lede_js)|g" feeds/fichenx/luci-app-amlogic/root/etc/config
 #nps（修改nps源为yisier）
 rm -rf feeds/packages/net/nps
 git_sparse_clone master https://github.com/immortalwrt/packages net/nps && mv -n nps feeds/packages/net/nps
-#cp -rf $GITHUB_WORKSPACE/backup/nps feeds/packages/net/nps
+#cp -rf $GITHUB_WORKSPACE/res/nps feeds/packages/net/nps
 
 #luci-app-nps（修改nps服务器允许域名）
 sed -i 's/^server.datatype = "ipaddr"/--server.datatype = "ipaddr"/g' feeds/luci/applications/luci-app-nps/luasrc/model/cbi/nps.lua
@@ -254,7 +254,7 @@ update_lucky() {
 
     # 从补丁文件名中提取版本号
     local version
-    version=$(find "$GITHUB_WORKSPACE/backup" -name "lucky_*.tar.gz" -printf "%f\n" | head -n 1 | sed -n 's/^lucky_\(.*\)_Linux.*$/\1/p')
+    version=$(find "$GITHUB_WORKSPACE/res" -name "lucky_*.tar.gz" -printf "%f\n" | head -n 1 | sed -n 's/^lucky_\(.*\)_Linux.*$/\1/p')
     if [ -z "$version" ]; then
         echo "Warning: 未找到 lucky 补丁文件，跳过更新。" >&2
         return 0

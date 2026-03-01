@@ -142,7 +142,7 @@ sed -i "s|ARMv8|ARMv8(lede_lua)|g" feeds/fichenx/luci-app-amlogic/root/etc/confi
 #nps（修改nps源为yisier）
 rm -rf feeds/packages/net/nps
 git_sparse_clone master https://github.com/immortalwrt/packages net/nps && mv -n nps feeds/packages/net/nps
-#cp -rf $GITHUB_WORKSPACE/backup/nps feeds/packages/net/nps
+#cp -rf $GITHUB_WORKSPACE/res/nps feeds/packages/net/nps
 #sed -i 's/PKG_SOURCE_URL:=.*/PKG_SOURCE_URL:=https:\/\/codeload.github.com\/yisier\/nps\/tar.gz\/v$(PKG_VERSION)?/g' feeds/packages/net/nps/Makefile
 #sed -i 's/PKG_VERSION:=.*/PKG_VERSION:=0.26.18/g' feeds/packages/net/nps/Makefile
 #sed -i 's/PKG_HASH:=.*/PKG_HASH:=29da044262071a1fa53ce7169c6427ee4f12fc0ada60ef7fb52fabfd165afe91/g' feeds/packages/net/nps/Makefile
@@ -235,7 +235,7 @@ update_lucky() {
 
     # 从补丁文件名中提取版本号
     local version
-    version=$(find "$GITHUB_WORKSPACE/backup" -name "lucky_*.tar.gz" -printf "%f\n" | head -n 1 | sed -n 's/^lucky_\(.*\)_Linux.*$/\1/p')
+    version=$(find "$GITHUB_WORKSPACE/res" -name "lucky_*.tar.gz" -printf "%f\n" | head -n 1 | sed -n 's/^lucky_\(.*\)_Linux.*$/\1/p')
     if [ -z "$version" ]; then
         echo "Warning: 未找到 lucky 补丁文件，跳过更新。" >&2
         return 0
