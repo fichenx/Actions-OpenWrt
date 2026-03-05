@@ -15,9 +15,14 @@ echo "========================="
 function git_sparse_clone() {
   branch="$1" rurl="$2" && shift 2
   rootdir="$PWD"
-  git clone -b $branch --depth 1 --filter=blob:none --sparse $rurl temp_sparse
-  #git clone -b $branch --single-branch --no-tags --depth 1 --filter=blob:none --no-checkout $rurl temp_sparse
-  cd temp_sparse
+  git clone -b $branch --depth 1 --filter=blob:none --sparse $rurl temp_sparse || {
+    echo "克隆仓库失败：$rurl"
+    return 1
+  }  
+  cd temp_sparse || {
+    echo "进入目录失败：temp_sparse"
+    return 1
+  }
   git sparse-checkout init --cone
   git sparse-checkout set $@
   pkg=`echo $@ | tr ' ' '\n' | rev | cut -d'/' -f 1 | rev | tr '\n' ' ' `
