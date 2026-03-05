@@ -10,7 +10,7 @@ update_feeds() {
 
     if ! grep -q "fichenx/openwrt-package" "$FEEDS_PATH"; then
         [ -z "$(tail -c 1 "$FEEDS_PATH")" ] || echo "" >>"$FEEDS_PATH"
-        echo "src-git fichenx https://github.com/kenzok8/jell" >>"$FEEDS_PATH"
+        echo "src-git fichenx https://github.com/fichenx_package;js" >>"$FEEDS_PATH"
     fi
 
     if ! grep -q "openwrt-passwall" "$FEEDS_PATH"; then
