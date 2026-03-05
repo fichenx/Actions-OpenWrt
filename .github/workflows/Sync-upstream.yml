@@ -81,6 +81,7 @@ jobs:
                wrt_core/update.sh
         #处理modules/*.sh
         sed -i -e 's|kenzok8/small-package|fichenx/openwrt-package\;js|' \
+               -e 's|kenzok8/jell|fichenx_package\;js|' \
                -e 's|small-package|fichenx/openwrt-package|g' \
                -e 's|small8_packages|fichenx_package|g' \
                -e 's|small8|fichenx|g' \
