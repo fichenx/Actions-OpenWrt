@@ -196,10 +196,11 @@ jobs:
       continue-on-error: true
       uses: ophub/flippy-openwrt-actions@main
       env:
+        KERNEL_REPO_URL: ophub/flippy-openwrt-actions
         OPENWRT_ARMVIRT: https://github.com/fichenx/Actions-OpenWrt/releases/download/${{ inputs.model || 'ARMv8_lede_lua'}}_raw/${{ env.REPO }}-armsr-armv8-generic-rootfs.tar.gz
         PACKAGE_SOC: s905d_s905x3
         WHOAMI: fichenx
-        KERNEL_VERSION_NAME: 5.4.210_5.10.136_5.15.74_6.1.20_6.6.27_6.12.32
+        KERNEL_VERSION_NAME: 5.4.210_5.10.136_5.15.74_6.1.20_6.6.27_6.12.32_6.18.9
         KERNEL_AUTO_LATEST: true
         GZIP_IMGS: .gz
         GH_TOKEN: ${{ secrets.GH_TOKEN }}
