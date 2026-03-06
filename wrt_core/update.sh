@@ -35,6 +35,7 @@ source "$SCRIPT_DIR/modules/packages.sh"
 source "$SCRIPT_DIR/modules/system.sh"
 source "$SCRIPT_DIR/modules/cups.sh"
 
+
 main() {
     clone_repo
     clean_up
@@ -48,6 +49,8 @@ main() {
     update_golang
     change_dnsmasq2full
     fix_mk_def_depends
+
+    install_libubox_cmake_patch
     update_default_lan_addr
     remove_something_nss_kmod
     update_affinity_script
