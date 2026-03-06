@@ -273,6 +273,12 @@ rm -rf feeds/luci/applications/luci-app-timecontrol
 git clone --depth 1 -b lua https://github.com/gaobin89/luci-app-timecontrol feeds/luci/applications/luci-app-timecontrol
 
 
+#升级feeds/packages/net/smartdns
+rm -rf feeds/packages/net/smartdns
+git_sparse_clone main https://github.com/fichenx/openwrt-package smartdns && mv -n smartdns feeds/packages/net/smartdns
+#强制smartdns单线程编译
+sed -i 's/^PKG_BUILD_PARALLEL:=1/PKG_BUILD_PARALLEL:=0/' feeds/packages/net/smartdns/Makefile
+
 #修改应用位置
 # luci-app-openvpn
 sed -i 's/services/vpn/g'  feeds/luci/applications/luci-app-openvpn/luasrc/controller/openvpn.lua

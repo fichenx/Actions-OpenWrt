@@ -286,6 +286,12 @@ update_lucky() {
 }
 update_lucky
 
+#升级feeds/packages/net/smartdns
+rm -rf feeds/packages/net/smartdns
+git_sparse_clone main https://github.com/fichenx/openwrt-package smartdns && mv -n smartdns feeds/packages/net/smartdns
+#强制smartdns单线程编译
+sed -i 's/^PKG_BUILD_PARALLEL:=1/PKG_BUILD_PARALLEL:=0/' feeds/packages/net/smartdns/Makefile
+
 #删除自带和breakingbadboy自定义版本的dockerd、docker及依赖containerd、runc，使用自定义docker版本
 rm -rf feeds/fichenx/dockerd feeds/fichenx/docker feeds/fichenx/containerd feeds/fichenx/runc
 rm -rf feeds/packages/utils/dockerd

@@ -137,5 +137,8 @@ update_lucky() {
 }
 update_lucky
 
+#强制smartdns单线程编译
+sed -i 's/^PKG_BUILD_PARALLEL:=1/PKG_BUILD_PARALLEL:=0/' feeds/packages/net/smartdns/Makefile
+
 echo "========================="
 echo " 自定义(fichen) 配置完成……"
