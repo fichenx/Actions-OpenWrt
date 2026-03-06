@@ -78,29 +78,39 @@ jobs:
       env:
         DEBIAN_FRONTEND: noninteractive
       run: |
-        # docker rmi -f $(docker images -q) 2>/dev/null || true
-        sudo swapoff -a
-        sudo rm -f /swapfile /mnt/swapfile
-        sudo docker image prune -a -f
-        sudo systemctl stop docker
-        sudo snap set system refresh.retain=2
-        sudo rm -rf /usr/share/dotnet /usr/local/lib/android 2>/dev/null
-        sudo sed -i '/NVM_DIR/d;/skel/d' /root/{.bashrc,.profile}
-        sudo -E apt-get -qq purge azure-cli ghc* zulu* llvm* firefox google* dotnet* powershell openjdk* mongodb* moby* || true
-        [[ -n "${AGENT_TOOLSDIRECTORY}" ]] && sudo rm -rf "${AGENT_TOOLSDIRECTORY}"
-        sudo -E apt-get -qq update
-        if [ "${{ inputs.runs-on }}" = "ubuntu-20.04" ]; then
-            sudo -E apt-get -qq install $(cat $GITHUB_WORKSPACE/res/depends-ubuntu-2004)
-            if [ "${{ inputs.runs-on }}" = "ubuntu-22.04" ]; then
-               sudo -E apt-get -qq install $(cat $GITHUB_WORKSPACE/res/depends-ubuntu-2204)
-            fi
+        if [ "${{ inputs.model }}" = "ARMv8_imm" ]; then
+            sudo bash -c 'bash <(curl -sL https://build-scripts.immortalwrt.org/init_build_environment.sh)'
+            sudo -E apt -yqq install dos2unix
+            sudo -E apt -yqq install libfuse-dev
+            sudo -E apt -yqq autoremove --purge
+            sudo -E apt -yqq autoclean
+            sudo -E apt -yqq clean
+            sudo -E systemctl daemon-reload
           else
-            sudo -E apt-get -qq install $(curl -fsSL https://tinyurl.com/ubuntu2404-make-openwrt) || sudo -E apt-get -qq install $(cat $GITHUB_WORKSPACE/res/ubuntu2404-make-openwrt) 
+            # docker rmi -f $(docker images -q) 2>/dev/null || true  
+            sudo swapoff -a
+            sudo rm -f /swapfile /mnt/swapfile
+            sudo docker image prune -a -f
+            sudo systemctl stop docker
+            sudo snap set system refresh.retain=2
+            sudo rm -rf /usr/share/dotnet /usr/local/lib/android 2>/dev/null
+            sudo sed -i '/NVM_DIR/d;/skel/d' /root/{.bashrc,.profile}
+            sudo -E apt-get -qq purge azure-cli ghc* zulu* llvm* firefox google* dotnet* powershell openjdk* mongodb* moby* || true
+            [[ -n "${AGENT_TOOLSDIRECTORY}" ]] && sudo rm -rf "${AGENT_TOOLSDIRECTORY}"
+            sudo -E apt-get -qq update
+            if [ "${{ inputs.runs-on }}" = "ubuntu-20.04" ]; then
+                sudo -E apt-get -qq install $(cat $GITHUB_WORKSPACE/res/depends-ubuntu-2004)
+                if [ "${{ inputs.runs-on }}" = "ubuntu-22.04" ]; then
+                   sudo -E apt-get -qq install $(cat $GITHUB_WORKSPACE/res/depends-ubuntu-2204)
+                fi
+              else
+                sudo -E apt-get -qq install $(curl -fsSL https://tinyurl.com/ubuntu2404-make-openwrt) || sudo -E apt-get -qq install $(cat $GITHUB_WORKSPACE/res/ubuntu2404-make-openwrt) 
+            fi
+            sudo -E apt-get -qq install libfuse-dev lib32z1-dev libpcre3 libpcre3-dev clang llvm lld dos2unix
+            sudo -E apt-get -qq autoremove --purge
+            sudo -E systemctl daemon-reload
+            sudo -E apt-get -qq clean && sudo -E apt-get -qq autoclean
         fi
-        sudo -E apt-get -qq install libfuse-dev lib32z1-dev libpcre3 libpcre3-dev clang llvm lld dos2unix
-        sudo -E apt-get -qq autoremove --purge
-        sudo -E systemctl daemon-reload
-        sudo -E apt-get -qq clean && sudo -E apt-get -qq autoclean
         sudo timedatectl set-timezone "$TZ"
         # sudo mkdir -p /builder
         # sudo chown $USER:$GROUPS /builder
@@ -243,7 +253,7 @@ jobs:
         echo "WEB登陆账户：root" >> release_body.txt
         echo "密码：password" >> release_body.txt
         echo "固件源码：${{ env.REPO_URL }}" >> release_body.txt
-        echo "固件内核：https://github.com/breakingbadboy/OpenWrt/releases/tag/kernel_stable" >> release_body.txt
+        echo "固件内核：https://github.com/ophub/flippy-openwrt-actions/releases/tag/kernel_stable" >> release_body.txt
         echo "固件内核版本：${{ env.KVER }}" >> release_body.txt
         echo "源码最近提交信息:" >> release_body.txt
         echo "${{ env.useVersionInfo }}" >> release_body.txt
