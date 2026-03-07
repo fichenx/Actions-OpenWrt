@@ -290,9 +290,12 @@ git_sparse_clone js https://github.com/gaobin89/luci-app-timecontrol luci-app-ti
 #sed -i "s|CONFIG_GCC_USE_VERSION_11|CONFIG_GCC_USE_VERSION_12|g" package/custom2/elfutils/Makefile
 #rm -rf package/libs/elfutils
 #git_sparse_clone master https://github.com/coolsnowwolf/lede package/libs/elfutils && mv -n elfutils package/libs/elfutils
-rm -rf package/libs/elfutils
-git_sparse_clone master https://github.com/openwrt/openwrt package/libs/elfutils && mv -n elfutils package/libs/elfutils
+#rm -rf package/libs/elfutils
+#git_sparse_clone master https://github.com/openwrt/openwrt package/libs/elfutils && mv -n elfutils package/libs/elfutils
 
+
+rm -rf tools/elfutils
+git_sparse_clone master https://github.com/coolsnowwolf/lede tools/elfutils && mv -n elfutils tools/elfutils
 #sed -i 's/PKG_VERSION:=.*/PKG_VERSION:=0.194/g' package/libs/elfutils/Makefile
 #sed -i 's/PKG_HASH:=.*/PKG_HASH:=09e2ff033d39baa8b388a2d7fbc5390bfde99ae3b7c67c7daaf7433fbcf0f01e/g' package/libs/elfutils/Makefile
 #sed -i \
