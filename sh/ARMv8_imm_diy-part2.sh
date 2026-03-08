@@ -325,5 +325,10 @@ sed -i 's|CONFIG_PACKAGE_libnetwork=y|# CONFIG_PACKAGE_libnetwork is not set|g' 
 #给n2n添加补丁文件，修正前两行语法顺序颠倒的错误
 cp -rf $GITHUB_WORKSPACE/res/001-fix-cmake-compatibility.patch $GITHUB_WORKSPACE/openwrt/feeds/packages/net/n2n/patches/
 
+#替换rust，修复rust编译错误
+rm -rf feeds/packages/lang/rust
+git_sparse_clone master https://github.com/coolsnowwolf/packages lang/rust && mv -n rust feeds/packages/lang/rust
+
+
 echo "========================="
 echo " 自定义(ARMv8_imm_diy-part2) 配置完成……"
