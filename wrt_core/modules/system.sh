@@ -499,6 +499,47 @@ config include\\
     fi
 }
 
+fix_pbr_ip_forward() {
+    local pbr_pkg_dir="$BUILD_DIR/package/feeds/packages/pbr"
+    local pbr_init_script="$pbr_pkg_dir/files/etc/init.d/pbr"
+
+    if [ ! -d "$pbr_pkg_dir" ]; then
+        echo "PBR package directory not found: $pbr_pkg_dir"
+        return 1
+    fi
+
+    if [ ! -f "$pbr_init_script" ]; then
+        echo "PBR init script not found: $pbr_init_script"
+        return 1
+    fi
+
+    # Check if fix is already applied (enabled check already present)
+    if grep -q '\[ -n "$enabled" \] && \[ -n "$strict_enforcement" \]' "$pbr_init_script"; then
+        echo "PBR IP Forward fix already applied"
+        return 0
+    fi
+
+    # Check if the original pattern exists that needs fixing
+    if ! grep -q '\[ -n "$strict_enforcement" \] && \[ "$(cat /proc/sys/net/ipv4/ip_forward)"' "$pbr_init_script"; then
+        echo "PBR IP Forward: 未找到需要修复的代码，可能上游已修复或此版本无此问题"
+        return 0
+    fi
+
+    echo "正在应用 PBR IP Forward 修复..."
+    # Fix: Add enabled check before strict_enforcement check
+    # Original: if [ -n "$strict_enforcement" ] && [ "$(cat /proc/sys/net/ipv4/ip_forward)" != "0" ]; then
+    # Fixed:   if [ -n "$enabled" ] && [ -n "$strict_enforcement" ] && [ "$(cat /proc/sys/net/ipv4/ip_forward)" != "0" ]; then
+    sed -i 's/\[ -n "\$strict_enforcement" \] && \[ "\$(cat \/proc\/sys\/net\/ipv4\/ip_forward)"/\[ -n "\$enabled" \] \&\& \[ -n "\$strict_enforcement" \] \&\& \[ "\$(cat \/proc\/sys\/net\/ipv4\/ip_forward)"/' "$pbr_init_script"
+    
+    if grep -q '\[ -n "$enabled" \] && \[ -n "$strict_enforcement" \]' "$pbr_init_script"; then
+        echo "PBR IP Forward 修复应用成功"
+        return 0
+    else
+        echo "修复应用失败：未找到预期的修复内容"
+        return 1
+    fi
+}
+
 fix_quectel_cm() {
     local makefile_path="$BUILD_DIR/package/feeds/packages/quectel-cm/Makefile"
     local cmake_patch_path="$BUILD_DIR/package/feeds/packages/quectel-cm/patches/020-cmake.patch"
