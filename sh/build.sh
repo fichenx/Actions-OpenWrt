@@ -17,6 +17,134 @@ BASE_PATH=$(cd "$WRT_CORE_PATH" && pwd)
 Dev=$1
 Build_Mod=$2
 
+SUPPORTED_DEVS=()
+
+collect_supported_devs() {
+    local ini_file
+    local dev_key
+    local IFS
+
+    SUPPORTED_DEVS=()
+
+    for ini_file in "$BASE_PATH"/compilecfg/*.ini; do
+        [[ -f "$ini_file" ]] || continue
+
+        dev_key=$(basename "$ini_file" .ini)
+        if [[ -f "$BASE_PATH/deconfig/$dev_key.config" ]]; then
+            SUPPORTED_DEVS+=("$dev_key")
+        fi
+    done
+
+    if [[ ${#SUPPORTED_DEVS[@]} -eq 0 ]]; then
+        return
+    fi
+
+    IFS=$'\n' SUPPORTED_DEVS=($(printf '%s\n' "${SUPPORTED_DEVS[@]}" | LC_ALL=C sort))
+}
+
+print_usage() {
+    echo "Usage: $0 <device> [debug]"
+}
+
+print_supported_devs() {
+    local index
+
+    echo "Supported devices:"
+    for ((index = 0; index < ${#SUPPORTED_DEVS[@]}; index++)); do
+        printf "  %d) %s\n" "$((index + 1))" "${SUPPORTED_DEVS[index]}"
+    done
+}
+
+prompt_select_dev() {
+    local input
+    local selected_index
+
+    while true; do
+        print_supported_devs
+        printf "Select device by number (q to quit): "
+
+        if ! read -r input; then
+            echo
+            echo "Cancelled."
+            exit 1
+        fi
+
+        if [[ "$input" =~ ^[[:space:]]*[qQ][[:space:]]*$ ]]; then
+            echo "Cancelled."
+            exit 1
+        fi
+
+        if [[ "$input" =~ ^[[:space:]]*([0-9]+)[[:space:]]*$ ]]; then
+            selected_index=${BASH_REMATCH[1]}
+            if ((selected_index >= 1 && selected_index <= ${#SUPPORTED_DEVS[@]})); then
+                Dev=${SUPPORTED_DEVS[selected_index - 1]}
+                return
+            fi
+        fi
+
+        echo "Invalid selection. Please enter a number between 1 and ${#SUPPORTED_DEVS[@]}."
+    done
+}
+
+prompt_select_build_mode() {
+    local input
+
+    while true; do
+        echo "Build mode:"
+        echo "  1) normal"
+        echo "  2) debug"
+        printf "Select build mode (1-2, q to quit): "
+
+        if ! read -r input; then
+            echo
+            echo "Cancelled."
+            exit 1
+        fi
+
+        if [[ "$input" =~ ^[[:space:]]*[qQ][[:space:]]*$ ]]; then
+            echo "Cancelled."
+            exit 1
+        fi
+
+        if [[ "$input" =~ ^[[:space:]]*1[[:space:]]*$ ]]; then
+            Build_Mod=""
+            return
+        fi
+
+        if [[ "$input" =~ ^[[:space:]]*2[[:space:]]*$ ]]; then
+            Build_Mod="debug"
+            return
+        fi
+
+        echo "Invalid selection. Please enter 1 or 2."
+    done
+}
+
+is_interactive_terminal() {
+    [[ -t 0 && -t 1 ]]
+}
+
+if [[ $# -eq 0 ]]; then
+    collect_supported_devs
+
+    if [[ ${#SUPPORTED_DEVS[@]} -eq 0 ]]; then
+        echo "Error: no supported devices found."
+        exit 1
+    fi
+
+    if ! is_interactive_terminal; then
+        print_usage
+        print_supported_devs
+        exit 1
+    fi
+
+    prompt_select_dev
+
+    if [[ -z $Build_Mod ]]; then
+        prompt_select_build_mode
+    fi
+fi
+
 CONFIG_FILE="$BASE_PATH/deconfig/$Dev.config"
 INI_FILE="$BASE_PATH/compilecfg/$Dev.ini"
 

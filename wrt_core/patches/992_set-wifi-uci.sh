@@ -71,9 +71,9 @@ qihoo_360v6_wifi_cfg() {
 }
 
 linksys_mx4x00_wifi_cfg() {
-	configure_wifi 0 1 EHT20 22 'Linksys_MX4X00' '12345678'
-	configure_wifi 1 149 EHT80 21 'Linksys_MX4X00_5G1' '12345678'
-	configure_wifi 2 44 EHT80 21 'Linksys_MX4X00_5G2' '12345678'
+	configure_wifi 0 1 HE20 22 'Linksys_MX4X00' '12345678'
+	configure_wifi 1 149 HE80 21 'Linksys_MX4X00_5G1' '12345678'
+	configure_wifi 2 44 HE80 21 'Linksys_MX4X00_5G2' '12345678'
 }
 
 gemtek_w1701k_wifi_cfg() {
@@ -81,6 +81,11 @@ gemtek_w1701k_wifi_cfg() {
 	configure_wifi 1 44 EHT160 23 'Gemtek_W1701K_5G' '12345678'
 	configure_wifi 2 1 EHT320 23 'Gemtek_W1701K_6G' '12345678' 'sae'
     uci set wireless.radio2.disabled='1'
+}
+
+link_nn6000_wifi_cfg() {
+    configure_wifi 0 149 HE80 19 'Link_NN6000_5G' '12345678'
+	configure_wifi 1 1 HT20 19 'Link_NN6000' '12345678'
 }
 
 case "${board_name}" in
@@ -117,6 +122,9 @@ linksys,mx4200v1 | \
 gemtek,w1701k)
 	gemtek_w1701k_wifi_cfg
 	;;
+link,nn6000-v2)
+    link_nn6000_wifi_cfg
+    ;;
 *)
 	exit 0
 	;;

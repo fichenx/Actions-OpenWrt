@@ -638,28 +638,3 @@ remove_tweaked_packages() {
         fi
     fi
 }
-
-install_libubox_cmake_patch() {
-    local libubox_pkg_dir="$BUILD_DIR/package/libs/libubox"
-    local patch_file="999-libubox-demote-format-nonliteral.patch"
-
-    if [ ! -d "$libubox_pkg_dir" ]; then
-        echo "错误：libubox 包目录不存在: $libubox_pkg_dir" >&2
-        return 1
-    fi
-
-    mkdir -p "$libubox_pkg_dir/patches"
-
-    if [ -f "$BASE_PATH/patches/$patch_file" ]; then
-        install -Dm644 "$BASE_PATH/patches/$patch_file" "$libubox_pkg_dir/patches/$patch_file"
-        echo "已安装 libubox CMakeLists 补丁: $patch_file"
-    else
-        echo "错误：补丁文件不存在: $BASE_PATH/patches/$patch_file" >&2
-        return 1
-    fi
-
-    if [ ! -f "$libubox_pkg_dir/patches/$patch_file" ]; then
-        echo "错误：补丁安装失败: $libubox_pkg_dir/patches/$patch_file" >&2
-        return 1
-    fi
-}
