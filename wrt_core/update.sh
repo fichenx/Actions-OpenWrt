@@ -22,7 +22,7 @@ fi
 
 FEEDS_CONF="feeds.conf.default"
 GOLANG_REPO="https://github.com/sbwml/packages_lang_golang"
-GOLANG_BRANCH="25.x"
+GOLANG_BRANCH="26.x"
 THEME_SET="argon"
 LAN_ADDR="192.168.123.1"
 

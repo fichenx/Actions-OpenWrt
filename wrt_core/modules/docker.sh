@@ -2,7 +2,6 @@
 
 DOCKER_STACK_MODULE_DIR=$(cd "$(dirname "${BASH_SOURCE[0]}")" && pwd)
 DOCKER_STACK_REPO_ROOT=$(cd "$DOCKER_STACK_MODULE_DIR/../.." && pwd)
-DOCKER_STACK_CANONICAL_DOCKERD_INIT="$DOCKER_STACK_REPO_ROOT/wrt_core/templates/dockerd.init"
 
 DOCKER_STACK_COMPONENTS=(
     "runc"
@@ -16,6 +15,59 @@ DOCKER_STACK_DOCKERD_CONFIG_REL="package/feeds/packages/dockerd/files/etc/config
 DOCKER_STACK_DOCKERD_INIT_REL="package/feeds/packages/dockerd/files/dockerd.init"
 DOCKER_STACK_DOCKERD_SYSCTL_REL="package/feeds/packages/dockerd/files/etc/sysctl.d/sysctl-br-netfilter-ip.conf"
 
+_docker_stack_resolve_component_makefile() {
+    local build_dir="$1"
+    local component="$2"
+    local candidate=""
+
+    for candidate in \
+        "$build_dir/package/feeds/packages/$component/Makefile" \
+        "$build_dir/feeds/packages/utils/$component/Makefile"; do
+        [ -f "$candidate" ] && {
+            echo "$candidate"
+            return 0
+        }
+    done
+
+    echo "错误：未找到 $component Makefile（已检查 package/feeds 与 feeds/packages）" >&2
+    return 1
+}
+
+_docker_stack_resolve_dockerd_file() {
+    local build_dir="$1"
+    local rel="$2"
+    local candidate=""
+
+    for candidate in \
+        "$build_dir/package/feeds/packages/dockerd/$rel" \
+        "$build_dir/feeds/packages/utils/dockerd/$rel"; do
+        [ -f "$candidate" ] && {
+            echo "$candidate"
+            return 0
+        }
+    done
+
+    echo "错误：未找到 dockerd 文件 $rel（已检查 package/feeds 与 feeds/packages）" >&2
+    return 1
+}
+
+_docker_stack_resolve_dockerman_init() {
+    local build_dir="$1"
+    local candidate=""
+
+    for candidate in \
+        "$build_dir/feeds/luci/applications/luci-app-dockerman/root/etc/init.d/dockerman" \
+        "$build_dir/package/feeds/luci/luci-app-dockerman/root/etc/init.d/dockerman" \
+        "$build_dir/package/feeds/luci/applications/luci-app-dockerman/root/etc/init.d/dockerman"; do
+        [ -f "$candidate" ] && {
+            echo "$candidate"
+            return 0
+        }
+    done
+
+    return 1
+}
+
 _docker_stack_normalize_build_dir() {
     local path="$1"
     if [[ "$path" = /* ]]; then
@@ -28,7 +80,7 @@ _docker_stack_normalize_build_dir() {
 _docker_stack_validate_project() {
     local project_dir="$1"
     local component
-    local mk_path
+    local mk_path=""
 
     if [ ! -d "$project_dir" ]; then
         echo "错误：OpenWrt 项目目录不存在: $project_dir" >&2
@@ -36,11 +88,7 @@ _docker_stack_validate_project() {
     fi
 
     for component in "${DOCKER_STACK_COMPONENTS[@]}"; do
-        mk_path="$project_dir/package/feeds/packages/$component/Makefile"
-        if [ ! -f "$mk_path" ]; then
-            echo "错误：缺少 $component Makefile: $mk_path" >&2
-            return 1
-        fi
+        mk_path=$(_docker_stack_resolve_component_makefile "$project_dir" "$component") || return 1
     done
 
     return 0
@@ -248,45 +296,630 @@ _docker_stack_warn() {
     echo "警告：$*" >&2
 }
 
+_docker_stack_dockerman_init_supports_nftables_backend() {
+    local dockerman_init="$1"
+
+    grep -Fq 'dockerman_use_iptables() {' "$dockerman_init" \
+        && grep -Fq 'dockerman_use_iptables || {' "$dockerman_init"
+}
+
+_docker_stack_patch_dockerman_backend_helpers() {
+    local dockerman_init="$1"
+    local tmp_path=""
+
+    grep -Fq 'dockerman_use_iptables() {' "$dockerman_init" && return 0
+
+    tmp_path=$(mktemp) || {
+        echo "错误：创建临时文件失败" >&2
+        return 1
+    }
+
+    awk '
+        BEGIN {
+            inserted = 0
+        }
+        {
+            print
+            if ($0 ~ /^_DOCKERD=\/etc\/init\.d\/dockerd$/ && inserted == 0) {
+                inserted = 1
+                print ""
+                print "dockerman_firewall_backend() {"
+                print "\tlocal backend=\"\""
+                print "\tbackend=\"$(uci -q get dockerd.globals.firewall_backend 2>/dev/null)\""
+                print "\t[ -n \"${backend}\" ] || backend=\"nftables\""
+                print "\techo \"${backend}\""
+                print "}"
+                print ""
+                print "dockerman_use_iptables() {"
+                print "\tlocal backend=\"\""
+                print "\tlocal iptables_enabled=\"\""
+                print ""
+                print "\tbackend=\"$(dockerman_firewall_backend)\""
+                print "\t[ \"${backend}\" = \"iptables\" ] || return 1"
+                print ""
+                print "\tiptables_enabled=\"$(uci -q get dockerd.globals.iptables 2>/dev/null)\""
+                print "\t[ -n \"${iptables_enabled}\" ] || iptables_enabled=\"1\""
+                print ""
+                print "\t[ \"${iptables_enabled}\" = \"1\" ]"
+                print "}"
+            }
+        }
+        END {
+            if (inserted == 0) {
+                exit 2
+            }
+        }
+    ' "$dockerman_init" > "$tmp_path" || {
+        rm -f "$tmp_path"
+        echo "错误：无法在 $dockerman_init 注入 firewall backend 辅助函数" >&2
+        return 1
+    }
+
+    mv "$tmp_path" "$dockerman_init"
+}
+
+_docker_stack_patch_dockerman_start_service() {
+    local dockerman_init="$1"
+    local tmp_path=""
+
+    grep -Fq 'dockerman_use_iptables || {' "$dockerman_init" && return 0
+
+    tmp_path=$(mktemp) || {
+        echo "错误：创建临时文件失败" >&2
+        return 1
+    }
+
+    awk '
+        BEGIN {
+            inserted = 0
+        }
+        {
+            print
+            if ($0 ~ /^[[:space:]]*\$\(\$_DOCKERD running\) && docker_running \|\| return 0$/ && inserted == 0) {
+                inserted = 1
+                print "\tdockerman_use_iptables || {"
+                print "\t\tlogger -t \"dockerman\" -p notice \"dockerd firewall backend is nftables; skip DOCKER-MAN iptables chain management\""
+                print "\t\treturn 0"
+                print "\t}"
+            }
+        }
+        END {
+            if (inserted == 0) {
+                exit 2
+            }
+        }
+    ' "$dockerman_init" > "$tmp_path" || {
+        rm -f "$tmp_path"
+        echo "错误：无法在 $dockerman_init 的 start_service 注入 nftables 分支" >&2
+        return 1
+    }
+
+    mv "$tmp_path" "$dockerman_init"
+}
+
+_docker_stack_ensure_dockerman_nftables_compat() {
+    local dockerman_init="$1"
+
+    _docker_stack_dockerman_init_supports_nftables_backend "$dockerman_init" && return 0
+
+    _docker_stack_warn "$dockerman_init 缺少 nftables 兼容逻辑，正在执行原位补丁"
+
+    _docker_stack_patch_dockerman_backend_helpers "$dockerman_init" || return 1
+    _docker_stack_patch_dockerman_start_service "$dockerman_init" || return 1
+
+    _docker_stack_dockerman_init_supports_nftables_backend "$dockerman_init" || {
+        echo "错误：补丁后 $dockerman_init 仍缺少 nftables 兼容逻辑" >&2
+        return 1
+    }
+}
+
+docker_stack_sync_dockerman_nftables_compat() {
+    local build_dir="$1"
+    local dry_run="${2:-0}"
+    local dockerman_init=""
+
+    [ -n "$build_dir" ] || {
+        echo "错误：docker_stack_sync_dockerman_nftables_compat 缺少 build_dir 参数" >&2
+        return 1
+    }
+
+    build_dir=$(_docker_stack_normalize_build_dir "$build_dir")
+    dockerman_init=$(_docker_stack_resolve_dockerman_init "$build_dir" || true)
+    [ -n "$dockerman_init" ] || return 0
+
+    if [ "$dry_run" = "1" ]; then
+        if _docker_stack_dockerman_init_supports_nftables_backend "$dockerman_init"; then
+            echo "[dry-run] dockerman init already skips DOCKER-MAN iptables chain when backend=nftables"
+        else
+            echo "[dry-run] dockerman init will be patched to skip DOCKER-MAN iptables chain when backend=nftables"
+        fi
+        return 0
+    fi
+
+    _docker_stack_ensure_dockerman_nftables_compat "$dockerman_init"
+}
+
 _docker_stack_init_supports_nftables_backend() {
     local dockerd_init="$1"
 
-    grep -Fq 'if [ "${firewall_backend}" = "nftables" ]; then' "$dockerd_init" \
+    grep -Fq 'NFT_DOCKER_USER_TABLE="docker-user"' "$dockerd_init" \
+        && grep -Fq 'verify_nftables_swarm_is_disabled "${data_root}" || return 1' "$dockerd_init" \
+        && grep -Fq 'verify_nftables_forwarding || return 1' "$dockerd_init" \
         && grep -Fq 'verify_nftables_prerequisites "${data_root}" || return 1' "$dockerd_init" \
         && grep -Fq 'nft add rule inet "${NFT_DOCKER_USER_TABLE}" "${NFT_DOCKER_USER_CHAIN}" iifname "${inbound}" oifname "${outbound}" reject' "$dockerd_init"
 }
 
+_docker_stack_patch_nft_prereq_block() {
+    local dockerd_init="$1"
+    local tmp_path=""
+
+    if grep -Fq '# === DOCKER_STACK_NFT_PREREQ_START ===' "$dockerd_init"; then
+        tmp_path=$(mktemp) || {
+            echo "错误：创建临时文件失败" >&2
+            return 1
+        }
+
+        awk '
+            BEGIN { in_block = 0 }
+            {
+                if ($0 ~ /^# === DOCKER_STACK_NFT_PREREQ_START ===$/) {
+                    in_block = 1
+                    next
+                }
+                if ($0 ~ /^# === DOCKER_STACK_NFT_PREREQ_END ===$/) {
+                    in_block = 0
+                    next
+                }
+                if (in_block == 0) {
+                    print
+                }
+            }
+        ' "$dockerd_init" > "$tmp_path" || {
+            rm -f "$tmp_path"
+            echo "错误：无法清理旧的 nftables 前置校验函数块" >&2
+            return 1
+        }
+
+        mv "$tmp_path" "$dockerd_init"
+    fi
+
+    tmp_path=$(mktemp) || {
+        echo "错误：创建临时文件失败" >&2
+        return 1
+    }
+
+    awk '
+        BEGIN {
+            inserted = 0
+        }
+        {
+            print
+            if ($0 ~ /^DOCKERD_CONF="\$\{DOCKER_CONF_DIR\}\/daemon\.json"$/) {
+                inserted = 1
+                print ""
+                print "# === DOCKER_STACK_NFT_PREREQ_START ==="
+                print "NFT_DOCKER_USER_TABLE=\"docker-user\""
+                print "NFT_DOCKER_USER_CHAIN=\"forward\""
+                print ""
+                print "BLOCKING_RULE_ERROR=0"
+                print ""
+                print "set_blocking_rule_error() {"
+                print "\tBLOCKING_RULE_ERROR=1"
+                print "}"
+                print ""
+                print "verify_nftables_swarm_is_disabled() {"
+                print "\tlocal data_root=\"${1}\""
+                print "\treturn 0"
+                print "}"
+                print ""
+                print "verify_nftables_forwarding() {"
+                print "\tlocal ipv4_forwarding=\"\""
+                print "\tlocal ipv6_forwarding=\"\""
+                print ""
+                print "\tipv4_forwarding=\"$(cat /proc/sys/net/ipv4/ip_forward 2>/dev/null)\""
+                print "\tipv6_forwarding=\"$(cat /proc/sys/net/ipv6/conf/all/forwarding 2>/dev/null)\""
+                print ""
+                print "\tif [ \"${ipv4_forwarding}\" != \"1\" ] || [ \"${ipv6_forwarding}\" != \"1\" ]; then"
+                print "\t\tlogger -t \"dockerd-init\" -p err \"Docker nftables backend requires net.ipv4.ip_forward=1 and net.ipv6.conf.all.forwarding=1 before startup\""
+                print "\t\treturn 1"
+                print "\tfi"
+                print ""
+                print "\treturn 0"
+                print "}"
+                print ""
+                print "verify_nftables_prerequisites() {"
+                print "\tlocal data_root=\"${1}\""
+                print ""
+                print "\tverify_nftables_swarm_is_disabled \"${data_root}\" || return 1"
+                print "\tverify_nftables_forwarding || return 1"
+                print "}"
+                print "# === DOCKER_STACK_NFT_PREREQ_END ==="
+            }
+        }
+        END {
+            if (inserted == 0) {
+                exit 2
+            }
+        }
+    ' "$dockerd_init" > "$tmp_path" || {
+        rm -f "$tmp_path"
+        echo "错误：无法在 $dockerd_init 注入 nftables 前置校验函数块" >&2
+        return 1
+    }
+
+    mv "$tmp_path" "$dockerd_init"
+}
+
+_docker_stack_patch_process_config_nftables() {
+    local dockerd_init="$1"
+    local tmp_path=""
+
+    sed -i 's/^[[:space:]]*local alt_config_file data_root log_level iptables ip6tables bip$/\tlocal alt_config_file data_root log_level firewall_backend iptables ip6tables bip/' "$dockerd_init"
+
+    if ! grep -Fq 'config_get firewall_backend globals firewall_backend "nftables"' "$dockerd_init"; then
+        tmp_path=$(mktemp) || {
+            echo "错误：创建临时文件失败" >&2
+            return 1
+        }
+
+        awk '
+            BEGIN {
+                replaced = 0
+                skipping = 0
+            }
+            {
+                if ($0 ~ /^[[:space:]]*config_get data_root globals data_root "\/opt\/docker\/"$/) {
+                    replaced = 1
+                    skipping = 1
+
+                    print "\tconfig_get data_root globals data_root \"/opt/docker/\""
+                    print "\tconfig_get log_level globals log_level \"warn\""
+                    print "\tif uci_quiet get dockerd.globals.firewall_backend; then"
+                    print "\t\tconfig_get firewall_backend globals firewall_backend \"nftables\""
+                    print "\telse"
+                    print "\t\tfirewall_backend=\"nftables\""
+                    print "\t\tlogger -t \"dockerd-init\" -p notice \"Migrating dockerd firewall backend to ${firewall_backend}\""
+                    print "\t\tuci_quiet set dockerd.globals.firewall_backend=\"${firewall_backend}\" && uci_quiet commit dockerd || {"
+                    print "\t\t\tlogger -t \"dockerd-init\" -p err \"Failed to persist dockerd firewall backend migration\""
+                    print "\t\t\treturn 1"
+                    print "\t\t}"
+                    print "\tfi"
+                    print "\tcase \"${firewall_backend}\" in"
+                    print "\t\tiptables|nftables)"
+                    print "\t\t\t;;"
+                    print "\t\t*)"
+                    print "\t\t\tlogger -t \"dockerd-init\" -p notice \"Unsupported dockerd firewall backend ${firewall_backend}, defaulting to nftables\""
+                    print "\t\t\tfirewall_backend=\"nftables\""
+                    print "\t\t\t;;"
+                    print "\tesac"
+                    print "\tif [ \"${firewall_backend}\" = \"nftables\" ]; then"
+                    print "\t\tverify_nftables_prerequisites \"${data_root}\" || return 1"
+                    print "\tfi"
+                    print "\tconfig_get_bool iptables globals iptables \"1\""
+                    print "\tconfig_get_bool ip6tables globals ip6tables \"0\""
+                    next
+                }
+
+                if (skipping == 1) {
+                    if ($0 ~ /^[[:space:]]*config_get_bool ip6tables globals ip6tables "0"$/) {
+                        skipping = 0
+                    }
+                    next
+                }
+
+                print
+            }
+            END {
+                if (replaced == 0) {
+                    exit 2
+                }
+            }
+        ' "$dockerd_init" > "$tmp_path" || {
+            rm -f "$tmp_path"
+            echo "错误：无法重写 $dockerd_init 的 firewall_backend 配置段" >&2
+            return 1
+        }
+
+        mv "$tmp_path" "$dockerd_init"
+    fi
+
+    if ! grep -Fq 'json_add_string "firewall-backend" "${firewall_backend}"' "$dockerd_init"; then
+        sed -i '/^[[:space:]]*json_add_string "log-level" "${log_level}"$/a\	json_add_string "firewall-backend" "${firewall_backend}"' "$dockerd_init"
+    fi
+
+    if ! grep -Fq 'BLOCKING_RULE_ERROR=0' "$dockerd_init"; then
+        tmp_path=$(mktemp) || {
+            echo "错误：创建临时文件失败" >&2
+            return 1
+        }
+
+        awk '
+            BEGIN {
+                replaced = 0
+            }
+            {
+                if ($0 ~ /^[[:space:]]*\[ "\$\{iptables\}" -eq "1" \] && config_foreach iptables_add_blocking_rule firewall$/) {
+                    replaced = 1
+                    print "\tBLOCKING_RULE_ERROR=0"
+                    print "\tif [ \"${firewall_backend}\" = \"nftables\" ]; then"
+                    print "\t\tnftables_create_blocking_table || {"
+                    print "\t\t\tset_blocking_rule_error"
+                    print "\t\t\treturn 1"
+                    print "\t\t}"
+                    print "\t\tif ! nft flush chain inet \"${NFT_DOCKER_USER_TABLE}\" \"${NFT_DOCKER_USER_CHAIN}\"; then"
+                    print "\t\t\tlogger -t \"dockerd-init\" -p err \"Failed to reset nftables docker policy chain\""
+                    print "\t\t\tset_blocking_rule_error"
+                    print "\t\t\treturn 1"
+                    print "\t\tfi"
+                    print "\tfi"
+                    print ""
+                    print "\tconfig_foreach iptables_add_blocking_rule firewall \"${firewall_backend}\""
+                    print "\t[ \"${BLOCKING_RULE_ERROR}\" -eq 0 ] || return 1"
+                    next
+                }
+                print
+            }
+            END {
+                if (replaced == 0) {
+                    exit 2
+                }
+            }
+        ' "$dockerd_init" > "$tmp_path" || {
+            rm -f "$tmp_path"
+            echo "错误：无法重写 $dockerd_init 的 blocked_interfaces 处理段" >&2
+            return 1
+        }
+
+        mv "$tmp_path" "$dockerd_init"
+    fi
+}
+
+_docker_stack_patch_service_error_handling() {
+    local dockerd_init="$1"
+
+    sed -i '/^start_service() {/,/^}/{s/^[[:space:]]*process_config$/\tprocess_config || return 1/}' "$dockerd_init"
+    sed -i '/^reload_service() {/,/^}/{s/^[[:space:]]*process_config$/\tprocess_config || return 1/}' "$dockerd_init"
+}
+
+_docker_stack_patch_iptables_dispatch() {
+    local dockerd_init="$1"
+    local tmp_path=""
+
+    tmp_path=$(mktemp) || {
+        echo "错误：创建临时文件失败" >&2
+        return 1
+    }
+
+    awk '
+        {
+            if ($0 ~ /^[[:space:]]*local firewall_backend="\$\{2\}"$/) {
+                next
+            }
+            if ($0 ~ /^[[:space:]]*local iptables="1"$/) {
+                next
+            }
+            print
+        }
+    ' "$dockerd_init" > "$tmp_path" || {
+        rm -f "$tmp_path"
+        echo "错误：无法清理 $dockerd_init 中旧的 firewall_backend 注入行" >&2
+        return 1
+    }
+
+    mv "$tmp_path" "$dockerd_init"
+
+    if ! grep -Fq 'local firewall_backend="${2}"' "$dockerd_init"; then
+        tmp_path=$(mktemp) || {
+            echo "错误：创建临时文件失败" >&2
+            return 1
+        }
+
+        awk '
+            BEGIN {
+                in_target = 0
+                inserted = 0
+            }
+            {
+                if ($0 ~ /^iptables_add_blocking_rule\(\) \{$/) {
+                    in_target = 1
+                    print
+                    next
+                }
+
+                if (in_target == 1 && $0 ~ /^[[:space:]]*local cfg="\$\{1\}"$/ && inserted == 0) {
+                    inserted = 1
+                    print $0
+                    print "\tlocal firewall_backend=\"${2}\""
+                    print "\tlocal iptables=\"1\""
+                    print ""
+                    next
+                }
+
+                if (in_target == 1 && $0 ~ /^}$/) {
+                    in_target = 0
+                }
+
+                print
+            }
+            END {
+                if (inserted == 0) {
+                    exit 2
+                }
+            }
+        ' "$dockerd_init" > "$tmp_path" || {
+            rm -f "$tmp_path"
+            echo "错误：无法向 $dockerd_init 注入 firewall_backend 参数" >&2
+            return 1
+        }
+
+        mv "$tmp_path" "$dockerd_init"
+    fi
+
+    if ! grep -Fq 'nftables_add_blocking_rules "${cfg}"' "$dockerd_init"; then
+        tmp_path=$(mktemp) || {
+            echo "错误：创建临时文件失败" >&2
+            return 1
+        }
+
+        awk '
+            BEGIN {
+                in_target = 0
+                inserted = 0
+            }
+            {
+                if ($0 ~ /^iptables_add_blocking_rule\(\) \{$/) {
+                    in_target = 1
+                    print
+                    next
+                }
+
+                if (in_target == 1 && $0 ~ /^[[:space:]]*config_get device "\$\{cfg\}" device$/ && inserted == 0) {
+                    inserted = 1
+                    print "\tif [ \"${firewall_backend}\" = \"nftables\" ]; then"
+                    print "\t\tnftables_add_blocking_rules \"${cfg}\""
+                    print "\t\treturn"
+                    print "\tfi"
+                    print ""
+                    print "\tconfig_get_bool iptables globals iptables \"1\""
+                    print "\t[ \"${iptables}\" -eq \"1\" ] || return"
+                    print ""
+                }
+
+                if (in_target == 1 && $0 ~ /^}$/) {
+                    in_target = 0
+                }
+
+                print
+            }
+            END {
+                if (inserted == 0) {
+                    exit 2
+                }
+            }
+        ' "$dockerd_init" > "$tmp_path" || {
+            rm -f "$tmp_path"
+            echo "错误：无法向 $dockerd_init 注入 nftables 规则分支" >&2
+            return 1
+        }
+
+        mv "$tmp_path" "$dockerd_init"
+    fi
+}
+
+_docker_stack_patch_append_nft_rule_helpers() {
+    local dockerd_init="$1"
+    local tmp_path=""
+
+    grep -Fq 'nftables_create_blocking_table() {' "$dockerd_init" && grep -Fq 'nftables_add_blocking_rules() {' "$dockerd_init" && return 0
+
+    tmp_path=$(mktemp) || {
+        echo "错误：创建临时文件失败" >&2
+        return 1
+    }
+
+    awk '
+        BEGIN {
+            inserted = 0
+        }
+        {
+            if ($0 ~ /^stop_service\(\) \{$/ && inserted == 0) {
+                inserted = 1
+                print "nftables_create_blocking_table() {"
+                print "\tif ! nft list table inet \"${NFT_DOCKER_USER_TABLE}\" >/dev/null 2>&1; then"
+                print "\t\tif ! nft add table inet \"${NFT_DOCKER_USER_TABLE}\"; then"
+                print "\t\t\tlogger -t \"dockerd-init\" -p err \"Failed to create nftables table inet ${NFT_DOCKER_USER_TABLE}\""
+                print "\t\t\treturn 1"
+                print "\t\tfi"
+                print "\tfi"
+                print ""
+                print "\tif ! nft list chain inet \"${NFT_DOCKER_USER_TABLE}\" \"${NFT_DOCKER_USER_CHAIN}\" >/dev/null 2>&1; then"
+                print "\t\tif ! nft add chain inet \"${NFT_DOCKER_USER_TABLE}\" \"${NFT_DOCKER_USER_CHAIN}\" '\''{ type filter hook forward priority 0; policy accept; }'\''; then"
+                print "\t\t\tlogger -t \"dockerd-init\" -p err \"Failed to create nftables chain inet ${NFT_DOCKER_USER_TABLE} ${NFT_DOCKER_USER_CHAIN}\""
+                print "\t\t\treturn 1"
+                print "\t\tfi"
+                print "\tfi"
+                print "}"
+                print ""
+                print "nftables_add_blocking_rules() {"
+                print "\tlocal cfg=\"${1}\""
+                print ""
+                print "\tlocal device=\"\""
+                print "\tlocal extra_iptables_args=\"\""
+                print ""
+                print "\thandle_nftables_rule() {"
+                print "\t\tlocal interface=\"${1}\""
+                print "\t\tlocal outbound=\"${2}\""
+                print ""
+                print "\t\tlocal inbound=\"\""
+                print ""
+                print "\t\t. /lib/functions/network.sh"
+                print "\t\tnetwork_get_physdev inbound \"${interface}\""
+                print ""
+                print "\t\t[ -z \"${inbound}\" ] && {"
+                print "\t\t\tlogger -t \"dockerd-init\" -p notice \"Unable to get physical device for interface ${interface}\""
+                print "\t\t\treturn"
+                print "\t\t}"
+                print ""
+                print "\t\tlogger -t \"dockerd-init\" -p notice \"Drop traffic from ${inbound} to ${outbound}\""
+                print "\t\tif ! nft add rule inet \"${NFT_DOCKER_USER_TABLE}\" \"${NFT_DOCKER_USER_CHAIN}\" iifname \"${inbound}\" oifname \"${outbound}\" reject; then"
+                print "\t\t\tlogger -t \"dockerd-init\" -p err \"Failed to add nftables docker policy from ${inbound} to ${outbound}\""
+                print "\t\t\tset_blocking_rule_error"
+                print "\t\t\treturn 1"
+                print "\t\tfi"
+                print "\t}"
+                print ""
+                print "\tconfig_get device \"${cfg}\" device"
+                print ""
+                print "\t[ -z \"${device}\" ] && {"
+                print "\t\tlogger -t \"dockerd-init\" -p notice \"No device configured for ${cfg}\""
+                print "\t\treturn"
+                print "\t}"
+                print ""
+                print "\tconfig_get extra_iptables_args \"${cfg}\" extra_iptables_args"
+                print "\t[ -n \"${extra_iptables_args}\" ] && {"
+                print "\t\tlogger -t \"dockerd-init\" -p err \"extra_iptables_args is not supported when firewall_backend is nftables\""
+                print "\t\tset_blocking_rule_error"
+                print "\t\treturn 1"
+                print "\t}"
+                print ""
+                print "\tconfig_list_foreach \"${cfg}\" blocked_interfaces handle_nftables_rule \"${device}\""
+                print "}"
+                print ""
+            }
+            print
+        }
+        END {
+            if (inserted == 0) {
+                exit 2
+            }
+        }
+    ' "$dockerd_init" > "$tmp_path" || {
+        rm -f "$tmp_path"
+        echo "错误：无法向 $dockerd_init 追加 nftables 规则函数" >&2
+        return 1
+    }
+
+    mv "$tmp_path" "$dockerd_init"
+}
+
 _docker_stack_ensure_nftables_init_support() {
     local dockerd_init="$1"
-    local canonical_init="$DOCKER_STACK_CANONICAL_DOCKERD_INIT"
 
     if _docker_stack_init_supports_nftables_backend "$dockerd_init"; then
+        _docker_stack_patch_iptables_dispatch "$dockerd_init" || return 1
         return 0
     fi
 
-    [ -f "$canonical_init" ] || {
-        echo "错误：缺少 nftables 兼容 dockerd.init 模板: $canonical_init" >&2
-        return 1
-    }
+    _docker_stack_warn "$dockerd_init 缺少 nftables backend 逻辑，正在执行原位补丁"
 
-    _docker_stack_init_supports_nftables_backend "$canonical_init" || {
-        echo "错误：nftables 兼容 dockerd.init 模板内容不完整: $canonical_init" >&2
-        return 1
-    }
-
-    if [ "$canonical_init" = "$dockerd_init" ]; then
-        echo "错误：当前 dockerd.init 缺少 nftables backend 逻辑，且不存在可用外部模板" >&2
-        return 1
-    fi
-
-    _docker_stack_warn "$dockerd_init 缺少 nftables backend 逻辑，使用 $canonical_init 进行同步"
-    cp "$canonical_init" "$dockerd_init" || {
-        echo "错误：同步 dockerd.init 到 nftables 版本失败" >&2
-        return 1
-    }
+    _docker_stack_patch_nft_prereq_block "$dockerd_init" || return 1
+    _docker_stack_patch_process_config_nftables "$dockerd_init" || return 1
+    _docker_stack_patch_service_error_handling "$dockerd_init" || return 1
+    _docker_stack_patch_iptables_dispatch "$dockerd_init" || return 1
+    _docker_stack_patch_append_nft_rule_helpers "$dockerd_init" || return 1
 
     _docker_stack_init_supports_nftables_backend "$dockerd_init" || {
-        echo "错误：同步后 $dockerd_init 仍缺少 nftables backend 逻辑" >&2
+        echo "错误：补丁后 $dockerd_init 仍缺少 nftables backend 逻辑" >&2
         return 1
     }
 }
@@ -295,10 +928,15 @@ _docker_stack_update_dockerd_nftables_defaults() {
     local build_dir="$1"
     local dry_run="$2"
     local storage_driver="$3"
-    local dockerd_makefile="$build_dir/$DOCKER_STACK_DOCKERD_MAKEFILE_REL"
-    local dockerd_config="$build_dir/$DOCKER_STACK_DOCKERD_CONFIG_REL"
-    local dockerd_init="$build_dir/$DOCKER_STACK_DOCKERD_INIT_REL"
-    local dockerd_sysctl="$build_dir/$DOCKER_STACK_DOCKERD_SYSCTL_REL"
+    local dockerd_makefile=""
+    local dockerd_config=""
+    local dockerd_init=""
+    local dockerd_sysctl=""
+
+    dockerd_makefile=$(_docker_stack_resolve_component_makefile "$build_dir" "dockerd") || return 1
+    dockerd_config=$(_docker_stack_resolve_dockerd_file "$build_dir" "files/etc/config/dockerd") || return 1
+    dockerd_init=$(_docker_stack_resolve_dockerd_file "$build_dir" "files/dockerd.init") || return 1
+    dockerd_sysctl=$(_docker_stack_resolve_dockerd_file "$build_dir" "files/etc/sysctl.d/sysctl-br-netfilter-ip.conf") || return 1
 
     [ -f "$dockerd_makefile" ] || {
         echo "错误：未找到 dockerd Makefile: $dockerd_makefile" >&2
@@ -323,13 +961,14 @@ _docker_stack_update_dockerd_nftables_defaults() {
         if _docker_stack_init_supports_nftables_backend "$dockerd_init"; then
             echo "[dry-run] dockerd firewall_backend will be forced to nftables"
         else
-            echo "[dry-run] dockerd.init lacks nftables backend support and will be synchronized from $DOCKER_STACK_CANONICAL_DOCKERD_INIT"
-            echo "[dry-run] dockerd firewall_backend will be forced to nftables after sync"
+            echo "[dry-run] dockerd.init lacks nftables backend support and will be patched in-place"
+            echo "[dry-run] dockerd firewall_backend will be forced to nftables after patch"
         fi
         if [ -n "$storage_driver" ]; then
             echo "[dry-run] dockerd storage_driver will be set to $storage_driver"
         fi
         echo "[dry-run] dockerd forwarding sysctls will be set to 1"
+        docker_stack_sync_dockerman_nftables_compat "$build_dir" "1" || return 1
         return 0
     fi
 
@@ -337,6 +976,7 @@ _docker_stack_update_dockerd_nftables_defaults() {
     _docker_stack_fix_dockerd_vendored_checks "$dockerd_makefile" || return 1
 
     _docker_stack_ensure_nftables_init_support "$dockerd_init" || return 1
+    docker_stack_sync_dockerman_nftables_compat "$build_dir" "0" || return 1
 
     _docker_stack_set_or_append_dockerd_uci_option "$dockerd_config" "firewall_backend" "nftables" || return 1
     if [ -n "$storage_driver" ]; then
@@ -492,6 +1132,10 @@ update_docker_stack() {
     local dockerd_version="${DOCKER_STACK_DOCKERD_VERSION:-$docker_version}"
     local storage_driver="${DOCKER_STACK_STORAGE_DRIVER:-vfs}"
     local dry_run="${DOCKER_STACK_DRY_RUN:-0}"
+    local runc_makefile=""
+    local containerd_makefile=""
+    local docker_makefile=""
+    local dockerd_makefile=""
 
     if [ -z "$build_dir" ]; then
         echo "错误：update_docker_stack 依赖 BUILD_DIR，请先在调用方设置 BUILD_DIR" >&2
@@ -506,6 +1150,11 @@ update_docker_stack() {
     build_dir=$(_docker_stack_normalize_build_dir "$build_dir")
     _docker_stack_validate_project "$build_dir" || return 1
 
+    runc_makefile=$(_docker_stack_resolve_component_makefile "$build_dir" "runc") || return 1
+    containerd_makefile=$(_docker_stack_resolve_component_makefile "$build_dir" "containerd") || return 1
+    docker_makefile=$(_docker_stack_resolve_component_makefile "$build_dir" "docker") || return 1
+    dockerd_makefile=$(_docker_stack_resolve_component_makefile "$build_dir" "dockerd") || return 1
+
     echo "Docker 相关组件版本处理开始:"
     echo "  BUILD_DIR=$build_dir"
     echo "  runc=$runc_version"
@@ -514,10 +1163,10 @@ update_docker_stack() {
     echo "  dockerd=$dockerd_version"
     echo "  storage_driver=$storage_driver"
 
-    _docker_stack_update_component "runc" "$build_dir/package/feeds/packages/runc/Makefile" "releases" "$runc_version" "$dry_run" || return 1
-    _docker_stack_update_component "containerd" "$build_dir/package/feeds/packages/containerd/Makefile" "releases" "$containerd_version" "$dry_run" || return 1
-    _docker_stack_update_component "docker" "$build_dir/package/feeds/packages/docker/Makefile" "tags" "$docker_version" "$dry_run" || return 1
-    _docker_stack_update_component "dockerd" "$build_dir/package/feeds/packages/dockerd/Makefile" "releases" "$dockerd_version" "$dry_run" || return 1
+    _docker_stack_update_component "runc" "$runc_makefile" "releases" "$runc_version" "$dry_run" || return 1
+    _docker_stack_update_component "containerd" "$containerd_makefile" "releases" "$containerd_version" "$dry_run" || return 1
+    _docker_stack_update_component "docker" "$docker_makefile" "tags" "$docker_version" "$dry_run" || return 1
+    _docker_stack_update_component "dockerd" "$dockerd_makefile" "releases" "$dockerd_version" "$dry_run" || return 1
     _docker_stack_update_dockerd_nftables_defaults "$build_dir" "$dry_run" "$storage_driver" || return 1
 
     if [ "$dry_run" = "1" ]; then
