@@ -28,6 +28,11 @@ update_feeds() {
         echo 'src-git luci_app_bandix https://github.com/timsaya/luci-app-bandix.git;main' >>"$BUILD_DIR/$FEEDS_CONF"
     fi
 
+    if ! grep -q "nikki" "$BUILD_DIR/$FEEDS_CONF"; then
+        [ -z "$(tail -c 1 "$BUILD_DIR/$FEEDS_CONF")" ] || echo "" >>"$BUILD_DIR/$FEEDS_CONF"
+        echo 'src-git nikki https://github.com/nikkinikki-org/OpenWrt-nikki.git;main' >>"$BUILD_DIR/$FEEDS_CONF"
+    fi
+
     if [ ! -f "$BUILD_DIR/include/bpf.mk" ]; then
         touch "$BUILD_DIR/include/bpf.mk"
     fi
@@ -44,6 +49,8 @@ install_feeds() {
                 install_fullconenat
             elif [[ $(basename "$dir") == "passwall" ]]; then
                 install_passwall
+            elif [[ $(basename "$dir") == "nikki" ]]; then
+                install_nikki
             else
                 ./scripts/feeds install -f -ap $(basename "$dir")
             fi
