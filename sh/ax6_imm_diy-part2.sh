@@ -141,7 +141,7 @@ update_lucky
 sed -i 's/^PKG_BUILD_PARALLEL:=1/PKG_BUILD_PARALLEL:=0/' feeds/packages/net/smartdns/Makefile
 
 #homeproxy不兼容最新的1.13.0，替换sing-box为官方原版
-rm -rf feeds/packages/net/sing-box
+rm -rf feeds/packages/net/sing-box feeds/fichenx/sing-box
 git_sparse_clone master https://github.com/immortalwrt/packages net/sing-box && mv -n sing-box feeds/packages/net/sing-box
 
 echo "========================="
