@@ -87,6 +87,8 @@ jobs:
 
       - name: 构建固件
         run: |
+          cp -rf config/compilecfg wrt_core/
+          cp -rf config/*.config wrt_core/deconfig/
           chmod +x $DIY_my_SH
           ./sh/build.sh ${{ inputs.model || 'RedMi-AX6_plus_imm'}}
 
