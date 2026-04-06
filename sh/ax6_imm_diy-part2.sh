@@ -135,14 +135,14 @@ update_lucky() {
         echo "Warning: lucky Makefile 中未找到 'Build/Prepare'。跳过。" >&2
     fi
 }
-#update_lucky
+update_lucky
 
 #强制smartdns单线程编译
 sed -i 's/^PKG_BUILD_PARALLEL:=1/PKG_BUILD_PARALLEL:=0/' $BASE_PATH/action_build/feeds/packages/net/smartdns/Makefile
 
 #替换sing-box为官方原版
-rm -rf $BASE_PATH/action_build/feeds/fichenx/sing-box
-git_sparse_clone master https://github.com/immortalwrt/packages net/sing-box && mv -n sing-box $BASE_PATH/action_build/feeds/fichenx/sing-box
+#rm -rf $BASE_PATH/action_build/feeds/fichenx/sing-box
+#git_sparse_clone master https://github.com/immortalwrt/packages net/sing-box && mv -n sing-box $BASE_PATH/action_build/feeds/fichenx/sing-box
 
 echo "========================="
 echo " 自定义(fichen) 配置完成……"
