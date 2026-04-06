@@ -70,8 +70,8 @@ cp -rf $GITHUB_WORKSPACE/patch/001-fix-cmake-compatibility.patch $BASE_PATH/acti
 rm -rf $BASE_PATH/action_build/feeds/packages/net/n2n/patches/110-cmake.patch
 
 #替换luci-app-timecontrol为gaobin89/luci-app-timecontrol
-rm -rf feeds/luci/applications/luci-app-timecontrol
-git_sparse_clone js https://github.com/gaobin89/luci-app-timecontrol luci-app-timecontrol && mv -n luci-app-timecontrol feeds/luci/applications/luci-app-timecontrol
+rm -rf $BASE_PATH/action_build/feeds/luci/applications/luci-app-timecontrol
+git_sparse_clone js https://github.com/gaobin89/luci-app-timecontrol luci-app-timecontrol && mv -n luci-app-timecontrol $BASE_PATH/action_build/feeds/luci/applications/luci-app-timecontrol
 
 ##更换luci-theme-design
 #rm -rf $BASE_PATH/action_build/feeds/luci/themes/luci-theme-design $BASE_PATH/action_build/feeds/fichenx/luci-theme-design
@@ -83,12 +83,12 @@ git_sparse_clone js https://github.com/gaobin89/luci-app-timecontrol luci-app-ti
 #cp -f $GITHUB_WORKSPACE/patch/100-remove-format-nonliteral.patch $BASE_PATH/action_build/package/libs/libubox/patches/
 
 #添加luci-app-lucky、lucky
-mk_dir="feeds/fichenx/lucky/Makefile"
-mk_lede_dir="feeds/packages/net/lucky/Makefile"
-rm -rf feeds/luci/applications/luci-app-lucky feeds/packages/net/lucky
+mk_dir="$BASE_PATH/action_build/feeds/fichenx/lucky/Makefile"
+mk_lede_dir="$BASE_PATH/action_build/feeds/packages/net/lucky/Makefile"
+rm -rf $BASE_PATH/action_build/feeds/luci/applications/luci-app-lucky $BASE_PATH/action_build/feeds/packages/net/lucky
 #git_svn main https://github.com/gdy666/luci-app-lucky luci-app-lucky lucky
-git_sparse_clone main https://github.com/gdy666/luci-app-lucky luci-app-lucky && mv -n luci-app-lucky feeds/luci/applications/luci-app-lucky
-git_sparse_clone main https://github.com/gdy666/luci-app-lucky lucky && mv -n lucky feeds/packages/net/lucky
+git_sparse_clone main https://github.com/gdy666/luci-app-lucky luci-app-lucky && mv -n luci-app-lucky $BASE_PATH/action_build/feeds/luci/applications/luci-app-lucky
+git_sparse_clone main https://github.com/gdy666/luci-app-lucky lucky && mv -n lucky $BASE_PATH/action_build/feeds/packages/net/lucky
 ##使用在线lucky万吉版本
 #if [ -d "${mk_dir%/*}" ] && [ -f "$mk_dir" ]; then
 #    sed -i 's|Linux_$(LUCKY_ARCH)|Linux_$(LUCKY_ARCH)_wanji|g' "$mk_dir"
@@ -98,10 +98,10 @@ git_sparse_clone main https://github.com/gdy666/luci-app-lucky lucky && mv -n lu
 #fi
 ##使用本地lucky万吉版本
 update_lucky() {
-    local lucky_dir="feeds/packages/net/lucky"
+    local lucky_dir="$BASE_PATH/action_build/feeds/packages/net/lucky"
 
     # 默认关闭lucky
-    local lucky_conf="feeds/packages/net/lucky/files/luckyuci"
+    local lucky_conf="$BASE_PATH/action_build/feeds/packages/net/lucky/files/luckyuci"
     if [ -f "$lucky_conf" ]; then
         sed -i "s/option enabled '1'/option enabled '0'/g" "$lucky_conf"
         sed -i "s/option logger '1'/option logger '0'/g" "$lucky_conf"
@@ -115,7 +115,7 @@ update_lucky() {
         return 0
     fi
 
-    local makefile_path="feeds/packages/net/lucky/Makefile"
+    local makefile_path="$BASE_PATH/action_build/feeds/packages/net/lucky/Makefile"
     if [ ! -f "$makefile_path" ]; then
         echo "Warning: lucky Makefile not found. Skipping." >&2
         return 0
@@ -138,7 +138,11 @@ update_lucky() {
 update_lucky
 
 #强制smartdns单线程编译
-sed -i 's/^PKG_BUILD_PARALLEL:=1/PKG_BUILD_PARALLEL:=0/' feeds/packages/net/smartdns/Makefile
+sed -i 's/^PKG_BUILD_PARALLEL:=1/PKG_BUILD_PARALLEL:=0/' $BASE_PATH/action_build/feeds/packages/net/smartdns/Makefile
+
+#替换sing-box为coolsnowwolf版本
+rm -rf $BASE_PATH/action_build/feeds/fichenx/sing-box
+git_sparse_clone master https://github.com/coolsnowwolf/packages net/sing-box && mv -n sing-box $BASE_PATH/action_build/feeds/fichenx/sing-box
 
 echo "========================="
 echo " 自定义(fichen) 配置完成……"
