@@ -135,7 +135,7 @@ update_lucky() {
         echo "Warning: lucky Makefile 中未找到 'Build/Prepare'。跳过。" >&2
     fi
 }
-update_lucky
+#update_lucky
 
 #强制smartdns单线程编译
 sed -i 's/^PKG_BUILD_PARALLEL:=1/PKG_BUILD_PARALLEL:=0/' $BASE_PATH/action_build/feeds/packages/net/smartdns/Makefile
