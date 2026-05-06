@@ -190,11 +190,11 @@ _docker_stack_update_dockerd_depends_block() {
             in_depends = 0
             replaced = 0
         }
-        /^  DEPENDS:=\$\(GO_ARCH_DEPENDS\) \\$/ {
+        /^  DEPENDS:=\$\(ARCH_DEPENDS\) \\$/ {
             in_depends = 1
             replaced = 1
 
-            print "  DEPENDS:=$(GO_ARCH_DEPENDS) \\" 
+            print "  DEPENDS:=$(ARCH_DEPENDS) \\" 
             print "    +ca-certificates \\" 
             print "    +containerd \\" 
             print "    +iptables-nft \\" 
@@ -209,13 +209,13 @@ _docker_stack_update_dockerd_depends_block() {
             print "    +nftables \\" 
             print "    +kmod-nft-nat \\" 
             print "    +tini \\" 
-            print "    +uci-firewall \\" 
-            print "    @!(mips||mips64||mipsel)"
+            print "    +uci-firewall"
             next
         }
         in_depends {
-            if ($0 ~ /@!\(mips\|\|mips64\|\|mipsel\)/) {
+            if ($0 ~ /^  [A-Z0-9_]+:=/ || $0 ~ /^endef$/) {
                 in_depends = 0
+                print
             }
             next
         }
