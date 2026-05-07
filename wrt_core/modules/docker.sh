@@ -1,20 +1,5 @@
 #!/usr/bin/env bash
 
-DOCKER_STACK_MODULE_DIR=$(cd "$(dirname "${BASH_SOURCE[0]}")" && pwd)
-DOCKER_STACK_REPO_ROOT=$(cd "$DOCKER_STACK_MODULE_DIR/../.." && pwd)
-
-DOCKER_STACK_COMPONENTS=(
-    "runc"
-    "containerd"
-    "docker"
-    "dockerd"
-)
-
-DOCKER_STACK_DOCKERD_MAKEFILE_REL="package/feeds/packages/dockerd/Makefile"
-DOCKER_STACK_DOCKERD_CONFIG_REL="package/feeds/packages/dockerd/files/etc/config/dockerd"
-DOCKER_STACK_DOCKERD_INIT_REL="package/feeds/packages/dockerd/files/dockerd.init"
-DOCKER_STACK_DOCKERD_SYSCTL_REL="package/feeds/packages/dockerd/files/etc/sysctl.d/sysctl-br-netfilter-ip.conf"
-
 _docker_stack_resolve_component_makefile() {
     local build_dir="$1"
     local component="$2"
@@ -74,77 +59,6 @@ _docker_stack_normalize_build_dir() {
         echo "$path"
     else
         echo "$(pwd)/$path"
-    fi
-}
-
-_docker_stack_validate_project() {
-    local project_dir="$1"
-    local component
-    local mk_path=""
-
-    if [ ! -d "$project_dir" ]; then
-        echo "错误：OpenWrt 项目目录不存在: $project_dir" >&2
-        return 1
-    fi
-
-    for component in "${DOCKER_STACK_COMPONENTS[@]}"; do
-        mk_path=$(_docker_stack_resolve_component_makefile "$project_dir" "$component") || return 1
-    done
-
-    return 0
-}
-
-_docker_stack_resolve_repo_from_makefile() {
-    local mk_path="$1"
-    local pkg_repo=""
-
-    pkg_repo=$(grep -oE "^PKG_GIT_URL.*github.com(/[-_a-zA-Z0-9]{1,}){2}" "$mk_path" | awk -F"/" '{print $(NF - 1) "/" $NF}' || true)
-    if [ -z "$pkg_repo" ]; then
-        pkg_repo=$(grep -oE "^PKG_SOURCE_URL.*github.com(/[-_a-zA-Z0-9]{1,}){2}" "$mk_path" | awk -F"/" '{print $(NF - 1) "/" $NF}' || true)
-    fi
-
-    if [ -z "$pkg_repo" ]; then
-        echo "错误：无法从 $mk_path 提取 GitHub 仓库路径" >&2
-        return 1
-    fi
-
-    echo "$pkg_repo"
-}
-
-_docker_stack_resolve_target_tag() {
-    local repo="$1"
-    local branch="$2"
-    local explicit_tag="$3"
-
-    if [ -n "$explicit_tag" ]; then
-        echo "$explicit_tag"
-        return 0
-    fi
-
-    local target_tag
-    if ! target_tag=$(curl -fsSL "https://api.github.com/repos/$repo/$branch" | jq -r '.[0] | .tag_name // .name'); then
-        echo "错误：从 GitHub 获取 $repo 的 $branch 信息失败" >&2
-        return 1
-    fi
-
-    if [ -z "$target_tag" ] || [ "$target_tag" = "null" ]; then
-        echo "错误：无法解析 $repo 的目标版本标签" >&2
-        return 1
-    fi
-
-    echo "$target_tag"
-}
-
-_docker_stack_update_dockerd_git_ref() {
-    local mk_path="$1"
-    local version_clean="$2"
-    local major=""
-
-    major=$(echo "$version_clean" | awk -F. '{print $1}')
-    if [[ "$major" =~ ^[0-9]+$ ]] && [ "$major" -ge 29 ]; then
-        sed -i 's|^PKG_GIT_REF:=.*|PKG_GIT_REF:=docker-v$(PKG_VERSION)|g' "$mk_path"
-    else
-        sed -i 's|^PKG_GIT_REF:=.*|PKG_GIT_REF:=v$(PKG_VERSION)|g' "$mk_path"
     fi
 }
 
@@ -924,14 +838,26 @@ _docker_stack_ensure_nftables_init_support() {
     }
 }
 
-_docker_stack_update_dockerd_nftables_defaults() {
-    local build_dir="$1"
-    local dry_run="$2"
-    local storage_driver="$3"
+docker_stack_sync_nftables_compat() {
+    local build_dir="${1:-${BUILD_DIR:-}}"
+    local dry_run="${2:-${DOCKER_STACK_DRY_RUN:-0}}"
+    local storage_driver="${3:-${DOCKER_STACK_STORAGE_DRIVER:-vfs}}"
     local dockerd_makefile=""
     local dockerd_config=""
     local dockerd_init=""
     local dockerd_sysctl=""
+
+    [ -n "$build_dir" ] || {
+        echo "错误：docker_stack_sync_nftables_compat 缺少 build_dir 参数" >&2
+        return 1
+    }
+
+    if [ "$dry_run" != "0" ] && [ "$dry_run" != "1" ]; then
+        echo "错误：docker_stack_sync_nftables_compat 仅支持 dry_run 为 0 或 1，当前值: $dry_run" >&2
+        return 1
+    fi
+
+    build_dir=$(_docker_stack_normalize_build_dir "$build_dir")
 
     dockerd_makefile=$(_docker_stack_resolve_component_makefile "$build_dir" "dockerd") || return 1
     dockerd_config=$(_docker_stack_resolve_dockerd_file "$build_dir" "files/etc/config/dockerd") || return 1
@@ -987,193 +913,4 @@ _docker_stack_update_dockerd_nftables_defaults() {
 
     _docker_stack_set_or_append_sysctl_value "$dockerd_sysctl" "net.ipv4.ip_forward" "1" || return 1
     _docker_stack_set_or_append_sysctl_value "$dockerd_sysctl" "net.ipv6.conf.all.forwarding" "1" || return 1
-}
-
-_docker_stack_resolve_short_commit() {
-    local mk_path="$1"
-    local version_clean="$2"
-    local pkg_git_url=""
-    local pkg_git_ref=""
-
-    pkg_git_url=$(awk -F"=" '/^PKG_GIT_URL:=/ {print $NF}' "$mk_path")
-    pkg_git_ref=$(awk -F"=" '/^PKG_GIT_REF:=/ {print $NF}' "$mk_path")
-
-    if [ -z "$pkg_git_url" ] || [ -z "$pkg_git_ref" ]; then
-        echo "错误：$mk_path 缺少 PKG_GIT_URL 或 PKG_GIT_REF，无法更新 PKG_GIT_SHORT_COMMIT" >&2
-        return 1
-    fi
-
-    local pkg_git_ref_resolved=""
-    local pkg_git_ref_tag=""
-    pkg_git_ref_resolved=$(echo "$pkg_git_ref" | sed "s/\$(PKG_VERSION)/$version_clean/g; s/\${PKG_VERSION}/$version_clean/g")
-    pkg_git_ref_tag="${pkg_git_ref_resolved#refs/tags/}"
-
-    local remote_url=""
-    if [[ "$pkg_git_url" = http* ]]; then
-        remote_url="$pkg_git_url"
-    else
-        remote_url="https://$pkg_git_url"
-    fi
-
-    local ls_remote_output=""
-    ls_remote_output=$(git ls-remote "$remote_url" "refs/tags/${pkg_git_ref_tag}" "refs/tags/${pkg_git_ref_tag}^{}" 2>/dev/null || true)
-
-    local commit_sha=""
-    commit_sha=$(echo "$ls_remote_output" | awk '/\^\{\}$/ {print $1; exit}')
-    if [ -z "$commit_sha" ]; then
-        commit_sha=$(echo "$ls_remote_output" | awk 'NR==1{print $1}')
-    fi
-    if [ -z "$commit_sha" ]; then
-        commit_sha=$(git ls-remote "$remote_url" "${pkg_git_ref_resolved}^{}" 2>/dev/null | awk 'NR==1{print $1}')
-    fi
-    if [ -z "$commit_sha" ]; then
-        commit_sha=$(git ls-remote "$remote_url" "$pkg_git_ref_resolved" 2>/dev/null | awk 'NR==1{print $1}')
-    fi
-
-    if [ -z "$commit_sha" ]; then
-        echo "错误：无法从 $remote_url 获取 $pkg_git_ref_resolved 的提交哈希" >&2
-        return 1
-    fi
-
-    echo "$commit_sha" | cut -c1-7
-}
-
-_docker_stack_compute_package_hash() {
-    local mk_path="$1"
-    local version_clean="$2"
-
-    local pkg_name=""
-    local pkg_source=""
-    local pkg_source_url=""
-    local pkg_git_url=""
-    local pkg_git_ref=""
-
-    pkg_name=$(awk -F"=" '/^PKG_NAME:=/ {print $NF}' "$mk_path" | grep -oE "[-_:/\$\(\)\?\.a-zA-Z0-9]{1,}")
-    pkg_source=$(awk -F"=" '/^PKG_SOURCE:=/ {print $NF}' "$mk_path" | grep -oE "[-_:/\$\(\)\?\.a-zA-Z0-9]{1,}")
-    pkg_source_url=$(awk -F"=" '/^PKG_SOURCE_URL:=/ {print $NF}' "$mk_path" | grep -oE "[-_:/\$\(\)\{\}\?\.a-zA-Z0-9]{1,}")
-    pkg_git_url=$(awk -F"=" '/^PKG_GIT_URL:=/ {print $NF}' "$mk_path")
-    pkg_git_ref=$(awk -F"=" '/^PKG_GIT_REF:=/ {print $NF}' "$mk_path")
-
-    pkg_source_url=${pkg_source_url//\$\(PKG_GIT_URL\)/$pkg_git_url}
-    pkg_source_url=${pkg_source_url//\$\(PKG_GIT_REF\)/$pkg_git_ref}
-    pkg_source_url=${pkg_source_url//\$\(PKG_NAME\)/$pkg_name}
-    pkg_source_url=$(echo "$pkg_source_url" | sed "s/\${PKG_VERSION}/$version_clean/g; s/\$(PKG_VERSION)/$version_clean/g")
-
-    pkg_source=${pkg_source//\$\(PKG_NAME\)/$pkg_name}
-    pkg_source=${pkg_source//\$\(PKG_VERSION\)/$version_clean}
-
-    local pkg_hash=""
-    if ! pkg_hash=$(curl -fsSL "$pkg_source_url$pkg_source" | sha256sum | cut -b -64); then
-        echo "错误：从 $pkg_source_url$pkg_source 获取软件包哈希失败" >&2
-        return 1
-    fi
-
-    echo "$pkg_hash"
-}
-
-_docker_stack_update_component() {
-    local component="$1"
-    local mk_path="$2"
-    local branch="$3"
-    local explicit_tag="$4"
-    local dry_run="$5"
-
-    if [ ! -f "$mk_path" ]; then
-        echo "错误：未找到 $component Makefile: $mk_path" >&2
-        return 1
-    fi
-
-    local repo=""
-    repo=$(_docker_stack_resolve_repo_from_makefile "$mk_path")
-
-    local target_tag=""
-    target_tag=$(_docker_stack_resolve_target_tag "$repo" "$branch" "$explicit_tag")
-
-    local version_clean="${target_tag#v}"
-
-    if [ "$dry_run" = "1" ]; then
-        if [ "$component" = "dockerd" ]; then
-            local major=""
-            major=$(echo "$version_clean" | awk -F. '{print $1}')
-            if [[ "$major" =~ ^[0-9]+$ ]] && [ "$major" -ge 29 ]; then
-                echo "[dry-run] dockerd will use PKG_GIT_REF:=docker-v\$(PKG_VERSION)"
-            else
-                echo "[dry-run] dockerd will use PKG_GIT_REF:=v\$(PKG_VERSION)"
-            fi
-        fi
-        echo "[dry-run] $component -> $target_tag ($mk_path)"
-        return 0
-    fi
-
-    if [ "$component" = "dockerd" ]; then
-        _docker_stack_update_dockerd_git_ref "$mk_path" "$version_clean"
-    fi
-
-    if grep -q '^PKG_GIT_SHORT_COMMIT:=' "$mk_path"; then
-        local short_commit=""
-        short_commit=$(_docker_stack_resolve_short_commit "$mk_path" "$version_clean")
-        sed -i "s/^PKG_GIT_SHORT_COMMIT:=.*/PKG_GIT_SHORT_COMMIT:=$short_commit/g" "$mk_path"
-    fi
-
-    local pkg_hash=""
-    pkg_hash=$(_docker_stack_compute_package_hash "$mk_path" "$version_clean")
-
-    sed -i "s/^PKG_VERSION:=.*/PKG_VERSION:=$version_clean/g" "$mk_path"
-    sed -i "s/^PKG_HASH:=.*/PKG_HASH:=$pkg_hash/g" "$mk_path"
-
-    echo "更新 $component 到 $version_clean ($pkg_hash)"
-}
-
-update_docker_stack() {
-    local build_dir="${BUILD_DIR:-}"
-    local runc_version="${DOCKER_STACK_RUNC_VERSION:-v1.3.3}"
-    local containerd_version="${DOCKER_STACK_CONTAINERD_VERSION:-v1.7.28}"
-    local docker_version="${DOCKER_STACK_DOCKER_VERSION:-v29.3.1}"
-    local dockerd_version="${DOCKER_STACK_DOCKERD_VERSION:-$docker_version}"
-    local storage_driver="${DOCKER_STACK_STORAGE_DRIVER:-vfs}"
-    local dry_run="${DOCKER_STACK_DRY_RUN:-0}"
-    local runc_makefile=""
-    local containerd_makefile=""
-    local docker_makefile=""
-    local dockerd_makefile=""
-
-    if [ -z "$build_dir" ]; then
-        echo "错误：update_docker_stack 依赖 BUILD_DIR，请先在调用方设置 BUILD_DIR" >&2
-        return 1
-    fi
-
-    if [ "$dry_run" != "0" ] && [ "$dry_run" != "1" ]; then
-        echo "错误：DOCKER_STACK_DRY_RUN 仅支持 0 或 1，当前值: $dry_run" >&2
-        return 1
-    fi
-
-    build_dir=$(_docker_stack_normalize_build_dir "$build_dir")
-    _docker_stack_validate_project "$build_dir" || return 1
-
-    runc_makefile=$(_docker_stack_resolve_component_makefile "$build_dir" "runc") || return 1
-    containerd_makefile=$(_docker_stack_resolve_component_makefile "$build_dir" "containerd") || return 1
-    docker_makefile=$(_docker_stack_resolve_component_makefile "$build_dir" "docker") || return 1
-    dockerd_makefile=$(_docker_stack_resolve_component_makefile "$build_dir" "dockerd") || return 1
-
-    echo "Docker 相关组件版本处理开始:"
-    echo "  BUILD_DIR=$build_dir"
-    echo "  runc=$runc_version"
-    echo "  containerd=$containerd_version"
-    echo "  docker=$docker_version"
-    echo "  dockerd=$dockerd_version"
-    echo "  storage_driver=$storage_driver"
-
-    _docker_stack_update_component "runc" "$runc_makefile" "releases" "$runc_version" "$dry_run" || return 1
-    _docker_stack_update_component "containerd" "$containerd_makefile" "releases" "$containerd_version" "$dry_run" || return 1
-    _docker_stack_update_component "docker" "$docker_makefile" "tags" "$docker_version" "$dry_run" || return 1
-    _docker_stack_update_component "dockerd" "$dockerd_makefile" "releases" "$dockerd_version" "$dry_run" || return 1
-    _docker_stack_update_dockerd_nftables_defaults "$build_dir" "$dry_run" "$storage_driver" || return 1
-
-    if [ "$dry_run" = "1" ]; then
-        echo "dry-run 完成，未修改文件。"
-    else
-        echo "Docker 相关组件版本更新完成。"
-    fi
-
-    return 0
 }
