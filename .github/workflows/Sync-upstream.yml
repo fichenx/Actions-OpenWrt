@@ -78,6 +78,7 @@ jobs:
         #处理update.sh
         sed -i -e 's/192.168.1.1/192.168.123.1/' \
                -e 's/^[[:space:]]*update_lucky[[:space:]]*$/#&/' \
+               -e 's|small8|fichenx|g' \
                wrt_core/update.sh
         #处理modules/*.sh
         sed -i -e 's|kenzok8/small-package|fichenx/openwrt-package\;js|' \
