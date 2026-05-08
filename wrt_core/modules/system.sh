@@ -460,6 +460,35 @@ fix_opkg_check() {
     fi
 }
 
+fix_netfilter_kmod_clash() {
+    local netfilter_mk="$BUILD_DIR/package/kernel/linux/modules/netfilter.mk"
+
+    if [ ! -f "$netfilter_mk" ]; then
+        echo "Netfilter makefile not found: $netfilter_mk" >&2
+        return 1
+    fi
+
+    if grep -q 'DEPENDS:=+(!(LINUX_6_12||LINUX_6_18)):kmod-iptables' "$netfilter_mk"; then
+        echo "Netfilter kmod clash workaround already applied"
+        return 0
+    fi
+
+    if grep -q 'DEPENDS:=+!LINUX_6_12:kmod-iptables' "$netfilter_mk"; then
+        echo "Applying netfilter kmod clash workaround for Linux 6.12/6.18..."
+        sed -i 's/DEPENDS:=+!LINUX_6_12:kmod-iptables/DEPENDS:=+(!(LINUX_6_12||LINUX_6_18)):kmod-iptables/' "$netfilter_mk"
+        return 0
+    fi
+
+    if grep -q 'DEPENDS:=+(!LINUX_6_12&&!LINUX_6_18):kmod-iptables' "$netfilter_mk"; then
+        echo "Normalizing netfilter kmod clash workaround expression..."
+        sed -i 's/DEPENDS:=+(!LINUX_6_12\&\&!LINUX_6_18):kmod-iptables/DEPENDS:=+(!(LINUX_6_12||LINUX_6_18)):kmod-iptables/' "$netfilter_mk"
+        return 0
+    fi
+
+    echo "Netfilter kmod clash workaround target not found in $netfilter_mk" >&2
+    return 1
+}
+
 install_pbr_cmcc() {
     local pbr_pkg_dir="$BUILD_DIR/package/feeds/packages/pbr"
     local pbr_dir="$pbr_pkg_dir/files/usr/share/pbr"

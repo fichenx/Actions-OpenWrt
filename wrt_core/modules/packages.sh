@@ -70,7 +70,19 @@ update_golang() {
 }
 
 install_fichenx() {
-    ./scripts/feeds install -p fichenx -f luci-app-argon-config luci-theme-design luci-app-design-config luci-app-watchcat-plus luci-app-wol luci-app-timecontrol \
+    local repo_url="https://github.com/fichenx/openwrt-package;js.git"
+    local feed_name="fichenx"
+    local feeds_path
+    local fullconenat_nft_dir="$BUILD_DIR/package/network/utils/fullconenat-nft"
+    local fullconenat_dir="$BUILD_DIR/package/network/utils/fullconenat"
+
+    # 将稀疏克隆下来的包放到一个本地自定义 feed 目录中
+    local custom_feed_dir="$BUILD_DIR/custom_feeds/$feed_name"
+    local tmp_dir
+    tmp_dir=$(mktemp -d)
+
+    # 1. 集中管理你要的包名
+    local sparse_packages=(
         xray-core xray-plugin dns2tcp dns2socks haproxy hysteria \
         naiveproxy shadowsocks-rust sing-box v2ray-core v2ray-geodata geoview v2ray-plugin \
         tuic-client chinadns-ng ipt2socks tcping trojan-plus simple-obfs shadowsocksr-libev \
@@ -80,6 +92,113 @@ install_fichenx() {
         lucky luci-app-lucky luci-app-openclash luci-app-homeproxy luci-app-amlogic \
         oaf open-app-filter luci-app-oaf easytier luci-app-easytier \
         msd_lite luci-app-msd_lite cups luci-app-cupsd
+    )
+    local required_feed_dirs=(
+        cups tcping v2ray-geodata luci-lib-taskd luci-app-openclash
+        luci-app-quickstart luci-app-store luci-app-homeproxy luci-app-mosdns
+        open-app-filter luci-app-oaf lucky luci-app-lucky luci-app-easytier
+    )
+    local missing_packages=()
+    local missing_feed_dirs=()
+
+    if [ ! -d "$fullconenat_nft_dir" ]; then
+        sparse_packages+=(fullconenat-nft)
+    fi
+    if [ ! -d "$fullconenat_dir" ]; then
+        sparse_packages+=(fullconenat)
+    fi
+
+    feeds_path=$(get_feeds_path)
+
+    # 2. 准备本地 feed 目录
+    if [ -d "$custom_feed_dir" ]; then
+        echo "清理旧的自定义 feed 目录..."
+        rm -rf "$custom_feed_dir"
+    fi
+    mkdir -p "$custom_feed_dir"
+
+    # 3. 稀疏克隆拉取骨架
+    echo "正在使用稀疏克隆(sparse-checkout)拉取 $feed_name 仓库骨架..."
+    if ! git clone --depth 1 --filter=blob:none --sparse "$repo_url" "$tmp_dir"; then
+        echo "错误：从 $repo_url 拉取仓库骨架失败" >&2
+        return 1
+    fi
+
+    # 4. 告诉 Git 只拉取数组中的目录
+    echo "配置需要下载的包列表并拉取文件..."
+    if ! git -C "$tmp_dir" sparse-checkout set "${sparse_packages[@]}"; then
+        echo "错误：配置 $feed_name 稀疏检出目录失败" >&2
+        rm -rf "$tmp_dir" "$custom_feed_dir"
+        return 1
+    fi
+
+    # 5. 将拉取到的包移入我们的 custom_feeds 目录
+    for pkg in "${sparse_packages[@]}"; do
+        if [ -d "$tmp_dir/$pkg" ]; then
+            mv "$tmp_dir/$pkg" "$custom_feed_dir/"
+        else
+            missing_packages+=("$pkg")
+        fi
+    done
+
+    # 6. 清理临时克隆目录
+    rm -rf "$tmp_dir"
+
+    if [ ${#missing_packages[@]} -ne 0 ]; then
+        printf '错误：%s 仓库缺少以下必要目录：\n' "$feed_name" >&2
+        printf '  - %s\n' "${missing_packages[@]}" >&2
+        rm -rf "$custom_feed_dir"
+        return 1
+    fi
+
+    # 7. 将本地目录作为 src-link 写入当前生效的 feed 配置
+    sed -i "/[[:space:]]$feed_name[[:space:]]/d" "$feeds_path"
+    [ -z "$(tail -c 1 "$feeds_path")" ] || echo "" >>"$feeds_path"
+    echo "src-link $feed_name $custom_feed_dir" >>"$feeds_path"
+    echo "已将 $feed_name 作为本地源 (src-link) 添加到 $feeds_path"
+
+    # 8. 更新 feed 索引，后续统一交给 install_feeds 进行安装
+    echo "正在更新 $feed_name 本地 feed 索引..."
+    ./scripts/feeds update "$feed_name"
+
+    collect_missing_directories "$BUILD_DIR/feeds/$feed_name" required_feed_dirs missing_feed_dirs
+
+    if [ ${#missing_feed_dirs[@]} -ne 0 ]; then
+        printf '错误：%s 本地 feed 未生成以下仓库依赖路径：\n' "$feed_name" >&2
+        printf '  - %s\n' "${missing_feed_dirs[@]}" >&2
+        return 1
+    fi
+
+    echo "$feed_name 指定包处理完成并已成功加载到 feeds 体系中！"
+}
+
+verify_fichenx_installed_paths() {
+    local feed_name="fichenx"
+    local required_package_dirs=(
+        luci-app-adguardhome luci-app-mosdns v2ray-geodata luci-app-easytier
+    )
+    local missing_package_dirs=()
+
+    collect_missing_directories "$BUILD_DIR/package/feeds/$feed_name" required_package_dirs missing_package_dirs
+
+    if [ ${#missing_package_dirs[@]} -ne 0 ]; then
+        printf '错误：%s 安装后缺少以下仓库依赖路径：\n' "$feed_name" >&2
+        printf '  - %s\n' "${missing_package_dirs[@]}" >&2
+        return 1
+    fi
+}
+
+collect_missing_directories() {
+    local base_dir="$1"
+    local -n required_dirs_ref="$2"
+    local -n missing_dirs_ref="$3"
+    local dir_name
+
+    for dir_name in "${required_dirs_ref[@]}"; do
+        if [ ! -d "$base_dir/$dir_name" ]; then
+            missing_dirs_ref+=("${base_dir#$BUILD_DIR/}/$dir_name")
+        fi
+    done
 }
 
 install_passwall() {
@@ -90,15 +209,6 @@ install_passwall() {
 install_nikki() {
     echo "正在从官方仓库安装 nikki..."
     ./scripts/feeds install -p nikki -f nikki luci-app-nikki
-}
-
-install_fullconenat() {
-    if [ ! -d $BUILD_DIR/package/network/utils/fullconenat-nft ]; then
-        ./scripts/feeds install -p fichenx -f fullconenat-nft
-    fi
-    if [ ! -d $BUILD_DIR/package/network/utils/fullconenat ]; then
-        ./scripts/feeds install -p fichenx -f fullconenat
-    fi
 }
 
 check_default_settings() {
