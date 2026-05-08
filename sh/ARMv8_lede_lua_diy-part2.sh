@@ -414,5 +414,11 @@ git_sparse_clone master https://github.com/immortalwrt/immortalwrt package/libs/
 rm -rf feeds/packages/net/rp-pppoe
 git_sparse_clone master https://github.com/immortalwrt/packages net/rp-pppoe && mv -n rp-pppoe feeds/packages/net/rp-pppoe
 
+
+#20260508：修复breakings替换HAProxy后的编译问题，使用coolsnowwolf的HAProxy版本
+rm -rf feeds/packages/net/haproxy
+git_sparse_clone master https://github.com/coolsnowwolf/packages net/haproxy && mv -n haproxy feeds/packages/net/haproxy
+
+
 echo "========================="
 echo " 自定义(fichen) 配置完成……"
