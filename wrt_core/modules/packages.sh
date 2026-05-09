@@ -180,7 +180,7 @@ install_custom_feed() {
     fi
 
     custom_feed_sources=(
-        "fichenx/openwrt-package;js|https://github.com/fichenx/openwrt-package.git;js||${base_custom_feed_packages[*]}"
+        "fichenx/openwrt-package|https://github.com/fichenx/openwrt-package;js||${base_custom_feed_packages[*]}"
         "sbwml/luci-app-mosdns|https://github.com/sbwml/luci-app-mosdns.git|v5|mosdns luci-app-mosdns"
         "Openwrt-Passwall/openwrt-passwall|https://github.com/Openwrt-Passwall/openwrt-passwall.git|main|luci-app-passwall"
         "nikkinikki-org/OpenWrt-nikki|https://github.com/nikkinikki-org/OpenWrt-nikki.git|main|nikki luci-app-nikki"
