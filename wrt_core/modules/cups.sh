@@ -1,7 +1,7 @@
 #!/usr/bin/env bash
 
 fix_cups_libcups_avahi_depends() {
-    local makefile_path="$BUILD_DIR/feeds/fichenx/cups/Makefile"
+    local makefile_path="$(get_custom_feed_worktree_dir)/cups/Makefile"
     
     # Check if file exists
     if [ ! -f "$makefile_path" ]; then

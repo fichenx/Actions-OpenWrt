@@ -24,11 +24,11 @@ update_feeds() {
     FEEDS_PATH=$(get_feeds_path)
     sed -i '/^#/d' "$FEEDS_PATH"
     sed -i '/packages_ext/d' "$FEEDS_PATH"
+    sed -i '/[[:space:]]fichenx[[:space:]]/d' "$FEEDS_PATH"
+    sed -i '/[[:space:]]custom_feed[[:space:]]/d' "$FEEDS_PATH"
 
-    append_feed_if_missing "$FEEDS_PATH" "openwrt-passwall" "src-git passwall https://github.com/Openwrt-Passwall/openwrt-passwall;main"
     append_feed_if_missing "$FEEDS_PATH" "openwrt_bandix" "src-git openwrt_bandix https://github.com/timsaya/openwrt-bandix.git;main"
     append_feed_if_missing "$FEEDS_PATH" "luci_app_bandix" "src-git luci_app_bandix https://github.com/timsaya/luci-app-bandix.git;main"
-    append_feed_if_missing "$FEEDS_PATH" "nikki" "src-git nikki https://github.com/nikkinikki-org/OpenWrt-nikki.git;main"
 
     if [ ! -f "$BUILD_DIR/include/bpf.mk" ]; then
         touch "$BUILD_DIR/include/bpf.mk"
@@ -39,17 +39,5 @@ update_feeds() {
 
 install_feeds() {
     ./scripts/feeds update -i
-    for dir in $BUILD_DIR/feeds/*; do
-        if [ -d "$dir" ] && [[ ! "$dir" == *.tmp ]] && [[ ! "$dir" == *.index ]] && [[ ! "$dir" == *.targetindex ]]; then
-            local feed_name
-            feed_name=$(basename "$dir")
-            if [[ "$feed_name" == "passwall" ]]; then
-                install_passwall
-            elif [[ "$feed_name" == "nikki" ]]; then
-                install_nikki
-            else
-                ./scripts/feeds install -f -ap "$feed_name"
-            fi
-        fi
-    done
+    ./scripts/feeds install -a -f
 }

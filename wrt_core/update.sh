@@ -44,7 +44,7 @@ main() {
     update_feeds
     remove_unwanted_packages
     remove_tweaked_packages
-    install_fichenx
+    install_custom_feed
     update_homeproxy
     fix_default_set
     fix_miniupnpd
@@ -89,7 +89,7 @@ main() {
     remove_attendedsysupgrade
     fix_kconfig_recursive_dependency
     install_feeds
-    verify_fichenx_installed_paths
+    verify_custom_feed_installed_paths
     docker_stack_sync_nftables_compat "$BUILD_DIR" "0"
     fix_cups_libcups_avahi_depends
     fix_easytier_lua

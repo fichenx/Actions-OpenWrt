@@ -136,23 +136,26 @@ update_ath11k_fw() {
 }
 
 fix_mkpkg_format_invalid() {
+    local custom_feed_worktree_dir
+    custom_feed_worktree_dir=$(get_custom_feed_worktree_dir)
+
     if [[ $BUILD_DIR =~ "imm-nss" ]]; then
-        if [ -f $BUILD_DIR/feeds/fichenx/v2ray-geodata/Makefile ]; then
-            sed -i 's/VER)-\$(PKG_RELEASE)/VER)-r\$(PKG_RELEASE)/g' $BUILD_DIR/feeds/fichenx/v2ray-geodata/Makefile
+        if [ -f "$custom_feed_worktree_dir/v2ray-geodata/Makefile" ]; then
+            sed -i 's/VER)-\$(PKG_RELEASE)/VER)-r\$(PKG_RELEASE)/g' "$custom_feed_worktree_dir/v2ray-geodata/Makefile"
         fi
-        if [ -f $BUILD_DIR/feeds/fichenx/luci-lib-taskd/Makefile ]; then
-            sed -i 's/>=1\.0\.3-1/>=1\.0\.3-r1/g' $BUILD_DIR/feeds/fichenx/luci-lib-taskd/Makefile
+        if [ -f "$custom_feed_worktree_dir/luci-lib-taskd/Makefile" ]; then
+            sed -i 's/>=1\.0\.3-1/>=1\.0\.3-r1/g' "$custom_feed_worktree_dir/luci-lib-taskd/Makefile"
         fi
-        if [ -f $BUILD_DIR/feeds/fichenx/luci-app-openclash/Makefile ]; then
-            sed -i 's/PKG_RELEASE:=beta/PKG_RELEASE:=1/g' $BUILD_DIR/feeds/fichenx/luci-app-openclash/Makefile
+        if [ -f "$custom_feed_worktree_dir/luci-app-openclash/Makefile" ]; then
+            sed -i 's/PKG_RELEASE:=beta/PKG_RELEASE:=1/g' "$custom_feed_worktree_dir/luci-app-openclash/Makefile"
         fi
-        if [ -f $BUILD_DIR/feeds/fichenx/luci-app-quickstart/Makefile ]; then
-            sed -i 's/PKG_VERSION:=0\.8\.16-1/PKG_VERSION:=0\.8\.16/g' $BUILD_DIR/feeds/fichenx/luci-app-quickstart/Makefile
-            sed -i 's/PKG_RELEASE:=$/PKG_RELEASE:=1/g' $BUILD_DIR/feeds/fichenx/luci-app-quickstart/Makefile
+        if [ -f "$custom_feed_worktree_dir/luci-app-quickstart/Makefile" ]; then
+            sed -i 's/PKG_VERSION:=0\.8\.16-1/PKG_VERSION:=0\.8\.16/g' "$custom_feed_worktree_dir/luci-app-quickstart/Makefile"
+            sed -i 's/PKG_RELEASE:=$/PKG_RELEASE:=1/g' "$custom_feed_worktree_dir/luci-app-quickstart/Makefile"
         fi
-        if [ -f $BUILD_DIR/feeds/fichenx/luci-app-store/Makefile ]; then
-            sed -i 's/PKG_VERSION:=0\.1\.27-1/PKG_VERSION:=0\.1\.27/g' $BUILD_DIR/feeds/fichenx/luci-app-store/Makefile
-            sed -i 's/PKG_RELEASE:=$/PKG_RELEASE:=1/g' $BUILD_DIR/feeds/fichenx/luci-app-store/Makefile
+        if [ -f "$custom_feed_worktree_dir/luci-app-store/Makefile" ]; then
+            sed -i 's/PKG_VERSION:=0\.1\.27-1/PKG_VERSION:=0\.1\.27/g' "$custom_feed_worktree_dir/luci-app-store/Makefile"
+            sed -i 's/PKG_RELEASE:=$/PKG_RELEASE:=1/g' "$custom_feed_worktree_dir/luci-app-store/Makefile"
         fi
     fi
 }
@@ -181,7 +184,7 @@ change_cpuusage() {
 }
 
 update_tcping() {
-    local tcping_path="$BUILD_DIR/feeds/fichenx/tcping/Makefile"
+    local tcping_path="$(get_custom_feed_worktree_dir)/tcping/Makefile"
     local url="https://raw.githubusercontent.com/Openwrt-Passwall/openwrt-passwall-packages/refs/heads/main/tcping/Makefile"
 
     if [ -d "$(dirname "$tcping_path")" ]; then
@@ -221,12 +224,12 @@ EOF
 }
 
 apply_passwall_tweaks() {
-    local chnlist_path="$BUILD_DIR/feeds/passwall/luci-app-passwall/root/usr/share/passwall/rules/chnlist"
+    local chnlist_path="$(get_custom_feed_worktree_dir)/luci-app-passwall/root/usr/share/passwall/rules/chnlist"
     if [ -f "$chnlist_path" ]; then
         >"$chnlist_path"
     fi
 
-    local xray_util_path="$BUILD_DIR/feeds/passwall/luci-app-passwall/luasrc/passwall/util_xray.lua"
+    local xray_util_path="$(get_custom_feed_worktree_dir)/luci-app-passwall/luasrc/passwall/util_xray.lua"
     if [ -f "$xray_util_path" ]; then
         sed -i 's/maxRTT = "1s"/maxRTT = "2s"/g' "$xray_util_path"
         sed -i 's/sampling = 3/sampling = 5/g' "$xray_util_path"
@@ -285,7 +288,7 @@ update_menu_location() {
         sed -i 's/nas/services/g' "$samba4_path"
     fi
 
-    local tailscale_path="$BUILD_DIR/feeds/fichenx/luci-app-tailscale/root/usr/share/luci/menu.d/luci-app-tailscale.json"
+    local tailscale_path="$(get_custom_feed_worktree_dir)/luci-app-tailscale/root/usr/share/luci/menu.d/luci-app-tailscale.json"
     if [ -d "$(dirname "$tailscale_path")" ] && [ -f "$tailscale_path" ]; then
         sed -i 's/services/vpn/g' "$tailscale_path"
     fi
@@ -328,14 +331,14 @@ update_script_priority() {
         sed -i 's/START=.*/START=89/g' "$pbuf_path"
     fi
 
-    local mosdns_path="$BUILD_DIR/package/feeds/fichenx/luci-app-mosdns/root/etc/init.d/mosdns"
+    local mosdns_path="$(get_custom_feed_package_dir)/luci-app-mosdns/root/etc/init.d/mosdns"
     if [ -d "${mosdns_path%/*}" ] && [ -f "$mosdns_path" ]; then
         sed -i 's/START=.*/START=94/g' "$mosdns_path"
     fi
 }
 
 update_mosdns_deconfig() {
-    local mosdns_conf="$BUILD_DIR/feeds/fichenx/luci-app-mosdns/root/etc/config/mosdns"
+    local mosdns_conf="$(get_custom_feed_worktree_dir)/luci-app-mosdns/root/etc/config/mosdns"
     if [ -d "${mosdns_conf%/*}" ] && [ -f "$mosdns_conf" ]; then
         sed -i 's/8000/300/g' "$mosdns_conf"
         sed -i 's/5335/5336/g' "$mosdns_conf"
@@ -343,7 +346,7 @@ update_mosdns_deconfig() {
 }
 
 fix_quickstart() {
-    local file_path="$BUILD_DIR/feeds/fichenx/luci-app-quickstart/luasrc/controller/istore_backend.lua"
+    local file_path="$(get_custom_feed_worktree_dir)/luci-app-quickstart/luasrc/controller/istore_backend.lua"
     local url="https://gist.githubusercontent.com/puteulanus/1c180fae6bccd25e57eb6d30b7aa28aa/raw/istore_backend.lua"
     if [ -f "$file_path" ]; then
         echo "正在修复 quickstart..."
@@ -355,9 +358,9 @@ fix_quickstart() {
 }
 
 update_oaf_deconfig() {
-    local conf_path="$BUILD_DIR/feeds/fichenx/open-app-filter/files/appfilter.config"
-    local uci_def="$BUILD_DIR/feeds/fichenx/luci-app-oaf/root/etc/uci-defaults/94_feature_3.0"
-    local disable_path="$BUILD_DIR/feeds/fichenx/luci-app-oaf/root/etc/uci-defaults/99_disable_oaf"
+    local conf_path="$(get_custom_feed_worktree_dir)/open-app-filter/files/appfilter.config"
+    local uci_def="$(get_custom_feed_worktree_dir)/luci-app-oaf/root/etc/uci-defaults/94_feature_3.0"
+    local disable_path="$(get_custom_feed_worktree_dir)/luci-app-oaf/root/etc/uci-defaults/99_disable_oaf"
 
     if [ -d "${conf_path%/*}" ] && [ -f "$conf_path" ]; then
         sed -i \
@@ -382,7 +385,7 @@ EOF
 }
 
 update_geoip() {
-    local geodata_path="$BUILD_DIR/package/feeds/fichenx/v2ray-geodata/Makefile"
+    local geodata_path="$(get_custom_feed_package_dir)/v2ray-geodata/Makefile"
     if [ -d "${geodata_path%/*}" ] && [ -f "$geodata_path" ]; then
         local GEOIP_VER=$(awk -F"=" '/GEOIP_VER:=/ {print $NF}' $geodata_path | grep -oE "[0-9]{1,}")
         if [ -n "$GEOIP_VER" ]; then
@@ -414,14 +417,14 @@ fix_rust_compile_error() {
 }
 
 fix_easytier_lua() {
-    local file_path="$BUILD_DIR/package/feeds/fichenx/luci-app-easytier/luasrc/model/cbi/easytier.lua"
+    local file_path="$(get_custom_feed_package_dir)/luci-app-easytier/luasrc/model/cbi/easytier.lua"
     if [ -f "$file_path" ]; then
         sed -i 's/util.pcdata/xml.pcdata/g' "$file_path"
     fi
 }
 
 fix_easytier_mk() {
-    local mk_path="$BUILD_DIR/feeds/fichenx/luci-app-easytier/easytier/Makefile"
+    local mk_path="$(get_custom_feed_worktree_dir)/luci-app-easytier/easytier/Makefile"
     if [ -f "$mk_path" ]; then
         sed -i 's/!@(mips||mipsel)/!TARGET_mips \&\& !TARGET_mipsel/g' "$mk_path"
     fi
