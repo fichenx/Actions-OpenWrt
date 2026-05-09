@@ -81,15 +81,15 @@ jobs:
                -e 's|small8|fichenx|g' \
                wrt_core/update.sh
         #处理modules/*.sh
-        sed -i -e 's|kenzok8/small-package.git\|\||fichenx/openwrt-package\|js\||g' \
-               -e 's|kenzok8/small-package|fichenx/openwrt-package|g' \
-               -e 's|kenzok8/jell.git\|\|||fichenx/openwrt-package\|js\||g' \
-               -e 's|kenzok8/jell|fichenx/openwrt-package\;js|g' \
-               -e 's|small-package|fichenx/openwrt-package|g' \
-               -e 's|small8_packages|fichenx_package|g' \
-               -e 's|small8|fichenx|g' \
-               -e 's|build by ZqinKing|build by FICHEN(\$(TZ=UTC-8 date +%Y.%m.%d))|g' \
-               -e 's|^\(    \./scripts/feeds install -p fichenx -f \)|\1luci-app-argon-config luci-theme-design luci-app-design-config luci-app-watchcat-plus luci-app-wol luci-app-timecontrol \\\n        |' \
+        sed -i -e 's#kenzok8/small-package.git||#fichenx/openwrt-package|js|#g' \
+               -e 's#kenzok8/small-package#fichenx/openwrt-package#g' \
+               -e 's#kenzok8/jell.git||##fichenx/openwrt-package|js|#g' \
+               -e 's#kenzok8/jell#fichenx/openwrt-package#g' \
+               -e 's#small-package#fichenx/openwrt-package#g' \
+               -e 's#small8_packages#fichenx_package#g' \
+               -e 's#small8#fichenx#g' \
+               -e 's#build by ZqinKing#build by FICHEN(\$(TZ=UTC-8 date +%Y.%m.%d))#g' \
+               -e 's#^\(    \./scripts/feeds install -p fichenx -f \)#\1luci-app-argon-config luci-theme-design luci-app-design-config luci-app-watchcat-plus luci-app-wol luci-app-timecontrol \\\n        #' \
                wrt_core/modules/*.sh
         #处理breakings_diy-part2.sh
         sed -i -e 's|$GITHUB_WORKSPACE/PATCH|$GITHUB_WORKSPACE/patch/breakings_PATCH|g' \
