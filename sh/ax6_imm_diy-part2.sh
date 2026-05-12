@@ -71,6 +71,7 @@ rm -rf $BASE_PATH/action_build/feeds/packages/net/n2n/patches/110-cmake.patch
 
 #替换luci-app-timecontrol为gaobin89/luci-app-timecontrol
 rm -rf $BASE_PATH/action_build/feeds/luci/applications/luci-app-timecontrol
+rm -rf $BASE_PATH/action_build/package/luci-app-timecontrol
 git_sparse_clone js https://github.com/gaobin89/luci-app-timecontrol luci-app-timecontrol && mv -n luci-app-timecontrol $BASE_PATH/action_build/feeds/luci/applications/luci-app-timecontrol
 
 ##更换luci-theme-design
@@ -141,8 +142,8 @@ update_lucky
 sed -i 's/^PKG_BUILD_PARALLEL:=1/PKG_BUILD_PARALLEL:=0/' $BASE_PATH/action_build/feeds/packages/net/smartdns/Makefile
 
 #替换sing-box为coolsnowwolf版本
-rm -rf $BASE_PATH/action_build/feeds/fichenx/sing-box
-git_sparse_clone master https://github.com/coolsnowwolf/packages net/sing-box && mv -n sing-box $BASE_PATH/action_build/feeds/fichenx/sing-box
+#rm -rf $BASE_PATH/action_build/feeds/fichenx/sing-box
+#git_sparse_clone master https://github.com/coolsnowwolf/packages net/sing-box && mv -n sing-box $BASE_PATH/action_build/feeds/fichenx/sing-box
 
 echo "========================="
 echo " 自定义(fichen) 配置完成……"
