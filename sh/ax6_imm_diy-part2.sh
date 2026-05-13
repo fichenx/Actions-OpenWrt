@@ -139,6 +139,7 @@ update_lucky() {
 update_lucky
 
 #强制smartdns单线程编译
+sed -i '/PKG_BUILD_PARALLEL/i\.NOTPARALLEL:' $BASE_PATH/action_build/feeds/packages/net/smartdns/Makefile
 sed -i 's/^PKG_BUILD_PARALLEL:=1/PKG_BUILD_PARALLEL:=0/' $BASE_PATH/action_build/feeds/packages/net/smartdns/Makefile
 
 #替换sing-box为coolsnowwolf版本
