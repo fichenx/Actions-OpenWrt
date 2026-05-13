@@ -144,6 +144,7 @@ update_lucky
 #替换smartdns为fichenx/openwrt-package版本
 rm -rf $BASE_PATH/action_build/feeds/packages/net/smartdns
 git_sparse_clone js https://github.com/fichenx/openwrt-package smartdns && mv -n smartdns $BASE_PATH/action_build/feeds/packages/net/smartdns
+sed -i 's/^PKG_BUILD_PARALLEL:=1/PKG_BUILD_PARALLEL:=0/' $BASE_PATH/action_build/feeds/packages/net/smartdns/Makefile
 
 #替换sing-box为coolsnowwolf版本
 #rm -rf $BASE_PATH/action_build/feeds/fichenx/sing-box
