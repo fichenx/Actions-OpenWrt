@@ -150,5 +150,8 @@ sed -i 's/^PKG_BUILD_PARALLEL:=1/PKG_BUILD_PARALLEL:=0/' $BASE_PATH/action_build
 #rm -rf $BASE_PATH/action_build/feeds/fichenx/sing-box
 #git_sparse_clone master https://github.com/coolsnowwolf/packages net/sing-box && mv -n sing-box $BASE_PATH/action_build/feeds/fichenx/sing-box
 
+#删除冲突的补丁文件
+rm -rf $BASE_PATH/action_build/feeds/nss_packages/qca-nss-ecm/patches/12-ecm-conditionally-check-mlo-device.patch
+
 echo "========================="
 echo " 自定义(fichen) 配置完成……"
