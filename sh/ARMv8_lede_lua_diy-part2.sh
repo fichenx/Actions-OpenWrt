@@ -131,7 +131,8 @@ sed -i 's/luci-theme-argon/luci-theme-design/g' feeds/luci/collections/luci-ssl-
 #sed -i "s|http.*/library|https://github.com/breakingbadboy/OpenWrt/opt/kernel|g" package/luci-app-amlogic/root/etc/config/amlogic
 #sed -i "s|s9xxx_lede|ARMv8|g" package/luci-app-amlogic/root/etc/config/amlogic
 #sed -i "s|.img.gz|..OPENWRT_SUFFIX|g" package/luci-app-amlogic/root/etc/config/amlogic
-
+rm -rf package/custom/luci-app-amlogic
+git_svn lua https://github.com/ophub/luci-app-amlogic luci-app-amlogic
 sed -i "s|https.*/OpenWrt|https://github.com/fichenx/Actions-OpenWrt|g" package/luci-app-amlogic/root/etc/config/amlogic
 sed -i "s|opt/kernel|https://github.com/breakingbadboy/OpenWrt/releases/tag/kernel_stable|g" package/luci-app-amlogic/root/etc/config/amlogic
 sed -i "s|ARMv8|ARMv8(lede_lua)|g" package/luci-app-amlogic/root/etc/config/amlogic
