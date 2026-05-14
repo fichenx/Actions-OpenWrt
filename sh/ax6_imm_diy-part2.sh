@@ -72,7 +72,7 @@ rm -rf $BASE_PATH/action_build/feeds/packages/net/n2n/patches/110-cmake.patch
 #替换luci-app-timecontrol为gaobin89/luci-app-timecontrol
 rm -rf $BASE_PATH/action_build/feeds/luci/applications/luci-app-timecontrol
 rm -rf $BASE_PATH/action_build/package/luci-app-timecontrol
-git_sparse_clone js https://github.com/gaobin89/luci-app-timecontrol luci-app-timecontrol && mv -n luci-app-timecontrol $BASE_PATH/action_build/feeds/luci/applications/luci-app-timecontrol
+git_sparse_clone js https://github.com/gaobin89/luci-app-timecontrol luci-app-timecontrol && mv -n luci-app-timecontrol $BASE_PATH/action_build/package/luci-app-timecontrol
 
 ##更换luci-theme-design
 #rm -rf $BASE_PATH/action_build/feeds/luci/themes/luci-theme-design $BASE_PATH/action_build/feeds/fichenx/luci-theme-design
