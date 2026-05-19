@@ -20,3 +20,11 @@
  STOP=82
  NAME=smartdns
  USE_PROCD=1
+@@ -632,7 +632,6 @@ load_service()
+ 
+ 	[ -z "$dnsmasq_lease_file" ] && dnsmasq_lease_file="/tmp/dhcp.leases"
+ 	[ -z "$dnsmasq_port" ] && dnsmasq_port="53"
+-	[ -z "$resolve_file" ] && resolve_file="/tmp/resolv.conf.d/resolv.conf.auto"
+ 
+ 	qtype_soa_list=""
+ 
