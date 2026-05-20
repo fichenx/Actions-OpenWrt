@@ -25,8 +25,8 @@ on:
           #- x64_immwrt
 
 
-  schedule:
-    - cron: 43 3 * * 4
+#  schedule:
+#    - cron: 43 3 * * 4
 
 env:
   GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
