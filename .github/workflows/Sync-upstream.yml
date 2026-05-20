@@ -6,8 +6,8 @@ on:
 #    paths:
 #      - '.github/workflows/Sync-upstream.yml'
 #      - 'diy/**'
-  schedule:
-    - cron: 30 5 * * *
+#  schedule:
+#    - cron: 30 5 * * *
   watch:
     types: started
   repository_dispatch:
