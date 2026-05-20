@@ -34,6 +34,8 @@ env:
 
 jobs:
   build:
+    permissions:
+      contents: write   #添加这一行，授予创建 Release 的权限
     strategy:
       matrix:
         os: [ubuntu-24.04]
