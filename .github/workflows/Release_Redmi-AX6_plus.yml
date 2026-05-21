@@ -1,6 +1,11 @@
 name: Release_Redmi-AX6 plus（imm） 
 run-name: Release - ${{ inputs.model || 'RedMi-AX6_plus_imm'}}
 
+permissions:
+  contents: write
+  actions: write
+
+
 on:
   workflow_dispatch:
     inputs:
