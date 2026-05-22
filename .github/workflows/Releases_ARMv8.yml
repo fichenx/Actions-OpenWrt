@@ -36,8 +36,8 @@ on:
           - ubuntu-22.04
           - ubuntu-24.04
 
-  schedule:
-    - cron: '05 10 * * 4'
+#  schedule:
+#    - cron: '05 10 * * 4'
 
 env:
   #REPO_URL: https://github.com/coolsnowwolf/lede

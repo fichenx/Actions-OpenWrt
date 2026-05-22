@@ -1,6 +1,11 @@
 name: Release_Redmi-AX6 plus（imm） 
 run-name: Release - ${{ inputs.model || 'RedMi-AX6_plus_imm'}}
 
+permissions:
+  contents: write
+  actions: write
+
+
 on:
   workflow_dispatch:
     inputs:
@@ -25,8 +30,8 @@ on:
           #- x64_immwrt
 
 
-  schedule:
-    - cron: 43 3 * * 4
+#  schedule:
+#    - cron: 43 3 * * 4
 
 env:
   GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
@@ -90,7 +95,18 @@ jobs:
           cp -rf config/compilecfg wrt_core/
           cp -rf config/*.config wrt_core/deconfig/
           chmod +x $DIY_my_SH
-          ./sh/build.sh ${{ inputs.model || 'RedMi-AX6_plus_imm'}}
+          # 1. 先让原厂脚本跑完它所有的克隆、合并和全家桶注入逻辑
+          ./sh/build.sh ${{ inputs.model || 'RedMi-AX6_plus_imm' }} & PID=$!
+          
+          # 2. 等待原厂脚本把基础目录和环境准备好（大约需要 10 秒左右）
+          sleep 15
+          
+          # 3. 在编译开始前，直接用你的精简版配置暴力覆盖掉它的最终配置文件！
+          cp -f config/RedMi-AX6_plus_imm.config action_build/.config
+          echo "======== 成功：已实现直接暴力覆盖！ ========"
+          
+          # 4. 等待编译结束
+          wait $PID
 
 
       - name: 获取内核版本
