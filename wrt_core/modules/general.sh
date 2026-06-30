@@ -4,7 +4,7 @@
 clone_repo() {
     if [[ ! -d $BUILD_DIR ]]; then
         echo "克隆仓库: $REPO_URL 分支: $REPO_BRANCH"
-        if ! git clone --depth 1 -b $REPO_BRANCH $REPO_URL $BUILD_DIR; then
+        if ! git_retry clone --depth 1 -b "$REPO_BRANCH" "$REPO_URL" "$BUILD_DIR"; then
             echo "错误：克隆仓库 $REPO_URL 失败" >&2
             exit 1
         fi
@@ -34,10 +34,10 @@ clean_up() {
 }
 
 reset_feeds_conf() {
-    git reset --hard origin/$REPO_BRANCH
-    git clean -f -d
-    git pull
+    git_retry reset --hard "origin/$REPO_BRANCH"
+    git_retry clean -f -d
+    git_retry pull
     if [[ $COMMIT_HASH != "none" ]]; then
-        git checkout $COMMIT_HASH
+        git_retry checkout "$COMMIT_HASH"
     fi
 }

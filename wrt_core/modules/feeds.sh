@@ -34,10 +34,10 @@ update_feeds() {
         touch "$BUILD_DIR/include/bpf.mk"
     fi
 
-    ./scripts/feeds update -a
+    network_retry ./scripts/feeds update -a
 }
 
 install_feeds() {
-    ./scripts/feeds update -i
+    network_retry ./scripts/feeds update -i
     ./scripts/feeds install -a -f
 }

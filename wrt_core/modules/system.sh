@@ -125,7 +125,7 @@ update_ath11k_fw() {
 
     if [ -d "$(dirname "$makefile")" ]; then
         echo "正在更新 ath11k-firmware Makefile..."
-        if ! curl -fsSL -o "$new_mk" "$url"; then
+        if ! curl_retry -fsSL -o "$new_mk" "$url"; then
             echo "错误：从 $url 下载 ath11k-firmware Makefile 失败" >&2
             exit 1
         fi
@@ -203,7 +203,7 @@ update_tcping() {
 
     if [ -d "$(dirname "$tcping_path")" ]; then
         echo "正在更新 tcping Makefile..."
-        if ! curl -fsSL -o "$tcping_path" "$url"; then
+        if ! curl_retry -fsSL -o "$tcping_path" "$url"; then
             echo "错误：从 $url 下载 tcping Makefile 失败" >&2
             exit 1
         fi
@@ -364,7 +364,7 @@ fix_quickstart() {
     local url="https://gist.githubusercontent.com/puteulanus/1c180fae6bccd25e57eb6d30b7aa28aa/raw/istore_backend.lua"
     if [ -f "$file_path" ]; then
         echo "正在修复 quickstart..."
-        if ! curl -fsSL -o "$file_path" "$url"; then
+        if ! curl_retry -fsSL -o "$file_path" "$url"; then
             echo "错误：从 $url 下载 istore_backend.lua 失败" >&2
             exit 1
         fi
@@ -405,12 +405,12 @@ update_geoip() {
         if [ -n "$GEOIP_VER" ]; then
             local base_url="https://github.com/v2fly/geoip/releases/download/${GEOIP_VER}"
             local old_SHA256
-            if ! old_SHA256=$(wget -qO- "$base_url/geoip.dat.sha256sum" | awk '{print $1}'); then
+            if ! old_SHA256=$(wget_retry -qO- "$base_url/geoip.dat.sha256sum" | awk '{print $1}'); then
                 echo "错误：从 $base_url/geoip.dat.sha256sum 获取旧的 geoip.dat 校验和失败" >&2
                 return 1
             fi
             local new_SHA256
-            if ! new_SHA256=$(wget -qO- "$base_url/geoip-only-cn-private.dat.sha256sum" | awk '{print $1}'); then
+            if ! new_SHA256=$(wget_retry -qO- "$base_url/geoip-only-cn-private.dat.sha256sum" | awk '{print $1}'); then
                 echo "错误：从 $base_url/geoip-only-cn-private.dat.sha256sum 获取新的 geoip-only-cn-private.dat 校验和失败" >&2
                 return 1
             fi

@@ -30,6 +30,7 @@ SCRIPT_DIR=$(cd $(dirname $0) && pwd)
 BASE_PATH=${BASE_PATH:-$SCRIPT_DIR}
 
 source "$SCRIPT_DIR/modules/general.sh"
+source "$SCRIPT_DIR/modules/network.sh"
 source "$SCRIPT_DIR/modules/feeds.sh"
 source "$SCRIPT_DIR/modules/packages.sh"
 source "$SCRIPT_DIR/modules/system.sh"
