@@ -320,6 +320,9 @@ git_sparse_clone  master https://github.com/coolsnowwolf/packages utils/runc && 
 #sed -i 's/PKG_VERSION:=.*/PKG_VERSION:=1.3.4/g' feeds/packages/utils/runc/Makefile
 #sed -i 's/PKG_HASH:=.*/PKG_HASH:=a9f9646c4c8990239f6462b408b22d9aa40ba0473a9fc642b9d6576126495eee/g' feeds/packages/utils/runc/Makefile
 
+# docker-compose
+rm -rf feeds/packages/utils/docker-compose
+git_sparse_clone master https://github.com/coolsnowwolf/packages utils/docker-compose && mv -n docker-compose feeds/packages/utils/docker-compose
 
 
 #########修复编译错误#########
