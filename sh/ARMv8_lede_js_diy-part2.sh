@@ -298,25 +298,8 @@ git_sparse_clone main https://github.com/fichenx/openwrt-package smartdns && mv 
 #强制smartdns单线程编译
 sed -i 's/^PKG_BUILD_PARALLEL:=1/PKG_BUILD_PARALLEL:=0/' feeds/packages/net/smartdns/Makefile
 
-#删除自带和breakingbadboy自定义版本的dockerd、docker及依赖containerd、runc，使用自定义docker版本
+#删除fichenx feed中的dockerd、docker及依赖containerd、runc，使用packages feed(coolsnowwolf)默认版本
 rm -rf feeds/fichenx/dockerd feeds/fichenx/docker feeds/fichenx/containerd feeds/fichenx/runc
-rm -rf feeds/packages/utils/dockerd
-#git_sparse_clone main https://github.com/fichenx/openwrt-package dockerd && mv -n dockerd feeds/packages/utils/dockerd
-git_sparse_clone master https://github.com/coolsnowwolf/packages utils/dockerd && mv -n dockerd feeds/packages/utils/dockerd
-rm -rf feeds/packages/utils/docker
-#git_sparse_clone main https://github.com/fichenx/openwrt-package docker && mv -n docker feeds/packages/utils/docker
-git_sparse_clone master https://github.com/coolsnowwolf/packages utils/docker && mv -n docker feeds/packages/utils/docker
-rm -rf feeds/packages/utils/containerd
-#git_sparse_clone main https://github.com/fichenx/openwrt-package containerd && mv -n containerd feeds/packages/utils/containerd
-git_sparse_clone master https://github.com/coolsnowwolf/packages utils/containerd && mv -n containerd feeds/packages/utils/containerd
-#sed -i 's/PKG_VERSION:=.*/PKG_VERSION:=2.2.0/g' feeds/packages/utils/containerd/Makefile
-#sed -i 's/PKG_HASH:=.*/PKG_HASH:=86e7a268fc73f5332522baef86082c1d6c17986e2957a9ad842ead35d1080fca/g' feeds/packages/utils/containerd/Makefile
-#sed -i 's/containerd-shim,containerd-shim-runc-v1,//g' feeds/packages/utils/containerd/Makefile
-rm -rf feeds/packages/utils/runc
-#git_sparse_clone main https://github.com/fichenx/openwrt-package runc && mv -n runc feeds/packages/utils/runc
-git_sparse_clone  master https://github.com/coolsnowwolf/packages utils/runc && mv -n runc feeds/packages/utils/runc
-#sed -i 's/PKG_VERSION:=.*/PKG_VERSION:=1.3.4/g' feeds/packages/utils/runc/Makefile
-#sed -i 's/PKG_HASH:=.*/PKG_HASH:=a9f9646c4c8990239f6462b408b22d9aa40ba0473a9fc642b9d6576126495eee/g' feeds/packages/utils/runc/Makefile
 
 #替换luci-app-timecontrol为gaobin89/luci-app-timecontrol
 rm -rf feeds/luci/applications/luci-app-timecontrol
@@ -329,94 +312,15 @@ git_sparse_clone js https://github.com/gaobin89/luci-app-timecontrol luci-app-ti
 mkdir -p package/network/services/odhcpd/patches
 cp -fv $GITHUB_WORKSPACE/patch/odhcpd/001-fix-gcc12-maybe-uninitialized-first_key.patch package/network/services/odhcpd/patches/
 
-# frp
-#编译错误，恢复frp为lede默认
-#rm -rf feeds/packages/net/frp
-#git_sparse_clone master https://github.com/coolsnowwolf/packages net/frp && mv -n frp feeds/packages/net/frp
-
-##修复elfutils编译错误
-#1、修复lede版elfutils0.188版编译错误
-#sed -i "s|TARGET_CFLAGS += -D_GNU_SOURCE -Wno-unused-result -Wno-format-nonliteral|TARGET_CFLAGS += -D_GNU_SOURCE -Wno-unused-result -Wno-format-nonliteral -Wno-error=use-after-free|g" package/libs/elfutils/Makefile
-##2、修复替换后openwrt官方版elfutils0.191版elfutils编译错误
-#sed -i "s|CONFIG_GCC_USE_VERSION_11|CONFIG_GCC_USE_VERSION_12|g" package/custom2/elfutils/Makefile
-#rm -rf package/libs/elfutils
-#git_svn main https://github.com/openwrt/openwrt package/libs/elfutils
-rm -rf package/libs/elfutils
-git_sparse_clone master https://github.com/openwrt/openwrt package/libs/elfutils && mv -n elfutils package/libs/elfutils
-
-
 #取消编译libnetwork，防止出现冲突：
 # * check_data_file_clashes: Package libnetwork wants to install file /workdir/openwrt/build_dir/target-aarch64_generic_musl/root-armvirt/usr/bin/docker-proxy
 #         But that file is already provided by package  * dockerd 
 # * opkg_install_cmd: Cannot install package libnetwork.
 sed -i 's|CONFIG_PACKAGE_libnetwork=y|# CONFIG_PACKAGE_libnetwork is not set|g' .config
 
-#修复breakings更新dnsproxy后的编译问题
-#sed -i 's/PKG_VERSION:=.*/PKG_VERSION:=0.73.3/g' feeds/packages/net/dnsproxy/Makefile
-#sed -i 's/PKG_HASH:=.*/PKG_HASH:=9eb2b1e88e74d3a4237b50977aa52cd19ea1bb6c896535e7dd4b2df4d6aa469c/g' feeds/packages/net/dnsproxy/Makefile
-
-rm -rf feeds/packages/net/dnsproxy
-git_sparse_clone master https://github.com/coolsnowwolf/packages net/dnsproxy && mv -n dnsproxy feeds/packages/net/dnsproxy
-
-#修复breakings替换python后的编译问题
-#rm -rf feeds/packages/lang/python
-#cp -rf $GITHUB_WORKSPACE/general/python feeds/packages/lang
-rm -rf feeds/packages/lang/python
-git_sparse_clone master https://github.com/coolsnowwolf/packages lang/python && mv -n python feeds/packages/lang/python
-
-#修复breakings替换php8后的编译问题
-rm -rf feeds/packages/lang/php8
-git_sparse_clone master https://github.com/coolsnowwolf/packages lang/php8 && mv -n php8 feeds/packages/lang/php8
-
-#修复breakings替换curl后的编译问题
-rm -rf feeds/packages/net/curl
-git_sparse_clone master https://github.com/coolsnowwolf/packages net/curl && mv -n curl feeds/packages/net/curl
-
-#修复breakings替换boost后的编译问题
-rm -rf feeds/packages/libs/boost
-git_sparse_clone master https://github.com/coolsnowwolf/packages libs/boost && mv -n boost feeds/packages/libs/boost
-
-#修复breakings替换bcoreutils后的编译警示（可编译通过）：
-#make[3] -C feeds/packages/utils/coreutils compile
-#WARNING: Makefile 'package/feeds/luci/luci-ssl-nginx/Makefile' has a dependency on 'nginx-mod-luci-ssl', which does not exist
-rm -rf feeds/packages/utils/coreutils
-git_sparse_clone master https://github.com/coolsnowwolf/packages utils/coreutils && mv -n coreutils feeds/packages/utils/coreutils
-
-#修复breakings替换zlib后的编译问题
-git_sparse_clone main https://github.com/openwrt/openwrt package/libs/zlib && mv -n zlib package/libs/zlib
-sed -i 's/PKG_VERSION:=.*/PKG_VERSION:=1.3.1/g' tools/zlib/Makefile
-sed -i 's/PKG_HASH:=.*/PKG_HASH:=9a93b2b7dfdac77ceba5a558a580e74667dd6fede4585b91eefb60f03b72df23/g' tools/zlib/Makefile
-
-#修复breakings替换golang后的编译问题
-rm -rf feeds/packages/lang/golang
-git_sparse_clone master https://github.com/coolsnowwolf/packages lang/golang && mv -n golang feeds/packages/lang/golang
-
 # NaïveProxy
 rm -rf package/naiveproxy
 git_sparse_clone main https://github.com/fichenx/openwrt-package naiveproxy && mv -n naiveproxy package/naiveproxy
-
-#20251126:修复ucode编译错误
-#sed -i '/^TARGET_CFLAGS\s*+=/ s/$/ -Wno-format-overflow/' package/utils/ucode/Makefile || \
-#sed -i '1i TARGET_CFLAGS += -Wno-format-overflow' package/utils/ucode/Makefile
-rm -rf package/utils/ucode
-git_sparse_clone master https://github.com/immortalwrt/immortalwrt package/utils/ucode && mv -n ucode package/utils/ucode
-rm -rf package/libs/udebug
-git_sparse_clone master https://github.com/immortalwrt/immortalwrt package/libs/udebug && mv -n udebug package/libs/udebug
-#sed -i 's/PKG_SOURCE_DATE:=.*/PKG_SOURCE_DATE:=2025-11-07/g' package/utils/ucode/Makefile
-#sed -i 's/PKG_SOURCE_VERSION:=.*/PKG_SOURCE_VERSION:=ea579046a619e5325b994780bf2ce1ffde448794/g' package/utils/ucode/Makefile
-#sed -i 's/PKG_MIRROR_HASH:=.*/PKG_MIRROR_HASH:=eb6049d2d4925318257cfa2fa3e5199f47170663d00a5b05eea8b131d62c4bc9/g' package/utils/ucode/Makefile
-#
-#sed -i 's/PKG_SOURCE_DATE:=.*/PKG_SOURCE_DATE:=2025-10-21/g' package/libs/udebug/Makefile
-#sed -i 's/PKG_SOURCE_VERSION:=.*/PKG_SOURCE_VERSION:=75f39cd4a8067a6f0503c2f1c83c6b1af733a6f2/g' package/libs/udebug/Makefile
-#sed -i 's/PKG_MIRROR_HASH:=.*/PKG_MIRROR_HASH:=9546c51155e06d1ee49b1121ee834aad0dbe9490f67fe05d265ec74cb2fd0506/g' package/libs/udebug/Makefile
-
-#20251130:修复rp-pppoe编译错误，删除自带3.15版本，使用immortalwrt的4.0版本
-rm -rf feeds/packages/net/rp-pppoe
-git_sparse_clone master https://github.com/immortalwrt/packages net/rp-pppoe && mv -n rp-pppoe feeds/packages/net/rp-pppoe
-
-#20260508：修复breakings替换HAProxy后的编译问题，使用coolsnowwolf的HAProxy版本
-rm -rf feeds/packages/net/haproxy
-git_sparse_clone master https://github.com/coolsnowwolf/packages net/haproxy && mv -n haproxy feeds/packages/net/haproxy
 
 echo "========================="
 echo " 自定义(fichen) 配置完成……"

@@ -148,26 +148,3 @@ git clone -b openwrt-18.06 https://github.com/tty228/luci-app-wechatpush feeds/l
 #替换luci-app-socat为https://github.com/chenmozhijin/luci-app-socat
 rm -rf feeds/luci/applications/luci-app-socat
 git_svn main https://github.com/chenmozhijin/luci-app-socat luci-app-socat
-
-
-###################修复编译错误##########################
-
-#修复breakings升级elfutils后的编译问题：恢复官方默认版本
-rm -rf package/libs/elfutils
-git_sparse_clone master https://github.com/coolsnowwolf/lede package/libs/elfutils && mv -n elfutils package/libs/elfutils
-
-#修复breakings替换openssh后的编译问题：恢复官方默认版本
-rm -rf feeds/packages/net/openssh
-git_sparse_clone master https://github.com/coolsnowwolf/packages net/openssh && mv -n openssh feeds/packages/net/openssh
-
-#恢复breakings替换的autocore Makefile文件
-sed -i 's/DEPENDS:=@(.*/DEPENDS:=@(arm||aarch64) \\/g' package/lean/autocore/Makefile
-
-#修复breakings替换zlib后的编译问题
-git_sparse_clone main https://github.com/openwrt/openwrt package/libs/zlib && mv -n zlib package/libs/zlib
-sed -i 's/PKG_VERSION:=.*/PKG_VERSION:=1.3.1/g' tools/zlib/Makefile
-sed -i 's/PKG_HASH:=.*/PKG_HASH:=9a93b2b7dfdac77ceba5a558a580e74667dd6fede4585b91eefb60f03b72df23/g' tools/zlib/Makefile
-
-#修复breakings替换golang后的编译问题
-rm -rf feeds/packages/lang/golang
-git_sparse_clone master https://github.com/coolsnowwolf/packages lang/golang && mv -n golang feeds/packages/lang/golang
