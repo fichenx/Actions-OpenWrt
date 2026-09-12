@@ -317,6 +317,11 @@ rm -rf feeds/fichenx/dockerd feeds/fichenx/docker feeds/fichenx/containerd feeds
 mkdir -p package/network/services/odhcpd/patches
 cp -fv $GITHUB_WORKSPACE/patch/odhcpd/001-fix-gcc12-maybe-uninitialized-first_key.patch package/network/services/odhcpd/patches/
 
+#修复icu编译错误：coolsnowwolf feed的icu72.1旧configure不兼容ccache包装的CC，
+#误把ccache识别为clang后编译器链接测试失败（C compiler cannot create executables），
+#参照openwrt官方icu新版Makefile，对icu目标侧configure改用不带ccache的编译器（幂等）
+sed -i 's|CC="$(TARGET_CC)"|CC="$(TARGET_CC_NOCACHE)"|;s|CXX="$(TARGET_CXX)"|CXX="$(TARGET_CXX_NOCACHE)"|' feeds/packages/libs/icu/Makefile
+
 #取消编译libnetwork，防止出现冲突：
 # * check_data_file_clashes: Package libnetwork wants to install file /workdir/openwrt/build_dir/target-aarch64_generic_musl/root-armvirt/usr/bin/docker-proxy
 #         But that file is already provided by package  * dockerd 
