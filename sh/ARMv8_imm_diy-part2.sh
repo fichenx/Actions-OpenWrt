@@ -283,6 +283,13 @@ git_sparse_clone js https://github.com/gaobin89/luci-app-timecontrol luci-app-ti
 
 #########修复编译错误#########
 
+#修复6.12+内核下kmod-nf-ipt与kmod-iptables重复打包ip_tables.ko/x_tables.ko导致的安装冲突
+#check_data_file_clashes: Package kmod-nf-ipt wants to install file ... But that file is already provided by package * kmod-iptables
+if [ -f include/netfilter.mk ]; then
+  sed -i '/CONFIG_IP_NF_IPTABLES, $(P_V4)ip_tables),))/s/ip_tables),))/ip_tables, lt 6.12),))/' include/netfilter.mk
+  sed -i '/CONFIG_NETFILTER_XTABLES, $(P_XT)x_tables),))/s/x_tables),))/x_tables, lt 6.12),))/' include/netfilter.mk
+fi
+
 ##修复elfutils编译错误
 #1、修复lede版elfutils0.188版编译错误
 #sed -i "s|TARGET_CFLAGS += -D_GNU_SOURCE -Wno-unused-result -Wno-format-nonliteral|TARGET_CFLAGS += -D_GNU_SOURCE -Wno-unused-result -Wno-format-nonliteral -Wno-error=use-after-free|g" package/libs/elfutils/Makefile

@@ -1,0 +1,28 @@
+From 0000000000000000000000000000000000000000 Mon Sep 17 00:00:00 2001
+From: fichenx <fichenx@users.noreply.github.com>
+Date: Fri, 12 Sep 2026 00:00:00 +0800
+Subject: [PATCH] dhcpv6-ia: zero-initialize first_key to fix gcc12
+ maybe-uninitialized
+
+GCC 12.3 (aarch64, musl) reports a false positive:
+dhcpv6-ia.c:1222:57: error: '*(__int128 unsigned *)(&first_key[0])' may
+be used uninitialized [-Werror=maybe-uninitialized] at
+memcpy(a->key, first_key, sizeof(a->key)).
+
+first_key is only consumed when first_key_valid is true, and the two are
+set together, but GCC cannot prove the correlation. Zero-initialize the
+buffer so -Werror no longer aborts the odhcpd (ipv6only) build.
+---
+diff --git a/src/dhcpv6-ia.c b/src/dhcpv6-ia.c
+index 7096d47..c4b67ea 100644
+--- a/src/dhcpv6-ia.c
++++ b/src/dhcpv6-ia.c
+@@ -967,7 +967,7 @@ static bool dhcpv6_ia_on_link(const struct dhcpv6_ia_hdr *ia, struct dhcpv6_leas
+ ssize_t dhcpv6_ia_handle_IAs(uint8_t *buf, size_t buflen, struct interface *iface,
+ 		const struct sockaddr_in6 *addr, const void *data, const uint8_t *end)
+ {
+-	uint8_t first_key[16];
++	uint8_t first_key[16] = {0};
+ 	bool first_key_valid = false;
+ 	const struct dhcpv6_client_header *hdr = data;
+ 	time_t now = odhcpd_time();

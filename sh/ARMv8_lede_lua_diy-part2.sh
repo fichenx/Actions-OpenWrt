@@ -327,6 +327,11 @@ git_sparse_clone master https://github.com/coolsnowwolf/packages utils/docker-co
 
 #########修复编译错误#########
 
+#修复odhcpd编译错误：GCC12对dhcpv6-ia.c的maybe-uninitialized误报被-Werror提升为错误
+#error: '*(__int128 unsigned *)(&first_key[0])' may be used uninitialized
+mkdir -p package/network/services/odhcpd/patches
+cp -fv $GITHUB_WORKSPACE/patch/odhcpd/001-fix-gcc12-maybe-uninitialized-first_key.patch package/network/services/odhcpd/patches/
+
 #取消编译libnetwork，防止出现冲突：
 # * check_data_file_clashes: Package libnetwork wants to install file /workdir/openwrt/build_dir/target-aarch64_generic_musl/root-armvirt/usr/bin/docker-proxy
 #         But that file is already provided by package  * dockerd 

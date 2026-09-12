@@ -317,6 +317,12 @@ rm -rf feeds/luci/applications/luci-app-timecontrol
 git_sparse_clone js https://github.com/gaobin89/luci-app-timecontrol luci-app-timecontrol && mv -n luci-app-timecontrol feeds/luci/applications/luci-app-timecontrol
 
 #########修复编译错误#########
+
+#修复odhcpd编译错误：GCC12对dhcpv6-ia.c的maybe-uninitialized误报被-Werror提升为错误
+#error: '*(__int128 unsigned *)(&first_key[0])' may be used uninitialized
+mkdir -p package/network/services/odhcpd/patches
+cp -fv $GITHUB_WORKSPACE/patch/odhcpd/001-fix-gcc12-maybe-uninitialized-first_key.patch package/network/services/odhcpd/patches/
+
 # frp
 #编译错误，恢复frp为lede默认
 #rm -rf feeds/packages/net/frp
