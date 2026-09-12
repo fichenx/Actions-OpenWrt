@@ -13,6 +13,12 @@
 echo "开始 自定义（fichen） 配置……"
 echo "========================="
 
+#启用ccache编译器缓存，加速每日重复编译（仅作用于编译主机，不改变固件产物）
+#CONFIG_CCACHE位于DEVEL菜单下，默认缓存目录为./.ccache（与工作流缓存路径一致）
+sed -i '/^CONFIG_DEVEL=/d;/^CONFIG_CCACHE=/d' .config
+echo 'CONFIG_DEVEL=y' >> .config
+echo 'CONFIG_CCACHE=y' >> .config
+
 function git_sparse_clone() {
   branch="$1" rurl="$2" && shift 2
   rootdir="$PWD"
