@@ -79,7 +79,6 @@ jobs:
           else
             echo "REPO_URL=https://github.com/coolsnowwolf/lede" >> $GITHUB_ENV
             echo "REPO=lede" >> $GITHUB_ENV
-            echo "DIY_breakings_SH=sh/breakings_diy-part2.sh" >> $GITHUB_ENV
         fi
 
     - name: 检出
@@ -203,10 +202,8 @@ jobs:
       run: |
         [ -e files ] && mv files openwrt/files
         [ -e $CONFIG_FILE ] && mv $CONFIG_FILE openwrt/.config
-        [ -n "${DIY_breakings_SH:-}" ] && [ -e $DIY_breakings_SH ] && chmod +x $DIY_breakings_SH
         chmod +x $DIY_my_SH
         cd openwrt
-        [ -n "${DIY_breakings_SH:-}" ] && [ -e $GITHUB_WORKSPACE/$DIY_breakings_SH ] && $GITHUB_WORKSPACE/$DIY_breakings_SH
         $GITHUB_WORKSPACE/$DIY_my_SH
 
     - name: SSH连接到Actions

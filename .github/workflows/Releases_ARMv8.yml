@@ -45,7 +45,6 @@ env:
   FEEDS_CONF: feeds.conf.default
   CONFIG_FILE: config/${{ inputs.model || 'ARMv8_lede_lua'}}.config
   DIY_feeds_SH: sh/lede_diy-part1.sh
-  DIY_breakings_SH: sh/breakings_diy-part2.sh
   DIY_my_SH: sh/${{ inputs.model || 'ARMv8_lede_lua'}}_diy-part2.sh
   UPLOAD_FIRMWARE: false
   UPLOAD_RELEASE: true
