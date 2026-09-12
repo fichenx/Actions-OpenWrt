@@ -325,8 +325,12 @@ rm -rf feeds/packages/utils/dockerd
 cp -rf $GITHUB_WORKSPACE/res/breakings_general/dockerd feeds/packages/utils/dockerd
 
 # docker-compose
-sed -i 's/PKG_VERSION:=.*/PKG_VERSION:=2.40.3/g' feeds/packages/utils/docker-compose/Makefile
-sed -i 's/PKG_HASH:=.*/PKG_HASH:=5ee988a7d9e00ffa2d166a50f4cda0e13622f2220f1ffa6aff353f33cf40e37e/g' feeds/packages/utils/docker-compose/Makefile
+#上游openwrt/packages与coolsnowwolf/packages均已升级到5.x（Go模块路径由v2变为v5），
+#旧的2.40.3降级sed只改版本/hash不改GO_PKG(v5)，会导致编译错误：
+#no required module provides package github.com/docker/compose/v5/cmd
+#lua由自身脚本替换为coolsnowwolf版；js直接使用上游5.5.0，二者Makefile一致且已验证可编译，故不再降级
+#sed -i 's/PKG_VERSION:=.*/PKG_VERSION:=2.40.3/g' feeds/packages/utils/docker-compose/Makefile
+#sed -i 's/PKG_HASH:=.*/PKG_HASH:=5ee988a7d9e00ffa2d166a50f4cda0e13622f2220f1ffa6aff353f33cf40e37e/g' feeds/packages/utils/docker-compose/Makefile
 
 # containerd
 #sed -i 's/PKG_VERSION:=.*/PKG_VERSION:=1.5.11/g' feeds/packages/utils/containerd/Makefile
