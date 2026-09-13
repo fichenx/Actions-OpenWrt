@@ -65,7 +65,7 @@ echo "开始 自定义（fichen） 配置……"
 echo "========================="
 #给n2n添加补丁文件，修正前两行语法顺序颠倒的错误
 BASE_PATH=$(cd $(dirname $0)/../ && pwd)
-cp -rf $GITHUB_WORKSPACE/patch/001-fix-cmake-compatibility.patch $BASE_PATH/action_build/feeds/packages/net/n2n/patches/
+cp -rf $GITHUB_WORKSPACE/res/patch/001-fix-cmake-compatibility.patch $BASE_PATH/action_build/feeds/packages/net/n2n/patches/
 #删除n2n无效补丁
 rm -rf $BASE_PATH/action_build/feeds/packages/net/n2n/patches/110-cmake.patch
 
@@ -81,7 +81,7 @@ git_sparse_clone js https://github.com/gaobin89/luci-app-timecontrol luci-app-ti
 
 #给libubox加补丁，禁止非字面格式字符串的警告
 #mkdir -p $BASE_PATH/action_build/package/libs/libubox/patches && \
-#cp -f $GITHUB_WORKSPACE/patch/100-remove-format-nonliteral.patch $BASE_PATH/action_build/package/libs/libubox/patches/
+#cp -f $GITHUB_WORKSPACE/res/patch/100-remove-format-nonliteral.patch $BASE_PATH/action_build/package/libs/libubox/patches/
 
 #添加luci-app-lucky、lucky
 mk_dir="$BASE_PATH/action_build/feeds/fichenx/lucky/Makefile"

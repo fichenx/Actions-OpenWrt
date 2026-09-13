@@ -315,7 +315,7 @@ git_sparse_clone js https://github.com/gaobin89/luci-app-timecontrol luci-app-ti
 #修复odhcpd编译错误：GCC12对dhcpv6-ia.c的maybe-uninitialized误报被-Werror提升为错误
 #error: '*(__int128 unsigned *)(&first_key[0])' may be used uninitialized
 mkdir -p package/network/services/odhcpd/patches
-cp -fv $GITHUB_WORKSPACE/patch/odhcpd/001-fix-gcc12-maybe-uninitialized-first_key.patch package/network/services/odhcpd/patches/
+cp -fv $GITHUB_WORKSPACE/res/patch/odhcpd/001-fix-gcc12-maybe-uninitialized-first_key.patch package/network/services/odhcpd/patches/
 
 #修复icu编译错误：coolsnowwolf feed的icu72.1旧configure不兼容ccache包装的CC，
 #误把ccache识别为clang后编译器链接测试失败（C compiler cannot create executables），
