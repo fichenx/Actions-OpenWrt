@@ -71,6 +71,11 @@ function merge_package(){
 }
 rm -rf package/custom2; mkdir package/custom2
 
+#确保package/custom目录存在：git_svn的"mv 目标 ../package/custom/"在目录不存在时会退化成改名，
+#首个移入的包（lua为ophub的luci-app-amlogic）会占据package/custom根目录，其luci.mk按目录名
+#生成幽灵翻译包luci-i18n-custom-zh-cn，与config选装的luci-i18n-amlogic-zh-cn冲突（amlogic.zh-cn.lmo）
+mkdir -p package/custom
+
 
 ##########固件配置修改#########
 # 修改默认IP
@@ -327,6 +332,12 @@ sed -i 's|CC="$(TARGET_CC)"|CC="$(TARGET_CC_NOCACHE)"|;s|CXX="$(TARGET_CXX)"|CXX
 #install的$(CP)依赖该目录；只选vim-fuller时目录未生成，报cannot stat .../vim82。
 #将守卫改为恒真，使runtime无条件生成（不选vim-runtime包则不打入固件，幂等）
 sed -i 's|ifneq ($(CONFIG_PACKAGE_vim-runtime)$(CONFIG_PACKAGE_vim-help),)|ifeq (y,y)|' feeds/packages/utils/vim/Makefile
+
+#修复luci-app-upnp依赖失败：coolsnowwolf/luci master的luci-app-upnp依赖裸名miniupnpd，
+#但coolsnowwolf packages feed与immortalwrt源均只提供miniupnpd-nftables/iptables变体；
+#lua版防火墙为iptables版firewall（rootfs安装firewall而非firewall4），
+#故固定改用iptables变体依赖；仅改依赖行，不切换luci分支（幂等）
+sed -i 's|^LUCI_DEPENDS:=+miniupnpd$|LUCI_DEPENDS:=+miniupnpd-iptables|' feeds/luci/applications/luci-app-upnp/Makefile
 
 #取消编译libnetwork，防止出现冲突：
 # * check_data_file_clashes: Package libnetwork wants to install file /workdir/openwrt/build_dir/target-aarch64_generic_musl/root-armvirt/usr/bin/docker-proxy
