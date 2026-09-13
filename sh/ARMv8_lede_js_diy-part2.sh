@@ -317,6 +317,12 @@ cp -fv $GITHUB_WORKSPACE/patch/odhcpd/001-fix-gcc12-maybe-uninitialized-first_ke
 #参照openwrt官方icu新版Makefile，对icu目标侧configure改用不带ccache的编译器（幂等）
 sed -i 's|CC="$(TARGET_CC)"|CC="$(TARGET_CC_NOCACHE)"|;s|CXX="$(TARGET_CXX)"|CXX="$(TARGET_CXX_NOCACHE)"|' feeds/packages/libs/icu/Makefile
 
+#修复vim-fuller打包失败：coolsnowwolf feed的vim8.2 Makefile中，生成runtime目录的
+#Build/Compile/vim-runtime被CONFIG_PACKAGE_vim-runtime/vim-help条件守卫，而vim-fuller/
+#install的$(CP)依赖该目录；只选vim-fuller时目录未生成，报cannot stat .../vim82。
+#将守卫改为恒真，使runtime无条件生成（不选vim-runtime包则不打入固件，幂等）
+sed -i 's|ifneq ($(CONFIG_PACKAGE_vim-runtime)$(CONFIG_PACKAGE_vim-help),)|ifeq (y,y)|' feeds/packages/utils/vim/Makefile
+
 #取消编译libnetwork，防止出现冲突：
 # * check_data_file_clashes: Package libnetwork wants to install file /workdir/openwrt/build_dir/target-aarch64_generic_musl/root-armvirt/usr/bin/docker-proxy
 #         But that file is already provided by package  * dockerd 
