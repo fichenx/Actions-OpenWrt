@@ -202,7 +202,7 @@ jobs:
         restore-keys: |
           ${{ env.CACHE_RESTORE_CFG }}
           ${{ env.CACHE_RESTORE_MODEL }}
-        lookup-only: true
+        #lookup-only会跳过恢复（仅查询存在性），曾导致缓存只存不用、每次全量冷编译约5小时
 
     - name: 刷新缓存
       run: |
