@@ -183,26 +183,35 @@ jobs:
       run: |
         MODEL="${{ inputs.model || 'ARMv8_lede_lua'}}"
         RUNNER_TAG="${{ inputs.runs-on || 'ubuntu-24.04'}}"
-        CONFIG_HASH="$(sha256sum "config/${MODEL}.config" | cut -c1-12)"
         CACHE_DATE="$(date +%Y%m%d)"
-        PREFIX="armv8-${RUNNER_TAG}-${REPO}-${MODEL}"
-        echo "CACHE_KEY=${PREFIX}-${CONFIG_HASH}-${CACHE_DATE}" >> $GITHUB_ENV
-        echo "CACHE_RESTORE_CFG=${PREFIX}-${CONFIG_HASH}-" >> $GITHUB_ENV
-        echo "CACHE_RESTORE_MODEL=${PREFIX}-" >> $GITHUB_ENV
-        echo "缓存key: ${PREFIX}-${CONFIG_HASH}-${CACHE_DATE}"
+        #源码标识：lede与immortalwrt工具链版本不同，staging_dir不可互通
+        REPO_TOKEN="$(echo "${REPO_URL}" | sed 's#https://github.com/##; s#/#-#g')"
+        #平台标识(板型_子目标)：从seed config提取；lua/js同源码同平台，共享同一份staging
+        TARGET_TOKEN="$(grep -m1 -oE '^CONFIG_TARGET_[a-z0-9]+_[a-z0-9]+=y' "config/${MODEL}.config" | sed 's/CONFIG_TARGET_//; s/=y//')"
+        #ccache按编译器哈希与预处理内容寻址，跨型号/平台/源码混用安全（不命中即回退实编译），
+        #故ccache在所有固件间全局共享一份，压缩缓存条目数量（GitHub上限10G）
+        echo "CCACHE_KEY=ccache-${RUNNER_TAG}-${CACHE_DATE}" >> $GITHUB_ENV
+        echo "CCACHE_RESTORE=ccache-${RUNNER_TAG}-" >> $GITHUB_ENV
+        #staging_dir含二进制工具链，只能在同runner+同源码+同平台间共享
+        echo "STAGING_KEY=staging-${RUNNER_TAG}-${REPO_TOKEN}-${TARGET_TOKEN}-${CACHE_DATE}" >> $GITHUB_ENV
+        echo "STAGING_RESTORE=staging-${RUNNER_TAG}-${REPO_TOKEN}-${TARGET_TOKEN}-" >> $GITHUB_ENV
+        echo "缓存标识: ${CCACHE_KEY} / ${STAGING_KEY}"
 
-    - name: 缓存依赖项
-      id: cache
+    - name: 恢复ccache缓存
+      id: cache-ccache
       uses: actions/cache@v4
       with:
-        path: |
-          /builder/openwrt/.ccache
-          /builder/openwrt/staging_dir
-        key: ${{ env.CACHE_KEY }}
-        restore-keys: |
-          ${{ env.CACHE_RESTORE_CFG }}
-          ${{ env.CACHE_RESTORE_MODEL }}
-        #lookup-only会跳过恢复（仅查询存在性），曾导致缓存只存不用、每次全量冷编译约5小时
+        path: /builder/openwrt/.ccache
+        key: ${{ env.CCACHE_KEY }}
+        restore-keys: ${{ env.CCACHE_RESTORE }}
+
+    - name: 恢复staging工具链缓存
+      id: cache-staging
+      uses: actions/cache@v4
+      with:
+        path: /builder/openwrt/staging_dir
+        key: ${{ env.STAGING_KEY }}
+        restore-keys: ${{ env.STAGING_RESTORE }}
 
     - name: 刷新缓存
       run: |
@@ -270,15 +279,21 @@ jobs:
         CCACHE_DIR=/builder/openwrt/.ccache ccache -s || true
         du -sh /builder/openwrt/.ccache /builder/openwrt/staging_dir 2>/dev/null || true
 
-    - name: 保存编译缓存
+    - name: 保存ccache缓存
       if: always()
       continue-on-error: true
       uses: actions/cache/save@v4
       with:
-        path: |
-          /builder/openwrt/.ccache
-          /builder/openwrt/staging_dir
-        key: ${{ env.CACHE_KEY }}
+        path: /builder/openwrt/.ccache
+        key: ${{ env.CCACHE_KEY }}
+
+    - name: 保存staging工具链缓存
+      if: always()
+      continue-on-error: true
+      uses: actions/cache/save@v4
+      with:
+        path: /builder/openwrt/staging_dir
+        key: ${{ env.STAGING_KEY }}
 
     - name: 清理服务器空间
       if: steps.compile.outputs.status == 'success' && !cancelled()

@@ -67,15 +67,39 @@ jobs:
       - name: 克隆固件代码
         run: ./wrt_core/pre_clone_action.sh ${{ inputs.model || 'RedMi-AX6_plus_imm'}}
 
-      - name: 缓存依赖
+      - name: 设置缓存标识
+        run: |
+          MODEL="${{ inputs.model || 'RedMi-AX6_plus_imm'}}"
+          RUNNER_TAG="${{ matrix.os }}"
+          CACHE_DATE="$(date +%Y%m%d)"
+          #平台标识(板型_子目标)，从seed config提取
+          TARGET_TOKEN="$(grep -m1 -oE '^CONFIG_TARGET_[a-z0-9]+_[a-z0-9]+=y' "config/${MODEL}.config" | sed 's/CONFIG_TARGET_//; s/=y//')"
+          #源码标识：pre_clone_action.sh生成的repo_flag内容为REPO_URL/REPO_BRANCH；
+          #imm与libwrt即使平台相同也不可共享staging（工具链/二进制不兼容）
+          REPO_HASH="$(sha256sum repo_flag | cut -c1-12)"
+          #ccache按编译器哈希寻址，跨型号/平台/源码混用安全，与其他工作流全局共享一份
+          echo "CCACHE_KEY=ccache-${RUNNER_TAG}-${CACHE_DATE}" >> $GITHUB_ENV
+          echo "CCACHE_RESTORE=ccache-${RUNNER_TAG}-" >> $GITHUB_ENV
+          #staging_dir含二进制工具链，actb前缀区分本工作流的action_build构建路径
+          echo "STAGING_KEY=staging-actb-${RUNNER_TAG}-${TARGET_TOKEN}-${REPO_HASH}-${CACHE_DATE}" >> $GITHUB_ENV
+          echo "STAGING_RESTORE=staging-actb-${RUNNER_TAG}-${TARGET_TOKEN}-${REPO_HASH}-" >> $GITHUB_ENV
+          echo "缓存标识: ${CCACHE_KEY} / ${STAGING_KEY}"
+
+      - name: 恢复ccache缓存
+        id: cache-ccache
         uses: actions/cache@v5.0.2
         with:
-          path: |
-            ./action_build/.ccache
-            ./action_build/staging_dir
-          key: ${{ matrix.os }}-${{ hashFiles('**/repo_flag') }}-${{ env.BUILD_DATE }}
-          restore-keys: |
-            ${{ matrix.os }}-${{ hashFiles('**/repo_flag') }}-
+          path: ./action_build/.ccache
+          key: ${{ env.CCACHE_KEY }}
+          restore-keys: ${{ env.CCACHE_RESTORE }}
+
+      - name: 恢复staging工具链缓存
+        id: cache-staging
+        uses: actions/cache@v5.0.2
+        with:
+          path: ./action_build/staging_dir
+          key: ${{ env.STAGING_KEY }}
+          restore-keys: ${{ env.STAGING_RESTORE }}
 
       - name: 刷新缓存
         run: |
@@ -92,6 +116,22 @@ jobs:
           chmod +x $DIY_my_SH
           ./sh/build.sh ${{ inputs.model || 'RedMi-AX6_plus_imm'}}
 
+      #失败也保存缓存（staging已由build.sh保留，不再执行make clean）
+      - name: 保存ccache缓存
+        if: always()
+        continue-on-error: true
+        uses: actions/cache/save@v5.0.2
+        with:
+          path: ./action_build/.ccache
+          key: ${{ env.CCACHE_KEY }}
+
+      - name: 保存staging工具链缓存
+        if: always()
+        continue-on-error: true
+        uses: actions/cache/save@v5.0.2
+        with:
+          path: ./action_build/staging_dir
+          key: ${{ env.STAGING_KEY }}
 
       - name: 获取内核版本
         run: |
@@ -103,16 +143,16 @@ jobs:
           echo "useVersionInfo=$useVersionInfo" >> $GITHUB_ENV
           cd ..
           
-      - name: 删除旧缓存
+      - name: 缓存统计
+        if: always()
         run: |
-          # 获取缓存列表并删除
-          gh cache list --key ${{ matrix.os }}-${{ hashFiles('**/repo_flag') }}- --json key --jq '.[] | .key' | while read -r key; do
-            gh cache delete "$key"
-          done
-          # 输出缓存状态
+          #旧方案在构建后gh cache delete会把刚保存的新缓存一并删掉，导致下次冷编译；
+          #改由GitHub缓存策略自动淘汰（7天未命中/总量超10G删最旧），这里仅输出统计
           echo "========cache status========"
-          echo "ccache: $(du -sh ./action_build/.ccache | cut -f 1)"
-          echo "staging: $(du -sh ./action_build/staging_dir | cut -f 1)"
+          du -sh ./action_build/.ccache ./action_build/staging_dir 2>/dev/null || true
+          if [ -x ./action_build/staging_dir/host/bin/ccache ]; then
+            CCACHE_DIR=./action_build/.ccache ./action_build/staging_dir/host/bin/ccache -s || true
+          fi
 
       - name: 输出虚拟机信息
         run: |

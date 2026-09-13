@@ -172,24 +172,8 @@ jobs:
     #   clean: false
     #   prefix: ${{ github.workspace }}/openwrt
 
-    - name: 缓存依赖项
-      uses: actions/cache@v4
-      with:
-        path: |
-          /builder/openwrt/.ccache
-          /builder/openwrt/staging_dir
-        key: ${{ inputs.runs-on || 'ubuntu-24.04'}}-${{ hashFiles('**/repo_flag') }}-${{ env.DATE }}
-        restore-keys: |
-          ${{ inputs.runs-on || 'ubuntu-24.04'}}-${{ hashFiles('**/repo_flag') }}-
-
-    - name: 刷新缓存
-      run: |
-        if [ -d "/builder/openwrt/staging_dir" ]; then
-          find "/builder/openwrt/staging_dir" -type d -name "stamp" -not -path "*target*" | while read -r dir; do
-              find "$dir" -type f -exec touch {} +
-          done
-        fi
-        
+    #本工作流仅从底包Release下载rootfs并做ophub打包，不在本地编译，
+    #故不配置staging/ccache缓存（原缓存步骤恢复后无人写入、保存的是空目录，徒占10G配额）。
 
 #    - name: 将${{ inputs.model || 'ARMv8_lede_lua'}}打包为OpenWrt
 #      if: (!cancelled())

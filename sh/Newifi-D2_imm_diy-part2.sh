@@ -12,6 +12,11 @@
 echo "开始 自定义（Newifi-D2_imm_diy-part2） 配置……"
 echo "========================="
 
+#启用ccache编译器缓存，加速重复编译（仅作用于编译主机，不改变固件产物）
+sed -i '/^CONFIG_DEVEL=/d;/^CONFIG_CCACHE=/d' .config
+echo 'CONFIG_DEVEL=y' >> .config
+echo 'CONFIG_CCACHE=y' >> .config
+
 function git_sparse_clone() {
   branch="$1" rurl="$2" && shift 2
   rootdir="$PWD"

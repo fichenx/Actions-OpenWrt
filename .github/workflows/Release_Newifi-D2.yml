@@ -155,31 +155,43 @@ jobs:
         echo "DATE=$(date "+%Y-%m-%d %H:%M:%S")" >> $GITHUB_ENV
         echo "DATE1=$(date "+%Y-%m-%d")" >> $GITHUB_ENV
         echo "DATE2=$(date "+%Y%m%d%H%M")" >> $GITHUB_ENV
-  
-    #- name: 缓存工具链
-    # #uses: klever1988/cachewrtbuild@main
-    # uses: stupidloud/cachewrtbuild@main
-    # with:
-    #   mixkey: 'lede_js_armvirt'
-    #   ccache: true
-    #   skip: true
-    #   toolchain: true
-    #   clean: false
-    #   prefix: ${{ github.workspace }}/openwrt
 
-    - name: 缓存依赖项
+    - name: 设置缓存标识
+      run: |
+        MODEL="${{ inputs.model || 'Newifi-D2_lede_lua'}}"
+        RUNNER_TAG="${{ inputs.runs-on || 'ubuntu-24.04'}}"
+        CACHE_DATE="$(date +%Y%m%d)"
+        #源码标识：lede与immortalwrt工具链版本不同，staging_dir不可互通
+        REPO_TOKEN="$(echo "${REPO_URL}" | sed 's#https://github.com/##; s#/#-#g')"
+        #平台标识(板型_子目标)：lua/js同源码同平台，共享同一份staging
+        TARGET_TOKEN="$(grep -m1 -oE '^CONFIG_TARGET_[a-z0-9]+_[a-z0-9]+=y' "config/${MODEL}.config" | sed 's/CONFIG_TARGET_//; s/=y//')"
+        #ccache按编译器哈希寻址，跨型号/平台/源码混用安全，与其他工作流全局共享一份
+        echo "CCACHE_KEY=ccache-${RUNNER_TAG}-${CACHE_DATE}" >> $GITHUB_ENV
+        echo "CCACHE_RESTORE=ccache-${RUNNER_TAG}-" >> $GITHUB_ENV
+        #staging_dir含二进制工具链，仅同runner+同源码+同平台可共享
+        echo "STAGING_KEY=staging-${RUNNER_TAG}-${REPO_TOKEN}-${TARGET_TOKEN}-${CACHE_DATE}" >> $GITHUB_ENV
+        echo "STAGING_RESTORE=staging-${RUNNER_TAG}-${REPO_TOKEN}-${TARGET_TOKEN}-" >> $GITHUB_ENV
+        echo "缓存标识: ${CCACHE_KEY} / ${STAGING_KEY}"
+
+    - name: 恢复ccache缓存
+      id: cache-ccache
       uses: actions/cache@v4
       with:
-        path: |
-          /builder/openwrt/.ccache
-          /builder/openwrt/staging_dir
-        key: ${{ inputs.runs-on || 'ubuntu-22.04'}}-${{ hashFiles('**/repo_flag') }}-${{ env.DATE }}
-        restore-keys: |
-          ${{ inputs.runs-on || 'ubuntu-22.04'}}-${{ hashFiles('**/repo_flag') }}-
+        path: /builder/openwrt/.ccache
+        key: ${{ env.CCACHE_KEY }}
+        restore-keys: ${{ env.CCACHE_RESTORE }}
+
+    - name: 恢复staging工具链缓存
+      id: cache-staging
+      uses: actions/cache@v4
+      with:
+        path: /builder/openwrt/staging_dir
+        key: ${{ env.STAGING_KEY }}
+        restore-keys: ${{ env.STAGING_RESTORE }}
 
     - name: 刷新缓存
       run: |
-        if [ -d "/builder/staging_dir" ]; then
+        if [ -d "/builder/openwrt/staging_dir" ]; then
           find "/builder/openwrt/staging_dir" -type d -name "stamp" -not -path "*target*" | while read -r dir; do
               find "$dir" -type f -exec touch {} +
           done
@@ -232,6 +244,29 @@ jobs:
         grep '^CONFIG_TARGET.*DEVICE.*=y' .config | sed -r 's/.*DEVICE_(.*)=y/\1/' > DEVICE_NAME
         [ -s DEVICE_NAME ] && echo "DEVICE_NAME=_$(cat DEVICE_NAME)" >> $GITHUB_ENV
         echo "FILE_DATE=_$(date +"%Y%m%d%H%M")" >> $GITHUB_ENV
+
+    - name: 记录ccache统计
+      if: always()
+      continue-on-error: true
+      run: |
+        CCACHE_DIR=/builder/openwrt/.ccache ccache -s || true
+        du -sh /builder/openwrt/.ccache /builder/openwrt/staging_dir 2>/dev/null || true
+
+    - name: 保存ccache缓存
+      if: always()
+      continue-on-error: true
+      uses: actions/cache/save@v4
+      with:
+        path: /builder/openwrt/.ccache
+        key: ${{ env.CCACHE_KEY }}
+
+    - name: 保存staging工具链缓存
+      if: always()
+      continue-on-error: true
+      uses: actions/cache/save@v4
+      with:
+        path: /builder/openwrt/staging_dir
+        key: ${{ env.STAGING_KEY }}
 
     - name: 检查空间使用情况
       if: (!cancelled())
