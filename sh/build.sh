@@ -470,5 +470,6 @@ mkdir -p "$FIRMWARE_DIR"
 find "$TARGET_DIR" -type f \( -name "*.bin" -o -name "*.manifest" -o -name "*efi.img.gz" -o -name "*.itb" -o -name "*.fip" -o -name "*.ubi" -o -name "*.tar.gz" \) -exec cp -f {} "$FIRMWARE_DIR/" \;
 \rm -f "$BASE_PATH/../firmware/Packages.manifest" 2>/dev/null
 
-#不在此处执行make clean：OpenWrt的make clean会rm -rf整个staging_dir（含工具链/host工具），
-#CI随后保存的缓存将是空目录，导致下次构建仍需全量重编工具链。保留staging_dir供actions/cache复用。
+if [[ -d action_build ]]; then
+    make clean
+fi
