@@ -153,3 +153,9 @@ git clone -b openwrt-18.06 https://github.com/tty228/luci-app-wechatpush feeds/l
 #替换luci-app-socat为https://github.com/chenmozhijin/luci-app-socat
 rm -rf feeds/luci/applications/luci-app-socat
 git_svn main https://github.com/chenmozhijin/luci-app-socat luci-app-socat
+
+#修复luci-app-upnp依赖失败：coolsnowwolf/luci master的luci-app-upnp依赖裸名miniupnpd，
+#但coolsnowwolf packages feed与immortalwrt源均只提供miniupnpd-nftables/iptables变体；
+#lua版防火墙为iptables版firewall（rootfs安装firewall而非firewall4），
+#故固定改用iptables变体依赖；仅改依赖行，不切换luci分支（幂等，未选装upnp时sed不命中也无害）
+sed -i 's|^LUCI_DEPENDS:=+miniupnpd$|LUCI_DEPENDS:=+miniupnpd-iptables|' feeds/luci/applications/luci-app-upnp/Makefile
