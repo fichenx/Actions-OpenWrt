@@ -216,12 +216,12 @@ git_sparse_clone openwrt-23.05 https://github.com/openwrt/packages net/uwsgi && 
 #更换miniupnpd为最新版（immortalwrt源）
 [ -e package/lean/default-settings/files/zzz-default-settings ] && rm -rf feeds/packages/net/miniupnpd
 [ -e package/lean/default-settings/files/zzz-default-settings ] && git_svn master https://github.com/immortalwrt/packages net/miniupnpd
-#immortalwrt合并官方源（dd29469e，2026-10-16）升级miniupnpd至2.3.11后，本地补丁未清理：
-#020-descr-filter-fix（yangfl权限行解析器重写，2.3.11已含iseol）、
-#030-allow-private-fix（ALLOWPRIVATEIPV4MASK条件修复，2.3.11上游upnpsoap.c已是修复后代码）
-#均已被上游源码吸收，重复打入hunks FAILED致构建中断；此处删除过时残片
-#（rm -f幂等，上游清理后不报错；若immortalwrt回退2.3.9则失去这两处修复，可接受）
-rm -f package/custom/miniupnpd/patches/020-descr-filter-fix.patch package/custom/miniupnpd/patches/030-allow-private-fix.patch
+#immortalwrt合并官方源（dd29469e，2026-10-16）升级miniupnpd至2.3.11后，本地补丁未同步：
+#020/030已被上游源码吸收（重复打入hunks FAILED）、040-improve-logging因2.3.11重构main()
+#上下文漂移4/12 hunks FAILED（内容均为日志文案润色，无功能差异，immortalwrt PR #2001
+#的处理即删020/030+刷新040）。此处删除020/030/040（rm -f幂等）；
+#待PR #2001合并master后，可移除040的删除以恢复日志增强（900-format-xml与2.3.11兼容保留）
+rm -f package/custom/miniupnpd/patches/020-descr-filter-fix.patch package/custom/miniupnpd/patches/030-allow-private-fix.patch package/custom/miniupnpd/patches/040-improve-logging.patch
 
 #替换luci-app-socat为https://github.com/chenmozhijin/luci-app-socat
 rm -rf feeds/luci/applications/luci-app-socat
