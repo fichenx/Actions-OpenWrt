@@ -234,11 +234,12 @@ git_sparse_clone openwrt-23.05 https://github.com/openwrt/packages net/uwsgi && 
 #更换miniupnpd为最新版（immortalwrt源）
 [ -e package/lean/default-settings/files/zzz-default-settings ] && rm -rf feeds/packages/net/miniupnpd
 [ -e package/lean/default-settings/files/zzz-default-settings ] && git_svn master https://github.com/immortalwrt/packages net/miniupnpd
-#immortalwrt合并官方源（dd29469e，2026-10-16）升级miniupnpd至2.3.11后，本地补丁020未清理：
-#该补丁（yangfl权限行解析器重写）已被2.3.11上游源码吸收（upnppermissions.c已有iseol），
-#重复打入5/7 hunks失败致构建中断；此处删除过时残片（幂等，上游清理后不报错；
-#若immortalwrt回退2.3.9则失去该解析器健壮性修复，可接受）
-rm -f package/custom/miniupnpd/patches/020-descr-filter-fix.patch
+#immortalwrt合并官方源（dd29469e，2026-10-16）升级miniupnpd至2.3.11后，本地补丁未清理：
+#020-descr-filter-fix（yangfl权限行解析器重写，2.3.11已含iseol）、
+#030-allow-private-fix（ALLOWPRIVATEIPV4MASK条件修复，2.3.11上游upnpsoap.c已是修复后代码）
+#均已被上游源码吸收，重复打入hunks FAILED致构建中断；此处删除过时残片
+#（rm -f幂等，上游清理后不报错；若immortalwrt回退2.3.9则失去这两处修复，可接受）
+rm -f package/custom/miniupnpd/patches/020-descr-filter-fix.patch package/custom/miniupnpd/patches/030-allow-private-fix.patch
 
 #替换luci-app-socat为https://github.com/chenmozhijin/luci-app-socat(lua版)
 [ -e package/lean/default-settings/files/zzz-default-settings ] && rm -rf feeds/luci/applications/luci-app-socat
