@@ -118,6 +118,19 @@ sync_repo_root_package_to_feed_dir() {
 }
 
 
+remove_nested_airoha_npu_package() {
+    local package_dir="$1"
+    local nested_package_dir="$package_dir/luci-app-airoha-npu"
+
+    if [ -f "$package_dir/Makefile" ] && [ -f "$nested_package_dir/Makefile" ]; then
+        if ! rm -rf "$nested_package_dir"; then
+            return 1
+        fi
+        echo "已移除 luci-app-airoha-npu 的重复嵌套包目录：$nested_package_dir"
+    fi
+}
+
+
 fix_emmc_health_luci_js_deps() {
     local package_dir="$1"
     local makefile_path="$package_dir/Makefile"
@@ -131,6 +144,19 @@ fix_emmc_health_luci_js_deps() {
         sed -i '/^[[:space:]]*DEPENDS:=/ s/[[:space:]]*+luci-js-deps//g' "$makefile_path"
         echo "已移除 luci-app-emmc-health 的 luci-js-deps 兼容性依赖。"
     fi
+}
+
+
+fix_airoha_npu_luci_mk() {
+    local package_dir="$1"
+    local makefile_path
+
+    while IFS= read -r -d '' makefile_path; do
+        if grep -qE '^[[:space:]]*include[[:space:]]+\.\./\.\./luci\.mk[[:space:]]*$' "$makefile_path"; then
+            sed -i 's|^[[:space:]]*include[[:space:]]\+\.\./\.\./luci\.mk[[:space:]]*$|include $(TOPDIR)/feeds/luci/luci.mk|' "$makefile_path"
+            echo "已修复 luci-app-airoha-npu 的 LuCI Makefile 引用：$makefile_path"
+        fi
+    done < <(find "$package_dir" -type f -name Makefile -print0)
 }
 
 
@@ -168,10 +194,10 @@ install_custom_feed() {
     )
     local required_feed_dirs=(
         cups tcping v2ray-geodata luci-lib-taskd luci-app-openclash
-        luci-app-quickstart luci-app-store luci-app-homeproxy luci-app-mosdns
+        luci-app-quickstart luci-app-store luci-app-homeproxy luci-app-mosdns geo2txt
         luci-app-passwall nikki luci-app-nikki mihomo-meta
         open-app-filter luci-app-oaf lucky luci-app-lucky luci-app-easytier
-        luci-app-emmc-health
+        luci-app-emmc-health luci-app-airoha-npu
     )
     local custom_feed_sources=()
     local missing_feed_dirs=()
@@ -192,7 +218,7 @@ install_custom_feed() {
     # 统一从外部仓库同步指定包，避免分散维护 feeds.conf。
     custom_feed_sources=(
         "fichenx/openwrt-package|https://github.com/fichenx/openwrt-package.git|js|${base_custom_feed_packages[*]}"
-        "sbwml/luci-app-mosdns|https://github.com/sbwml/luci-app-mosdns.git|v5|mosdns luci-app-mosdns"
+        "sbwml/luci-app-mosdns|https://github.com/sbwml/luci-app-mosdns.git|v5|mosdns luci-app-mosdns geo2txt"
         "Openwrt-Passwall/openwrt-passwall|https://github.com/Openwrt-Passwall/openwrt-passwall.git|main|luci-app-passwall"
         "nikkinikki-org/OpenWrt-nikki|https://github.com/nikkinikki-org/OpenWrt-nikki.git|main|nikki luci-app-nikki mihomo-meta"
     )
@@ -219,6 +245,21 @@ install_custom_feed() {
     done
 
     if ! sync_repo_root_package_to_feed_dir "https://github.com/adminchenyu/eMMC-Health.git" "main" "$custom_feed_dir" "adminchenyu/eMMC-Health" "luci-app-emmc-health"; then
+        rm -rf "$custom_feed_dir"
+        return 1
+    fi
+
+    if ! sync_repo_root_package_to_feed_dir "https://github.com/rchen14b/luci-app-airoha-npu.git" "main" "$custom_feed_dir" "rchen14b/luci-app-airoha-npu" "luci-app-airoha-npu"; then
+        rm -rf "$custom_feed_dir"
+        return 1
+    fi
+
+    if ! remove_nested_airoha_npu_package "$custom_feed_dir/luci-app-airoha-npu"; then
+        rm -rf "$custom_feed_dir"
+        return 1
+    fi
+
+    if ! fix_airoha_npu_luci_mk "$custom_feed_dir/luci-app-airoha-npu"; then
         rm -rf "$custom_feed_dir"
         return 1
     fi

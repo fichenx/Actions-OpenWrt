@@ -203,6 +203,11 @@ fix_netfilter_kmod_clash() {
         sed -i 's/DEPENDS:=+(!LINUX_6_12\&\&!LINUX_6_18):kmod-iptables/DEPENDS:=+(!(LINUX_6_12||LINUX_6_18)):kmod-iptables/' "$netfilter_mk"
     fi
 
+    if grep -q 'DEPENDS:=+kmod-iptables' "$netfilter_mk"; then
+        echo "Applying netfilter kmod clash workaround for Linux 6.12/6.18..."
+        sed -i 's/DEPENDS:=+kmod-iptables/DEPENDS:=+(!(LINUX_6_12||LINUX_6_18)):kmod-iptables/' "$netfilter_mk"
+    fi
+
     if grep -q 'DEPENDS:=+(!(LINUX_6_12||LINUX_6_18)):kmod-iptables' "$netfilter_mk"; then
         if netfilter_kmod_clash_include_fixed "$include_netfilter_mk"; then
             return 0
