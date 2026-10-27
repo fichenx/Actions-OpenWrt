@@ -241,6 +241,12 @@ git_sparse_clone openwrt-23.05 https://github.com/openwrt/packages net/uwsgi && 
 #待PR #2001合并master后，可移除040的删除以恢复日志增强（900-format-xml与2.3.11兼容保留）
 rm -f package/custom/miniupnpd/patches/020-descr-filter-fix.patch package/custom/miniupnpd/patches/030-allow-private-fix.patch package/custom/miniupnpd/patches/040-improve-logging.patch
 
+#lede master 0185dc58（2026-10-26）内核6.18.55→6.18.58，include/linux/skbuff.h在
+#unreadable:1后新增__u8 tc_depth:2，导致hack-6.18/953-net-patch-linux-kernel-to-support-
+#shortcut-fe.patch的skbuff.h hunk上下文失配（Hunk #1 FAILED at 1030），target/linux中断
+#本仓库未启用shortcut-fe（无CONFIG_SHORTCUT_FE/kmod-shortcut-fe），删除该补丁无影响；（rm -f幂等）
+rm -f target/linux/generic/hack-6.18/953-net-patch-linux-kernel-to-support-shortcut-fe.patch
+
 #替换luci-app-socat为https://github.com/chenmozhijin/luci-app-socat(lua版)
 [ -e package/lean/default-settings/files/zzz-default-settings ] && rm -rf feeds/luci/applications/luci-app-socat
 [ -e package/lean/default-settings/files/zzz-default-settings ] && git_svn main https://github.com/chenmozhijin/luci-app-socat luci-app-socat
