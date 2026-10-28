@@ -236,17 +236,21 @@ update_lucky() {
     fi
 
     echo "正在更新 lucky Makefile..."
-    # 使用本地补丁文件，而不是下载
-    local patch_line="\\t[ -f \${GITHUB_WORKSPACE}/res/lucky_${version}_Linux_\$(LUCKY_ARCH)_wanji.tar.gz ] && install -Dm644 \${GITHUB_WORKSPACE}/res/lucky_${version}_Linux_\$(LUCKY_ARCH)_wanji.tar.gz \$(PKG_BUILD_DIR)/\$(PKG_NAME)_\$(PKG_VERSION)_Linux_\$(LUCKY_ARCH).tar.gz"
-    # 确保 Build/Prepare 部分存在，然后在其后添加我们的行
-    if grep -q "Build/Prepare" "$makefile_path"; then
-        sed -i "/Build\\/Prepare/a\\$patch_line" "$makefile_path"
-        # 删除任何现有的 wget 命令
-        sed -i '/wget/d' "$makefile_path"
-        echo "lucky Makefile 更新完成。"
-    else
-        echo "Warning: lucky Makefile 中未找到 'Build/Prepare'。跳过。" >&2
+    # 版本号对齐：上游 PKG_VERSION 长期滞后（如 2.27.2），与替换进来的二进制版本不符
+    if grep -q '^PKG_VERSION:=' "$makefile_path"; then
+        sed -i "s/^PKG_VERSION:=.*/PKG_VERSION:=$version/" "$makefile_path"
     fi
+
+    # 上游 Build/Prepare 是从 $(DL_DIR)/$(PKG_SOURCE) 解包，只把本地文件放进 PKG_BUILD_DIR 不会被使用；
+    # 预置同名文件到 dl/ 后 make download 因文件已存在而跳过下载
+    local dl_dir="dl" f arch
+    mkdir -p "$dl_dir"
+    for f in "$GITHUB_WORKSPACE"/res/lucky_*_Linux_*.tar.gz; do
+        [ -f "$f" ] || continue
+        arch=$(basename "$f" | sed -n 's/^lucky_.*_Linux_\(.*\)_wanji.*\.tar\.gz$/\1/p')
+        [ -n "$arch" ] && install -Dm644 "$f" "$dl_dir/lucky_${version}_Linux_${arch}.tar.gz"
+    done
+    echo "lucky $version 本地二进制已预置到 $dl_dir/"
 }
 update_lucky
 
