@@ -229,6 +229,27 @@ rm -f package/custom/miniupnpd/patches/020-descr-filter-fix.patch package/custom
 #本仓库未启用shortcut-fe（无CONFIG_SHORTCUT_FE/kmod-shortcut-fe），删除该补丁无影响；（rm -f幂等）
 rm -f target/linux/generic/hack-6.18/953-net-patch-linux-kernel-to-support-shortcut-fe.patch
 
+#内核6.18.58起 net/sunrpc/Kconfig 的 RPCSEC_GSS_KRB5 新增 select CRYPTO_KRB5（6.18.55无），
+#rpcsec_gss_krb5.ko 因此依赖 crypto/krb5/krb5.ko；但 lede/openwrt 均无打包该模块的 kmod，
+#fs.mk 中 rpcsec 的依赖也未声明提供者，导致打包校验
+#“Package kmod-fs-nfs-common-rpcsec is missing dependencies: krb5.ko”中断
+#此处补建 kmod-crypto-krb5 并加入依赖（grep守卫+sed替换不重复生效，上游日后补包也不冲突）
+if ! grep -q 'KernelPackage/crypto-krb5' package/kernel/linux/modules/crypto.mk; then
+cat >> package/kernel/linux/modules/crypto.mk <<'EOF'
+
+define KernelPackage/crypto-krb5
+  TITLE:=Kerberos V5 crypto support
+  KCONFIG:=CONFIG_CRYPTO_KRB5
+  FILES:=$(LINUX_DIR)/crypto/krb5/krb5.ko
+  AUTOLOAD:=$(call AutoLoad,09,krb5)
+  $(call AddDepends/crypto)
+endef
+
+$(eval $(call KernelPackage,crypto-krb5))
+EOF
+fi
+sed -i 's/^\(\s*\)+kmod-fs-nfs-common \\$/\1+kmod-fs-nfs-common +kmod-crypto-krb5 \\/' package/kernel/linux/modules/fs.mk
+
 #替换luci-app-socat为https://github.com/chenmozhijin/luci-app-socat
 rm -rf feeds/luci/applications/luci-app-socat
 git_svn main https://github.com/chenmozhijin/luci-app-socat luci-app-socat
