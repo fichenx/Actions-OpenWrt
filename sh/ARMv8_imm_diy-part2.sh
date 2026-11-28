@@ -370,5 +370,60 @@ sed -i 's|^\(\s*\)AUTOLOAD:=\$(call AutoProbe,\$(notdir \$(NF_IPT-m)))$|\1AUTOLO
 sed -i 's|^\(\s*\)DEPENDS:=+kmod-nf-reject +kmod-nf-ipt +kmod-nf-log$|\1DEPENDS:=+kmod-nf-reject +kmod-nf-ipt +kmod-nf-log +kmod-nf-xtables|' package/kernel/linux/modules/netfilter.mk
 fi
 
+#移动硬盘调优：fstab自动挂载加noatime、hd-idle默认10分钟休眠、关闭USB自动挂起、SMB/NFS默认共享
+mkdir -p package/base-files/files/etc/uci-defaults
+cat > package/base-files/files/etc/uci-defaults/99-hdd-tune <<'HDEOF'
+#!/bin/sh
+# 移动硬盘调优：noatime、hd-idle、USB 不自动挂起、SMB/NFS 默认共享
+
+# 1. fstab 自动挂载加 noatime（减少写放大，延长移动硬盘寿命）
+uci -q set fstab.@global[0].options='noatime'
+uci commit fstab
+
+# 2. hd-idle 默认 10 分钟无 IO 休眠（机械盘省电延寿）
+if [ ! -f /etc/config/hd-idle ]; then
+cat > /etc/config/hd-idle <<'EOF'
+config hd-idle
+	option idle_time 10
+	option unit 'minutes'
+	option enabled 1
+EOF
+fi
+/etc/init.d/hd-idle enable 2>/dev/null
+
+# 3. 关闭 USB 自动挂起（避免硬盘盒被误挂起后掉盘）
+if ! grep -q 'usbcore.autosuspend' /etc/rc.local; then
+	sed -i '/^exit 0/i echo -1 > /sys/module/usbcore/parameters/autosuspend' /etc/rc.local
+fi
+
+# 4. SMB 默认共享 /mnt/sda1（仅当无共享配置时）
+if [ -f /etc/config/samba4 ] && ! uci -q get samba4.@share[0]; then
+	uci -q batch <<EOF
+add samba4 share
+set samba4.@share[-1].name='sda1'
+set samba4.@share[-1].path='/mnt/sda1'
+set samba4.@share[-1].read_only='no'
+set samba4.@share[-1].guest_ok='yes'
+set samba4.@share[-1].create_mask='0666'
+set samba4.@share[-1].dir_mask='0777'
+commit samba4
+EOF
+fi
+
+# 5. NFS 默认导出 /mnt/sda1（仅当无导出时）
+if [ -f /etc/config/nfs ] && ! uci -q get nfs.@export[0]; then
+	uci -q batch <<EOF
+add nfs export
+set nfs.@export[-1].path='/mnt/sda1'
+set nfs.@export[-1].clients='192.168.123.0/24'
+set nfs.@export[-1].options='rw,sync,no_subtree_check,no_root_squash'
+commit nfs
+EOF
+fi
+
+exit 0
+HDEOF
+chmod +x package/base-files/files/etc/uci-defaults/99-hdd-tune
+
 echo "========================="
 echo " 自定义(ARMv8_imm_diy-part2) 配置完成……"
