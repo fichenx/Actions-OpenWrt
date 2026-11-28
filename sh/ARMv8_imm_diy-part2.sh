@@ -340,6 +340,29 @@ cp -rf $GITHUB_WORKSPACE/res/001-fix-cmake-compatibility.patch $GITHUB_WORKSPACE
 rm -rf feeds/packages/lang/rust
 git_sparse_clone master https://github.com/coolsnowwolf/packages lang/rust && mv -n rust feeds/packages/lang/rust
 
+#内核6.18把legacy表拆成NETFILTER_XTABLES_LEGACY/IP6_NF_IPTABLES_LEGACY，
+#openwrt上游已把x_tables.ko独立成kmod-nf-xtables并让nf-ipt/ipt-core依赖它；
+#immortalwrt尚未同步，仍把x_tables挂在nf-ipt的NF_IPT-m里，导致ip6_tables.ko
+#（kmod-nf-ipt6）声明依赖x_tables却没有任何包提供该模块，打包自检
+#“Package kmod-nf-ipt6 is missing dependencies: x_tables.ko”中断
+#此处按上游结构补建kmod-nf-xtables（grep守卫，上游日后同步后不重复生效）
+if ! grep -q 'KernelPackage/nf-xtables' package/kernel/linux/modules/netfilter.mk; then
+sed -i 's/nf_add,NF_IPT,CONFIG_NETFILTER_XTABLES/nf_add,NF_XTABLES,CONFIG_NETFILTER_XTABLES/' include/netfilter.mk
+cat >> package/kernel/linux/modules/netfilter.mk <<'EOF'
+
+define KernelPackage/nf-xtables
+  SUBMENU:=$(NF_MENU)
+  TITLE:=Netfilter Xtables support
+  KCONFIG:=$(KCONFIG_NF_XTABLES)
+  FILES:=$(foreach mod,$(NF_XTABLES-m),$(LINUX_DIR)/net/$(mod).ko)
+  AUTOLOAD:=$(call AutoProbe,$(notdir $(NF_XTABLES-m)))
+endef
+
+$(eval $(call KernelPackage,nf-xtables))
+EOF
+sed -i 's|^\(\s*\)AUTOLOAD:=\$(call AutoProbe,\$(notdir \$(NF_IPT-m)))$|\1AUTOLOAD:=$(call AutoProbe,$(notdir $(NF_IPT-m)))\n\1DEPENDS:=+kmod-nf-xtables|' package/kernel/linux/modules/netfilter.mk
+sed -i 's|^\(\s*\)DEPENDS:=+kmod-nf-reject +kmod-nf-ipt +kmod-nf-log$|\1DEPENDS:=+kmod-nf-reject +kmod-nf-ipt +kmod-nf-log +kmod-nf-xtables|' package/kernel/linux/modules/netfilter.mk
+fi
 
 echo "========================="
 echo " 自定义(ARMv8_imm_diy-part2) 配置完成……"
