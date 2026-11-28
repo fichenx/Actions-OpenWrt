@@ -195,6 +195,11 @@ git_sparse_clone master https://github.com/openwrt/packages lang/perl && mv -n p
 #<command-line>: error: unknown type name 'thread_local'（1.0.22已修正该TLS检测）
 rm -rf feeds/packages/libs/libsodium
 git_sparse_clone master https://github.com/openwrt/packages libs/libsodium && mv -n libsodium feeds/packages/libs/libsodium
+#替换gnutls为openwrt官方3.8.10版，修复lede源自带3.8.3在gettext 0.24时代的编译错误:
+#构建时autopoint --force会用新版gnulib宏刷新gnutls的m4(config.h不再包含<stdbool.h>),
+#而实际编译仍用默认-std=gnu17,导致 gl/basename-lgpl.c: error: unknown type name 'bool'
+rm -rf feeds/packages/libs/gnutls
+git_sparse_clone master https://github.com/openwrt/packages libs/gnutls && mv -n gnutls feeds/packages/libs/gnutls
 
 #更换msd_lite为最新版（immortalwrt源）
 [ -e package/lean/default-settings/files/zzz-default-settings ] && rm -rf feeds/packages/net/msd_lite

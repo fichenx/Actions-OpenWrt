@@ -293,13 +293,10 @@ git_sparse_clone js https://github.com/gaobin89/luci-app-timecontrol luci-app-ti
 
 #########修复编译错误#########
 
-#修复6.12+内核下kmod-nf-ipt重复打包ip_tables.ko导致的安装冲突(仅ip_tables需要版本门控;
-#x_tables.ko无重复打包问题,且由下方kmod-nf-xtables独立打包,此处切勿再给它加lt 6.12门控,
-#否则6.18下NF_XTABLES-m为空、kmod-nf-xtables打不到x_tables.ko,nf-ipt6仍缺依赖)
-#check_data_file_clashes: Package kmod-nf-ipt wants to install file ... But that file is already provided by package * kmod-iptables
-if [ -f include/netfilter.mk ]; then
-  sed -i '/CONFIG_IP_NF_IPTABLES, $(P_V4)ip_tables),))/s/ip_tables),))/ip_tables, lt 6.12),))/' include/netfilter.mk
-fi
+#注意:immortalwrt的include/netfilter.mk仍是旧结构,6.18内核下ip_tables.ko/x_tables.ko
+#都是真实存在的模块,切勿照搬openwrt的"lt 6.12"门控,否则这两个ko不会被任何包打包,
+#导致 kmod-nf-ipt6/kmod-ipt-core 报 missing dependencies(x_tables.ko / ip_tables.ko)
+#x_tables.ko由下方kmod-nf-xtables独立打包;ip_tables.ko仍留在NF_IPT由kmod-nf-ipt打包
 
 ##修复elfutils编译错误
 #1、修复lede版elfutils0.188版编译错误
