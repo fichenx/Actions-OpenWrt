@@ -120,6 +120,12 @@ sed -i 's/\[services\]/\[vpn\]/g'  feeds/luci/applications/luci-app-nps/luasrc/v
 rm -rf feeds/luci/themes/luci-theme-design
 git clone -b js https://github.com/papagaye744/luci-theme-design feeds/luci/themes/luci-theme-design
 
+#新增主题：7Dollar（ucode/JS，明暗+多配色）、Aurora（Vite+Tailwind）
+rm -rf feeds/luci/themes/luci-theme-7dollar
+git clone --depth 1 https://github.com/itsmaiGe/luci-theme-7dollar feeds/luci/themes/luci-theme-7dollar || echo "警告：luci-theme-7dollar 克隆失败"
+rm -rf feeds/luci/themes/luci-theme-aurora
+git clone --depth 1 https://github.com/eamonxg/luci-theme-aurora feeds/luci/themes/luci-theme-aurora || echo "警告：luci-theme-aurora 克隆失败"
+
 #修改默认主题
 #sed -i 's|set luci.main.mediaurlbase|#set luci.main.mediaurlbase|g' feeds/luci/themes/luci-theme-argon/root/etc/uci-defaults/30_luci-theme-argon
 #sed -i 's|set luci.main.mediaurlbase|#set luci.main.mediaurlbase|g' feeds/luci/themes/luci-theme-argon-mod/root/etc/uci-defaults/90_luci-theme-argon
