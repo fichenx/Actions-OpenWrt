@@ -190,6 +190,11 @@ rm -rf feeds/packages/net/samba4
 rm -rf feeds/packages/lang/perl
 git_sparse_clone master https://github.com/openwrt/packages net/samba4 && mv -n samba4 feeds/packages/net/samba4
 git_sparse_clone master https://github.com/openwrt/packages lang/perl && mv -n perl feeds/packages/lang/perl
+#替换libsodium为openwrt官方1.0.22版，修复lede源自带的1.0.18在GCC14/-std=gnu23下
+#TLS宏被误定义为thread_local，导致randombytes_internal_random.c报错:
+#<command-line>: error: unknown type name 'thread_local'（1.0.22已修正该TLS检测）
+rm -rf feeds/packages/libs/libsodium
+git_sparse_clone master https://github.com/openwrt/packages libs/libsodium && mv -n libsodium feeds/packages/libs/libsodium
 
 #更换msd_lite为最新版（immortalwrt源）
 [ -e package/lean/default-settings/files/zzz-default-settings ] && rm -rf feeds/packages/net/msd_lite
